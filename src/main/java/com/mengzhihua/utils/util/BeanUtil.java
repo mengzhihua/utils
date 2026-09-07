@@ -1,7 +1,10 @@
 package com.mengzhihua.utils.util;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +34,27 @@ public final class BeanUtil {
         T target = instantiate(targetClass);
         BeanUtils.copyProperties(source, target);
         return target;
+    }
+
+    /**
+     * Copies non-null properties only, useful for PATCH-style updates.
+     */
+    public static void copyIgnoreNull(Object source, Object target) {
+        if (source == null || target == null) {
+            return;
+        }
+        BeanWrapper src = new BeanWrapperImpl(source);
+        BeanWrapper trg = new BeanWrapperImpl(target);
+        for (PropertyDescriptor descriptor : src.getPropertyDescriptors()) {
+            String name = descriptor.getName();
+            if ("class".equals(name) || !src.isReadableProperty(name) || !trg.isWritableProperty(name)) {
+                continue;
+            }
+            Object value = src.getPropertyValue(name);
+            if (value != null) {
+                trg.setPropertyValue(name, value);
+            }
+        }
     }
 
     public static <T> List<T> copyList(Collection<?> sources, Class<T> targetClass) {

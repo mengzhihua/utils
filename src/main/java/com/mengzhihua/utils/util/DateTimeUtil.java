@@ -1,12 +1,16 @@
 package com.mengzhihua.utils.util;
 
+import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -151,6 +155,62 @@ public final class DateTimeUtil {
             return false;
         }
         return !target.isBefore(start) && !target.isAfter(end);
+    }
+
+    public static boolean isWeekend(LocalDate date) {
+        if (date == null) {
+            return false;
+        }
+        DayOfWeek day = date.getDayOfWeek();
+        return day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY;
+    }
+
+    public static int age(LocalDate birthday) {
+        if (birthday == null) {
+            return 0;
+        }
+        return Period.between(birthday, today()).getYears();
+    }
+
+    public static LocalDate startOfWeek(LocalDate date) {
+        return date == null ? null : date.with(DayOfWeek.MONDAY);
+    }
+
+    public static LocalDate endOfWeek(LocalDate date) {
+        return date == null ? null : date.with(DayOfWeek.SUNDAY);
+    }
+
+    public static LocalDate startOfMonth(LocalDate date) {
+        return date == null ? null : date.with(TemporalAdjusters.firstDayOfMonth());
+    }
+
+    public static LocalDate endOfMonth(LocalDate date) {
+        return date == null ? null : date.with(TemporalAdjusters.lastDayOfMonth());
+    }
+
+    public static LocalDate startOfYear(LocalDate date) {
+        return date == null ? null : date.with(TemporalAdjusters.firstDayOfYear());
+    }
+
+    public static LocalDate endOfYear(LocalDate date) {
+        return date == null ? null : date.with(TemporalAdjusters.lastDayOfYear());
+    }
+
+    public static String formatDuration(Duration duration) {
+        if (duration == null) {
+            return "0s";
+        }
+        long seconds = Math.abs(duration.getSeconds());
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long secs = seconds % 60;
+        if (hours > 0) {
+            return hours + "h " + minutes + "m " + secs + "s";
+        }
+        if (minutes > 0) {
+            return minutes + "m " + secs + "s";
+        }
+        return secs + "s";
     }
 
     private static DateTimeFormatter formatter(String pattern) {

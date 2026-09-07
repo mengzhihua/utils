@@ -13,6 +13,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -75,5 +76,25 @@ class UtilsDemoControllerTest {
                         .param("type", "unknown"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(400));
+    }
+
+    @Test
+    void extraUtilsIdCardJwtAndTraceHeader() throws Exception {
+        mockMvc.perform(get("/api/utils/idcard/parse").param("idNo", "110101199003078937"))
+                .andExpect(status().isOk())
+                .andExpect(header().exists("X-Trace-Id"))
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.gender").value("M"))
+                .andExpect(jsonPath("$.data.province").value("北京"));
+
+        mockMvc.perform(get("/api/utils/jwt").param("subject", "ada"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.token").isString())
+                .andExpect(jsonPath("$.data.payload.sub").value("ada"));
+
+        mockMvc.perform(get("/api/utils/html/escape").param("text", "<b>x</b>"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.escaped").value("&lt;b&gt;x&lt;/b&gt;"))
+                .andExpect(jsonPath("$.data.stripped").value("x"));
     }
 }
