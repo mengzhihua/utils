@@ -77,12 +77,13 @@ function md5(text) {
   const ii = (a, b, c, d, x, s, t) => cmn(c ^ (b | ~d), a, b, x, s, t)
   const bytes = unescape(encodeURIComponent(text))
   const n = bytes.length
-  const words = []
+  const nBlocks = ((((n + 8) >> 6) + 1) * 16)
+  const words = new Array(nBlocks).fill(0)
   for (let i = 0; i < n; i++) {
     words[i >> 2] |= (bytes.charCodeAt(i) & 0xff) << ((i % 4) * 8)
   }
   words[n >> 2] |= 0x80 << ((n % 4) * 8)
-  words[(((n + 8) >> 6) << 4) + 14] = n * 8
+  words[nBlocks - 2] = n * 8
   let a = 1732584193
   let b = -271733879
   let c = -1732584194
