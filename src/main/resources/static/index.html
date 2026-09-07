@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Utils Toolkit</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #f4f1ea;
+            --card: #fffdf8;
+            --ink: #1f2933;
+            --muted: #5b6773;
+            --accent: #0f766e;
+            --line: #e4ddd0;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
+            background: radial-gradient(circle at top left, #fff7e8, var(--bg) 42%);
+            color: var(--ink);
+        }
+        main {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 56px 24px 80px;
+        }
+        h1 { margin: 0 0 8px; font-size: 36px; letter-spacing: -0.03em; }
+        p.lead { color: var(--muted); font-size: 18px; line-height: 1.6; }
+        .grid { display: grid; gap: 16px; margin-top: 32px; }
+        @media (min-width: 720px) { .grid { grid-template-columns: 1fr 1fr; } }
+        a.card, .card {
+            display: block;
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 20px 22px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 10px 30px rgba(31, 41, 51, 0.05);
+        }
+        a.card:hover { border-color: var(--accent); }
+        .card h2 { margin: 0 0 8px; font-size: 18px; }
+        .card p { margin: 0; color: var(--muted); line-height: 1.5; }
+        code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
+        .tag { color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+<main>
+    <div class="tag">Spring Boot 4 · Java 21</div>
+    <h1>Java Utils Toolkit</h1>
+    <p class="lead">通用工具集：字符串、日期、JSON、加解密、雪花 ID、树结构、统一返回体。可直接作为 Spring Boot 应用运行，也可把工具类拷贝进业务项目。</p>
+    <div class="grid">
+        <a class="card" href="/swagger-ui.html">
+            <h2>Swagger UI</h2>
+            <p>在浏览器里试跑演示接口，查看请求/响应结构。</p>
+        </a>
+        <a class="card" href="/v3/api-docs">
+            <h2>OpenAPI JSON</h2>
+            <p>机器可读的接口描述，便于导入 Apifox / Postman。</p>
+        </a>
+        <a class="card" href="/api/utils/datetime/now">
+            <h2>当前时间</h2>
+            <p>演示统一 <code>Result</code> 包装和日期工具。</p>
+        </a>
+        <a class="card" href="/actuator/health">
+            <h2>Health</h2>
+            <p>Actuator 健康检查，确认应用已启动。</p>
+        </a>
+    </div>
+</main>
+</body>
+</html>

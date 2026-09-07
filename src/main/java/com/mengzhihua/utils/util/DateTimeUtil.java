@@ -1,0 +1,160 @@
+package com.mengzhihua.utils.util;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * Date and time helpers based on {@code java.time}.
+ */
+public final class DateTimeUtil {
+
+    public static final String DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_PATTERN = "yyyy-MM-dd";
+    public static final String TIME_PATTERN = "HH:mm:ss";
+    public static final ZoneId DEFAULT_ZONE = ZoneId.of("Asia/Shanghai");
+
+    private static final Map<String, DateTimeFormatter> FORMATTERS = new ConcurrentHashMap<>();
+
+    static {
+        FORMATTERS.put(DATETIME_PATTERN, DateTimeFormatter.ofPattern(DATETIME_PATTERN));
+        FORMATTERS.put(DATE_PATTERN, DateTimeFormatter.ofPattern(DATE_PATTERN));
+        FORMATTERS.put(TIME_PATTERN, DateTimeFormatter.ofPattern(TIME_PATTERN));
+    }
+
+    private DateTimeUtil() {
+    }
+
+    public static LocalDateTime now() {
+        return LocalDateTime.now(DEFAULT_ZONE);
+    }
+
+    public static LocalDate today() {
+        return LocalDate.now(DEFAULT_ZONE);
+    }
+
+    public static String nowDateTime() {
+        return format(now(), DATETIME_PATTERN);
+    }
+
+    public static String nowDate() {
+        return format(today(), DATE_PATTERN);
+    }
+
+    public static String format(LocalDateTime dateTime) {
+        return format(dateTime, DATETIME_PATTERN);
+    }
+
+    public static String format(LocalDateTime dateTime, String pattern) {
+        if (dateTime == null) {
+            return null;
+        }
+        return formatter(pattern).format(dateTime);
+    }
+
+    public static String format(LocalDate date) {
+        return format(date, DATE_PATTERN);
+    }
+
+    public static String format(LocalDate date, String pattern) {
+        if (date == null) {
+            return null;
+        }
+        return formatter(pattern).format(date);
+    }
+
+    public static LocalDateTime parseDateTime(String text) {
+        return parseDateTime(text, DATETIME_PATTERN);
+    }
+
+    public static LocalDateTime parseDateTime(String text, String pattern) {
+        if (StringUtil.isBlank(text)) {
+            return null;
+        }
+        return LocalDateTime.parse(text.trim(), formatter(pattern));
+    }
+
+    public static LocalDate parseDate(String text) {
+        return parseDate(text, DATE_PATTERN);
+    }
+
+    public static LocalDate parseDate(String text, String pattern) {
+        if (StringUtil.isBlank(text)) {
+            return null;
+        }
+        return LocalDate.parse(text.trim(), formatter(pattern));
+    }
+
+    public static long toEpochMilli(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return 0L;
+        }
+        return dateTime.atZone(DEFAULT_ZONE).toInstant().toEpochMilli();
+    }
+
+    public static LocalDateTime ofEpochMilli(long epochMilli) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(epochMilli), DEFAULT_ZONE);
+    }
+
+    public static Date toDate(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return null;
+        }
+        return Date.from(dateTime.atZone(DEFAULT_ZONE).toInstant());
+    }
+
+    public static LocalDateTime fromDate(Date date) {
+        if (date == null) {
+            return null;
+        }
+        return LocalDateTime.ofInstant(date.toInstant(), DEFAULT_ZONE);
+    }
+
+    public static LocalDateTime startOfDay(LocalDate date) {
+        if (date == null) {
+            return null;
+        }
+        return date.atStartOfDay();
+    }
+
+    public static LocalDateTime endOfDay(LocalDate date) {
+        if (date == null) {
+            return null;
+        }
+        return LocalDateTime.of(date, LocalTime.MAX.withNano(0));
+    }
+
+    public static LocalDateTime plusDays(LocalDateTime dateTime, long days) {
+        return dateTime == null ? null : dateTime.plusDays(days);
+    }
+
+    public static LocalDateTime plusHours(LocalDateTime dateTime, long hours) {
+        return dateTime == null ? null : dateTime.plusHours(hours);
+    }
+
+    public static long daysBetween(LocalDate start, LocalDate end) {
+        if (start == null || end == null) {
+            return 0L;
+        }
+        return ChronoUnit.DAYS.between(start, end);
+    }
+
+    public static boolean isBetween(LocalDateTime target, LocalDateTime start, LocalDateTime end) {
+        if (target == null || start == null || end == null) {
+            return false;
+        }
+        return !target.isBefore(start) && !target.isAfter(end);
+    }
+
+    private static DateTimeFormatter formatter(String pattern) {
+        String key = StringUtil.defaultIfBlank(pattern, DATETIME_PATTERN);
+        return FORMATTERS.computeIfAbsent(key, DateTimeFormatter::ofPattern);
+    }
+}
