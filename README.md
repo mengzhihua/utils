@@ -36,6 +36,19 @@
 | 并发 / 系统 | `ThreadUtil` / `RetryUtil` / `StopWatchUtil` / `LocalCacheUtil` / `SystemUtil` | 虚拟线程、重试、计时、本地 TTL 缓存 |
 | 反射 | `ReflectUtil` / `EnumUtil` / `ClassUtil` / `ExceptionUtil` | 字段读写、枚举查找、堆栈 |
 
+## 前端控制台（Vue 3）
+
+启动后打开 <http://localhost:8080/> 即可在页面上自测常用工具：脱敏、身份证、JWT、AES、人民币大写、雪花 ID 等。源码在 `frontend/`，构建产物输出到 `src/main/resources/static/`。
+
+本地改前端：
+
+```bash
+cd frontend
+npm install
+npm run dev      # 开发（代理到 8080）
+npm run build    # 构建进 Spring Boot 静态资源
+```
+
 ## 快速开始
 
 ```bash
