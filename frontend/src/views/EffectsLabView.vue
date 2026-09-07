@@ -1,5 +1,5 @@
 <template>
-  <div class="fx-lab" @mousemove="onMove">
+  <div class="fx-lab">
     <div class="topbar">
       <div>
         <h1 class="gradient-text">特效实验室</h1>
@@ -31,9 +31,9 @@
         <p>在区域内点击，看波纹扩散。</p>
         <span v-for="item in ripples" :key="item.id" class="ripple" :style="item.style"></span>
       </article>
-      <article class="spotlight-card" :style="spotStyle">
+      <article class="spotlight-card" :style="spotStyle" @mousemove="spot">
         <h2>聚光跟随</h2>
-        <p>鼠标在页面移动时，高光会跟着走。</p>
+        <p>鼠标在卡片上移动时，高光会跟着走。</p>
       </article>
     </div>
     <canvas ref="canvasRef" class="confetti"></canvas>
@@ -47,7 +47,7 @@ const typed = ref('')
 const displayCount = ref(0)
 const canvasRef = ref(null)
 const ripples = ref([])
-const mouse = ref({ x: 40, y: 40 })
+const mouse = ref({ x: 80, y: 70 })
 const fullText = 'Vue 3 · 过渡、光晕、玻璃拟态、礼花'
 let typeTimer
 let countTimer
@@ -58,8 +58,12 @@ const spotStyle = computed(() => ({
   '--y': `${mouse.value.y}px`
 }))
 
-function onMove(event) {
-  mouse.value = { x: event.clientX, y: event.clientY }
+function spot(event) {
+  const rect = event.currentTarget.getBoundingClientRect()
+  mouse.value = {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  }
 }
 
 function tilt(event) {

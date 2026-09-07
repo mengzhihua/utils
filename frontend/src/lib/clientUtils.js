@@ -10,11 +10,10 @@ export async function runClientTool(id, values) {
   switch (id) {
     case 'json-format': {
       const parsed = JSON.parse(values.text || '{}')
-      return {
-        result: values.mode === 'minify'
-          ? JSON.stringify(parsed)
-          : JSON.stringify(parsed, null, 2)
+      if (values.mode === 'minify') {
+        return { minified: JSON.stringify(parsed) }
       }
+      return parsed
     }
     case 'base64': {
       const text = values.text || ''
