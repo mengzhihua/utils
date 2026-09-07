@@ -38,7 +38,12 @@
 
 ## 前端控制台（Vue 3）
 
-启动后打开 <http://localhost:8080/> 即可在页面上自测常用工具：脱敏、身份证、JWT、AES、人民币大写、雪花 ID 等。源码在 `frontend/`，构建产物输出到 `src/main/resources/static/`。
+启动后打开 <http://localhost:8080/> 即可在页面上自测常用工具：脱敏、身份证、JWT、AES、人民币大写、雪花 ID 等。源码在 `frontend/`，构建产物输出到 `src/main/resources/static/`。控制台包含：
+
+- 后端 Java 工具演示（脱敏、JWT、AES、身份证等）
+- 浏览器本地工具：JSON 格式化、Base64、URL、时间戳、UUID、密码生成、字数、正则、颜色、SHA-256、图片转 Base64
+- 特效实验室：玻璃拟态、光晕、礼花、打字机、涟漪、聚光跟随
+- 深色模式、页面过渡、复制 Toast
 
 本地改前端：
 

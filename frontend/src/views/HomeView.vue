@@ -1,34 +1,35 @@
 <template>
-  <div>
+  <div class="home">
     <div class="topbar">
       <div>
-        <h1>工具控制台</h1>
-        <p>在页面上直接调用后端通用工具，方便自测和演示。左侧选择具体能力。</p>
+        <h1 class="gradient-text">工具控制台</h1>
+        <p>后端 Java 工具 + 浏览器本地工具。左侧选择能力，或从下面卡片进入。</p>
       </div>
     </div>
 
     <div class="stats">
-      <div class="stat">
+      <div class="stat reveal" style="--d: 0ms">
         <b>{{ health || '...' }}</b>
         <span>应用健康</span>
       </div>
-      <div class="stat">
+      <div class="stat reveal" style="--d: 80ms">
         <b>{{ system.java || '...' }}</b>
         <span>Java 版本</span>
       </div>
-      <div class="stat">
+      <div class="stat reveal" style="--d: 160ms">
         <b>{{ now.dateTime || '...' }}</b>
         <span>服务器时间</span>
       </div>
     </div>
 
     <div class="actions" style="margin: 0 0 18px">
-      <button class="btn" type="button" @click="quick('uuid')">生成 UUID</button>
+      <button class="btn glow-btn" type="button" @click="quick('uuid')">生成 UUID</button>
       <button class="btn secondary" type="button" @click="quick('snowflake')">雪花 ID</button>
       <button class="btn secondary" type="button" @click="quick('order-no')">业务单号</button>
+      <RouterLink class="btn secondary" to="/fx">打开特效实验室</RouterLink>
     </div>
 
-    <div v-if="quickResult" class="result" style="margin-bottom: 22px">
+    <div v-if="quickResult" class="result result-enter" style="margin-bottom: 22px">
       <div class="result-head">
         <span>快捷结果</span>
         <button class="btn secondary" type="button" @click="copy(quickResult)">复制</button>
@@ -36,8 +37,29 @@
       <pre>{{ quickResult }}</pre>
     </div>
 
+    <h3 class="section-title">前端工具</h3>
     <div class="grid">
-      <RouterLink v-for="tool in tools" :key="tool.id" class="card" :to="`/t/${tool.id}`">
+      <RouterLink
+        v-for="(tool, index) in clientTools"
+        :key="tool.id"
+        class="card reveal"
+        :style="{ '--d': `${index * 40}ms` }"
+        :to="`/c/${tool.id}`"
+      >
+        <h2>{{ tool.title }}</h2>
+        <p>{{ tool.summary }} · 本地</p>
+      </RouterLink>
+    </div>
+
+    <h3 class="section-title">后端 Java 工具</h3>
+    <div class="grid">
+      <RouterLink
+        v-for="(tool, index) in tools"
+        :key="tool.id"
+        class="card reveal"
+        :style="{ '--d': `${index * 18}ms` }"
+        :to="`/t/${tool.id}`"
+      >
         <h2>{{ tool.title }}</h2>
         <p>{{ tool.summary }} · {{ tool.method }}</p>
       </RouterLink>
@@ -49,11 +71,14 @@
 import { onMounted, reactive, ref } from 'vue'
 import { callTool } from '../api/http'
 import { getTool, tools } from '../tools'
+import { clientTools } from '../clientTools'
+import { useToast } from '../composables/useToast'
 
 const health = ref('')
 const now = reactive({})
 const system = reactive({})
 const quickResult = ref('')
+const toast = useToast()
 
 async function load() {
   const [healthRes, nowRes, sysRes] = await Promise.all([
@@ -73,6 +98,7 @@ async function quick(id) {
 
 async function copy(text) {
   await navigator.clipboard.writeText(text)
+  toast.show('已复制')
 }
 
 onMounted(load)

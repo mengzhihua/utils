@@ -1,19 +1,18 @@
 <template>
-  <div v-if="tool">
+  <div v-if="tool" class="tool-page">
     <div class="topbar">
       <div>
         <h1>{{ tool.title }}</h1>
-        <p>{{ tool.summary }} · {{ tool.method }} {{ tool.path }}</p>
+        <p>{{ tool.summary }} · 浏览器本地计算</p>
       </div>
     </div>
-
     <section class="panel">
       <form class="form-grid" @submit.prevent="run">
         <div
           v-for="field in tool.fields"
           :key="field.name"
           class="field"
-          :class="{ full: field.type === 'textarea' || tool.fields.length === 1 }"
+          :class="{ full: field.type === 'textarea' || field.type === 'file' || tool.fields.length === 1 }"
         >
           <label :for="field.name">{{ field.label }}</label>
           <select v-if="field.type === 'select'" :id="field.name" v-model="values[field.name]">
@@ -21,38 +20,27 @@
               {{ option.label }}
             </option>
           </select>
-          <textarea
-            v-else-if="field.type === 'textarea'"
-            :id="field.name"
-            v-model="values[field.name]"
-          />
+          <textarea v-else-if="field.type === 'textarea'" :id="field.name" v-model="values[field.name]" />
+          <input v-else-if="field.type === 'file'" :id="field.name" type="file" accept="image/*" @change="onFile" />
           <input v-else :id="field.name" v-model="values[field.name]" />
         </div>
         <div class="field full">
           <div class="actions">
-            <button class="btn" type="submit" :disabled="loading">{{ loading ? '执行中...' : '运行' }}</button>
+            <button class="btn" type="submit" :disabled="loading">{{ loading ? '计算中...' : '运行' }}</button>
             <button class="btn secondary" type="button" @click="reset">重置样例</button>
           </div>
         </div>
       </form>
-
       <p v-if="error" class="curl" style="color: var(--danger)">{{ error }}</p>
-
-      <div v-if="result" class="result result-enter">
+      <div v-if="colorPreview" class="color-preview" :style="{ background: colorPreview }"></div>
+      <img v-if="imagePreview" class="image-preview" :src="imagePreview" alt="preview" />
+      <div v-if="pretty" class="result result-enter">
         <div class="result-head">
-          <div>
-            <span class="badge" :class="result.ok ? 'ok' : 'bad'">
-              {{ result.ok ? 'success' : 'failed' }}
-            </span>
-            <span class="badge">HTTP {{ result.status }}</span>
-            <span class="badge">{{ result.elapsed }}ms</span>
-            <span v-if="result.traceId" class="badge">trace {{ result.traceId }}</span>
-          </div>
+          <span class="badge ok">local</span>
           <button class="btn secondary" type="button" @click="copy">复制 JSON</button>
         </div>
         <pre>{{ pretty }}</pre>
       </div>
-      <p v-if="result" class="curl">{{ result.curl }}</p>
     </section>
   </div>
   <div v-else class="panel">未找到该工具</div>
@@ -60,8 +48,8 @@
 
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
-import { callTool } from '../api/http'
-import { getTool } from '../tools'
+import { getClientTool } from '../clientTools'
+import { runClientTool } from '../lib/clientUtils'
 import { useToast } from '../composables/useToast'
 
 const props = defineProps({
@@ -69,32 +57,43 @@ const props = defineProps({
 })
 
 const toast = useToast()
-
-const tool = computed(() => getTool(props.id))
+const tool = computed(() => getClientTool(props.id))
 const values = reactive({})
 const loading = ref(false)
 const error = ref('')
-const result = ref(null)
-const pretty = computed(() => JSON.stringify(result.value?.payload, null, 2))
+const output = ref(null)
+const pretty = computed(() => output.value ? JSON.stringify(output.value, null, 2) : '')
+const colorPreview = computed(() => output.value?.preview || '')
+const imagePreview = computed(() => output.value?.dataUrl || '')
 
 function hydrate() {
   Object.keys(values).forEach((key) => delete values[key])
   for (const field of tool.value?.fields || []) {
     values[field.name] = field.value ?? ''
   }
-  result.value = null
+  output.value = null
   error.value = ''
 }
 
-async function run() {
-  if (!tool.value) {
+function onFile(event) {
+  const file = event.target.files?.[0]
+  if (!file) {
     return
   }
+  const reader = new FileReader()
+  reader.onload = () => {
+    values.dataUrl = String(reader.result)
+  }
+  reader.readAsDataURL(file)
+}
+
+async function run() {
   loading.value = true
   error.value = ''
   try {
-    result.value = await callTool(tool.value, values)
+    output.value = await runClientTool(props.id, values)
   } catch (err) {
+    output.value = null
     error.value = err instanceof Error ? err.message : String(err)
   } finally {
     loading.value = false
