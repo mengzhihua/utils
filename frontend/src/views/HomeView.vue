@@ -37,19 +37,21 @@
       <pre>{{ quickResult }}</pre>
     </div>
 
-    <h3 class="section-title">前端工具</h3>
-    <div class="grid">
-      <RouterLink
-        v-for="(tool, index) in clientTools"
-        :key="tool.id"
-        class="card reveal"
-        :style="{ '--d': `${index * 40}ms` }"
-        :to="`/c/${tool.id}`"
-      >
-        <h2>{{ tool.title }}</h2>
-        <p>{{ tool.summary }} · 本地</p>
-      </RouterLink>
-    </div>
+    <template v-for="group in clientCatalog" :key="group.id">
+      <h3 class="section-title">前端 · {{ group.label }}</h3>
+      <div class="grid">
+        <RouterLink
+          v-for="(tool, index) in group.tools"
+          :key="tool.id"
+          class="card reveal"
+          :style="{ '--d': `${index * 40}ms` }"
+          :to="`/c/${tool.id}`"
+        >
+          <h2>{{ tool.title }}</h2>
+          <p>{{ tool.summary }} · 本地</p>
+        </RouterLink>
+      </div>
+    </template>
 
     <h3 class="section-title">后端 Java 工具</h3>
     <div class="grid">
@@ -71,7 +73,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import { callTool } from '../api/http'
 import { getTool, tools } from '../tools'
-import { clientTools } from '../clientTools'
+import { groupedClientTools } from '../clientTools'
 import { useToast } from '../composables/useToast'
 
 const health = ref('')
@@ -79,6 +81,7 @@ const now = reactive({})
 const system = reactive({})
 const quickResult = ref('')
 const toast = useToast()
+const clientCatalog = groupedClientTools()
 
 async function load() {
   const [healthRes, nowRes, sysRes] = await Promise.all([

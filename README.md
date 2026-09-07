@@ -17,22 +17,22 @@
 
 | 模块 | 类 | 说明 |
 | --- | --- | --- |
-| 字符串 / 脱敏 | `StringUtil` / `DesensitizeUtil` / `HtmlUtil` / `XmlUtil` | 驼峰转换、姓名电话身份证银行卡脱敏、XSS 转义 |
-| 对象 / 集合 | `ObjectUtil` / `ArrayUtil` / `CollectionUtil` / `MapUtil` / `BeanUtil` | 判空、分组分页、Bean 拷贝（含忽略 null） |
-| 日期 | `DateTimeUtil` | 格式化、起止日/周/月、年龄、周末、时长 |
-| JSON / CSV | `JsonUtil` / `CsvUtil` / `CloneUtil` | Jackson 3、CSV 编解码、深拷贝 |
-| 数字 | `NumberUtil` / `ConvertUtil` / `BooleanUtil` / `ChineseNumberUtil` / `PageUtil` / `VersionUtil` | 精确运算、人民币大写、分页、版本比较 |
-| 校验 / 断言 | `RegexUtil` / `AssertUtil` / `SqlUtil` / `IdCardUtil` / `BankCardUtil` / `PasswordUtil` | 格式校验、身份证校验码、Luhn、密码强度、ORDER BY 白名单 |
+| 字符串 / 脱敏 | `StringUtil` / `DesensitizeUtil` / `HtmlUtil` / `XmlUtil` / `TextUtil` / `SensitiveWordUtil` | 驼峰/短横线、模板占位、全角半角、相似度、敏感词 |
+| 对象 / 集合 | `ObjectUtil` / `ArrayUtil` / `CollectionUtil` / `MapUtil` / `BeanUtil` | 判空、分组分页、集合 diff、Bean 拷贝（含忽略 null） |
+| 日期 | `DateTimeUtil` / `CronUtil` | 格式化、工作日、相对时间、Cron 下次触发 |
+| JSON / CSV / YAML | `JsonUtil` / `CsvUtil` / `YamlUtil` / `CloneUtil` | Jackson 3、CSV、SnakeYAML、深拷贝 |
+| 数字 | `NumberUtil` / `MoneyUtil` / `ByteSizeUtil` / `ConvertUtil` / `BooleanUtil` / `ChineseNumberUtil` / `PageUtil` / `VersionUtil` | 精确运算、元/分、字节大小、人民币大写 |
+| 校验 / 断言 | `RegexUtil` / `AssertUtil` / `SqlUtil` / `IdCardUtil` / `BankCardUtil` / `CreditCodeUtil` / `PhoneUtil` / `PasswordUtil` | 身份证、Luhn、统一社会信用代码、运营商 |
 
 ### 安全、ID、文件、网络
 
 | 模块 | 类 | 说明 |
 | --- | --- | --- |
-| 加解密 | `EncryptUtil` / `RsaUtil` / `JwtUtil` / `HexUtil` | MD5/SHA、AES-GCM、RSA-OAEP、HS256 JWT |
-| ID / 单号 | `IdUtil` / `SnowflakeIdGenerator` / `OrderNoUtil` / `RandomUtil` | UUID、雪花、业务单号 |
+| 加解密 | `EncryptUtil` / `RsaUtil` / `JwtUtil` / `HexUtil` / `SignUtil` / `TotpUtil` | MD5/SHA/CRC32、AES-GCM、HMAC、接口签名、TOTP |
+| ID / 单号 | `IdUtil` / `SnowflakeIdGenerator` / `OrderNoUtil` / `ShortCodeUtil` / `RandomUtil` | UUID、ULID、雪花、Base62 短码 |
 | 文件 | `FileUtil` / `IoUtil` / `ZipUtil` / `MimeUtil` / `PathUtil` / `DownloadUtil` | 读写、压缩（防 zip-slip）、下载头 |
-| 网络 / Web | `IpUtil` / `NetUtil` / `UrlUtil` / `HttpUtil` / `ServletUtil` / `CookieUtil` / `UserAgentUtil` | 客户端 IP、URL、Cookie、UA |
-| 树 / 地理 | `TreeUtil` / `GeoUtil` | 扁平列表建树、经纬度距离 |
+| 网络 / Web | `IpUtil` / `NetUtil` / `UrlUtil` / `HttpUtil` / `ServletUtil` / `CookieUtil` / `UserAgentUtil` | 客户端 IP、CIDR、Query 解析、UA |
+| 树 / 地理 | `TreeUtil` / `GeoUtil` | 建树、距离、WGS84 / GCJ-02 / BD-09 |
 | 并发 / 系统 | `ThreadUtil` / `RetryUtil` / `StopWatchUtil` / `LocalCacheUtil` / `SystemUtil` | 虚拟线程、重试、计时、本地 TTL 缓存 |
 | 反射 | `ReflectUtil` / `EnumUtil` / `ClassUtil` / `ExceptionUtil` | 字段读写、枚举查找、堆栈 |
 
@@ -40,10 +40,12 @@
 
 启动后打开 <http://localhost:8080/> 即可在页面上自测常用工具：脱敏、身份证、JWT、AES、人民币大写、雪花 ID 等。源码在 `frontend/`，构建产物输出到 `src/main/resources/static/`。控制台包含：
 
-- 后端 Java 工具演示（脱敏、JWT、AES、身份证等）
-- 浏览器本地工具：JSON 格式化、Base64、URL、时间戳、UUID、密码生成、字数、正则、颜色、SHA-256、图片转 Base64
+- 后端 Java 工具演示（脱敏、JWT、AES、身份证、信用代码、坐标系、签名、TOTP、Cron 等）
+- 浏览器本地工具：JSON/XML、Base64、JWT 解码、Markdown、命名风格、全角半角、行处理、文本对比、MD5/HMAC/CRC32、ULID、CIDR、UA/Cookie 等
 - 特效实验室：玻璃拟态、光晕、礼花、打字机、涟漪、聚光跟随
 - 深色模式、页面过渡、复制 Toast
+
+未内置（需额外依赖，可按项目再加）：Excel、邮件、二维码、Redis、OSS。
 
 本地改前端：
 

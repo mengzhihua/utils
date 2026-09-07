@@ -133,4 +133,13 @@ public final class EncryptUtil {
             throw new IllegalStateException(algorithm + " digest failed", ex);
         }
     }
+
+    public static String crc32(String text) {
+        if (text == null) {
+            return null;
+        }
+        java.util.zip.CRC32 crc = new java.util.zip.CRC32();
+        crc.update(text.getBytes(StandardCharsets.UTF_8));
+        return String.format(java.util.Locale.ROOT, "%08x", crc.getValue());
+    }
 }

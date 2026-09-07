@@ -16,10 +16,10 @@
           特效实验室
           <small>光晕 / 礼花 / 玻璃拟态</small>
         </RouterLink>
-        <div class="nav-group">
-          <h3>前端工具</h3>
+        <div class="nav-group" v-for="group in clientCatalog" :key="group.id">
+          <h3>前端 · {{ group.label }}</h3>
           <RouterLink
-            v-for="tool in clientTools"
+            v-for="tool in group.tools"
             :key="tool.id"
             class="nav-link"
             :to="`/c/${tool.id}`"
@@ -66,12 +66,13 @@
 <script setup>
 import { ref } from 'vue'
 import { groupedTools } from './tools'
-import { clientTools } from './clientTools'
+import { groupedClientTools } from './clientTools'
 import { useTheme } from './composables/useTheme'
 import { useToast } from './composables/useToast'
 
 const open = ref(false)
 const catalog = groupedTools()
+const clientCatalog = groupedClientTools()
 const { isDark, toggle } = useTheme()
 const { message, visible } = useToast()
 </script>

@@ -34,6 +34,7 @@
       <p v-if="error" class="curl" style="color: var(--danger)">{{ error }}</p>
       <div v-if="colorPreview" class="color-preview" :style="{ background: colorPreview }"></div>
       <img v-if="imagePreview" class="image-preview" :src="imagePreview" alt="preview" />
+      <div v-if="htmlPreview" class="panel" style="margin-top: 16px" v-html="htmlPreview"></div>
       <div v-if="pretty" class="result result-enter">
         <div class="result-head">
           <span class="badge ok">local</span>
@@ -63,8 +64,9 @@ const loading = ref(false)
 const error = ref('')
 const output = ref(null)
 const pretty = computed(() => output.value ? JSON.stringify(output.value, null, 2) : '')
-const colorPreview = computed(() => output.value?.preview || '')
+const colorPreview = computed(() => output.value?.preview && !output.value?.html ? output.value.preview : '')
 const imagePreview = computed(() => output.value?.dataUrl || '')
+const htmlPreview = computed(() => output.value?.html || '')
 
 function hydrate() {
   Object.keys(values).forEach((key) => delete values[key])

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -241,5 +242,67 @@ public final class StringUtil {
             return null;
         }
         return new StringBuilder(str).reverse().toString();
+    }
+
+    /**
+     * Converts {@code userName} / {@code user_name} to {@code user-name}.
+     */
+    public static String toKebab(String str) {
+        if (isBlank(str)) {
+            return str;
+        }
+        return camelToSnake(str.contains("_") ? snakeToCamel(str) : str).replace('_', '-');
+    }
+
+    public static String toPascal(String str) {
+        return capitalize(snakeToCamel(isBlank(str) ? str : str.replace('-', '_')));
+    }
+
+    public static String format(String template, Map<String, ?> params) {
+        if (template == null || params == null) {
+            return template;
+        }
+        String result = template;
+        for (Map.Entry<String, ?> entry : params.entrySet()) {
+            if (entry.getKey() == null) {
+                continue;
+            }
+            String value = entry.getValue() == null ? EMPTY : String.valueOf(entry.getValue());
+            result = result.replace("{" + entry.getKey() + "}", value);
+            result = result.replace("${" + entry.getKey() + "}", value);
+        }
+        return result;
+    }
+
+    public static String toHalfWidth(String str) {
+        if (str == null) {
+            return null;
+        }
+        char[] chars = str.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[i];
+            if (c == 12288) {
+                chars[i] = ' ';
+            } else if (c >= 65281 && c <= 65374) {
+                chars[i] = (char) (c - 65248);
+            }
+        }
+        return new String(chars);
+    }
+
+    public static String toFullWidth(String str) {
+        if (str == null) {
+            return null;
+        }
+        char[] chars = str.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[i];
+            if (c == ' ') {
+                chars[i] = 12288;
+            } else if (c >= 33 && c <= 126) {
+                chars[i] = (char) (c + 65248);
+            }
+        }
+        return new String(chars);
     }
 }

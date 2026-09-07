@@ -123,6 +123,10 @@ public class UtilsDemoController {
             case "ipv4" -> RegexUtil.isIpv4(value);
             case "url" -> RegexUtil.isUrl(value);
             case "username" -> RegexUtil.isUsername(value);
+            case "credit" -> RegexUtil.isCreditCode(value);
+            case "plate" -> RegexUtil.isPlate(value);
+            case "ipv6" -> RegexUtil.isIpv6(value);
+            case "zipcode" -> RegexUtil.isZipcode(value);
             default -> throw new IllegalArgumentException("unsupported type: " + type);
         };
         return Result.ok(Map.of("matched", matched));

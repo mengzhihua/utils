@@ -106,4 +106,22 @@ class UtilsDemoControllerTest {
                 .andExpect(jsonPath("$.data.escaped").value("&lt;b&gt;x&lt;/b&gt;"))
                 .andExpect(jsonPath("$.data.stripped").value("x"));
     }
+
+    @Test
+    void businessUtilsCreditMoneyAndCidr() throws Exception {
+        String code = com.mengzhihua.utils.util.CreditCodeUtil.complete("91110000710930405");
+        mockMvc.perform(get("/api/utils/credit-code/parse").param("code", code))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/money/fen").param("yuan", "12.3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.fen").value(1230))
+                .andExpect(jsonPath("$.data.back").value("12.30"));
+
+        mockMvc.perform(get("/api/utils/ip/cidr").param("ip", "172.16.0.10").param("cidr", "172.16.0.0/24"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.inCidr").value(true))
+                .andExpect(jsonPath("$.data.network").value("172.16.0.0"));
+    }
 }

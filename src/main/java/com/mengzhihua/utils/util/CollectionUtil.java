@@ -133,4 +133,28 @@ public final class CollectionUtil {
         }
         return new ArrayList<>(list.subList(from, Math.min(from + size, list.size())));
     }
+
+    public static <T> Diff<T> diff(Collection<T> before, Collection<T> after) {
+        List<T> oldList = emptyIfNull(before == null ? null : new ArrayList<>(before));
+        List<T> newList = emptyIfNull(after == null ? null : new ArrayList<>(after));
+        List<T> added = new ArrayList<>();
+        List<T> removed = new ArrayList<>();
+        List<T> kept = new ArrayList<>();
+        for (T item : newList) {
+            if (oldList.contains(item)) {
+                kept.add(item);
+            } else {
+                added.add(item);
+            }
+        }
+        for (T item : oldList) {
+            if (!newList.contains(item)) {
+                removed.add(item);
+            }
+        }
+        return new Diff<>(added, removed, kept);
+    }
+
+    public record Diff<T>(List<T> added, List<T> removed, List<T> kept) {
+    }
 }

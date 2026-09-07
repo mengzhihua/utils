@@ -213,6 +213,67 @@ public final class DateTimeUtil {
         return secs + "s";
     }
 
+    public static String fromNow(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return "";
+        }
+        long seconds = Duration.between(dateTime, now()).getSeconds();
+        boolean future = seconds < 0;
+        long abs = Math.abs(seconds);
+        String suffix = future ? "后" : "前";
+        if (abs < 10) {
+            return future ? "马上" : "刚刚";
+        }
+        if (abs < 60) {
+            return abs + "秒" + suffix;
+        }
+        if (abs < 3600) {
+            return (abs / 60) + "分钟" + suffix;
+        }
+        if (abs < 86400) {
+            return (abs / 3600) + "小时" + suffix;
+        }
+        if (abs < 86400L * 30) {
+            return (abs / 86400) + "天" + suffix;
+        }
+        return format(dateTime);
+    }
+
+    public static boolean isWorkday(LocalDate date) {
+        return date != null && !isWeekend(date);
+    }
+
+    public static LocalDate plusWorkdays(LocalDate date, int days) {
+        if (date == null) {
+            return null;
+        }
+        int step = days < 0 ? -1 : 1;
+        int remaining = Math.abs(days);
+        LocalDate cursor = date;
+        while (remaining > 0) {
+            cursor = cursor.plusDays(step);
+            if (isWorkday(cursor)) {
+                remaining--;
+            }
+        }
+        return cursor;
+    }
+
+    public static long workdaysBetween(LocalDate start, LocalDate end) {
+        if (start == null || end == null) {
+            return 0L;
+        }
+        LocalDate from = start.isAfter(end) ? end : start;
+        LocalDate to = start.isAfter(end) ? start : end;
+        long count = 0;
+        for (LocalDate cursor = from; cursor.isBefore(to); cursor = cursor.plusDays(1)) {
+            if (isWorkday(cursor)) {
+                count++;
+            }
+        }
+        return start.isAfter(end) ? -count : count;
+    }
+
     private static DateTimeFormatter formatter(String pattern) {
         String key = StringUtil.defaultIfBlank(pattern, DATETIME_PATTERN);
         return FORMATTERS.computeIfAbsent(key, DateTimeFormatter::ofPattern);

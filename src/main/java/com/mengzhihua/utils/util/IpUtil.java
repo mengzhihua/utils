@@ -51,6 +51,51 @@ public final class IpUtil {
                 || inRange(value, ipv4ToLong("10.0.2.3"), ipv4ToLong("192.168.2.3"));
     }
 
+    public static String longToIpv4(long value) {
+        if (value < 0 || value > 0xffffffffL) {
+            return "";
+        }
+        return ((value >> 24) & 0xff) + "." + ((value >> 16) & 0xff) + "." + ((value >> 8) & 0xff) + "." + (value & 0xff);
+    }
+
+    public static boolean inCidr(String ip, String cidr) {
+        Cidr parsed = parseCidr(cidr);
+        long value = ipv4ToLong(ip);
+        return value >= 0 && value >= parsed.network && value <= parsed.broadcast;
+    }
+
+    public static String cidrNetwork(String cidr) {
+        return longToIpv4(parseCidr(cidr).network);
+    }
+
+    public static String cidrBroadcast(String cidr) {
+        return longToIpv4(parseCidr(cidr).broadcast);
+    }
+
+    public static long cidrHostCount(String cidr) {
+        Cidr parsed = parseCidr(cidr);
+        return parsed.broadcast - parsed.network + 1;
+    }
+
+    private static Cidr parseCidr(String cidr) {
+        if (StringUtil.isBlank(cidr) || !cidr.contains("/")) {
+            throw new IllegalArgumentException("invalid cidr: " + cidr);
+        }
+        String[] parts = cidr.trim().split("/");
+        long ip = ipv4ToLong(parts[0]);
+        int prefix = Integer.parseInt(parts[1]);
+        if (ip < 0 || prefix < 0 || prefix > 32) {
+            throw new IllegalArgumentException("invalid cidr: " + cidr);
+        }
+        long mask = prefix == 0 ? 0 : (0xffffffffL << (32 - prefix)) & 0xffffffffL;
+        long network = ip & mask;
+        long broadcast = network | (~mask & 0xffffffffL);
+        return new Cidr(network, broadcast);
+    }
+
+    private record Cidr(long network, long broadcast) {
+    }
+
     public static long ipv4ToLong(String ip) {
         if (StringUtil.isBlank(ip) || !RegexUtil.isIpv4(ip)) {
             return -1L;

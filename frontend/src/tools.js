@@ -159,7 +159,11 @@ export const tools = [
           { value: 'idcard', label: '身份证' },
           { value: 'ipv4', label: 'IPv4' },
           { value: 'url', label: 'URL' },
-          { value: 'username', label: '用户名' }
+          { value: 'username', label: '用户名' },
+          { value: 'credit', label: '信用代码' },
+          { value: 'plate', label: '车牌' },
+          { value: 'ipv6', label: 'IPv6' },
+          { value: 'zipcode', label: '邮编' }
         ]
       },
       { name: 'value', label: '值', value: '13812345678' }
@@ -173,6 +177,33 @@ export const tools = [
     method: 'GET',
     path: '/api/utils/idcard/parse',
     fields: [{ name: 'idNo', label: '身份证号', value: '110101199003078937' }]
+  },
+  {
+    id: 'credit-code',
+    group: 'validate',
+    title: '统一社会信用代码',
+    summary: 'CreditCodeUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/credit-code/parse',
+    fields: [{ name: 'code', label: '代码', value: '91110000710930405L' }]
+  },
+  {
+    id: 'bankcard',
+    group: 'validate',
+    title: '银行卡 Luhn',
+    summary: 'BankCardUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/bankcard/luhn',
+    fields: [{ name: 'cardNo', label: '卡号', value: '4111111111111111' }]
+  },
+  {
+    id: 'phone-carrier',
+    group: 'validate',
+    title: '手机运营商',
+    summary: 'PhoneUtil.carrier',
+    method: 'GET',
+    path: '/api/utils/phone/carrier',
+    fields: [{ name: 'mobile', label: '手机号', value: '13812345678' }]
   },
   {
     id: 'password',
@@ -212,6 +243,163 @@ export const tools = [
       { name: 'left', label: '左侧', value: '1.2.10' },
       { name: 'right', label: '右侧', value: '1.2.9' }
     ]
+  },
+  {
+    id: 'money-fen',
+    group: 'number',
+    title: '元 / 分互转',
+    summary: 'MoneyUtil.yuanToFen',
+    method: 'GET',
+    path: '/api/utils/money/fen',
+    fields: [{ name: 'yuan', label: '元', value: '12.3' }]
+  },
+  {
+    id: 'byte-size',
+    group: 'number',
+    title: '字节大小',
+    summary: 'ByteSizeUtil.format',
+    method: 'GET',
+    path: '/api/utils/bytesize',
+    fields: [{ name: 'bytes', label: '字节', value: '1536000' }]
+  },
+  {
+    id: 'hmac',
+    group: 'crypto',
+    title: 'HMAC / CRC32',
+    summary: 'EncryptUtil.hmacSha256',
+    method: 'GET',
+    path: '/api/utils/encrypt/hmac',
+    fields: [
+      { name: 'text', label: '原文', value: 'hello' },
+      { name: 'secret', label: '密钥', value: 'secret' }
+    ]
+  },
+  {
+    id: 'totp',
+    group: 'crypto',
+    title: 'TOTP 动态口令',
+    summary: 'TotpUtil.generate',
+    method: 'GET',
+    path: '/api/utils/totp',
+    fields: [{ name: 'secret', label: 'Base32 密钥', value: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ' }]
+  },
+  {
+    id: 'sign',
+    group: 'crypto',
+    title: '接口签名',
+    summary: 'SignUtil.md5',
+    method: 'GET',
+    path: '/api/utils/sign/md5',
+    fields: [
+      { name: 'appId', label: 'appId', value: 'demo' },
+      { name: 'timestamp', label: 'timestamp', value: '1710000000' },
+      { name: 'secret', label: 'secret', value: 'demo-secret' }
+    ]
+  },
+  {
+    id: 'ulid',
+    group: 'id',
+    title: 'ULID / 短码',
+    summary: 'IdUtil.ulid / ShortCodeUtil',
+    method: 'GET',
+    path: '/api/utils/id/ulid',
+    fields: [{ name: 'id', label: '数字 ID', value: '123456' }]
+  },
+  {
+    id: 'workday',
+    group: 'datetime',
+    title: '工作日 / 相对时间',
+    summary: 'plusWorkdays / fromNow',
+    method: 'GET',
+    path: '/api/utils/workday',
+    fields: [
+      { name: 'date', label: '日期', value: '2026-09-07' },
+      { name: 'days', label: '加工作日', value: '3' }
+    ]
+  },
+  {
+    id: 'cron',
+    group: 'datetime',
+    title: 'Cron 下次触发',
+    summary: 'CronUtil.nextTimes',
+    method: 'GET',
+    path: '/api/utils/cron/next',
+    fields: [{ name: 'expression', label: '表达式', value: '0 0 9 * * MON-FRI' }]
+  },
+  {
+    id: 'template',
+    group: 'string',
+    title: '模板 / 全角半角',
+    summary: 'StringUtil.format',
+    method: 'GET',
+    path: '/api/utils/template',
+    fields: [
+      { name: 'template', label: '模板', value: '你好，{name}' },
+      { name: 'name', label: 'name', value: 'Ada' }
+    ]
+  },
+  {
+    id: 'similar',
+    group: 'string',
+    title: '文本相似度',
+    summary: 'TextUtil.similarity',
+    method: 'GET',
+    path: '/api/utils/text/similar',
+    fields: [
+      { name: 'left', label: '文本 A', value: 'hello' },
+      { name: 'right', label: '文本 B', value: 'hallo' }
+    ]
+  },
+  {
+    id: 'sensitive',
+    group: 'string',
+    title: '敏感词替换',
+    summary: 'SensitiveWordUtil.replace',
+    method: 'GET',
+    path: '/api/utils/sensitive',
+    fields: [{ name: 'text', label: '文本', value: '请开发票' }]
+  },
+  {
+    id: 'yaml',
+    group: 'json',
+    title: 'JSON → YAML',
+    summary: 'YamlUtil.jsonToYaml',
+    method: 'POST',
+    path: '/api/utils/yaml/from-json',
+    fields: [{ name: 'json', label: 'JSON', type: 'textarea', value: '{"name":"Ada","skills":["java","vue"]}' }]
+  },
+  {
+    id: 'geo-transform',
+    group: 'structure',
+    title: '坐标系转换',
+    summary: 'WGS84 / GCJ-02 / BD-09',
+    method: 'GET',
+    path: '/api/utils/geo/transform',
+    fields: [
+      { name: 'lat', label: '纬度', value: '39.9087' },
+      { name: 'lon', label: '经度', value: '116.3975' }
+    ]
+  },
+  {
+    id: 'cidr',
+    group: 'web',
+    title: 'CIDR 计算',
+    summary: 'IpUtil.inCidr',
+    method: 'GET',
+    path: '/api/utils/ip/cidr',
+    fields: [
+      { name: 'ip', label: 'IP', value: '172.16.0.10' },
+      { name: 'cidr', label: 'CIDR', value: '172.16.0.0/24' }
+    ]
+  },
+  {
+    id: 'url-query',
+    group: 'web',
+    title: 'Query 解析',
+    summary: 'UrlUtil.parseQuery',
+    method: 'GET',
+    path: '/api/utils/url/query',
+    fields: [{ name: 'url', label: 'URL', value: 'https://example.com?q=工具&x=1' }]
   },
   {
     id: 'tree',

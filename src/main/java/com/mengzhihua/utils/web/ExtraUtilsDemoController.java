@@ -98,6 +98,7 @@ public class ExtraUtilsDemoController {
     public Result<Map<String, String>> html(@RequestParam String text) {
         Map<String, String> data = new LinkedHashMap<>();
         data.put("escaped", HtmlUtil.escape(text));
+        data.put("unescaped", HtmlUtil.unescape(HtmlUtil.escape(text)));
         data.put("stripped", HtmlUtil.stripTags(text));
         return Result.ok(data);
     }
