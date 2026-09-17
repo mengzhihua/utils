@@ -625,6 +625,44 @@ export const clientTools = [
         { name: 'before', label: '前', value: '<' },
         { name: 'after', label: '后', value: '>' }
       ]
+    },
+    {
+      id: 'pinyin-local',
+      group: 'text',
+      title: '拼音首字母',
+      summary: '中国 → ZG',
+      fields: [{ name: 'text', label: '中文', value: '中国' }]
+    },
+    {
+      id: 'hkid-local',
+      group: 'net',
+      title: '香港身份证',
+      summary: 'A123456(3)',
+      fields: [{ name: 'value', label: '证件号', value: 'A123456(3)' }]
+    },
+    {
+      id: 'twid-local',
+      group: 'net',
+      title: '台湾身份证',
+      summary: 'A123456789',
+      fields: [{ name: 'value', label: '证件号', value: 'A123456789' }]
+    },
+    {
+      id: 'org-code-local',
+      group: 'net',
+      title: '组织机构代码',
+      summary: 'GB 11714',
+      fields: [{ name: 'code', label: '代码', value: '12345678' }]
+    },
+    {
+      id: 'solar-term-local',
+      group: 'time',
+      title: '二十四节气',
+      summary: '清明日期',
+      fields: [
+        { name: 'year', label: '年份', value: '2026' },
+        { name: 'name', label: '节气', value: '清明' }
+      ]
     }
   ]
 

@@ -255,4 +255,20 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.formatted").value("2天3小时5分钟"));
     }
+
+    @Test
+    void sm4Blake2sHkidSolar() throws Exception {
+        mockMvc.perform(get("/api/utils/blake2s").param("text", "abc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.blake2s")
+                        .value("508c5e8c327c14e2e1a72ba34eeb452f37458b209ed63a294d999b4c86675982"));
+
+        mockMvc.perform(get("/api/utils/hkid").param("value", "A123456(3)"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/solar-term").param("year", "2026").param("name", "清明"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.qingming").value("2026-04-05"));
+    }
 }

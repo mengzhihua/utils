@@ -99,6 +99,66 @@ public final class HashUtil {
         return hash;
     }
 
+    public static long fnv1a64(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        long hash = 0xcbf29ce484222325L;
+        for (byte b : data) {
+            hash ^= b & 0xff;
+            hash *= 0x100000001b3L;
+        }
+        return hash;
+    }
+
+    public static String fnv1a64Hex(String text) {
+        return String.format(Locale.ROOT, "%016x", fnv1a64(text));
+    }
+
+    /**
+     * CRC-8/MAXIM-DOW (1-Wire). {@code 123456789} → {@code a1}.
+     */
+    public static int crc8(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        int crc = 0;
+        for (byte b : data) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 1) != 0) {
+                    crc = (crc >>> 1) ^ 0x8c;
+                } else {
+                    crc >>>= 1;
+                }
+            }
+        }
+        return crc & 0xff;
+    }
+
+    public static String crc8Hex(String text) {
+        return String.format(Locale.ROOT, "%02x", crc8(text));
+    }
+
+    /**
+     * CRC-64/ECMA-182. {@code 123456789} → {@code 6c40df5f0b497347}.
+     */
+    public static long crc64(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        long crc = 0;
+        for (byte b : data) {
+            crc ^= (b & 0xffL) << 56;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 0x8000000000000000L) != 0) {
+                    crc = (crc << 1) ^ 0x42F0E1EBA9EA3693L;
+                } else {
+                    crc <<= 1;
+                }
+            }
+        }
+        return crc;
+    }
+
+    public static String crc64Hex(String text) {
+        return String.format(Locale.ROOT, "%016x", crc64(text));
+    }
+
     /**
      * CRC-32C Castagnoli (iSCSI / Guava {@code Hashing.crc32c}).
      */

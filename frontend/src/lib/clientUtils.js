@@ -679,6 +679,23 @@ export async function runClientTool(id, values) {
         first: subBetween(values.text || '', values.before || '', values.after || ''),
         all: subBetweenAll(values.text || '', values.before || '', values.after || '')
       }
+    case 'pinyin-local':
+      return { firstLetters: pinyinFirstLetters(values.text || '') }
+    case 'hkid-local': {
+      const compact = String(values.value || '').replace(/[()\s]/g, '').toUpperCase()
+      return { normalized: compact, valid: isHkId(values.value || '') }
+    }
+    case 'twid-local':
+      return { normalized: String(values.value || '').trim().toUpperCase(), valid: isTwId(values.value || '') }
+    case 'org-code-local': {
+      const compact = String(values.code || '').replace(/[-\s]/g, '').toUpperCase()
+      const complete = compact.length === 8 ? compact + orgCodeCheck(compact) : compact
+      return { normalized: compact, complete, valid: isOrgCode(complete) }
+    }
+    case 'solar-term-local': {
+      const year = Number(values.year) || 2026
+      return { date: solarTermDate(year, values.name || '清明'), qingming: solarTermDate(year, '清明') }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -1498,4 +1515,83 @@ function subBetweenAll(text, before, after) {
     all.push(text.slice(begin, end))
     from = end + after.length
   }
+}
+
+function pinyinFirstLetters(text) {
+  const known = { 中: 'Z', 国: 'G', 北: 'B', 京: 'J', 上: 'S', 海: 'H', 工: 'G', 具: 'G' }
+  return [...String(text || '')].map((ch) => {
+    if (/[a-z]/i.test(ch)) return ch.toUpperCase()
+    if (known[ch]) return known[ch]
+    return ch
+  }).join('')
+}
+
+function isHkId(id) {
+  const compact = String(id || '').replace(/[()\s]/g, '').toUpperCase()
+  if (compact.length < 8 || compact.length > 9) return false
+  const body = compact.slice(0, -1)
+  const check = compact.slice(-1)
+  if (!/^[A-Z]{1,2}\d{6}$/.test(body)) return false
+  const padded = body.length === 7 ? ' ' + body : body
+  let sum = 0
+  let weight = 9
+  for (const ch of padded) {
+    let code
+    if (ch === ' ') code = 36
+    else if (ch >= 'A' && ch <= 'Z') code = ch.charCodeAt(0) - 65 + 10
+    else code = Number(ch)
+    sum += code * weight
+    weight--
+  }
+  const rem = sum % 11
+  const digit = (11 - rem) % 11
+  const expected = digit === 10 ? 'A' : String(digit)
+  return check === expected
+}
+
+function isTwId(id) {
+  const compact = String(id || '').trim().toUpperCase()
+  if (!/^[A-Z][12]\d{8}$/.test(compact)) return false
+  const letters = [10, 11, 12, 13, 14, 15, 16, 17, 34, 18, 19, 20, 21, 22, 35, 23, 24, 25, 26, 27, 28, 29, 32, 30, 31, 33]
+  const n = letters[compact.charCodeAt(0) - 65]
+  let sum = Math.floor(n / 10) + (n % 10) * 9
+  const weights = [8, 7, 6, 5, 4, 3, 2, 1, 1]
+  for (let i = 0; i < 9; i++) {
+    sum += Number(compact[i + 1]) * weights[i]
+  }
+  return sum % 10 === 0
+}
+
+function orgCodeCheck(body8) {
+  const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const weights = [3, 7, 9, 10, 5, 8, 4, 2]
+  let sum = 0
+  for (let i = 0; i < 8; i++) {
+    const idx = charset.indexOf(body8[i])
+    if (idx < 0) return ''
+    sum += idx * weights[i]
+  }
+  const c9 = 11 - (sum % 11)
+  if (c9 === 11) return '0'
+  if (c9 === 10) return 'X'
+  return String(c9)
+}
+
+function isOrgCode(code) {
+  const compact = String(code || '').replace(/[-\s]/g, '').toUpperCase()
+  if (compact.length !== 9) return false
+  return compact[8] === orgCodeCheck(compact.slice(0, 8))
+}
+
+function solarTermDate(year, name) {
+  const names = ['小寒', '大寒', '立春', '雨水', '惊蛰', '春分', '清明', '谷雨', '立夏', '小满', '芒种', '夏至', '小暑', '大暑', '立秋', '处暑', '白露', '秋分', '寒露', '霜降', '立冬', '小雪', '大雪', '冬至']
+  const c21 = [5.4055, 20.12, 3.87, 18.73, 5.63, 20.646, 4.81, 20.1, 5.52, 21.04, 5.678, 21.37, 7.108, 22.83, 7.5, 23.13, 7.646, 23.042, 8.318, 23.438, 7.438, 22.36, 7.18, 21.94]
+  const c20 = [6.11, 20.84, 4.6295, 19.4599, 6.3826, 21.4155, 5.59, 20.888, 6.318, 21.86, 6.5, 22.2, 7.928, 23.65, 8.35, 23.95, 8.44, 23.822, 9.098, 24.218, 8.218, 23.08, 7.9, 22.6]
+  const idx = names.indexOf(name)
+  if (idx < 0) return null
+  const c = year < 2000 ? c20 : c21
+  const y = year % 100
+  const day = Math.floor(y * 0.2422 + c[idx]) - Math.floor(y / 4)
+  const month = Math.floor(idx / 2) + 1
+  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
 }
