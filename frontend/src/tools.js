@@ -1809,6 +1809,117 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/uuid-v8',
       fields: []
+    },
+    {
+      id: 'nysiis',
+      group: 'string',
+      title: 'NYSIIS',
+      summary: 'NysiisUtil Commons Codec',
+      method: 'GET',
+      path: '/api/utils/nysiis',
+      fields: [{ name: 'text', label: '姓名', value: 'Miller' }]
+    },
+    {
+      id: 'caverphone',
+      group: 'string',
+      title: 'Caverphone 2',
+      summary: 'CaverphoneUtil',
+      method: 'GET',
+      path: '/api/utils/caverphone',
+      fields: [{ name: 'text', label: '姓名', value: 'Stevenson' }]
+    },
+    {
+      id: 'sonyflake',
+      group: 'id',
+      title: 'Sonyflake',
+      summary: 'SonyflakeUtil 10ms ID',
+      method: 'GET',
+      path: '/api/utils/sonyflake',
+      fields: []
+    },
+    {
+      id: 'content-disposition',
+      group: 'web',
+      title: 'Content-Disposition',
+      summary: 'ContentDispositionUtil RFC 6266',
+      method: 'GET',
+      path: '/api/utils/content-disposition',
+      fields: [{ name: 'filename', label: '文件名', value: '报表.txt' }]
+    },
+    {
+      id: 'julian',
+      group: 'datetime',
+      title: '儒略日',
+      summary: 'JulianDayUtil',
+      method: 'GET',
+      path: '/api/utils/julian',
+      fields: [{ name: 'date', label: '日期', value: '2000-01-01' }]
+    },
+    {
+      id: 'cpf',
+      group: 'validate',
+      title: '巴西 CPF',
+      summary: 'CpfUtil',
+      method: 'GET',
+      path: '/api/utils/cpf',
+      fields: [{ name: 'value', label: 'CPF', value: '111.444.777-35' }]
+    },
+    {
+      id: 'cnpj',
+      group: 'validate',
+      title: '巴西 CNPJ',
+      summary: 'CnpjUtil',
+      method: 'GET',
+      path: '/api/utils/cnpj',
+      fields: [{ name: 'value', label: 'CNPJ', value: '00.000.000/0001-91' }]
+    },
+    {
+      id: 'pesel',
+      group: 'validate',
+      title: '波兰 PESEL',
+      summary: 'PeselUtil',
+      method: 'GET',
+      path: '/api/utils/pesel',
+      fields: [{ name: 'value', label: 'PESEL', value: '44051401359' }]
+    },
+    {
+      id: 'upc-e',
+      group: 'validate',
+      title: 'UPC-E',
+      summary: 'UpcEUtil → UPC-A',
+      method: 'GET',
+      path: '/api/utils/upc-e',
+      fields: [{ name: 'value', label: 'UPC-E', value: '04252614' }]
+    },
+    {
+      id: 'crc32-mpeg2',
+      group: 'crypto',
+      title: 'CRC-32/MPEG-2',
+      summary: 'HashUtil.crc32Mpeg2',
+      method: 'GET',
+      path: '/api/utils/crc32-mpeg2',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'hmac-sm3',
+      group: 'crypto',
+      title: 'HMAC-SM3',
+      summary: 'Sm3Util.hmac',
+      method: 'GET',
+      path: '/api/utils/hmac-sm3',
+      fields: [
+        { name: 'text', label: '原文', value: 'abc' },
+        { name: 'key', label: '密钥', value: 'key' }
+      ]
+    },
+    {
+      id: 'murmur128',
+      group: 'crypto',
+      title: 'Murmur3-128',
+      summary: 'HashUtil.murmur128',
+      method: 'GET',
+      path: '/api/utils/murmur128',
+      fields: [{ name: 'text', label: '原文', value: 'abc' }]
     }
   ]
 

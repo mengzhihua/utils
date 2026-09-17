@@ -750,6 +750,31 @@ export async function runClientTool(id, values) {
     }
     case 'uuid-v8-local':
       return { uuid: uuidV8() }
+    case 'nysiis-local':
+      return { code: nysiis(values.text || '') }
+    case 'caverphone-local':
+      return { code: caverphone(values.text || '') }
+    case 'cpf-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isCpf(digits) }
+    }
+    case 'cnpj-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isCnpj(digits) }
+    }
+    case 'pesel-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isPesel(digits), birthDate: isPesel(digits) ? peselBirth(digits) : null }
+    }
+    case 'upc-e-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      const upcA = isUpcE(digits) ? expandUpcE(digits) : null
+      return { normalized: digits, valid: Boolean(upcA), upcA }
+    }
+    case 'julian-local': {
+      const iso = String(values.date || '2000-01-01')
+      return { julianDayNumber: julianDayNumber(iso), iso }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -1824,4 +1849,161 @@ function solarTermDate(year, name) {
   const day = Math.floor(y * 0.2422 + c[idx]) - Math.floor(y / 4)
   const month = Math.floor(idx / 2) + 1
   return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+}
+
+function nysiis(text) {
+  let word = String(text || '').toUpperCase().replace(/[^A-Z]/g, '')
+  if (!word) return ''
+  if (word.startsWith('MAC')) word = 'MCC' + word.slice(3)
+  else if (word.startsWith('KN')) word = 'NN' + word.slice(2)
+  else if (word.startsWith('K')) word = 'C' + word.slice(1)
+  else if (word.startsWith('PH') || word.startsWith('PF')) word = 'FF' + word.slice(2)
+  else if (word.startsWith('SCH')) word = 'SSS' + word.slice(3)
+  if (word.endsWith('EE') || word.endsWith('IE')) word = word.slice(0, -2) + 'Y'
+  else if (/(DT|RT|RD|NT|ND)$/.test(word)) word = word.slice(0, -2) + 'D'
+  const chars = word.split('')
+  const vowel = (c) => 'AEIOU'.includes(c)
+  const transcode = (prev, current, next, next2) => {
+    if (current === 'E' && next === 'V') return ['A', 'F']
+    if (vowel(current)) return ['A']
+    if (current === 'Q') return ['G']
+    if (current === 'Z') return ['S']
+    if (current === 'M') return ['N']
+    if (current === 'K') return next === 'N' ? ['N', 'N'] : ['C']
+    if (current === 'S' && next === 'C' && next2 === 'H') return ['S', 'S', 'S']
+    if (current === 'P' && next === 'H') return ['F', 'F']
+    if (current === 'H' && (!vowel(prev) || !vowel(next))) return [prev]
+    if (current === 'W' && vowel(prev)) return [prev]
+    return [current]
+  }
+  let key = chars[0]
+  for (let i = 1; i < chars.length; i++) {
+    const coded = transcode(chars[i - 1], chars[i], chars[i + 1] || ' ', chars[i + 2] || ' ')
+    for (let j = 0; j < coded.length && i + j < chars.length; j++) chars[i + j] = coded[j]
+    if (chars[i] !== chars[i - 1]) key += chars[i]
+  }
+  if (key.length > 1 && key.endsWith('S')) key = key.slice(0, -1)
+  if (key.length > 2 && key.endsWith('AY')) key = key.slice(0, -2) + 'Y'
+  if (key.length > 1 && key.endsWith('A')) key = key.slice(0, -1)
+  return key
+}
+
+function caverphone(text) {
+  if (!text) return '1111111111'
+  let word = String(text).toLowerCase().replace(/[^a-z]/g, '')
+  if (!word) return '1111111111'
+  word = word.replace(/e$/, '')
+  word = word.replace(/^cough/, 'cou2f').replace(/^rough/, 'rou2f').replace(/^tough/, 'tou2f')
+  word = word.replace(/^enough/, 'enou2f').replace(/^trough/, 'trou2f').replace(/^gn/, '2n')
+  word = word.replace(/mb$/, 'm2')
+  word = word.replace(/cq/g, '2q').replace(/ci/g, 'si').replace(/ce/g, 'se').replace(/cy/g, 'sy')
+  word = word.replace(/tch/g, '2ch').replace(/c/g, 'k').replace(/q/g, 'k').replace(/x/g, 'k').replace(/v/g, 'f')
+  word = word.replace(/dg/g, '2g').replace(/tio/g, 'sio').replace(/tia/g, 'sia').replace(/d/g, 't')
+  word = word.replace(/ph/g, 'fh').replace(/b/g, 'p').replace(/sh/g, 's2').replace(/z/g, 's')
+  word = word.replace(/^[aeiou]/, 'A').replace(/[aeiou]/g, '3')
+  word = word.replace(/j/g, 'y').replace(/^y3/, 'Y3').replace(/^y/, 'A').replace(/y/g, '3')
+  word = word.replace(/3gh3/g, '3kh3').replace(/gh/g, '22').replace(/g/g, 'k')
+  word = word.replace(/s+/g, 'S').replace(/t+/g, 'T').replace(/p+/g, 'P').replace(/k+/g, 'K')
+  word = word.replace(/f+/g, 'F').replace(/m+/g, 'M').replace(/n+/g, 'N')
+  word = word.replace(/w3/g, 'W3').replace(/wh3/g, 'Wh3').replace(/w$/, '3').replace(/w/g, '2')
+  word = word.replace(/^h/, 'A').replace(/h/g, '2')
+  word = word.replace(/r3/g, 'R3').replace(/r$/, '3').replace(/r/g, '2')
+  word = word.replace(/l3/g, 'L3').replace(/l$/, '3').replace(/l/g, '2')
+  word = word.replace(/2/g, '').replace(/3$/, 'A').replace(/3/g, '')
+  return (word + '1111111111').slice(0, 10)
+}
+
+function sameDigits(digits) {
+  return digits.split('').every((ch) => ch === digits[0])
+}
+
+function isCpf(digits) {
+  if (!/^\d{11}$/.test(digits) || sameDigits(digits)) return false
+  const digit = (body) => {
+    const weight = body.length + 1
+    let sum = 0
+    for (let i = 0; i < body.length; i++) sum += Number(body[i]) * (weight - i)
+    const rem = sum % 11
+    return String(rem < 2 ? 0 : 11 - rem)
+  }
+  return digits[9] === digit(digits.slice(0, 9)) && digits[10] === digit(digits.slice(0, 10))
+}
+
+function isCnpj(digits) {
+  if (!/^\d{14}$/.test(digits) || sameDigits(digits)) return false
+  const w12 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+  const w13 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+  const digit = (body, weights) => {
+    let sum = 0
+    for (let i = 0; i < body.length; i++) sum += Number(body[i]) * weights[i]
+    const rem = sum % 11
+    return String(rem < 2 ? 0 : 11 - rem)
+  }
+  return digits[12] === digit(digits.slice(0, 12), w12) && digits[13] === digit(digits.slice(0, 13), w13)
+}
+
+function isPesel(digits) {
+  if (!/^\d{11}$/.test(digits)) return false
+  const weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]
+  let sum = 0
+  for (let i = 0; i < 10; i++) sum += Number(digits[i]) * weights[i]
+  return digits[10] === String((10 - (sum % 10)) % 10)
+}
+
+function peselBirth(digits) {
+  let month = Number(digits.slice(2, 4))
+  const year = Number(digits.slice(0, 2))
+  const day = digits.slice(4, 6)
+  let century = 1900
+  if (month >= 21 && month <= 32) { century = 2000; month -= 20 }
+  else if (month >= 41 && month <= 52) { century = 2100; month -= 40 }
+  else if (month >= 61 && month <= 72) { century = 2200; month -= 60 }
+  else if (month >= 81 && month <= 92) { century = 1800; month -= 80 }
+  return `${century + year}-${String(month).padStart(2, '0')}-${day}`
+}
+
+function eanCheckDigit(body) {
+  let sum = 0
+  let factor = 3
+  for (let i = body.length - 1; i >= 0; i--) {
+    sum += Number(body[i]) * factor
+    factor = 4 - factor
+  }
+  return String((10 - (sum % 10)) % 10)
+}
+
+function expandUpcE(digits) {
+  if (!/^[01]\d{7}$/.test(digits)) return null
+  const ns = digits[0]
+  const body = digits.slice(1, 7)
+  const last = body[5]
+  let manufacturer
+  let product
+  if (last <= '2') {
+    manufacturer = body.slice(0, 2) + last + '00'
+    product = '00' + body.slice(2, 5)
+  } else if (last === '3') {
+    manufacturer = body.slice(0, 3) + '00'
+    product = '000' + body.slice(3, 5)
+  } else if (last === '4') {
+    manufacturer = body.slice(0, 4) + '0'
+    product = '0000' + body[4]
+  } else {
+    manufacturer = body.slice(0, 5)
+    product = '0000' + last
+  }
+  const upcA = ns + manufacturer + product + eanCheckDigit(ns + manufacturer + product)
+  return upcA[11] === digits[7] ? upcA : null
+}
+
+function isUpcE(digits) {
+  return Boolean(expandUpcE(digits))
+}
+
+function julianDayNumber(iso) {
+  const [y, m, d] = iso.split('-').map(Number)
+  const a = Math.floor((14 - m) / 12)
+  const y2 = y + 4800 - a
+  const m2 = m + 12 * a - 3
+  return d + Math.floor((153 * m2 + 2) / 5) + 365 * y2 + Math.floor(y2 / 4) - Math.floor(y2 / 100) + Math.floor(y2 / 400) - 32045
 }

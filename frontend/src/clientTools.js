@@ -760,6 +760,55 @@ export const clientTools = [
       title: 'UUID v8',
       summary: 'RFC 9562 custom',
       fields: []
+    },
+    {
+      id: 'nysiis-local',
+      group: 'text',
+      title: 'NYSIIS',
+      summary: 'Miller → MALAR',
+      fields: [{ name: 'text', label: '姓名', value: 'Miller' }]
+    },
+    {
+      id: 'caverphone-local',
+      group: 'text',
+      title: 'Caverphone 2',
+      summary: 'Stevenson → STFNSN1111',
+      fields: [{ name: 'text', label: '姓名', value: 'Stevenson' }]
+    },
+    {
+      id: 'cpf-local',
+      group: 'net',
+      title: '巴西 CPF',
+      summary: '111.444.777-35',
+      fields: [{ name: 'value', label: 'CPF', value: '111.444.777-35' }]
+    },
+    {
+      id: 'cnpj-local',
+      group: 'net',
+      title: '巴西 CNPJ',
+      summary: '00.000.000/0001-91',
+      fields: [{ name: 'value', label: 'CNPJ', value: '00.000.000/0001-91' }]
+    },
+    {
+      id: 'pesel-local',
+      group: 'net',
+      title: '波兰 PESEL',
+      summary: '44051401359',
+      fields: [{ name: 'value', label: 'PESEL', value: '44051401359' }]
+    },
+    {
+      id: 'upc-e-local',
+      group: 'net',
+      title: 'UPC-E',
+      summary: '04252614 → 042100005264',
+      fields: [{ name: 'value', label: 'UPC-E', value: '04252614' }]
+    },
+    {
+      id: 'julian-local',
+      group: 'time',
+      title: '儒略日',
+      summary: '2000-01-01 → 2451545',
+      fields: [{ name: 'date', label: '日期', value: '2000-01-01' }]
     }
   ]
 

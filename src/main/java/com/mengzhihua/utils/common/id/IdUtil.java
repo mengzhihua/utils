@@ -195,6 +195,14 @@ public final class IdUtil {
         return TsidUtil.nextStr();
     }
 
+    public static long sonyflake() {
+        return SonyflakeUtil.next();
+    }
+
+    public static String sonyflakeStr() {
+        return Long.toUnsignedString(SonyflakeUtil.next());
+    }
+
     /**
      * RFC 4122 UUID version 3 (MD5 name-based).
      */

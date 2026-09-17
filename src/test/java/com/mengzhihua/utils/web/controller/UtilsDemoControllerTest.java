@@ -338,4 +338,45 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.distance").value(3));
     }
+
+    @Test
+    void nysiisCpfJulianCrcMpeg2() throws Exception {
+        mockMvc.perform(get("/api/utils/nysiis").param("text", "Miller"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.code").value("MALAR"));
+
+        mockMvc.perform(get("/api/utils/caverphone").param("text", "Stevenson"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.code").value("STFNSN1111"));
+
+        mockMvc.perform(get("/api/utils/cpf").param("value", "111.444.777-35"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/pesel").param("value", "44051401359"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.birthDate").value("1944-05-14"));
+
+        mockMvc.perform(get("/api/utils/julian").param("date", "2000-01-01"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.julianDayNumber").value(2451545));
+
+        mockMvc.perform(get("/api/utils/crc32-mpeg2").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc32Mpeg2").value("0376e6e7"));
+
+        mockMvc.perform(get("/api/utils/upc-e").param("value", "04252614"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.upcA").value("042100005264"));
+
+        mockMvc.perform(get("/api/utils/murmur128").param("text", "abc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.murmur128").value("6778ad3f3f3f96b4522dca264174a23b"));
+
+        mockMvc.perform(get("/api/utils/hmac-sm3").param("text", "abc").param("key", "key"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.hmacSm3")
+                        .value("28e63256e7c5a087b1f073265dc53092163f7b82729735d06f28f10af9d52393"));
+    }
 }

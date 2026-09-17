@@ -16,7 +16,7 @@ import java.util.Locale;
 import com.mengzhihua.utils.common.lang.AssertUtil;
 
 /**
- * Hash helpers for strings and files (MD5 / SHA-256 / Murmur3-32).
+ * Hash helpers for strings and files (MD5 / SHA-256 / Murmur3 / CRC).
  */
 public final class HashUtil {
 
@@ -87,6 +87,128 @@ public final class HashUtil {
         h1 *= 0xc2b2ae35;
         h1 ^= h1 >>> 16;
         return h1;
+    }
+
+    /**
+     * MurmurHash3 x64_128, seed 0 (Guava {@code Hashing.murmur3_128}).
+     */
+    public static String murmur128Hex(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return HEX.formatHex(murmur128(data));
+    }
+
+    public static byte[] murmur128(byte[] data) {
+        return murmur128(data, 0);
+    }
+
+    @SuppressWarnings("fallthrough")
+    public static byte[] murmur128(byte[] data, int seed) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        long c1 = 0x87c37b91114253d5L;
+        long c2 = 0x4cf5ad432745937fL;
+        long h1 = seed & 0xffffffffL;
+        long h2 = seed & 0xffffffffL;
+        int roundedEnd = (bytes.length / 16) * 16;
+        for (int i = 0; i < roundedEnd; i += 16) {
+            long k1 = leLong(bytes, i);
+            long k2 = leLong(bytes, i + 8);
+            k1 *= c1;
+            k1 = Long.rotateLeft(k1, 31);
+            k1 *= c2;
+            h1 ^= k1;
+            h1 = Long.rotateLeft(h1, 27);
+            h1 += h2;
+            h1 = h1 * 5 + 0x52dce729;
+            k2 *= c2;
+            k2 = Long.rotateLeft(k2, 33);
+            k2 *= c1;
+            h2 ^= k2;
+            h2 = Long.rotateLeft(h2, 31);
+            h2 += h1;
+            h2 = h2 * 5 + 0x38495ab5;
+        }
+        long k1 = 0;
+        long k2 = 0;
+        switch (bytes.length & 15) {
+            case 15:
+                k2 ^= (long) (bytes[roundedEnd + 14] & 0xff) << 48;
+            case 14:
+                k2 ^= (long) (bytes[roundedEnd + 13] & 0xff) << 40;
+            case 13:
+                k2 ^= (long) (bytes[roundedEnd + 12] & 0xff) << 32;
+            case 12:
+                k2 ^= (long) (bytes[roundedEnd + 11] & 0xff) << 24;
+            case 11:
+                k2 ^= (long) (bytes[roundedEnd + 10] & 0xff) << 16;
+            case 10:
+                k2 ^= (long) (bytes[roundedEnd + 9] & 0xff) << 8;
+            case 9:
+                k2 ^= bytes[roundedEnd + 8] & 0xff;
+                k2 *= c2;
+                k2 = Long.rotateLeft(k2, 33);
+                k2 *= c1;
+                h2 ^= k2;
+            case 8:
+                k1 ^= (long) (bytes[roundedEnd + 7] & 0xff) << 56;
+            case 7:
+                k1 ^= (long) (bytes[roundedEnd + 6] & 0xff) << 48;
+            case 6:
+                k1 ^= (long) (bytes[roundedEnd + 5] & 0xff) << 40;
+            case 5:
+                k1 ^= (long) (bytes[roundedEnd + 4] & 0xff) << 32;
+            case 4:
+                k1 ^= (long) (bytes[roundedEnd + 3] & 0xff) << 24;
+            case 3:
+                k1 ^= (long) (bytes[roundedEnd + 2] & 0xff) << 16;
+            case 2:
+                k1 ^= (long) (bytes[roundedEnd + 1] & 0xff) << 8;
+            case 1:
+                k1 ^= bytes[roundedEnd] & 0xff;
+                k1 *= c1;
+                k1 = Long.rotateLeft(k1, 31);
+                k1 *= c2;
+                h1 ^= k1;
+            default:
+                break;
+        }
+        h1 ^= bytes.length;
+        h2 ^= bytes.length;
+        h1 += h2;
+        h2 += h1;
+        h1 = fmix64(h1);
+        h2 = fmix64(h2);
+        h1 += h2;
+        h2 += h1;
+        byte[] out = new byte[16];
+        putLeLong(out, 0, h1);
+        putLeLong(out, 8, h2);
+        return out;
+    }
+
+    private static long leLong(byte[] bytes, int offset) {
+        return (bytes[offset] & 0xffL)
+                | ((bytes[offset + 1] & 0xffL) << 8)
+                | ((bytes[offset + 2] & 0xffL) << 16)
+                | ((bytes[offset + 3] & 0xffL) << 24)
+                | ((bytes[offset + 4] & 0xffL) << 32)
+                | ((bytes[offset + 5] & 0xffL) << 40)
+                | ((bytes[offset + 6] & 0xffL) << 48)
+                | ((long) bytes[offset + 7] << 56);
+    }
+
+    private static void putLeLong(byte[] out, int offset, long value) {
+        for (int i = 0; i < 8; i++) {
+            out[offset + i] = (byte) (value >>> (8 * i));
+        }
+    }
+
+    private static long fmix64(long k) {
+        k ^= k >>> 33;
+        k *= 0xff51afd7ed558ccdL;
+        k ^= k >>> 33;
+        k *= 0xc4ceb9fe1a85ec53L;
+        k ^= k >>> 33;
+        return k;
     }
 
     public static int fnv1a32(String text) {
@@ -252,6 +374,35 @@ public final class HashUtil {
 
     public static String shake256(String text) {
         return ShakeUtil.shake256(text);
+    }
+
+    /**
+     * CRC-32/MPEG-2 (poly {@code 0x04C11DB7}, init {@code 0xFFFFFFFF}, xorout 0).
+     * {@code 123456789} → {@code 0376e6e7}.
+     */
+    public static int crc32Mpeg2(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc32Mpeg2(data);
+    }
+
+    public static String crc32Mpeg2Hex(String text) {
+        return String.format(Locale.ROOT, "%08x", crc32Mpeg2(text));
+    }
+
+    public static int crc32Mpeg2(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0xffffffff;
+        for (byte b : bytes) {
+            crc ^= (b & 0xff) << 24;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 0x80000000) != 0) {
+                    crc = (crc << 1) ^ 0x04C11DB7;
+                } else {
+                    crc <<= 1;
+                }
+            }
+        }
+        return crc;
     }
 
     public static int crc16Ccitt(byte[] data) {
