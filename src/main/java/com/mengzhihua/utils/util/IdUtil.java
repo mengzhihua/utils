@@ -98,6 +98,10 @@ public final class IdUtil {
         return uuid.toString();
     }
 
+    public static String objectId() {
+        return ObjectIdUtil.next();
+    }
+
     private static void writeCrockford(char[] out, long value, int count, int offset, char[] alphabet) {
         for (int i = count - 1; i >= 0; i--) {
             out[offset + i] = alphabet[(int) (value & 31)];

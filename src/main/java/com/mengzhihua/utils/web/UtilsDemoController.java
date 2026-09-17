@@ -130,6 +130,10 @@ public class UtilsDemoController {
             case "plate" -> RegexUtil.isPlate(value);
             case "ipv6" -> RegexUtil.isIpv6(value);
             case "zipcode" -> RegexUtil.isZipcode(value);
+            case "qq" -> RegexUtil.isQq(value);
+            case "landline" -> RegexUtil.isLandline(value);
+            case "mac" -> RegexUtil.isMac(value);
+            case "isbn" -> RegexUtil.isIsbn(value);
             default -> throw new IllegalArgumentException("unsupported type: " + type);
         };
         return Result.ok(Map.of("matched", matched));

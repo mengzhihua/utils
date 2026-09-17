@@ -351,6 +351,38 @@ export const clientTools = [
     title: 'Murmur3-32',
     summary: '本地非加密哈希',
     fields: [{ name: 'text', label: '原文', value: 'hello' }]
+  },
+  {
+    id: 'expr-local',
+    group: 'gen',
+    title: '四则运算',
+    summary: '本地计算 1+2*3',
+    fields: [{ name: 'expression', label: '表达式', value: '(1+2)*3' }]
+  },
+  {
+    id: 'radix-local',
+    group: 'hash',
+    title: '进制转换',
+    summary: '2-36 进制',
+    fields: [
+      { name: 'value', label: '数值', value: '255' },
+      { name: 'from', label: '源进制', value: '10' },
+      { name: 'to', label: '目标进制', value: '16' }
+    ]
+  },
+  {
+    id: 'isbn-local',
+    group: 'net',
+    title: 'ISBN 校验',
+    summary: 'ISBN-10 / 13',
+    fields: [{ name: 'code', label: 'ISBN', value: '9780306406157' }]
+  },
+  {
+    id: 'punycode-local',
+    group: 'net',
+    title: 'Punycode',
+    summary: '浏览器 IDN',
+    fields: [{ name: 'domain', label: '域名', value: '清华大学.cn' }]
   }
 ]
 

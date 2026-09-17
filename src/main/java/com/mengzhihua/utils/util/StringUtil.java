@@ -305,4 +305,22 @@ public final class StringUtil {
         }
         return new String(chars);
     }
+
+    public static String pad(String str, int length, char padChar) {
+        String value = str == null ? "" : str;
+        if (value.length() >= length) {
+            return value;
+        }
+        return String.valueOf(padChar).repeat(length - value.length()) + value;
+    }
+
+    public static String brief(String str, int max) {
+        if (str == null || max < 0 || str.length() <= max) {
+            return str;
+        }
+        if (max <= 1) {
+            return str.substring(0, max);
+        }
+        return str.substring(0, max - 1) + "…";
+    }
 }

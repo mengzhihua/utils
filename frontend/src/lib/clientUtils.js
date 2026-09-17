@@ -532,6 +532,35 @@ export async function runClientTool(id, values) {
       const hash = murmur32(values.text || '')
       return { murmur32: hash, hex: (hash >>> 0).toString(16).padStart(8, '0') }
     }
+    case 'expr-local': {
+      const expression = String(values.expression || '').trim()
+      if (!/^[\d+\-*/().\s]+$/.test(expression)) {
+        throw new Error('只支持数字和 + - * / ( )')
+      }
+      const result = Function(`"use strict"; return (${expression})`)()
+      return { result }
+    }
+    case 'radix-local': {
+      const from = Number(values.from) || 10
+      const to = Number(values.to) || 16
+      if (from < 2 || from > 36 || to < 2 || to > 36) {
+        throw new Error('进制范围 2-36')
+      }
+      const num = Number.parseInt(String(values.value || '0'), from)
+      if (Number.isNaN(num)) {
+        throw new Error('无效数值')
+      }
+      return { converted: num.toString(to), hex: num.toString(16) }
+    }
+    case 'isbn-local': {
+      const compact = String(values.code || '').replace(/[^0-9Xx]/g, '').toUpperCase()
+      return { normalized: compact, valid: isIsbn(compact) }
+    }
+    case 'punycode-local': {
+      const domain = String(values.domain || '').trim()
+      const ascii = new URL(`http://${domain}`).hostname
+      return { ascii, href: `http://${ascii}` }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -697,4 +726,27 @@ function murmur32(text) {
   h1 = Math.imul(h1, 0xc2b2ae35)
   h1 ^= h1 >>> 16
   return h1 | 0
+}
+
+function isIsbn(compact) {
+  if (compact.length === 10) {
+    let sum = 0
+    for (let i = 0; i < 9; i++) {
+      const digit = Number(compact[i])
+      if (Number.isNaN(digit)) return false
+      sum += digit * (10 - i)
+    }
+    const last = compact[9] === 'X' ? 10 : Number(compact[9])
+    return last >= 0 && (sum + last) % 11 === 0
+  }
+  if (compact.length === 13) {
+    let sum = 0
+    for (let i = 0; i < 13; i++) {
+      const digit = Number(compact[i])
+      if (Number.isNaN(digit)) return false
+      sum += digit * (i % 2 === 0 ? 1 : 3)
+    }
+    return sum % 10 === 0
+  }
+  return false
 }

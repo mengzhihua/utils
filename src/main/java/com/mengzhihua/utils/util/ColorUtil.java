@@ -29,6 +29,42 @@ public final class ColorUtil {
         return luminance(hex) < 0.5;
     }
 
+    public static int[] hexToHsl(String hex) {
+        int[] rgb = hexToRgb(hex);
+        double r = rgb[0] / 255D;
+        double g = rgb[1] / 255D;
+        double b = rgb[2] / 255D;
+        double max = Math.max(r, Math.max(g, b));
+        double min = Math.min(r, Math.min(g, b));
+        double l = (max + min) / 2;
+        double h = 0;
+        double s = 0;
+        if (max != min) {
+            double d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            if (max == r) {
+                h = (g - b) / d + (g < b ? 6 : 0);
+            } else if (max == g) {
+                h = (b - r) / d + 2;
+            } else {
+                h = (r - g) / d + 4;
+            }
+            h *= 60;
+        }
+        return new int[] {(int) Math.round(h), (int) Math.round(s * 100), (int) Math.round(l * 100)};
+    }
+
+    public static String mix(String left, String right, double ratio) {
+        int[] a = hexToRgb(left);
+        int[] b = hexToRgb(right);
+        double t = Math.max(0, Math.min(1, ratio));
+        return rgbToHex(
+                (int) Math.round(a[0] + (b[0] - a[0]) * t),
+                (int) Math.round(a[1] + (b[1] - a[1]) * t),
+                (int) Math.round(a[2] + (b[2] - a[2]) * t)
+        );
+    }
+
     private static String normalize(String hex) {
         String value = hex == null ? "" : hex.trim();
         if (value.startsWith("#")) {

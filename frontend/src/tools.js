@@ -165,7 +165,11 @@ export const tools = [
           { value: 'credit', label: '信用代码' },
           { value: 'plate', label: '车牌' },
           { value: 'ipv6', label: 'IPv6' },
-          { value: 'zipcode', label: '邮编' }
+          { value: 'zipcode', label: '邮编' },
+          { value: 'qq', label: 'QQ' },
+          { value: 'landline', label: '固话' },
+          { value: 'mac', label: 'MAC' },
+          { value: 'isbn', label: 'ISBN' }
         ]
       },
       { name: 'value', label: '值', value: '13812345678' }
@@ -605,6 +609,121 @@ export const tools = [
     method: 'GET',
     path: '/api/utils/circuit',
     fields: [{ name: 'name', label: 'name', value: 'demo' }]
+  },
+  {
+    id: 'unicode-java',
+    group: 'string',
+    title: 'Unicode 转义',
+    summary: 'UnicodeUtil.toUnicode',
+    method: 'GET',
+    path: '/api/utils/unicode',
+    fields: [{ name: 'text', label: '文本', value: '工具集' }]
+  },
+  {
+    id: 'radix',
+    group: 'number',
+    title: '进制转换',
+    summary: 'RadixUtil.convert',
+    method: 'GET',
+    path: '/api/utils/radix',
+    fields: [
+      { name: 'value', label: '数值', value: '255' },
+      { name: 'from', label: '源进制', value: '10' },
+      { name: 'to', label: '目标进制', value: '16' }
+    ]
+  },
+  {
+    id: 'object-id',
+    group: 'id',
+    title: 'ObjectId',
+    summary: 'IdUtil.objectId',
+    method: 'GET',
+    path: '/api/utils/object-id',
+    fields: []
+  },
+  {
+    id: 'idn',
+    group: 'web',
+    title: '国际化域名',
+    summary: 'IdnUtil.toAscii',
+    method: 'GET',
+    path: '/api/utils/idn',
+    fields: [{ name: 'domain', label: '域名', value: '清华大学.cn' }]
+  },
+  {
+    id: 'expr',
+    group: 'number',
+    title: '四则运算',
+    summary: 'ExprUtil.eval',
+    method: 'GET',
+    path: '/api/utils/expr',
+    fields: [{ name: 'expression', label: '表达式', value: '(1+2)*3' }]
+  },
+  {
+    id: 'lunar',
+    group: 'datetime',
+    title: '农历',
+    summary: 'LunarUtil.of',
+    method: 'GET',
+    path: '/api/utils/lunar',
+    fields: [{ name: 'date', label: '公历', value: '2024-02-10' }]
+  },
+  {
+    id: 'json-path',
+    group: 'json',
+    title: 'JSON Pointer',
+    summary: 'JsonPathUtil.getStr',
+    method: 'POST',
+    path: '/api/utils/json-path',
+    fields: [
+      { name: 'json', label: 'JSON', type: 'textarea', value: '{"user":{"name":"Ada"}}' },
+      { name: 'path', label: '路径', value: 'user.name' }
+    ]
+  },
+  {
+    id: 'captcha',
+    group: 'validate',
+    title: '图片验证码',
+    summary: 'CaptchaUtil.create',
+    method: 'GET',
+    path: '/api/utils/captcha',
+    fields: []
+  },
+  {
+    id: 'isbn',
+    group: 'validate',
+    title: 'ISBN',
+    summary: 'IsbnUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/isbn',
+    fields: [{ name: 'code', label: 'ISBN', value: '9780306406157' }]
+  },
+  {
+    id: 'mac',
+    group: 'web',
+    title: 'MAC 地址',
+    summary: 'MacUtil.normalize',
+    method: 'GET',
+    path: '/api/utils/mac',
+    fields: [{ name: 'value', label: 'MAC', value: '00-1A-2B-3C-4D-5E' }]
+  },
+  {
+    id: 'idcard-convert',
+    group: 'validate',
+    title: '身份证 15 升 18',
+    summary: 'IdCardUtil.convert15To18',
+    method: 'GET',
+    path: '/api/utils/idcard/convert',
+    fields: [{ name: 'idNo', label: '15 位身份证', value: '110101900307893' }]
+  },
+  {
+    id: 'base32',
+    group: 'crypto',
+    title: 'Base32',
+    summary: 'Base32Util.encode',
+    method: 'GET',
+    path: '/api/utils/base32',
+    fields: [{ name: 'text', label: '原文', value: 'hello' }]
   }
 ]
 

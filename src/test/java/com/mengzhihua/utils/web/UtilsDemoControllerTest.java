@@ -144,4 +144,21 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.slug").value("spring-boot-工具集"));
     }
+
+    @Test
+    void alignUtilsExprLunarIsbn() throws Exception {
+        mockMvc.perform(get("/api/utils/expr").param("expression", "(1+2)*3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.result").value("9"));
+
+        mockMvc.perform(get("/api/utils/lunar").param("date", "2024-02-10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.month").value(1))
+                .andExpect(jsonPath("$.data.day").value(1))
+                .andExpect(jsonPath("$.data.animal").value("龙"));
+
+        mockMvc.perform(get("/api/utils/isbn").param("code", "9780306406157"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+    }
 }

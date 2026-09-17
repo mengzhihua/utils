@@ -86,6 +86,32 @@ public final class HashUtil {
         return h1;
     }
 
+    public static int fnv1a32(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        int hash = 0x811c9dc5;
+        for (byte b : data) {
+            hash ^= b & 0xff;
+            hash *= 0x01000193;
+        }
+        return hash;
+    }
+
+    public static int crc16(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        int crc = 0xffff;
+        for (byte b : data) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 1) != 0) {
+                    crc = (crc >>> 1) ^ 0xa001;
+                } else {
+                    crc >>>= 1;
+                }
+            }
+        }
+        return crc & 0xffff;
+    }
+
     private static String digestFile(String algorithm, Path path) {
         AssertUtil.notNull(path, "path must not be null");
         try {

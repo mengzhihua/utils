@@ -67,4 +67,20 @@ public final class RegexUtil {
     public static boolean isZipcode(String value) {
         return isMatch(ZIPCODE, value);
     }
+
+    public static boolean isQq(String value) {
+        return isMatch(QQ, value);
+    }
+
+    public static boolean isLandline(String value) {
+        return isMatch(LANDLINE, value);
+    }
+
+    public static boolean isMac(String value) {
+        return MacUtil.isValid(value);
+    }
+
+    public static boolean isIsbn(String value) {
+        return IsbnUtil.isValid(value);
+    }
 }

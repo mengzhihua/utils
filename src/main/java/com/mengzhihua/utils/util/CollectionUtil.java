@@ -155,6 +155,33 @@ public final class CollectionUtil {
         return new Diff<>(added, removed, kept);
     }
 
+    public static <T> List<T> union(Collection<T> left, Collection<T> right) {
+        java.util.LinkedHashSet<T> set = new java.util.LinkedHashSet<>(emptyIfNull(left == null ? null : new ArrayList<>(left)));
+        set.addAll(emptyIfNull(right == null ? null : new ArrayList<>(right)));
+        return new ArrayList<>(set);
+    }
+
+    public static <T> List<T> intersection(Collection<T> left, Collection<T> right) {
+        List<T> result = new ArrayList<>();
+        if (isEmpty(left) || isEmpty(right)) {
+            return result;
+        }
+        for (T item : left) {
+            if (right.contains(item) && !result.contains(item)) {
+                result.add(item);
+            }
+        }
+        return result;
+    }
+
+    public static <T> List<T> subtract(Collection<T> left, Collection<T> right) {
+        List<T> result = new ArrayList<>(emptyIfNull(left == null ? null : new ArrayList<>(left)));
+        if (isNotEmpty(right)) {
+            result.removeAll(right);
+        }
+        return result;
+    }
+
     public record Diff<T>(List<T> added, List<T> removed, List<T> kept) {
     }
 }
