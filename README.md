@@ -1,6 +1,37 @@
 # Java Utils Toolkit
 
-基于 **Spring Boot 4.1 + Java 21** 的通用工具集。既可直接运行演示服务，也可把 `com.mengzhihua.utils.util` 下的工具类复用到业务项目。
+基于 **Spring Boot 4.1 + Java 21** 的通用工具集。既可直接运行演示服务，也可把 `com.mengzhihua.utils.common` 下按领域分包的工具类复用到业务项目。
+
+## 工程结构
+
+按《阿里巴巴 Java 开发手册》分层：Web 与 Common 分离，工具类按领域分包，不再平铺在单一 `util` 包。本仓库是工具库，不伪造 DAO / Service 空壳；演示接口直接调用 common 静态方法，HTTP 路径仍为 `/api/utils/**`。
+
+```
+com.mengzhihua.utils
+├── common                 # 通用层（可复用，无 Servlet 依赖除 net.ServletUtil）
+│   ├── api                # Result / PageResult / ResultCode
+│   ├── exception           # BizException
+│   ├── lang               # 字符串、集合、断言、随机
+│   ├── bean               # Bean、反射、类型转换
+│   ├── text               # 脱敏、正则、HTML、敏感词
+│   ├── codec              # Base32/45/58/64/85、Hex
+│   ├── crypto             # 加解密、哈希、JWT、TOTP
+│   ├── id                 # UUID、雪花、KSUID、Sqids
+│   ├── time               # 日期、农历、节假日
+│   ├── io                 # 文件、压缩、MIME
+│   ├── net                # IP、URL、HTTP、UA
+│   ├── json               # JSON / CSV / YAML / Patch
+│   ├── validate           # 身份证、银行卡、ISBN 等
+│   ├── math               # 金额、版本、表达式
+│   ├── concurrent         # 重试、限流、本地缓存
+│   ├── extra              # 验证码、树、地理、链路
+│   └── spring             # SpringContextHolder / SpEL
+├── web
+│   ├── controller         # 演示接口 /api/utils/**
+│   ├── advice             # GlobalExceptionHandler
+│   └── filter             # TraceIdFilter
+└── config                 # Spring / OpenAPI 装配
+```
 
 ## 能力一览
 
@@ -22,7 +53,7 @@
 | 日期 | `DateTimeUtil` / `CronUtil` | 格式化、工作日、相对时间、Cron 下次触发 |
 | JSON / CSV / YAML | `JsonUtil` / `CsvUtil` / `YamlUtil` / `CloneUtil` | Jackson 3、CSV、SnakeYAML、深拷贝 |
 | 数字 | `NumberUtil` / `MoneyUtil` / `ByteSizeUtil` / `ConvertUtil` / `BooleanUtil` / `ChineseNumberUtil` / `PageUtil` / `VersionUtil` | 精确运算、元/分、字节大小、人民币大写 |
-| 校验 / 断言 | `RegexUtil` / `AssertUtil` / `SqlUtil` / `IdCardUtil` / `BankCardUtil` / `CreditCodeUtil` / `PhoneUtil` / `PasswordUtil` | 身份证、Luhn、统一社会信用代码、运营商 |
+| 校验 / 断言 | `RegexUtil` / `ReUtil` / `AssertUtil` / `SqlUtil` / `IdCardUtil` / `BankCardUtil` / `CreditCodeUtil` / `PhoneUtil` / `PasswordUtil` | 身份证、常用格式正则、抽取手机/邮箱/URL、Luhn、信用代码 |
 
 ### 安全、ID、文件、网络
 
@@ -54,7 +85,7 @@
 | 标识 / 密码 | `ObjectIdUtil` / `Pbkdf2Util` / `IdnUtil` / `BasicAuthUtil` | Mongo ObjectId、PBKDF2、Punycode、Basic Auth |
 | 日期 / 计算 | `LunarUtil` / `ExprUtil` / `JsonPathUtil` | 农历（1900-2099）、四则运算、JSON Pointer |
 | 校验 / 图形 | `IsbnUtil` / `MacUtil` / `CaptchaUtil` / `IdCardUtil.convert15To18` | ISBN、MAC、图片验证码、15 升 18 位身份证 |
-| 正则 / 数学 | `ReUtil` / `MathUtil` / `UnitConvertUtil` / `WeekUtil` | 正则提取、公约数组合、单位换算、ISO 周 |
+| 正则 / 数学 | `ReUtil` / `MathUtil` / `UnitConvertUtil` / `WeekUtil` | 正则提取替换命名分组、公约数组合、单位换算、ISO 周 |
 | 编码 / ID | `Base58Util` / `HashidsUtil` / `SeqUtil` / `RomanUtil` | Base58、混淆 ID、日期序列、罗马数字 |
 | URL / 文本 | `UrlBuilder` / `UrlUtil.parse` / `TextDiffUtil` / `ImeiUtil` | URL 拼接解析、行 diff、IMEI |
 | 分布 / 图形 | `ConsistentHashUtil` / `ImageUtil.scale` / `RandomUtil.randomEle` | 一致性哈希、缩放水印、随机抽样 |
@@ -97,12 +128,21 @@
 | 文本 / 号牌 | `EmojiUtil` / `AccentUtil` / `PlateUtil` | Hutool / Commons Lang | Emoji、去音调、车牌 |
 | OTP / 哈希 | `TotpUtil` RFC 6238 / `XxHashUtil.hash64` | RFC 6238 / xxHash | Appendix B 8 位 TOTP、xxHash64 |
 
+### 对标 Hutool / GM/T / SemVer / RFC 4291
+
+| 模块 | 类 | 对标 | 说明 |
+| --- | --- | --- | --- |
+| 国密 / 哈希 | `Sm3Util` / `HashUtil.crc16Ccitt` | Hutool SmUtil / CRC-16 | SM3（`abc` 官方向量）、MODBUS / CCITT-FALSE |
+| 版本 / 网络 | `SemverUtil` / `Ipv6Util` | semver.org / RFC 5952 | 预发行比较、IPv6 展开压缩 |
+| 号段 / 书号 | `PhoneUtil` 港澳台 / `IsbnUtil.toIsbn13` / `BankCardUtil.brand` | Hutool PhoneUtil / Commons Validator | HK/TW/MO、ISBN-10↔13、卡组织 |
+| 文本 / 日期 | `StringUtil.subBetween` / `DateTimeUtil.formatBetween` | Hutool StrUtil / DateUtil | 提取中间串、`2天3小时5分钟` |
+
 ## 前端控制台（Vue 3）
 
 启动后打开 <http://localhost:8080/> 即可在页面上自测常用工具：脱敏、身份证、JWT、AES、人民币大写、雪花 ID 等。源码在 `frontend/`，构建产物输出到 `src/main/resources/static/`。控制台包含：
 
-- 后端 Java 工具演示（脱敏、JWT、AES、身份证、信用代码、坐标系、签名、TOTP、Cron、Ant 路径、限流、星座、slug、时长、农历、表达式、ISBN、验证码、单位换算、IMEI、Hashids、罗马数字、URL 解析、IBAN、VIN、EAN、Soundex、Jaro-Winkler、SHA3、KSUID、Sqids、UUID v5/v6、Metaphone、ISIN、BIC、Bech32、HKDF、摩斯电码、CaseFormat、HOTP、Base45、JSON Patch、节假日、WCAG 对比度、CUSIP、SEDOL、ORCID、ISRC、JSON Merge Patch、HTTP Date、车牌、URI Template 等）
-- 浏览器本地工具：JSON/XML、Base64、JWT 解码、Markdown、命名风格、全角半角、行处理、文本对比、MD5/HMAC/CRC32/Murmur3、ULID、UUID v7、CIDR、UA/Cookie、星座、高亮、四则运算、进制、ISBN、Punycode、罗马数字、单位换算、IMEI、URL 解析、Soundex、Jaro-Winkler、IBAN、EAN、年龄、ROT13、摩斯、通配符、ISIN、Humanize、Quoted-Printable、Base45、WCAG 对比度、去音调、车牌、Emoji、CUSIP 等
+- 后端 Java 工具演示（脱敏、JWT、AES、身份证、信用代码、坐标系、签名、TOTP、Cron、Ant 路径、限流、星座、slug、时长、农历、表达式、ISBN、验证码、单位换算、IMEI、Hashids、罗马数字、URL 解析、IBAN、VIN、EAN、Soundex、Jaro-Winkler、SHA3、KSUID、Sqids、UUID v5/v6、Metaphone、ISIN、BIC、Bech32、HKDF、摩斯电码、CaseFormat、HOTP、Base45、JSON Patch、节假日、WCAG 对比度、CUSIP、SEDOL、ORCID、ISRC、JSON Merge Patch、HTTP Date、车牌、URI Template、正则抽取、SM3、ISBN 互转、IPv6、SemVer、CRC-16 等）
+- 浏览器本地工具：JSON/XML、Base64、JWT 解码、Markdown、命名风格、全角半角、行处理、文本对比、MD5/HMAC/CRC32/Murmur3、ULID、UUID v7、CIDR、UA/Cookie、星座、高亮、四则运算、进制、ISBN、Punycode、罗马数字、单位换算、IMEI、URL 解析、Soundex、Jaro-Winkler、IBAN、EAN、年龄、ROT13、摩斯、通配符、ISIN、Humanize、Quoted-Printable、Base45、WCAG 对比度、去音调、车牌、Emoji、CUSIP、正则抽取/转义、ISBN 互转、IPv6、卡组织、时长差 等
 - 特效实验室：玻璃拟态、光晕、礼花、打字机、涟漪、聚光跟随
 - 深色模式、页面过渡、复制 Toast
 
@@ -137,9 +177,16 @@ curl "http://localhost:8080/api/utils/idcard/parse?idNo=110101199003078937"
 curl "http://localhost:8080/api/utils/jwt?subject=ada"
 ```
 
-代码内直接调用：
+代码内按领域包引用：
 
 ```java
+import com.mengzhihua.utils.common.crypto.JwtUtil;
+import com.mengzhihua.utils.common.extra.GeoUtil;
+import com.mengzhihua.utils.common.extra.TreeUtil;
+import com.mengzhihua.utils.common.lang.StringUtil;
+import com.mengzhihua.utils.common.math.ChineseNumberUtil;
+import com.mengzhihua.utils.common.validate.IdCardUtil;
+
 String phone = StringUtil.maskPhone("13812345678");
 boolean ok = IdCardUtil.isValid(idNo);
 String token = JwtUtil.create(Map.of("sub", userId), secret, Duration.ofHours(2));

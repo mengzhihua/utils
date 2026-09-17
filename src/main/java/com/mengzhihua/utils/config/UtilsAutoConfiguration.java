@@ -1,7 +1,8 @@
 package com.mengzhihua.utils.config;
 
-import com.mengzhihua.utils.util.IdUtil;
-import com.mengzhihua.utils.util.SnowflakeIdGenerator;
+
+import com.mengzhihua.utils.common.id.IdUtil;
+import com.mengzhihua.utils.common.id.SnowflakeIdGenerator;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

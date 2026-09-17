@@ -1,5 +1,6 @@
 package com.mengzhihua.utils.common.api;
 
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collections;
