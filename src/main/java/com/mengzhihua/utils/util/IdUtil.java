@@ -102,6 +102,14 @@ public final class IdUtil {
         return ObjectIdUtil.next();
     }
 
+    public static String ksuid() {
+        return KsuidUtil.next();
+    }
+
+    public static String typeId(String prefix) {
+        return TypeIdUtil.next(prefix);
+    }
+
     private static void writeCrockford(char[] out, long value, int count, int offset, char[] alphabet) {
         for (int i = count - 1; i >= 0; i--) {
             out[offset + i] = alphabet[(int) (value & 31)];

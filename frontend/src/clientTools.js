@@ -433,6 +433,47 @@ export const clientTools = [
     title: 'URL 解析',
     summary: '浏览器 URL',
     fields: [{ name: 'url', label: 'URL', value: 'https://example.com:8443/search?q=工具#top' }]
+  },
+  {
+    id: 'soundex-local',
+    group: 'text',
+    title: 'Soundex',
+    summary: '本地读音码',
+    fields: [
+      { name: 'left', label: '姓名 A', value: 'Robert' },
+      { name: 'right', label: '姓名 B', value: 'Rupert' }
+    ]
+  },
+  {
+    id: 'jaro-local',
+    group: 'text',
+    title: 'Jaro-Winkler',
+    summary: '本地相似度',
+    fields: [
+      { name: 'left', label: '文本 A', value: 'MARTHA' },
+      { name: 'right', label: '文本 B', value: 'MARHTA' }
+    ]
+  },
+  {
+    id: 'iban-local',
+    group: 'net',
+    title: 'IBAN 校验',
+    summary: 'MOD-97',
+    fields: [{ name: 'value', label: 'IBAN', value: 'GB82 WEST 1234 5698 7654 32' }]
+  },
+  {
+    id: 'ean-local',
+    group: 'net',
+    title: 'EAN 校验',
+    summary: 'GTIN 校验位',
+    fields: [{ name: 'value', label: '条码', value: '5901234123457' }]
+  },
+  {
+    id: 'age-local',
+    group: 'time',
+    title: '年龄',
+    summary: '本地按生日计算',
+    fields: [{ name: 'birthday', label: '生日', value: '1990-03-07' }]
   }
 ]
 

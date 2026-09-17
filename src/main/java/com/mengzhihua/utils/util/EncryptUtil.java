@@ -40,6 +40,10 @@ public final class EncryptUtil {
         return digest("SHA-512", text);
     }
 
+    public static String sha3_256(String text) {
+        return digest("SHA3-256", text);
+    }
+
     public static String hmacSha256(String text, String secret) {
         if (text == null || secret == null) {
             return null;

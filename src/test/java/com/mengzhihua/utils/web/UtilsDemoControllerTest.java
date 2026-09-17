@@ -191,4 +191,29 @@ class UtilsDemoControllerTest {
                 .andExpect(jsonPath("$.data.isoWeek").value(6))
                 .andExpect(jsonPath("$.data.chinese").value("星期六"));
     }
+
+    @Test
+    void openSourceIbanSoundexSha3() throws Exception {
+        mockMvc.perform(get("/api/utils/iban").param("value", "GB82WEST12345698765432"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/soundex").param("left", "Robert").param("right", "Rupert"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.left").value("R163"))
+                .andExpect(jsonPath("$.data.similar").value(true));
+
+        mockMvc.perform(get("/api/utils/similarity").param("left", "MARTHA").param("right", "MARHTA"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.jaroWinkler").value(org.hamcrest.Matchers.closeTo(0.9611, 0.001)));
+
+        mockMvc.perform(get("/api/utils/digest").param("text", "hello"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.sha3_256")
+                        .value("3338be694f50c5f338814986cdf0686453a888b84f424d792af4b9202398f392"));
+
+        mockMvc.perform(get("/api/utils/vin").param("value", "1M8GDM9AXKP042788"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+    }
 }

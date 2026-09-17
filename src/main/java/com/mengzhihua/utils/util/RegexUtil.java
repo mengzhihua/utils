@@ -94,4 +94,20 @@ public final class RegexUtil {
     public static boolean isImei(String value) {
         return ImeiUtil.isValid(value);
     }
+
+    public static boolean isIban(String value) {
+        return IbanUtil.isValid(value);
+    }
+
+    public static boolean isVin(String value) {
+        return VinUtil.isValid(value);
+    }
+
+    public static boolean isIssn(String value) {
+        return IssnUtil.isValid(value);
+    }
+
+    public static boolean isEan(String value) {
+        return EanUtil.isValid(value);
+    }
 }

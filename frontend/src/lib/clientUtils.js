@@ -593,6 +593,34 @@ export async function runClientTool(id, values) {
         fragment: parsed.hash.slice(1)
       }
     }
+    case 'soundex-local': {
+      const left = soundex(values.left || '')
+      const right = soundex(values.right || '')
+      return { left, right, similar: left !== '' && left === right }
+    }
+    case 'jaro-local':
+      return { jaroWinkler: jaroWinkler(values.left || '', values.right || '') }
+    case 'iban-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isIban(compact) }
+    }
+    case 'ean-local': {
+      const compact = String(values.value || '').replace(/\D/g, '')
+      return { normalized: compact, valid: isEan(compact) }
+    }
+    case 'age-local': {
+      const birthday = new Date(`${values.birthday || '1990-03-07'}T00:00:00`)
+      if (Number.isNaN(birthday.getTime())) {
+        throw new Error('无效日期')
+      }
+      const today = new Date()
+      let age = today.getFullYear() - birthday.getFullYear()
+      const md = today.getMonth() - birthday.getMonth()
+      if (md < 0 || (md === 0 && today.getDate() < birthday.getDate())) {
+        age--
+      }
+      return { age }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -849,6 +877,110 @@ function isImei(compact) {
     doubleDigit = !doubleDigit
   }
   return sum % 10 === 0
+}
+
+function isEan(compact) {
+  if (![8, 12, 13, 14].includes(compact.length) || !/^\d+$/.test(compact)) {
+    return false
+  }
+  let sum = 0
+  let factor = 3
+  for (let i = compact.length - 2; i >= 0; i--) {
+    sum += Number(compact[i]) * factor
+    factor = 4 - factor
+  }
+  return Number(compact[compact.length - 1]) === (10 - (sum % 10)) % 10
+}
+
+function isIban(compact) {
+  if (compact.length < 15 || compact.length > 34 || !/^[A-Z]{2}\d{2}[A-Z0-9]+$/.test(compact)) {
+    return false
+  }
+  const rearranged = compact.slice(4) + compact.slice(0, 4)
+  let numeric = ''
+  for (const ch of rearranged) {
+    numeric += /[A-Z]/.test(ch) ? String(ch.charCodeAt(0) - 55) : ch
+  }
+  let remainder = 0
+  for (const ch of numeric) {
+    remainder = (remainder * 10 + Number(ch)) % 97
+  }
+  return remainder === 1
+}
+
+function soundex(text) {
+  const map = '01230120022455012623010202'
+  const letters = String(text).toUpperCase().replace(/[^A-Z]/g, '')
+  if (!letters) {
+    return ''
+  }
+  let out = letters[0]
+  let last = map[letters.charCodeAt(0) - 65]
+  for (let i = 1; i < letters.length && out.length < 4; i++) {
+    const mapped = map[letters.charCodeAt(i) - 65]
+    if (mapped !== '0' && mapped !== last) {
+      out += mapped
+    }
+    if (mapped !== '0') {
+      last = mapped
+    }
+  }
+  return (out + '000').slice(0, 4)
+}
+
+function jaroWinkler(left, right) {
+  const j = jaro(left, right)
+  let prefix = 0
+  const limit = Math.min(4, left.length, right.length)
+  while (prefix < limit && left[prefix] === right[prefix]) {
+    prefix++
+  }
+  return j + prefix * 0.1 * (1 - j)
+}
+
+function jaro(a, b) {
+  if (a === b) {
+    return 1
+  }
+  if (!a.length || !b.length) {
+    return 0
+  }
+  const matchDistance = Math.max(a.length, b.length) / 2 - 1
+  const aMatch = Array(a.length).fill(false)
+  const bMatch = Array(b.length).fill(false)
+  let matches = 0
+  for (let i = 0; i < a.length; i++) {
+    const from = Math.max(0, i - matchDistance)
+    const to = Math.min(i + matchDistance + 1, b.length)
+    for (let j = from; j < to; j++) {
+      if (bMatch[j] || a[i] !== b[j]) {
+        continue
+      }
+      aMatch[i] = true
+      bMatch[j] = true
+      matches++
+      break
+    }
+  }
+  if (!matches) {
+    return 0
+  }
+  let transpositions = 0
+  let k = 0
+  for (let i = 0; i < a.length; i++) {
+    if (!aMatch[i]) {
+      continue
+    }
+    while (!bMatch[k]) {
+      k++
+    }
+    if (a[i] !== b[k]) {
+      transpositions++
+    }
+    k++
+  }
+  const m = matches
+  return (m / a.length + m / b.length + (m - transpositions / 2) / m) / 3
 }
 
 function isIsbn(compact) {

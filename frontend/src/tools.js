@@ -877,6 +877,111 @@ export const tools = [
       { name: 'pattern', label: '正则', value: '\\d+' },
       { name: 'text', label: '文本', value: 'ab12cd34' }
     ]
+  },
+  {
+    id: 'similarity',
+    group: 'string',
+    title: '文本相似度',
+    summary: 'Jaro-Winkler / Jaccard',
+    method: 'GET',
+    path: '/api/utils/similarity',
+    fields: [
+      { name: 'left', label: '文本 A', value: 'MARTHA' },
+      { name: 'right', label: '文本 B', value: 'MARHTA' }
+    ]
+  },
+  {
+    id: 'soundex',
+    group: 'string',
+    title: 'Soundex',
+    summary: 'SoundexUtil.encode',
+    method: 'GET',
+    path: '/api/utils/soundex',
+    fields: [
+      { name: 'left', label: '姓名 A', value: 'Robert' },
+      { name: 'right', label: '姓名 B', value: 'Rupert' }
+    ]
+  },
+  {
+    id: 'iban',
+    group: 'validate',
+    title: 'IBAN',
+    summary: 'IbanUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/iban',
+    fields: [{ name: 'value', label: 'IBAN', value: 'GB82WEST12345698765432' }]
+  },
+  {
+    id: 'vin',
+    group: 'validate',
+    title: 'VIN 车架号',
+    summary: 'VinUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/vin',
+    fields: [{ name: 'value', label: 'VIN', value: '1M8GDM9AXKP042788' }]
+  },
+  {
+    id: 'ean',
+    group: 'validate',
+    title: 'EAN / GTIN',
+    summary: 'EanUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/ean',
+    fields: [{ name: 'value', label: '条码', value: '5901234123457' }]
+  },
+  {
+    id: 'issn',
+    group: 'validate',
+    title: 'ISSN',
+    summary: 'IssnUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/issn',
+    fields: [{ name: 'value', label: 'ISSN', value: '0317-8471' }]
+  },
+  {
+    id: 'age',
+    group: 'datetime',
+    title: '年龄',
+    summary: 'AgeUtil.age',
+    method: 'GET',
+    path: '/api/utils/age',
+    fields: [{ name: 'birthday', label: '生日', value: '1990-03-07' }]
+  },
+  {
+    id: 'digest',
+    group: 'crypto',
+    title: 'SHA3-256',
+    summary: 'EncryptUtil.sha3_256',
+    method: 'GET',
+    path: '/api/utils/digest',
+    fields: [{ name: 'text', label: '原文', value: 'hello' }]
+  },
+  {
+    id: 'ksuid',
+    group: 'id',
+    title: 'KSUID / TypeID',
+    summary: 'KsuidUtil / TypeIdUtil',
+    method: 'GET',
+    path: '/api/utils/ksuid',
+    fields: []
+  },
+  {
+    id: 'host-port',
+    group: 'web',
+    title: 'host:port',
+    summary: 'HostAndPortUtil.parse',
+    method: 'GET',
+    path: '/api/utils/host-port',
+    fields: [{ name: 'value', label: '主机端口', value: 'example.com:8443' }]
+  },
+  {
+    id: 'word',
+    group: 'string',
+    title: '单词处理',
+    summary: 'WordUtil.initials',
+    method: 'GET',
+    path: '/api/utils/word',
+    fields: [{ name: 'text', label: '文本', value: 'spring BOOT utils' }]
   }
 ]
 
