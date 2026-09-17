@@ -2,6 +2,9 @@ package com.mengzhihua.utils.util;
 
 import org.junit.jupiter.api.Test;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -10,6 +13,8 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MoreUtilsTest {
@@ -124,5 +129,104 @@ class MoreUtilsTest {
         assertTrue(RegexUtil.isZipcode("100000"));
         String relative = DateTimeUtil.fromNow(LocalDateTime.now(DateTimeUtil.DEFAULT_ZONE).minusMinutes(5));
         assertTrue(relative.contains("分钟前"));
+    }
+
+    @Test
+    void mathReUnitRoman() {
+        assertEquals(6, MathUtil.gcd(12, 18));
+        assertEquals(36, MathUtil.lcm(12, 18));
+        assertTrue(MathUtil.isPrime(13));
+        assertFalse(MathUtil.isPrime(12));
+        assertEquals("220", MathUtil.combination(12, 3).toString());
+        assertEquals("2.0000", MathUtil.sqrt(4, 4).toPlainString());
+        assertEquals("1000", UnitConvertUtil.convert(1, "km", "m").stripTrailingZeros().toPlainString());
+        assertEquals("100", UnitConvertUtil.convert(1, "m", "cm").stripTrailingZeros().toPlainString());
+        assertEquals("33.80000000", UnitConvertUtil.convert(1, "c", "f").toPlainString());
+        assertEquals("MCMXCIV", RomanUtil.toRoman(1994));
+        assertEquals(1994, RomanUtil.fromRoman("MCMXCIV"));
+        assertTrue(RomanUtil.isValid("XIV"));
+        assertFalse(RomanUtil.isValid("ABC"));
+    }
+
+    @Test
+    void imeiUrlHashidsWeekSeq() {
+        assertTrue(ImeiUtil.isValid("490154203237518"));
+        assertTrue(ImeiUtil.isValid(ImeiUtil.generate()));
+        assertFalse(ImeiUtil.isValid("490154203237519"));
+        assertTrue(RegexUtil.isImei("490154203237518"));
+
+        assertEquals("example.com", UrlUtil.getHost("https://example.com:8443/search?q=1#top"));
+        assertEquals("/search", UrlUtil.getPath("https://example.com:8443/search?q=1#top"));
+        assertEquals(8443, UrlUtil.getPort("https://example.com:8443/search?q=1#top"));
+        assertEquals("top", UrlUtil.getFragment("https://example.com:8443/search?q=1#top"));
+        String built = UrlBuilder.of("https://example.com/a")
+                .appendPath("b")
+                .query("q", "工具")
+                .build();
+        assertTrue(built.startsWith("https://example.com/a/b?"));
+        assertTrue(built.contains("q="));
+
+        String hash = HashidsUtil.encode(123L);
+        assertEquals(123L, HashidsUtil.decodeOne(hash));
+        assertEquals(List.of(1L, 2L, 3L).toString(),
+                java.util.Arrays.stream(HashidsUtil.decode(HashidsUtil.encode(1, 2, 3))).boxed().toList().toString());
+
+        LocalDate date = LocalDate.of(2024, 2, 10);
+        assertEquals(6, WeekUtil.isoWeek(date));
+        assertEquals("星期六", WeekUtil.chineseDayOfWeek(date));
+        assertTrue(WeekUtil.isWeekend(date));
+        assertEquals(LocalDate.of(2024, 2, 5), WeekUtil.startOfIsoWeek(date));
+
+        String first = SeqUtil.next("UT");
+        String second = SeqUtil.next("UT");
+        assertTrue(first.startsWith("UT"));
+        assertNotEquals(first, second);
+        assertEquals(first.substring(0, 10), second.substring(0, 10));
+    }
+
+    @Test
+    void reBase58DiffHashHexUuidImage() throws Exception {
+        assertEquals(List.of("12", "34"), ReUtil.findAll("\\d+", "ab12cd34"));
+        assertEquals("12", ReUtil.getFirstNumber("ab12cd34"));
+        assertEquals("abcd", ReUtil.delAll("\\d+", "ab12cd34"));
+        assertEquals("a\\.b", ReUtil.escape("a.b"));
+        assertTrue(ReUtil.contains("\\d+", "ab12"));
+        assertFalse(ReUtil.isMatch("\\d+", "ab12"));
+
+        String encoded = Base58Util.encode("hello");
+        assertEquals("hello", Base58Util.decodeToString(encoded));
+        assertFalse(encoded.contains("0"));
+        assertFalse(encoded.contains("O"));
+
+        String unified = TextDiffUtil.unified("a\nb\nc", "a\nc\nd");
+        assertTrue(unified.contains("- b"));
+        assertTrue(unified.contains("+ d"));
+        assertEquals(2, TextDiffUtil.changedLines("a\nb\nc", "a\nc\nd"));
+
+        ConsistentHashUtil.Ring<String> ring = ConsistentHashUtil.of(List.of("n1", "node-b", "node-c"));
+        String node = ring.get("user-1");
+        assertNotNull(node);
+        assertEquals(node, ring.get("user-1"));
+        assertEquals(3, ring.size());
+
+        assertTrue(HexUtil.isHex("0a1b"));
+        assertFalse(HexUtil.isHex("0a1"));
+        assertTrue(RegexUtil.isUuid("550e8400-e29b-41d4-a716-446655440000"));
+        assertTrue(RegexUtil.isUuid("550e8400e29b41d4a716446655440000"));
+        assertFalse(RegexUtil.isUuid("not-a-uuid"));
+
+        assertEquals("b", RandomUtil.randomEle(List.of("b")));
+        assertEquals(2, RandomUtil.randomEles(List.of("a", "b", "c"), 2).size());
+
+        BufferedImage image = new BufferedImage(10, 8, BufferedImage.TYPE_INT_RGB);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", out);
+        byte[] png = out.toByteArray();
+        ImageUtil.Size scaled = ImageUtil.size(ImageUtil.scale(png, 20, 0));
+        assertEquals(20, scaled.width());
+        assertEquals(16, scaled.height());
+        ImageUtil.Size marked = ImageUtil.size(ImageUtil.watermark(png, "mark"));
+        assertEquals(10, marked.width());
+        assertEquals(8, marked.height());
     }
 }

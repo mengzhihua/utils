@@ -20,6 +20,9 @@ public final class RegexUtil {
     public static final Pattern ZIPCODE = Pattern.compile("^\\d{6}$");
     public static final Pattern QQ = Pattern.compile("^[1-9]\\d{4,11}$");
     public static final Pattern LANDLINE = Pattern.compile("^0\\d{2,3}-?\\d{7,8}$");
+    public static final Pattern UUID = Pattern.compile(
+            "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$");
+    public static final Pattern UUID_SIMPLE = Pattern.compile("^[0-9a-fA-F]{32}$");
 
     private RegexUtil() {
     }
@@ -82,5 +85,13 @@ public final class RegexUtil {
 
     public static boolean isIsbn(String value) {
         return IsbnUtil.isValid(value);
+    }
+
+    public static boolean isUuid(String value) {
+        return isMatch(UUID, value) || isMatch(UUID_SIMPLE, value);
+    }
+
+    public static boolean isImei(String value) {
+        return ImeiUtil.isValid(value);
     }
 }

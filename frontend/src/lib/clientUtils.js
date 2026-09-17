@@ -561,6 +561,38 @@ export async function runClientTool(id, values) {
       const ascii = new URL(`http://${domain}`).hostname
       return { ascii, href: `http://${ascii}` }
     }
+    case 'roman-local': {
+      const raw = String(values.value || '').trim()
+      if (/^\d+$/.test(raw)) {
+        const roman = toRoman(Number(raw))
+        return { roman, number: fromRoman(roman) }
+      }
+      const number = fromRoman(raw)
+      return { number, roman: toRoman(number) }
+    }
+    case 'unit-local':
+      return { value: convertUnit(values.value, values.from, values.to) }
+    case 'gcd-local': {
+      const a = Math.abs(Number(values.a) || 0)
+      const b = Math.abs(Number(values.b) || 0)
+      const g = gcd(a, b)
+      return { gcd: g, lcm: a === 0 || b === 0 ? 0 : (a / g) * b }
+    }
+    case 'imei-local': {
+      const compact = String(values.value || '').replace(/\D/g, '')
+      return { normalized: compact, valid: isImei(compact) }
+    }
+    case 'url-parse-local': {
+      const parsed = new URL(values.url || 'https://example.com')
+      return {
+        scheme: parsed.protocol.replace(':', ''),
+        host: parsed.hostname,
+        port: parsed.port || null,
+        path: parsed.pathname,
+        query: parsed.search.slice(1),
+        fragment: parsed.hash.slice(1)
+      }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -726,6 +758,97 @@ function murmur32(text) {
   h1 = Math.imul(h1, 0xc2b2ae35)
   h1 ^= h1 >>> 16
   return h1 | 0
+}
+
+function toRoman(number) {
+  if (number < 1 || number > 3999) {
+    throw new Error('罗马数字范围 1-3999')
+  }
+  const table = [
+    [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'],
+    [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']
+  ]
+  let remaining = number
+  let out = ''
+  for (const [value, symbol] of table) {
+    while (remaining >= value) {
+      out += symbol
+      remaining -= value
+    }
+  }
+  return out
+}
+
+function fromRoman(roman) {
+  const text = String(roman).trim().toUpperCase()
+  const map = { M: 1000, D: 500, C: 100, L: 50, X: 10, V: 5, I: 1 }
+  let value = 0
+  for (let i = 0; i < text.length; i++) {
+    const cur = map[text[i]]
+    const next = map[text[i + 1]]
+    if (!cur) {
+      throw new Error('无效罗马数字')
+    }
+    value += next && cur < next ? -cur : cur
+  }
+  if (toRoman(value) !== text) {
+    throw new Error('无效罗马数字')
+  }
+  return value
+}
+
+function gcd(a, b) {
+  while (b) {
+    const t = a % b
+    a = b
+    b = t
+  }
+  return a
+}
+
+function convertUnit(value, from, to) {
+  const amount = Number(value)
+  if (Number.isNaN(amount)) {
+    throw new Error('无效数值')
+  }
+  const length = { mm: 0.001, cm: 0.01, m: 1, km: 1000, in: 0.0254, ft: 0.3048 }
+  const mass = { mg: 0.001, g: 1, kg: 1000, t: 1_000_000, lb: 453.59237 }
+  const src = String(from || '').toLowerCase()
+  const dest = String(to || '').toLowerCase()
+  if (length[src] && length[dest]) {
+    return amount * length[src] / length[dest]
+  }
+  if (mass[src] && mass[dest]) {
+    return amount * mass[src] / mass[dest]
+  }
+  const toC = src === 'c' ? amount : src === 'f' ? (amount - 32) * 5 / 9 : src === 'k' ? amount - 273.15 : null
+  if (toC == null || !['c', 'f', 'k'].includes(dest)) {
+    throw new Error('无法换算这两个单位')
+  }
+  return dest === 'c' ? toC : dest === 'f' ? toC * 9 / 5 + 32 : toC + 273.15
+}
+
+function isImei(compact) {
+  if (compact.length !== 15) {
+    return false
+  }
+  let sum = 0
+  let doubleDigit = false
+  for (let i = compact.length - 1; i >= 0; i--) {
+    let n = Number(compact[i])
+    if (Number.isNaN(n)) {
+      return false
+    }
+    if (doubleDigit) {
+      n *= 2
+      if (n > 9) {
+        n -= 9
+      }
+    }
+    sum += n
+    doubleDigit = !doubleDigit
+  }
+  return sum % 10 === 0
 }
 
 function isIsbn(compact) {

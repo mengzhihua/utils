@@ -32,4 +32,16 @@ public final class HexUtil {
         byte[] bytes = decode(hex);
         return bytes == null ? null : new String(bytes, StandardCharsets.UTF_8);
     }
+
+    public static boolean isHex(String text) {
+        if (text == null || text.isEmpty() || (text.length() & 1) == 1) {
+            return false;
+        }
+        for (int i = 0; i < text.length(); i++) {
+            if (Character.digit(text.charAt(i), 16) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

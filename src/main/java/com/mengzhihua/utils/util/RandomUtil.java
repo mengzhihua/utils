@@ -1,6 +1,10 @@
 package com.mengzhihua.utils.util;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -44,6 +48,32 @@ public final class RandomUtil {
 
     public static String secureAlphanumeric(int length) {
         return random(ALPHANUMERIC, length, true);
+    }
+
+    public static <T> T randomEle(T[] array) {
+        if (array == null || array.length == 0) {
+            return null;
+        }
+        return array[nextInt(0, array.length)];
+    }
+
+    public static <T> T randomEle(List<T> list) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        return list.get(nextInt(0, list.size()));
+    }
+
+    public static <T> List<T> randomEles(Collection<T> collection, int count) {
+        if (collection == null || collection.isEmpty()) {
+            return new ArrayList<>();
+        }
+        if (count < 0 || count > collection.size()) {
+            throw new IllegalArgumentException("count must be between 0 and collection size");
+        }
+        List<T> copy = new ArrayList<>(collection);
+        Collections.shuffle(copy, ThreadLocalRandom.current());
+        return new ArrayList<>(copy.subList(0, count));
     }
 
     private static String random(String alphabet, int length, boolean secure) {

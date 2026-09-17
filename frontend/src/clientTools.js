@@ -383,6 +383,56 @@ export const clientTools = [
     title: 'Punycode',
     summary: '浏览器 IDN',
     fields: [{ name: 'domain', label: '域名', value: '清华大学.cn' }]
+  },
+  {
+    id: 'roman-local',
+    group: 'gen',
+    title: '罗马数字',
+    summary: '本地 1-3999',
+    fields: [{ name: 'value', label: '数字或罗马', value: '1994' }]
+  },
+  {
+    id: 'unit-local',
+    group: 'gen',
+    title: '单位换算',
+    summary: '长度 / 质量 / 温度',
+    fields: [
+      { name: 'value', label: '数值', value: '1' },
+      { name: 'from', label: '源单位', type: 'select', value: 'km', options: [
+        { value: 'km', label: 'km' }, { value: 'm', label: 'm' }, { value: 'cm', label: 'cm' },
+        { value: 'kg', label: 'kg' }, { value: 'g', label: 'g' },
+        { value: 'c', label: '°C' }, { value: 'f', label: '°F' }
+      ] },
+      { name: 'to', label: '目标单位', type: 'select', value: 'm', options: [
+        { value: 'm', label: 'm' }, { value: 'km', label: 'km' }, { value: 'cm', label: 'cm' },
+        { value: 'kg', label: 'kg' }, { value: 'g', label: 'g' },
+        { value: 'c', label: '°C' }, { value: 'f', label: '°F' }
+      ] }
+    ]
+  },
+  {
+    id: 'gcd-local',
+    group: 'gen',
+    title: '最大公约数',
+    summary: '本地 gcd / lcm',
+    fields: [
+      { name: 'a', label: 'A', value: '12' },
+      { name: 'b', label: 'B', value: '18' }
+    ]
+  },
+  {
+    id: 'imei-local',
+    group: 'net',
+    title: 'IMEI 校验',
+    summary: '15 位 Luhn',
+    fields: [{ name: 'value', label: 'IMEI', value: '490154203237518' }]
+  },
+  {
+    id: 'url-parse-local',
+    group: 'net',
+    title: 'URL 解析',
+    summary: '浏览器 URL',
+    fields: [{ name: 'url', label: 'URL', value: 'https://example.com:8443/search?q=工具#top' }]
   }
 ]
 

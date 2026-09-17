@@ -161,4 +161,34 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.valid").value(true));
     }
+
+    @Test
+    void moreUtilsMathImeiRoman() throws Exception {
+        mockMvc.perform(get("/api/utils/math").param("a", "12").param("b", "18"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.gcd").value(6))
+                .andExpect(jsonPath("$.data.lcm").value(36));
+
+        mockMvc.perform(get("/api/utils/imei").param("value", "490154203237518"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/roman").param("value", "1994"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.roman").value("MCMXCIV"));
+
+        mockMvc.perform(get("/api/utils/unit").param("value", "1").param("from", "km").param("to", "m"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.value").value("1000"));
+
+        mockMvc.perform(get("/api/utils/url/parse").param("url", "https://example.com:8443/search?q=1#top"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.host").value("example.com"))
+                .andExpect(jsonPath("$.data.port").value(8443));
+
+        mockMvc.perform(get("/api/utils/week").param("date", "2024-02-10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.isoWeek").value(6))
+                .andExpect(jsonPath("$.data.chinese").value("星期六"));
+    }
 }

@@ -724,6 +724,159 @@ export const tools = [
     method: 'GET',
     path: '/api/utils/base32',
     fields: [{ name: 'text', label: '原文', value: 'hello' }]
+  },
+  {
+    id: 'math',
+    group: 'number',
+    title: '最大公约数',
+    summary: 'MathUtil.gcd / lcm',
+    method: 'GET',
+    path: '/api/utils/math',
+    fields: [
+      { name: 'a', label: 'A', value: '12' },
+      { name: 'b', label: 'B', value: '18' }
+    ]
+  },
+  {
+    id: 'unit',
+    group: 'number',
+    title: '单位换算',
+    summary: 'UnitConvertUtil.convert',
+    method: 'GET',
+    path: '/api/utils/unit',
+    fields: [
+      { name: 'value', label: '数值', value: '1' },
+      { name: 'from', label: '源单位', type: 'select', value: 'km', options: [
+        { value: 'km', label: 'km' },
+        { value: 'm', label: 'm' },
+        { value: 'cm', label: 'cm' },
+        { value: 'mm', label: 'mm' },
+        { value: 'ft', label: 'ft' },
+        { value: 'in', label: 'in' },
+        { value: 'kg', label: 'kg' },
+        { value: 'g', label: 'g' },
+        { value: 'lb', label: 'lb' },
+        { value: 'c', label: '°C' },
+        { value: 'f', label: '°F' },
+        { value: 'k', label: 'K' }
+      ] },
+      { name: 'to', label: '目标单位', type: 'select', value: 'm', options: [
+        { value: 'm', label: 'm' },
+        { value: 'km', label: 'km' },
+        { value: 'cm', label: 'cm' },
+        { value: 'mm', label: 'mm' },
+        { value: 'ft', label: 'ft' },
+        { value: 'in', label: 'in' },
+        { value: 'kg', label: 'kg' },
+        { value: 'g', label: 'g' },
+        { value: 'lb', label: 'lb' },
+        { value: 'c', label: '°C' },
+        { value: 'f', label: '°F' },
+        { value: 'k', label: 'K' }
+      ] }
+    ]
+  },
+  {
+    id: 'imei',
+    group: 'validate',
+    title: 'IMEI',
+    summary: 'ImeiUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/imei',
+    fields: [{ name: 'value', label: 'IMEI', value: '490154203237518' }]
+  },
+  {
+    id: 'url-parse',
+    group: 'web',
+    title: 'URL 解析',
+    summary: 'UrlUtil.parse',
+    method: 'GET',
+    path: '/api/utils/url/parse',
+    fields: [{ name: 'url', label: 'URL', value: 'https://example.com:8443/search?q=工具#top' }]
+  },
+  {
+    id: 'url-build',
+    group: 'web',
+    title: 'URL 拼接',
+    summary: 'UrlBuilder.build',
+    method: 'GET',
+    path: '/api/utils/url/build',
+    fields: [
+      { name: 'scheme', label: '协议', value: 'https' },
+      { name: 'host', label: '主机', value: 'example.com' },
+      { name: 'path', label: '路径', value: '/search' },
+      { name: 'key', label: '参数名', value: 'q' },
+      { name: 'value', label: '参数值', value: '工具' }
+    ]
+  },
+  {
+    id: 'text-diff-java',
+    group: 'string',
+    title: '文本行 Diff',
+    summary: 'TextDiffUtil.unified',
+    method: 'POST',
+    path: '/api/utils/text-diff',
+    fields: [
+      { name: 'left', label: '原文', type: 'textarea', value: 'a\nb\nc' },
+      { name: 'right', label: '新文', type: 'textarea', value: 'a\nc\nd' }
+    ]
+  },
+  {
+    id: 'base58',
+    group: 'crypto',
+    title: 'Base58',
+    summary: 'Base58Util.encode',
+    method: 'GET',
+    path: '/api/utils/base58',
+    fields: [{ name: 'text', label: '原文', value: 'hello' }]
+  },
+  {
+    id: 'roman',
+    group: 'number',
+    title: '罗马数字',
+    summary: 'RomanUtil.toRoman',
+    method: 'GET',
+    path: '/api/utils/roman',
+    fields: [{ name: 'value', label: '数字或罗马', value: '1994' }]
+  },
+  {
+    id: 'hashids',
+    group: 'id',
+    title: 'Hashids',
+    summary: 'HashidsUtil.encode',
+    method: 'GET',
+    path: '/api/utils/hashids',
+    fields: [{ name: 'id', label: '数字 ID', value: '123' }]
+  },
+  {
+    id: 'week',
+    group: 'datetime',
+    title: 'ISO 周',
+    summary: 'WeekUtil.isoWeek',
+    method: 'GET',
+    path: '/api/utils/week',
+    fields: [{ name: 'date', label: '日期', value: '2024-02-10' }]
+  },
+  {
+    id: 'seq',
+    group: 'id',
+    title: '日期序列号',
+    summary: 'SeqUtil.next',
+    method: 'GET',
+    path: '/api/utils/seq',
+    fields: [{ name: 'prefix', label: '前缀', value: 'ORD' }]
+  },
+  {
+    id: 're',
+    group: 'string',
+    title: '正则提取',
+    summary: 'ReUtil.findAll',
+    method: 'GET',
+    path: '/api/utils/re',
+    fields: [
+      { name: 'pattern', label: '正则', value: '\\d+' },
+      { name: 'text', label: '文本', value: 'ab12cd34' }
+    ]
   }
 ]
 
