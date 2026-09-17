@@ -7,7 +7,7 @@ import java.util.HexFormat;
 
 /**
  * RFC 7693 BLAKE2s-256 (Commons Codec / libsodium style, JDK only).
- * {@code ""} → {@code 69217a3079908094e11121d042354a7c1f55b6482ca1a51e1b250dfd1cd0c48d};
+ * {@code ""} → {@code 69217a3079908094e11121d042354a7c1f55b6482ca1a51e1b250dfd1ed0eef9};
  * {@code "abc"} → {@code 508c5e8c327c14e2e1a72ba34eeb452f37458b209ed63a294d999b4c86675982}.
  */
 public final class Blake2sUtil {
