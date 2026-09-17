@@ -2004,6 +2004,108 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/http-accept',
       fields: [{ name: 'header', label: 'Accept', value: 'text/html,application/json;q=0.9,*/*;q=0.8' }]
+    },
+    {
+      id: 'refined-soundex',
+      group: 'string',
+      title: 'Refined Soundex',
+      summary: 'RefinedSoundexUtil',
+      method: 'GET',
+      path: '/api/utils/refined-soundex',
+      fields: [
+        { name: 'text', label: '词', value: 'testing' },
+        { name: 'other', label: '对照', value: 'The' }
+      ]
+    },
+    {
+      id: 'porter',
+      group: 'string',
+      title: 'Porter 词干',
+      summary: 'PorterStemmerUtil',
+      method: 'GET',
+      path: '/api/utils/porter',
+      fields: [{ name: 'text', label: '单词', value: 'relational' }]
+    },
+    {
+      id: 'nir',
+      group: 'validate',
+      title: '法国 NIR',
+      summary: 'NirUtil INSEE',
+      method: 'GET',
+      path: '/api/utils/nir',
+      fields: [{ name: 'value', label: 'NIR', value: '255081416812535' }]
+    },
+    {
+      id: 'codice-fiscale',
+      group: 'validate',
+      title: '意大利税号',
+      summary: 'CodiceFiscaleUtil',
+      method: 'GET',
+      path: '/api/utils/codice-fiscale',
+      fields: [{ name: 'value', label: '税号', value: 'RSSMRA80A01H501U' }]
+    },
+    {
+      id: 'steuer-id',
+      group: 'validate',
+      title: '德国税号',
+      summary: 'SteuerIdUtil ISO 7064',
+      method: 'GET',
+      path: '/api/utils/steuer-id',
+      fields: [{ name: 'value', label: 'IdNr', value: '86095742719' }]
+    },
+    {
+      id: 'eori',
+      group: 'validate',
+      title: '欧盟 EORI',
+      summary: 'EoriUtil',
+      method: 'GET',
+      path: '/api/utils/eori',
+      fields: [{ name: 'value', label: 'EORI', value: 'FR73282932000074' }]
+    },
+    {
+      id: 'doi',
+      group: 'validate',
+      title: 'DOI',
+      summary: 'DoiUtil ISO 26324',
+      method: 'GET',
+      path: '/api/utils/doi',
+      fields: [{ name: 'value', label: 'DOI', value: '10.1000/182' }]
+    },
+    {
+      id: 'pmid',
+      group: 'validate',
+      title: 'PMID',
+      summary: 'PmidUtil',
+      method: 'GET',
+      path: '/api/utils/pmid',
+      fields: [{ name: 'value', label: 'PMID', value: '12345678' }]
+    },
+    {
+      id: 'iccid',
+      group: 'validate',
+      title: 'SIM ICCID',
+      summary: 'IccidUtil Luhn',
+      method: 'GET',
+      path: '/api/utils/iccid',
+      fields: [{ name: 'value', label: 'ICCID', value: '89014103211118510720' }]
+    },
+    {
+      id: 'forwarded',
+      group: 'web',
+      title: 'HTTP Forwarded',
+      summary: 'ForwardedUtil RFC 7239',
+      method: 'GET',
+      path: '/api/utils/forwarded',
+      fields: [{ name: 'header', label: 'Forwarded', value: 'for=192.0.2.60;proto=http;by=203.0.113.43' }]
+    },
+    {
+      id: 'fletcher',
+      group: 'crypto',
+      title: 'Fletcher',
+      summary: 'HashUtil.fletcher16',
+      method: 'GET',
+      path: '/api/utils/fletcher',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

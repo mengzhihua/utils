@@ -861,6 +861,62 @@ export const clientTools = [
       title: 'Bencode',
       summary: 'spam → 4:spam',
       fields: [{ name: 'text', label: '字符串', value: 'spam' }]
+    },
+    {
+      id: 'refined-soundex-local',
+      group: 'text',
+      title: 'Refined Soundex',
+      summary: 'testing → T6036084',
+      fields: [{ name: 'text', label: '词', value: 'testing' }]
+    },
+    {
+      id: 'nir-local',
+      group: 'net',
+      title: '法国 NIR',
+      summary: '255081416812535',
+      fields: [{ name: 'value', label: 'NIR', value: '255081416812535' }]
+    },
+    {
+      id: 'codice-fiscale-local',
+      group: 'net',
+      title: '意大利税号',
+      summary: 'RSSMRA80A01H501U',
+      fields: [{ name: 'value', label: '税号', value: 'RSSMRA80A01H501U' }]
+    },
+    {
+      id: 'steuer-id-local',
+      group: 'net',
+      title: '德国税号',
+      summary: '86095742719',
+      fields: [{ name: 'value', label: 'IdNr', value: '86095742719' }]
+    },
+    {
+      id: 'eori-local',
+      group: 'net',
+      title: '欧盟 EORI',
+      summary: 'FR73282932000074',
+      fields: [{ name: 'value', label: 'EORI', value: 'FR73282932000074' }]
+    },
+    {
+      id: 'doi-local',
+      group: 'net',
+      title: 'DOI',
+      summary: '10.1000/182',
+      fields: [{ name: 'value', label: 'DOI', value: '10.1000/182' }]
+    },
+    {
+      id: 'pmid-local',
+      group: 'net',
+      title: 'PMID',
+      summary: '12345678',
+      fields: [{ name: 'value', label: 'PMID', value: '12345678' }]
+    },
+    {
+      id: 'iccid-local',
+      group: 'net',
+      title: 'SIM ICCID',
+      summary: '89014103211118510720',
+      fields: [{ name: 'value', label: 'ICCID', value: '89014103211118510720' }]
     }
   ]
 

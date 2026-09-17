@@ -320,6 +320,42 @@ public final class HashUtil {
         return String.format(Locale.ROOT, "%08x", adler32(text));
     }
 
+    /**
+     * Fletcher-16 (modulo 255). {@code 123456789} → {@code 1ede}.
+     */
+    public static int fletcher16(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        int sum1 = 0;
+        int sum2 = 0;
+        for (byte b : data) {
+            sum1 = (sum1 + (b & 0xff)) % 255;
+            sum2 = (sum2 + sum1) % 255;
+        }
+        return (sum2 << 8) | sum1;
+    }
+
+    public static String fletcher16Hex(String text) {
+        return String.format(Locale.ROOT, "%04x", fletcher16(text));
+    }
+
+    /**
+     * Fletcher-32 with 16-bit accumulators (modulo 65535).
+     */
+    public static int fletcher32(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        int sum1 = 0;
+        int sum2 = 0;
+        for (byte b : data) {
+            sum1 = (sum1 + (b & 0xff)) % 65535;
+            sum2 = (sum2 + sum1) % 65535;
+        }
+        return (sum2 << 16) | (sum1 & 0xffff);
+    }
+
+    public static String fletcher32Hex(String text) {
+        return String.format(Locale.ROOT, "%08x", fletcher32(text));
+    }
+
     public static int crc16(String text) {
         byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
         return crc16Modbus(data);

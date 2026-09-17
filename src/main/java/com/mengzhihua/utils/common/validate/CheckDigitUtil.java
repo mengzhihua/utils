@@ -122,6 +122,26 @@ public final class CheckDigitUtil {
         return (char) ('0' + interim);
     }
 
+    /**
+     * ISO 7064 MOD 11,10 check digit for a digit body (German Steuer-IdNr).
+     */
+    public static char iso7064Mod1110CheckDigit(String body) {
+        String value = digitsOnly(body);
+        if (value.isEmpty()) {
+            throw new IllegalArgumentException("ISO 7064 body is empty");
+        }
+        int product = 10;
+        for (int i = 0; i < value.length(); i++) {
+            int sum = (value.charAt(i) - '0' + product) % 10;
+            if (sum == 0) {
+                sum = 10;
+            }
+            product = (sum * 2) % 11;
+        }
+        int check = 11 - product;
+        return (char) ('0' + (check == 10 ? 0 : check));
+    }
+
     private static String digitsOnly(String digits) {
         if (digits == null) {
             return "";

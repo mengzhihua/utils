@@ -806,6 +806,43 @@ export async function runClientTool(id, values) {
       const text = String(values.text || '')
       return { encoded: `${text.length}:${text}` }
     }
+    case 'refined-soundex-local':
+      return { code: refinedSoundex(values.text || '') }
+    case 'nir-local': {
+      const compact = String(values.value || '').replace(/[\s.-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isNir(compact), female: isNir(compact) && '248'.includes(compact[0]) }
+    }
+    case 'codice-fiscale-local': {
+      const compact = String(values.value || '').replace(/[\s.-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isCodiceFiscale(compact) }
+    }
+    case 'steuer-id-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isSteuerId(digits) }
+    }
+    case 'eori-local': {
+      const compact = String(values.value || '').replace(/[\s.-]/g, '').toUpperCase()
+      const identifier = compact.slice(2)
+      const valid = /^[A-Z]{2}[A-Z0-9]{1,15}$/.test(compact)
+        && (compact.startsWith('FR') ? isSiret(identifier) : true)
+      return { normalized: compact, country: compact.slice(0, 2), identifier, valid }
+    }
+    case 'doi-local': {
+      let compact = String(values.value || '').trim()
+      const lower = compact.toLowerCase()
+      if (lower.startsWith('https://doi.org/')) compact = compact.slice(16)
+      else if (lower.startsWith('http://doi.org/')) compact = compact.slice(15)
+      else if (lower.startsWith('doi:')) compact = compact.slice(4)
+      return { normalized: compact.trim(), valid: /^10\.\d{4,9}\/\S+$/i.test(compact.trim()) }
+    }
+    case 'pmid-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: /^[1-9]\d{0,9}$/.test(digits) }
+    }
+    case 'iccid-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: /^89\d{17,18}$/.test(digits) && luhnAny(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2099,6 +2136,64 @@ function isIsni(compact) {
   const check = (12 - (p % 11)) % 11
   const expected = check === 10 ? 'X' : String(check)
   return compact[15] === expected
+}
+
+function refinedSoundex(text) {
+  const map = '01360240043788015936020505'
+  const letters = String(text || '').toUpperCase().replace(/[^A-Z]/g, '')
+  if (!letters) return ''
+  let out = letters[0]
+  let last = '*'
+  for (const ch of letters) {
+    const current = map[ch.charCodeAt(0) - 65]
+    if (current === last) continue
+    out += current
+    last = current
+  }
+  return out
+}
+
+function isNir(compact) {
+  if (!/^[1-8]\d{4}(?:\d{2}|2[AB])\d{6}\d{2}$/.test(compact)) return false
+  const body = compact.slice(0, 13)
+  const dept = compact.slice(5, 7)
+  const numeric = dept === '2A' ? `${body.slice(0, 5)}19${body.slice(7)}` : dept === '2B' ? `${body.slice(0, 5)}18${body.slice(7)}` : body
+  const key = String(97 - (Number(numeric) % 97)).padStart(2, '0')
+  return compact.slice(13) === key
+}
+
+function isCodiceFiscale(compact) {
+  if (!/^[A-Z]{6}\d{2}[A-EHLMPRST]\d{2}[A-Z]\d{3}[A-Z]$/.test(compact)) return false
+  const oddDigit = [1, 0, 5, 7, 9, 13, 15, 17, 19, 21]
+  const oddLetter = {
+    A: 1, B: 0, C: 5, D: 7, E: 9, F: 13, G: 15, H: 17, I: 19, J: 21,
+    K: 2, L: 4, M: 18, N: 20, O: 11, P: 3, Q: 6, R: 8, S: 12, T: 14,
+    U: 16, V: 10, W: 22, X: 25, Y: 24, Z: 23
+  }
+  let sum = 0
+  for (let i = 0; i < 15; i++) {
+    const c = compact[i]
+    if (i % 2 === 0) sum += /\d/.test(c) ? oddDigit[Number(c)] : oddLetter[c]
+    else sum += /\d/.test(c) ? Number(c) : c.charCodeAt(0) - 65
+  }
+  return compact[15] === String.fromCharCode(65 + (sum % 26))
+}
+
+function isSteuerId(digits) {
+  if (!/^[1-9]\d{10}$/.test(digits)) return false
+  const counts = Array(10).fill(0)
+  for (const ch of digits.slice(0, 10)) counts[Number(ch)]++
+  const missing = counts.filter((n) => n === 0).length
+  const twice = counts.filter((n) => n === 2).length
+  if (missing !== 1 || twice !== 1 || counts.some((n) => n > 2)) return false
+  let product = 10
+  for (const ch of digits.slice(0, 10)) {
+    let sum = (Number(ch) + product) % 10
+    if (sum === 0) sum = 10
+    product = (sum * 2) % 11
+  }
+  const check = 11 - product
+  return digits[10] === String(check === 10 ? 0 : check)
 }
 
 function doubleMetaphone(text) {

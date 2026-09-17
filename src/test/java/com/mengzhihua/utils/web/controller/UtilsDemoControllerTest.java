@@ -407,4 +407,31 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.negotiated").value("text/html"));
     }
+
+    @Test
+    void refinedSoundexNirCodiceDoi() throws Exception {
+        mockMvc.perform(get("/api/utils/refined-soundex").param("text", "testing"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.code").value("T6036084"));
+
+        mockMvc.perform(get("/api/utils/porter").param("text", "relational"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.stem").value("relat"));
+
+        mockMvc.perform(get("/api/utils/nir").param("value", "255081416812535"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/codice-fiscale").param("value", "RSSMRA80A01H501U"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/doi").param("value", "10.1000/182"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/fletcher").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.fletcher16").value("1ede"));
+    }
 }

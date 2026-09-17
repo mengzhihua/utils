@@ -41,6 +41,13 @@ import com.mengzhihua.utils.common.validate.SirenUtil;
 import com.mengzhihua.utils.common.validate.SiretUtil;
 import com.mengzhihua.utils.common.validate.TwIdUtil;
 import com.mengzhihua.utils.common.validate.UpcEUtil;
+import com.mengzhihua.utils.common.validate.CodiceFiscaleUtil;
+import com.mengzhihua.utils.common.validate.DoiUtil;
+import com.mengzhihua.utils.common.validate.EoriUtil;
+import com.mengzhihua.utils.common.validate.IccidUtil;
+import com.mengzhihua.utils.common.validate.NirUtil;
+import com.mengzhihua.utils.common.validate.PmidUtil;
+import com.mengzhihua.utils.common.validate.SteuerIdUtil;
 import com.mengzhihua.utils.common.validate.VinUtil;
 
 /**
@@ -191,6 +198,13 @@ public final class RegexUtil {
         TYPES.put("siret", SiretUtil::isValid);
         TYPES.put("nif", NifUtil::isValid);
         TYPES.put("isni", IsniUtil::isValid);
+        TYPES.put("nir", NirUtil::isValid);
+        TYPES.put("codicefiscale", CodiceFiscaleUtil::isValid);
+        TYPES.put("steuerid", SteuerIdUtil::isValid);
+        TYPES.put("eori", EoriUtil::isValid);
+        TYPES.put("doi", DoiUtil::isValid);
+        TYPES.put("pmid", PmidUtil::isValid);
+        TYPES.put("iccid", IccidUtil::isValid);
     }
 
     private RegexUtil() {
