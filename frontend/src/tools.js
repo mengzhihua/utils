@@ -106,7 +106,7 @@ export const tools = [
   {
     id: 'digest',
     group: 'crypto',
-    title: 'MD5 / SHA-256',
+    title: 'MD5 / SHA-256 / SHA3',
     summary: 'EncryptUtil 摘要',
     method: 'GET',
     path: '/api/utils/encrypt/digest',
@@ -948,7 +948,7 @@ export const tools = [
     fields: [{ name: 'birthday', label: '生日', value: '1990-03-07' }]
   },
   {
-    id: 'digest',
+    id: 'sha3',
     group: 'crypto',
     title: 'SHA3-256',
     summary: 'EncryptUtil.sha3_256',

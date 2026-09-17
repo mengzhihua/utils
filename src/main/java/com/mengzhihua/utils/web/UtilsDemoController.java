@@ -91,6 +91,8 @@ public class UtilsDemoController {
         Map<String, String> data = new LinkedHashMap<>();
         data.put("md5", EncryptUtil.md5(text));
         data.put("sha256", EncryptUtil.sha256(text));
+        data.put("sha3_256", EncryptUtil.sha3_256(text));
+        data.put("sha512", EncryptUtil.sha512(text));
         return Result.ok(data);
     }
 
