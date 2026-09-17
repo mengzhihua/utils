@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  */
 public final class DurationUtil {
 
-    private static final Pattern TOKEN = Pattern.compile("(\\d+)\\s*(ms|s|m|h|d)\\b", Pattern.CASE_INSENSITIVE);
+    private static final Pattern TOKEN = Pattern.compile("(\\d+)\\s*(ms|s|m|h|d)(?![a-zA-Z])", Pattern.CASE_INSENSITIVE);
 
     private DurationUtil() {
     }

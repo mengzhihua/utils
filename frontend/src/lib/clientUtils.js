@@ -624,7 +624,7 @@ function parseDuration(text) {
   if (/^\d+$/.test(trimmed)) {
     return Number(trimmed)
   }
-  const token = /(\d+)\s*(ms|s|m|h|d)\b/gi
+  const token = /(\d+)\s*(ms|s|m|h|d)(?![a-zA-Z])/gi
   let millis = 0
   let consumed = ''
   let found = false
