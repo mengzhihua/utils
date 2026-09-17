@@ -124,4 +124,24 @@ class UtilsDemoControllerTest {
                 .andExpect(jsonPath("$.data.inCidr").value(true))
                 .andExpect(jsonPath("$.data.network").value("172.16.0.0"));
     }
+
+    @Test
+    void runtimeUtilsAntPathZodiacDuration() throws Exception {
+        mockMvc.perform(get("/api/utils/ant-path").param("pattern", "/api/**").param("path", "/api/utils/ip"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.matched").value(true));
+
+        mockMvc.perform(get("/api/utils/zodiac").param("date", "1990-03-07"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.constellation").value("双鱼座"))
+                .andExpect(jsonPath("$.data.chineseZodiac").value("马"));
+
+        mockMvc.perform(get("/api/utils/duration").param("text", "1h30m"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.millis").value(5_400_000));
+
+        mockMvc.perform(get("/api/utils/slug").param("text", "Spring Boot 工具集"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.slug").value("spring-boot-工具集"));
+    }
 }

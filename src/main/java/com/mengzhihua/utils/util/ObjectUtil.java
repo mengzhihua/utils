@@ -46,6 +46,19 @@ public final class ObjectUtil {
         return value != null ? value : defaultValue;
     }
 
+    @SafeVarargs
+    public static <T> T firstNonNull(T... values) {
+        if (values == null) {
+            return null;
+        }
+        for (T value : values) {
+            if (value != null) {
+                return value;
+            }
+        }
+        return null;
+    }
+
     public static boolean equals(Object a, Object b) {
         return java.util.Objects.equals(a, b);
     }

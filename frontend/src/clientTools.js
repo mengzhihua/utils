@@ -299,6 +299,58 @@ export const clientTools = [
     title: '图片转 Base64',
     summary: '生成 data URL',
     fields: [{ name: 'file', label: '图片', type: 'file' }]
+  },
+  {
+    id: 'uuid-v7',
+    group: 'gen',
+    title: 'UUID v7',
+    summary: '时间有序 UUID，本地生成',
+    fields: []
+  },
+  {
+    id: 'js-escape',
+    group: 'codec',
+    title: 'JS / CSV 转义',
+    summary: '本地转义，不走后端',
+    fields: [{ name: 'text', label: '文本', type: 'textarea', value: 'a"b\'c' }]
+  },
+  {
+    id: 'highlight-local',
+    group: 'text',
+    title: '关键字高亮',
+    summary: '本地 HTML 高亮',
+    fields: [
+      { name: 'text', label: '文本', type: 'textarea', value: 'Spring Boot 工具集' },
+      { name: 'keyword', label: '关键字', value: '工具' }
+    ]
+  },
+  {
+    id: 'zodiac-local',
+    group: 'time',
+    title: '星座 / 生肖',
+    summary: '本地按日期计算',
+    fields: [{ name: 'date', label: '日期', value: '1990-03-07' }]
+  },
+  {
+    id: 'duration-local',
+    group: 'time',
+    title: '时长解析',
+    summary: '1h30m / 90s / PT15M',
+    fields: [{ name: 'text', label: '时长', value: '1h30m' }]
+  },
+  {
+    id: 'slug-local',
+    group: 'text',
+    title: 'URL slug',
+    summary: '本地生成 slug',
+    fields: [{ name: 'text', label: '文本', value: 'Spring Boot 工具集' }]
+  },
+  {
+    id: 'murmur-local',
+    group: 'hash',
+    title: 'Murmur3-32',
+    summary: '本地非加密哈希',
+    fields: [{ name: 'text', label: '原文', value: 'hello' }]
   }
 ]
 

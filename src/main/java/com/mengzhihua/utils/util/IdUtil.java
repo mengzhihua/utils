@@ -68,6 +68,36 @@ public final class IdUtil {
         return new String(out);
     }
 
+    public static SnowflakeIdGenerator.Parts parseSnowflake(long id) {
+        return SnowflakeIdGenerator.parse(id);
+    }
+
+    /**
+     * RFC 9562 UUID version 7 (time-ordered).
+     */
+    public static String uuidV7() {
+        byte[] bytes = new byte[16];
+        ThreadLocalRandom.current().nextBytes(bytes);
+        long time = System.currentTimeMillis();
+        bytes[0] = (byte) (time >>> 40);
+        bytes[1] = (byte) (time >>> 32);
+        bytes[2] = (byte) (time >>> 24);
+        bytes[3] = (byte) (time >>> 16);
+        bytes[4] = (byte) (time >>> 8);
+        bytes[5] = (byte) time;
+        bytes[6] = (byte) ((bytes[6] & 0x0f) | 0x70);
+        bytes[8] = (byte) ((bytes[8] & 0x3f) | 0x80);
+        UUID uuid = new UUID(
+                ((bytes[0] & 0xffL) << 56) | ((bytes[1] & 0xffL) << 48) | ((bytes[2] & 0xffL) << 40)
+                        | ((bytes[3] & 0xffL) << 32) | ((bytes[4] & 0xffL) << 24) | ((bytes[5] & 0xffL) << 16)
+                        | ((bytes[6] & 0xffL) << 8) | (bytes[7] & 0xffL),
+                ((bytes[8] & 0xffL) << 56) | ((bytes[9] & 0xffL) << 48) | ((bytes[10] & 0xffL) << 40)
+                        | ((bytes[11] & 0xffL) << 32) | ((bytes[12] & 0xffL) << 24) | ((bytes[13] & 0xffL) << 16)
+                        | ((bytes[14] & 0xffL) << 8) | (bytes[15] & 0xffL)
+        );
+        return uuid.toString();
+    }
+
     private static void writeCrockford(char[] out, long value, int count, int offset, char[] alphabet) {
         for (int i = count - 1; i >= 0; i--) {
             out[offset + i] = alphabet[(int) (value & 31)];

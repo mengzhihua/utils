@@ -55,9 +55,21 @@ public class SnowflakeIdGenerator {
                 | sequence;
     }
 
+    public static Parts parse(long id) {
+        long sequence = id & SEQUENCE_MASK;
+        long worker = (id >> WORKER_ID_SHIFT) & MAX_WORKER_ID;
+        long datacenter = (id >> DATACENTER_ID_SHIFT) & MAX_DATACENTER_ID;
+        long timestamp = (id >> TIMESTAMP_SHIFT) + EPOCH;
+        return new Parts(id, timestamp, datacenter, worker, sequence);
+    }
+
+    public record Parts(long id, long epochMilli, long datacenterId, long workerId, long sequence) {
+    }
+
     private long waitNextMillis(long lastTs) {
         long timestamp = currentTime();
         while (timestamp <= lastTs) {
+            Thread.onSpinWait();
             timestamp = currentTime();
         }
         return timestamp;

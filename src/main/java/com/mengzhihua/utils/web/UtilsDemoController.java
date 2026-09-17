@@ -70,6 +70,7 @@ public class UtilsDemoController {
         data.put("uuid", IdUtil.uuid());
         data.put("simpleUuid", IdUtil.simpleUuid());
         data.put("nanoId", IdUtil.nanoId(16));
+        data.put("uuidV7", IdUtil.uuidV7());
         return Result.ok(data);
     }
 
@@ -80,6 +81,7 @@ public class UtilsDemoController {
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("id", id);
         data.put("idStr", Long.toString(id));
+        data.put("parsed", IdUtil.parseSnowflake(id));
         return Result.ok(data);
     }
 
@@ -108,6 +110,7 @@ public class UtilsDemoController {
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("valid", JsonUtil.isJson(request.json()));
         data.put("map", JsonUtil.toMap(request.json()));
+        data.put("pretty", JsonUtil.toPrettyJson(request.json()));
         return Result.ok(data);
     }
 

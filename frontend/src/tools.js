@@ -59,7 +59,9 @@ export const tools = [
           { value: 'idcard', label: '身份证' },
           { value: 'bank', label: '银行卡' },
           { value: 'address', label: '地址' },
-          { value: 'ip', label: 'IP' }
+          { value: 'ip', label: 'IP' },
+          { value: 'plate', label: '车牌' },
+          { value: 'password', label: '密码' }
         ]
       },
       { name: 'value', label: '原文', value: '张三丰' }
@@ -78,7 +80,7 @@ export const tools = [
     id: 'uuid',
     group: 'id',
     title: 'UUID / NanoId',
-    summary: 'IdUtil.uuid',
+    summary: 'IdUtil.uuid / uuidV7',
     method: 'GET',
     path: '/api/utils/id/uuid',
     fields: []
@@ -87,7 +89,7 @@ export const tools = [
     id: 'snowflake',
     group: 'id',
     title: '雪花 ID',
-    summary: 'IdUtil.snowflakeId',
+    summary: '生成并解析 worker / 时间',
     method: 'GET',
     path: '/api/utils/id/snowflake',
     fields: []
@@ -453,6 +455,156 @@ export const tools = [
     method: 'GET',
     path: '/api/utils/system',
     fields: []
+  },
+  {
+    id: 'ant-path',
+    group: 'web',
+    title: 'Ant 路径匹配',
+    summary: 'AntPathUtil.match',
+    method: 'GET',
+    path: '/api/utils/ant-path',
+    fields: [
+      { name: 'pattern', label: 'pattern', value: '/api/**' },
+      { name: 'path', label: 'path', value: '/api/utils/ip' }
+    ]
+  },
+  {
+    id: 'color-java',
+    group: 'web',
+    title: '颜色亮度',
+    summary: 'ColorUtil.isDark',
+    method: 'GET',
+    path: '/api/utils/color',
+    fields: [{ name: 'hex', label: 'HEX', value: '#0f766e' }]
+  },
+  {
+    id: 'zodiac',
+    group: 'datetime',
+    title: '星座 / 生肖',
+    summary: 'ZodiacUtil',
+    method: 'GET',
+    path: '/api/utils/zodiac',
+    fields: [{ name: 'date', label: '日期', value: '1990-03-07' }]
+  },
+  {
+    id: 'map-path',
+    group: 'structure',
+    title: 'Map 点路径',
+    summary: 'MapPathUtil.get',
+    method: 'GET',
+    path: '/api/utils/map-path',
+    fields: []
+  },
+  {
+    id: 'file-type',
+    group: 'web',
+    title: '文件类型 / 文件名',
+    summary: 'FileTypeUtil / FileUtil.sanitize',
+    method: 'GET',
+    path: '/api/utils/file-type',
+    fields: [
+      { name: 'filename', label: '文件名', value: '../../a.png' },
+      { name: 'hex', label: 'Magic HEX', value: '89504e47' }
+    ]
+  },
+  {
+    id: 'murmur',
+    group: 'crypto',
+    title: 'Murmur3-32',
+    summary: 'HashUtil.murmur32',
+    method: 'GET',
+    path: '/api/utils/hash/murmur',
+    fields: [{ name: 'text', label: '原文', value: 'hello' }]
+  },
+  {
+    id: 'escape-js',
+    group: 'string',
+    title: 'JS / CSV 转义',
+    summary: 'EscapeUtil',
+    method: 'GET',
+    path: '/api/utils/escape',
+    fields: [{ name: 'text', label: '文本', value: 'a"b\'c' }]
+  },
+  {
+    id: 'highlight',
+    group: 'string',
+    title: '关键字高亮',
+    summary: 'HighlightUtil.html',
+    method: 'GET',
+    path: '/api/utils/highlight',
+    fields: [
+      { name: 'text', label: '文本', value: 'Spring Boot 工具集' },
+      { name: 'keyword', label: '关键字', value: '工具' }
+    ]
+  },
+  {
+    id: 'weight-random',
+    group: 'structure',
+    title: '加权随机',
+    summary: 'WeightRandomUtil.pick',
+    method: 'GET',
+    path: '/api/utils/weight-random',
+    fields: []
+  },
+  {
+    id: 'rate-limit',
+    group: 'web',
+    title: '令牌桶限流',
+    summary: 'RateLimiterUtil.tryAcquire',
+    method: 'GET',
+    path: '/api/utils/rate-limit',
+    fields: [
+      { name: 'key', label: 'key', value: 'demo' },
+      { name: 'qps', label: 'QPS', value: '3' }
+    ]
+  },
+  {
+    id: 'duration',
+    group: 'datetime',
+    title: '时长解析',
+    summary: 'DurationUtil.parse',
+    method: 'GET',
+    path: '/api/utils/duration',
+    fields: [{ name: 'text', label: '时长', value: '1h30m' }]
+  },
+  {
+    id: 'slug',
+    group: 'string',
+    title: 'URL slug',
+    summary: 'SlugUtil.of',
+    method: 'GET',
+    path: '/api/utils/slug',
+    fields: [{ name: 'text', label: '文本', value: 'Spring Boot 工具集' }]
+  },
+  {
+    id: 'verify-code',
+    group: 'id',
+    title: '验证码',
+    summary: 'VerifyCodeUtil.numeric',
+    method: 'GET',
+    path: '/api/utils/verify-code',
+    fields: [{ name: 'length', label: '长度', value: '6' }]
+  },
+  {
+    id: 'percent',
+    group: 'number',
+    title: '百分比',
+    summary: 'PercentUtil.of',
+    method: 'GET',
+    path: '/api/utils/percent',
+    fields: [
+      { name: 'part', label: '部分', value: '25' },
+      { name: 'total', label: '总量', value: '200' }
+    ]
+  },
+  {
+    id: 'circuit',
+    group: 'web',
+    title: '熔断器',
+    summary: 'CircuitBreakerUtil.allow',
+    method: 'GET',
+    path: '/api/utils/circuit',
+    fields: [{ name: 'name', label: 'name', value: 'demo' }]
   }
 ]
 

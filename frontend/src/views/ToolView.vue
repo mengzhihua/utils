@@ -52,6 +52,7 @@
         </div>
         <pre>{{ pretty }}</pre>
       </div>
+      <div v-if="htmlPreview" class="html-preview" v-html="htmlPreview"></div>
       <p v-if="result" class="curl">{{ result.curl }}</p>
     </section>
   </div>
@@ -76,6 +77,7 @@ const loading = ref(false)
 const error = ref('')
 const result = ref(null)
 const pretty = computed(() => JSON.stringify(result.value?.payload, null, 2))
+const htmlPreview = computed(() => result.value?.payload?.data?.html || '')
 
 function hydrate() {
   Object.keys(values).forEach((key) => delete values[key])

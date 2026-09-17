@@ -52,4 +52,11 @@ public final class DesensitizeUtil {
         String[] parts = ip.split("\\.");
         return parts[0] + "." + parts[1] + ".*.*";
     }
+
+    public static String plate(String plate) {
+        if (StringUtil.isBlank(plate) || plate.length() < 3) {
+            return plate;
+        }
+        return StringUtil.mask(plate, 2, 1, '*');
+    }
 }

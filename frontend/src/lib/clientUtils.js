@@ -498,7 +498,203 @@ export async function runClientTool(id, values) {
         length: values.dataUrl.length,
         dataUrl: values.dataUrl
       }
+    case 'uuid-v7':
+      return { uuid: uuidV7() }
+    case 'js-escape': {
+      const text = values.text || ''
+      return { js: escapeJs(text), csv: escapeCsv(text) }
+    }
+    case 'highlight-local': {
+      const html = highlightHtml(values.text || '', values.keyword || '')
+      return { html, preview: true }
+    }
+    case 'zodiac-local': {
+      const date = values.date || '1990-03-07'
+      const parsed = new Date(`${date}T00:00:00`)
+      if (Number.isNaN(parsed.getTime())) {
+        throw new Error('无效日期')
+      }
+      return {
+        constellation: constellation(parsed.getMonth() + 1, parsed.getDate()),
+        chineseZodiac: chineseZodiac(parsed.getFullYear())
+      }
+    }
+    case 'duration-local': {
+      const millis = parseDuration(values.text || '0s')
+      const hours = Math.floor(millis / 3_600_000)
+      const minutes = Math.floor((millis % 3_600_000) / 60_000)
+      const seconds = Math.floor((millis % 60_000) / 1000)
+      return { millis, iso: `PT${hours}H${minutes}M${seconds}S`, formatted: `${hours}h ${minutes}m ${seconds}s` }
+    }
+    case 'slug-local':
+      return { slug: toSlug(values.text || '') }
+    case 'murmur-local': {
+      const hash = murmur32(values.text || '')
+      return { murmur32: hash, hex: (hash >>> 0).toString(16).padStart(8, '0') }
+    }
     default:
       throw new Error('unknown client tool')
   }
+}
+
+function uuidV7() {
+  const bytes = crypto.getRandomValues(new Uint8Array(16))
+  const time = BigInt(Date.now())
+  bytes[0] = Number((time >> 40n) & 0xffn)
+  bytes[1] = Number((time >> 32n) & 0xffn)
+  bytes[2] = Number((time >> 24n) & 0xffn)
+  bytes[3] = Number((time >> 16n) & 0xffn)
+  bytes[4] = Number((time >> 8n) & 0xffn)
+  bytes[5] = Number(time & 0xffn)
+  bytes[6] = (bytes[6] & 0x0f) | 0x70
+  bytes[8] = (bytes[8] & 0x3f) | 0x80
+  const hex = [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('')
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`
+}
+
+function escapeJs(text) {
+  return String(text)
+    .replaceAll('\\', '\\\\')
+    .replaceAll("'", "\\'")
+    .replaceAll('"', '\\"')
+    .replaceAll('\n', '\\n')
+    .replaceAll('\r', '\\r')
+    .replaceAll('\t', '\\t')
+    .replaceAll('/', '\\/')
+}
+
+function escapeCsv(text) {
+  const value = String(text)
+  if (/[",\n\r]/.test(value)) {
+    return `"${value.replaceAll('"', '""')}"`
+  }
+  return value
+}
+
+function highlightHtml(text, keyword) {
+  const escaped = escapeHtml(text)
+  const needle = escapeHtml(keyword)
+  if (!needle) {
+    return escaped
+  }
+  const lower = escaped.toLowerCase()
+  const needleLower = needle.toLowerCase()
+  let from = 0
+  let html = ''
+  let index = lower.indexOf(needleLower, from)
+  while (index >= 0) {
+    html += escaped.slice(from, index) + `<mark>${escaped.slice(index, index + needle.length)}</mark>`
+    from = index + needle.length
+    index = lower.indexOf(needleLower, from)
+  }
+  return html + escaped.slice(from)
+}
+
+function chineseZodiac(year) {
+  const animals = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪']
+  return animals[((year - 4) % 12 + 12) % 12]
+}
+
+function constellation(month, day) {
+  const md = month * 100 + day
+  if (md >= 321 && md < 420) return '白羊座'
+  if (md >= 420 && md < 521) return '金牛座'
+  if (md >= 521 && md < 622) return '双子座'
+  if (md >= 622 && md < 723) return '巨蟹座'
+  if (md >= 723 && md < 823) return '狮子座'
+  if (md >= 823 && md < 923) return '处女座'
+  if (md >= 923 && md < 1024) return '天秤座'
+  if (md >= 1024 && md < 1123) return '天蝎座'
+  if (md >= 1123 && md < 1222) return '射手座'
+  if (md >= 1222 || md < 120) return '摩羯座'
+  if (md >= 120 && md < 219) return '水瓶座'
+  return '双鱼座'
+}
+
+function parseDuration(text) {
+  const trimmed = String(text).trim()
+  if (/^P/i.test(trimmed)) {
+    const iso = trimmed.toUpperCase()
+    const match = iso.match(/^P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$/)
+    if (!match) {
+      throw new Error('无效 ISO 时长')
+    }
+    return ((Number(match[1]) || 0) * 86400 + (Number(match[2]) || 0) * 3600 + (Number(match[3]) || 0) * 60 + (Number(match[4]) || 0)) * 1000
+  }
+  if (/^\d+$/.test(trimmed)) {
+    return Number(trimmed)
+  }
+  const token = /(\d+)\s*(ms|s|m|h|d)\b/gi
+  let millis = 0
+  let consumed = ''
+  let found = false
+  let match
+  while ((match = token.exec(trimmed))) {
+    found = true
+    consumed += match[0]
+    const value = Number(match[1])
+    const unit = match[2].toLowerCase()
+    millis += unit === 'ms' ? value
+      : unit === 's' ? value * 1000
+        : unit === 'm' ? value * 60_000
+          : unit === 'h' ? value * 3_600_000
+            : value * 86_400_000
+  }
+  if (!found || trimmed.replace(/\s+/g, '') !== consumed.replaceAll(' ', '')) {
+    throw new Error('无效时长')
+  }
+  return millis
+}
+
+function toSlug(text) {
+  return String(text)
+    .trim()
+    .normalize('NFKD')
+    .replace(/\p{M}/gu, '')
+    .replace(/[^\p{L}\p{N}]+/gu, '-')
+    .replace(/-{2,}/g, '-')
+    .replace(/^-|-$/g, '')
+    .toLowerCase()
+}
+
+function murmur32(text) {
+  const data = new TextEncoder().encode(text)
+  const c1 = 0xcc9e2d51
+  const c2 = 0x1b873593
+  let h1 = 0
+  const roundedEnd = (data.length >> 2) << 2
+  for (let i = 0; i < roundedEnd; i += 4) {
+    let k1 = (data[i] | (data[i + 1] << 8) | (data[i + 2] << 16) | (data[i + 3] << 24)) >>> 0
+    k1 = Math.imul(k1, c1)
+    k1 = (k1 << 15) | (k1 >>> 17)
+    k1 = Math.imul(k1, c2)
+    h1 ^= k1
+    h1 = (h1 << 13) | (h1 >>> 19)
+    h1 = (Math.imul(h1, 5) + 0xe6546b64) | 0
+  }
+  let k1 = 0
+  switch (data.length & 3) {
+    case 3:
+      k1 ^= data[roundedEnd + 2] << 16
+    // fall through
+    case 2:
+      k1 ^= data[roundedEnd + 1] << 8
+    // fall through
+    case 1:
+      k1 |= data[roundedEnd]
+      k1 = Math.imul(k1, c1)
+      k1 = (k1 << 15) | (k1 >>> 17)
+      k1 = Math.imul(k1, c2)
+      h1 ^= k1
+      break
+    default:
+      break
+  }
+  h1 ^= data.length
+  h1 ^= h1 >>> 16
+  h1 = Math.imul(h1, 0x85ebca6b)
+  h1 ^= h1 >>> 13
+  h1 = Math.imul(h1, 0xc2b2ae35)
+  h1 ^= h1 >>> 16
+  return h1 | 0
 }
