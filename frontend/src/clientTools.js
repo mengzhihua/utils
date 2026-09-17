@@ -468,14 +468,55 @@ export const clientTools = [
     summary: 'GTIN 校验位',
     fields: [{ name: 'value', label: '条码', value: '5901234123457' }]
   },
-  {
-    id: 'age-local',
-    group: 'time',
-    title: '年龄',
-    summary: '本地按生日计算',
-    fields: [{ name: 'birthday', label: '生日', value: '1990-03-07' }]
-  }
-]
+    {
+      id: 'age-local',
+      group: 'time',
+      title: '年龄',
+      summary: '本地按生日计算',
+      fields: [{ name: 'birthday', label: '生日', value: '1990-03-07' }]
+    },
+    {
+      id: 'rot13-local',
+      group: 'codec',
+      title: 'ROT13',
+      summary: '本地 ROT13',
+      fields: [{ name: 'text', label: '文本', value: 'Hello' }]
+    },
+    {
+      id: 'morse-local',
+      group: 'codec',
+      title: '摩斯电码',
+      summary: '本地编解码',
+      fields: [{ name: 'text', label: '文本', value: 'SOS' }]
+    },
+    {
+      id: 'wildcard-local',
+      group: 'text',
+      title: '通配符',
+      summary: '* / ? 匹配',
+      fields: [
+        { name: 'text', label: '文本', value: 'Foo.java' },
+        { name: 'pattern', label: '模式', value: '*.java' }
+      ]
+    },
+    {
+      id: 'isin-local',
+      group: 'net',
+      title: 'ISIN 校验',
+      summary: 'ISO 6166',
+      fields: [{ name: 'value', label: 'ISIN', value: 'US0378331005' }]
+    },
+    {
+      id: 'humanize-local',
+      group: 'text',
+      title: 'Humanize',
+      summary: '1.2K / 21st',
+      fields: [
+        { name: 'value', label: '数字', value: '1234' },
+        { name: 'ordinal', label: '序数', value: '21' }
+      ]
+    }
+  ]
 
 export function getClientTool(id) {
   return clientTools.find((item) => item.id === id)

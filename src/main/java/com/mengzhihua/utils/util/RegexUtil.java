@@ -110,4 +110,12 @@ public final class RegexUtil {
     public static boolean isEan(String value) {
         return EanUtil.isValid(value);
     }
+
+    public static boolean isIsin(String value) {
+        return IsinUtil.isValid(value);
+    }
+
+    public static boolean isBic(String value) {
+        return BicUtil.isValid(value);
+    }
 }

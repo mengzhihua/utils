@@ -1,5 +1,9 @@
 package com.mengzhihua.utils.util;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -31,6 +35,13 @@ public final class IdUtil {
 
     public static String snowflakeIdStr() {
         return Long.toString(snowflakeId());
+    }
+
+    public static final UUID NAMESPACE_DNS = UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
+    public static final UUID NAMESPACE_URL = UUID.fromString("6ba7b811-9dad-11d1-80b4-00c04fd430c8");
+
+    public static String nanoId() {
+        return nanoId(21);
     }
 
     public static String nanoId(int length) {
@@ -108,6 +119,64 @@ public final class IdUtil {
 
     public static String typeId(String prefix) {
         return TypeIdUtil.next(prefix);
+    }
+
+    public static String sqid(long id) {
+        return SqidsUtil.encode(id);
+    }
+
+    public static String cuid2() {
+        return Cuid2Util.next();
+    }
+
+    /**
+     * RFC 4122 UUID version 3 (MD5 name-based).
+     */
+    public static String uuidV3(String name) {
+        return uuidV3(NAMESPACE_DNS, name);
+    }
+
+    public static String uuidV3(UUID namespace, String name) {
+        return nameBasedUuid(namespace, name, "MD5", 3);
+    }
+
+    /**
+     * RFC 4122 UUID version 5 (SHA-1 name-based).
+     */
+    public static String uuidV5(String name) {
+        return uuidV5(NAMESPACE_DNS, name);
+    }
+
+    public static String uuidV5(UUID namespace, String name) {
+        return nameBasedUuid(namespace, name, "SHA-1", 5);
+    }
+
+    private static String nameBasedUuid(UUID namespace, String name, String algorithm, int version) {
+        if (namespace == null || name == null) {
+            throw new IllegalArgumentException("namespace and name are required");
+        }
+        try {
+            MessageDigest digest = MessageDigest.getInstance(algorithm);
+            ByteBuffer buffer = ByteBuffer.allocate(16);
+            buffer.putLong(namespace.getMostSignificantBits());
+            buffer.putLong(namespace.getLeastSignificantBits());
+            digest.update(buffer.array());
+            digest.update(name.getBytes(StandardCharsets.UTF_8));
+            byte[] hash = digest.digest();
+            hash[6] = (byte) ((hash[6] & 0x0f) | (version << 4));
+            hash[8] = (byte) ((hash[8] & 0x3f) | 0x80);
+            long msb = 0;
+            long lsb = 0;
+            for (int i = 0; i < 8; i++) {
+                msb = (msb << 8) | (hash[i] & 0xffL);
+            }
+            for (int i = 8; i < 16; i++) {
+                lsb = (lsb << 8) | (hash[i] & 0xffL);
+            }
+            return new UUID(msb, lsb).toString();
+        } catch (NoSuchAlgorithmException ex) {
+            throw new IllegalStateException(algorithm + " not available", ex);
+        }
     }
 
     private static void writeCrockford(char[] out, long value, int count, int offset, char[] alphabet) {

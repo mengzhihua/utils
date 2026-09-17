@@ -96,6 +96,34 @@ public final class HashUtil {
         return hash;
     }
 
+    /**
+     * CRC-32C Castagnoli (iSCSI / Guava {@code Hashing.crc32c}).
+     */
+    public static int crc32c(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc32c(data);
+    }
+
+    public static String crc32cHex(String text) {
+        return String.format(Locale.ROOT, "%08x", crc32c(text));
+    }
+
+    public static int crc32c(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0xffffffff;
+        for (byte b : bytes) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 1) != 0) {
+                    crc = (crc >>> 1) ^ 0x82f63b78;
+                } else {
+                    crc >>>= 1;
+                }
+            }
+        }
+        return ~crc;
+    }
+
     public static int crc16(String text) {
         byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
         int crc = 0xffff;

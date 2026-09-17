@@ -974,16 +974,186 @@ export const tools = [
     path: '/api/utils/host-port',
     fields: [{ name: 'value', label: '主机端口', value: 'example.com:8443' }]
   },
-  {
-    id: 'word',
-    group: 'string',
-    title: '单词处理',
-    summary: 'WordUtil.initials',
-    method: 'GET',
-    path: '/api/utils/word',
-    fields: [{ name: 'text', label: '文本', value: 'spring BOOT utils' }]
-  }
-]
+    {
+      id: 'word',
+      group: 'string',
+      title: '单词处理',
+      summary: 'WordUtil.initials',
+      method: 'GET',
+      path: '/api/utils/word',
+      fields: [{ name: 'text', label: '文本', value: 'spring BOOT utils' }]
+    },
+    {
+      id: 'sqids',
+      group: 'id',
+      title: 'Sqids',
+      summary: 'SqidsUtil.encode',
+      method: 'GET',
+      path: '/api/utils/sqids',
+      fields: [{ name: 'numbers', label: '数字', value: '1,2,3' }]
+    },
+    {
+      id: 'uuid-name',
+      group: 'id',
+      title: 'UUID v3 / v5 / NanoID / CUID2',
+      summary: 'IdUtil.uuidV5',
+      method: 'GET',
+      path: '/api/utils/uuid-name',
+      fields: [{ name: 'name', label: '名称', value: 'www.example.com' }]
+    },
+    {
+      id: 'metaphone',
+      group: 'string',
+      title: 'Metaphone',
+      summary: 'MetaphoneUtil.encode',
+      method: 'GET',
+      path: '/api/utils/metaphone',
+      fields: [
+        { name: 'left', label: '姓名 A', value: 'Philip' },
+        { name: 'right', label: '姓名 B', value: 'Phillip' }
+      ]
+    },
+    {
+      id: 'isin',
+      group: 'validate',
+      title: 'ISIN',
+      summary: 'IsinUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/isin',
+      fields: [{ name: 'value', label: 'ISIN', value: 'US0378331005' }]
+    },
+    {
+      id: 'bic',
+      group: 'validate',
+      title: 'SWIFT BIC',
+      summary: 'BicUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/bic',
+      fields: [{ name: 'value', label: 'BIC', value: 'DEUTDEFF' }]
+    },
+    {
+      id: 'case-format',
+      group: 'string',
+      title: 'CaseFormat',
+      summary: 'CaseFormatUtil.to',
+      method: 'GET',
+      path: '/api/utils/case-format',
+      fields: [{ name: 'text', label: '文本', value: 'springBootUtils' }]
+    },
+    {
+      id: 'media-type',
+      group: 'web',
+      title: 'MediaType',
+      summary: 'MediaTypeUtil.parse',
+      method: 'GET',
+      path: '/api/utils/media-type',
+      fields: [{ name: 'value', label: '类型', value: 'application/json; charset=utf-8' }]
+    },
+    {
+      id: 'morse',
+      group: 'string',
+      title: '摩斯电码',
+      summary: 'MorseUtil.encode',
+      method: 'GET',
+      path: '/api/utils/morse',
+      fields: [{ name: 'text', label: '文本', value: 'SOS' }]
+    },
+    {
+      id: 'gzip',
+      group: 'crypto',
+      title: 'Gzip',
+      summary: 'ZipUtil.gzipBase64',
+      method: 'GET',
+      path: '/api/utils/gzip',
+      fields: [{ name: 'text', label: '文本', value: 'hello 工具' }]
+    },
+    {
+      id: 'bech32',
+      group: 'crypto',
+      title: 'Bech32',
+      summary: 'Bech32Util.encodeText',
+      method: 'GET',
+      path: '/api/utils/bech32',
+      fields: [
+        { name: 'hrp', label: 'HRP', value: 'xyz' },
+        { name: 'text', label: '文本', value: 'hello' }
+      ]
+    },
+    {
+      id: 'hkdf',
+      group: 'crypto',
+      title: 'HKDF-SHA256',
+      summary: 'HkdfUtil.deriveHex',
+      method: 'GET',
+      path: '/api/utils/hkdf',
+      fields: [
+        { name: 'ikm', label: 'IKM', value: 'hello' },
+        { name: 'salt', label: 'Salt', value: 'salt' },
+        { name: 'info', label: 'Info', value: 'info' },
+        { name: 'length', label: '长度', value: '32' }
+      ]
+    },
+    {
+      id: 'check-digit',
+      group: 'validate',
+      title: '校验位',
+      summary: 'Luhn / Verhoeff / Damm',
+      method: 'GET',
+      path: '/api/utils/check-digit',
+      fields: [{ name: 'value', label: '数字', value: '79927398713' }]
+    },
+    {
+      id: 'humanize',
+      group: 'number',
+      title: 'Humanize',
+      summary: 'compact / ordinal',
+      method: 'GET',
+      path: '/api/utils/humanize',
+      fields: [
+        { name: 'value', label: '数字', value: '1234' },
+        { name: 'ordinal', label: '序数', value: '21' }
+      ]
+    },
+    {
+      id: 'rot13',
+      group: 'string',
+      title: 'ROT13',
+      summary: 'RotUtil.rot13',
+      method: 'GET',
+      path: '/api/utils/rot13',
+      fields: [{ name: 'text', label: '文本', value: 'Hello' }]
+    },
+    {
+      id: 'wildcard',
+      group: 'web',
+      title: '通配符',
+      summary: 'WildcardUtil.match',
+      method: 'GET',
+      path: '/api/utils/wildcard',
+      fields: [
+        { name: 'text', label: '文本', value: 'Foo.java' },
+        { name: 'pattern', label: '模式', value: '*.java' }
+      ]
+    },
+    {
+      id: 'email-parse',
+      group: 'validate',
+      title: '邮箱解析',
+      summary: 'EmailUtil.parse',
+      method: 'GET',
+      path: '/api/utils/email-parse',
+      fields: [{ name: 'value', label: '邮箱', value: 'ada+dev@example.com' }]
+    },
+    {
+      id: 'crc32c',
+      group: 'crypto',
+      title: 'CRC-32C',
+      summary: 'HashUtil.crc32c',
+      method: 'GET',
+      path: '/api/utils/hash/crc32c',
+      fields: [{ name: 'text', label: '文本', value: '123456789' }]
+    }
+  ]
 
 export function getTool(id) {
   return tools.find((item) => item.id === id)

@@ -166,6 +166,114 @@ public final class TextUtil {
         return inter.size() / (double) union.size();
     }
 
+    /**
+     * Damerau-Levenshtein distance (adjacent transpositions, Commons Text).
+     */
+    public static int damerauLevenshtein(String left, String right) {
+        String a = left == null ? "" : left;
+        String b = right == null ? "" : right;
+        int n = a.length();
+        int m = b.length();
+        int[][] dp = new int[n + 1][m + 1];
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = i;
+        }
+        for (int j = 0; j <= m; j++) {
+            dp[0][j] = j;
+        }
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                int cost = a.charAt(i - 1) == b.charAt(j - 1) ? 0 : 1;
+                dp[i][j] = Math.min(Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1), dp[i - 1][j - 1] + cost);
+                if (i > 1 && j > 1 && a.charAt(i - 1) == b.charAt(j - 2) && a.charAt(i - 2) == b.charAt(j - 1)) {
+                    dp[i][j] = Math.min(dp[i][j], dp[i - 2][j - 2] + 1);
+                }
+            }
+        }
+        return dp[n][m];
+    }
+
+    /**
+     * Sørensen–Dice coefficient on character bigrams.
+     */
+    public static double dice(String left, String right) {
+        java.util.Set<String> a = shingles(left);
+        java.util.Set<String> b = shingles(right);
+        if (a.isEmpty() && b.isEmpty()) {
+            return 1D;
+        }
+        java.util.Set<String> inter = new java.util.HashSet<>(a);
+        inter.retainAll(b);
+        return 2D * inter.size() / (a.size() + b.size());
+    }
+
+    /**
+     * Cosine similarity of character frequency vectors.
+     */
+    public static double cosine(String left, String right) {
+        java.util.Map<Character, Integer> a = frequencies(left);
+        java.util.Map<Character, Integer> b = frequencies(right);
+        if (a.isEmpty() && b.isEmpty()) {
+            return 1D;
+        }
+        double dot = 0;
+        double normA = 0;
+        double normB = 0;
+        java.util.Set<Character> keys = new java.util.HashSet<>(a.keySet());
+        keys.addAll(b.keySet());
+        for (Character key : keys) {
+            int av = a.getOrDefault(key, 0);
+            int bv = b.getOrDefault(key, 0);
+            dot += av * (double) bv;
+            normA += av * (double) av;
+            normB += bv * (double) bv;
+        }
+        if (normA == 0 || normB == 0) {
+            return 0D;
+        }
+        return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+    }
+
+    /**
+     * Apache Commons Text {@code FuzzyScore} (English, lowercase matching).
+     */
+    public static int fuzzyScore(String term, String query) {
+        if (term == null || query == null) {
+            return 0;
+        }
+        String termLower = term.toLowerCase(java.util.Locale.ROOT);
+        String queryLower = query.toLowerCase(java.util.Locale.ROOT);
+        int score = 0;
+        int termIndex = 0;
+        int previous = Integer.MIN_VALUE;
+        for (int queryIndex = 0; queryIndex < queryLower.length(); queryIndex++) {
+            char queryChar = queryLower.charAt(queryIndex);
+            boolean found = false;
+            for (; termIndex < termLower.length() && !found; termIndex++) {
+                if (termLower.charAt(termIndex) == queryChar) {
+                    score++;
+                    if (previous + 1 == termIndex) {
+                        score += 2;
+                    }
+                    previous = termIndex;
+                    found = true;
+                }
+            }
+        }
+        return score;
+    }
+
+    private static java.util.Map<Character, Integer> frequencies(String text) {
+        java.util.Map<Character, Integer> map = new java.util.HashMap<>();
+        if (text == null) {
+            return map;
+        }
+        for (int i = 0; i < text.length(); i++) {
+            map.merge(text.charAt(i), 1, Integer::sum);
+        }
+        return map;
+    }
+
     private static java.util.Set<String> shingles(String text) {
         String value = text == null ? "" : text;
         java.util.Set<String> set = new java.util.LinkedHashSet<>();

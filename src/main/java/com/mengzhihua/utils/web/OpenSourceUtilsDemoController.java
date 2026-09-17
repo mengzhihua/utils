@@ -43,6 +43,10 @@ public class OpenSourceUtilsDemoController {
         data.put("similarity", TextUtil.similarity(left, right));
         data.put("jaroWinkler", TextUtil.jaroWinkler(left, right));
         data.put("jaccard", TextUtil.jaccard(left, right));
+        data.put("dice", TextUtil.dice(left, right));
+        data.put("cosine", TextUtil.cosine(left, right));
+        data.put("damerau", TextUtil.damerauLevenshtein(left, right));
+        data.put("fuzzyScore", TextUtil.fuzzyScore(left, right));
         data.put("lcs", TextUtil.longestCommonSubsequence(left, right));
         data.put("simhashDistance", SimHashUtil.distance(left, right));
         return Result.ok(data);

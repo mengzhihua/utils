@@ -621,6 +621,23 @@ export async function runClientTool(id, values) {
       }
       return { age }
     }
+    case 'rot13-local':
+      return { rot13: rot13(values.text || '') }
+    case 'morse-local': {
+      const encoded = encodeMorse(values.text || 'SOS')
+      return { encoded, decoded: decodeMorse(encoded) }
+    }
+    case 'wildcard-local':
+      return { matched: wildcardMatch(values.text || '', values.pattern || '') }
+    case 'isin-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isIsin(compact) }
+    }
+    case 'humanize-local':
+      return {
+        compact: compactNumber(Number(values.value) || 0),
+        ordinal: ordinal(Number(values.ordinal) || 0)
+      }
     default:
       throw new Error('unknown client tool')
   }
@@ -1004,4 +1021,82 @@ function isIsbn(compact) {
     return sum % 10 === 0
   }
   return false
+}
+
+function rot13(text) {
+  return String(text).replace(/[a-zA-Z]/g, (ch) => {
+    const base = ch <= 'Z' ? 65 : 97
+    return String.fromCharCode(base + ((ch.charCodeAt(0) - base + 13) % 26))
+  })
+}
+
+const MORSE_LETTERS = ['.-', '-...', '-.-.', '-..', '.', '..-.', '--.', '....', '..', '.---', '-.-', '.-..', '--', '-.', '---', '.--.', '--.-', '.-.', '...', '-', '..-', '...-', '.--', '-..-', '-.--', '--..']
+const MORSE_DIGITS = ['-----', '.----', '..---', '...--', '....-', '.....', '-....', '--...', '---..', '----.']
+const MORSE_DECODE = Object.fromEntries([
+  ...MORSE_LETTERS.map((code, i) => [code, String.fromCharCode(65 + i)]),
+  ...MORSE_DIGITS.map((code, i) => [code, String(i)])
+])
+
+function encodeMorse(text) {
+  return String(text).toUpperCase().trim().split(/\s+/).map((word) => [...word].map((ch) => {
+    if (ch >= 'A' && ch <= 'Z') return MORSE_LETTERS[ch.charCodeAt(0) - 65]
+    if (ch >= '0' && ch <= '9') return MORSE_DIGITS[Number(ch)]
+    return ''
+  }).filter(Boolean).join(' ')).join(' / ')
+}
+
+function decodeMorse(morse) {
+  return String(morse).trim().split(/\s+\/\s+/).map((word) => word.split(/\s+/).map((code) => MORSE_DECODE[code] || '').join('')).join(' ')
+}
+
+function wildcardMatch(text, pattern) {
+  const regex = '^' + String(pattern).replace(/[.+^${}()|[\]\\]/g, '\\$&').replaceAll('*', '.*').replaceAll('?', '.') + '$'
+  return new RegExp(regex).test(text)
+}
+
+function isIsin(compact) {
+  if (compact.length !== 12 || !/^[A-Z]{2}[A-Z0-9]{9}[0-9]$/.test(compact)) {
+    return false
+  }
+  let numeric = ''
+  for (const ch of compact.slice(0, 11)) {
+    numeric += /[A-Z]/.test(ch) ? String(ch.charCodeAt(0) - 55) : ch
+  }
+  numeric += compact[11]
+  let sum = 0
+  let doubleDigit = false
+  for (let i = numeric.length - 1; i >= 0; i--) {
+    let n = Number(numeric[i])
+    if (doubleDigit) {
+      n *= 2
+      if (n > 9) n -= 9
+    }
+    sum += n
+    doubleDigit = !doubleDigit
+  }
+  return sum % 10 === 0
+}
+
+function compactNumber(value) {
+  const abs = Math.abs(value)
+  if (abs < 1000) return String(value)
+  const units = ['K', 'M', 'B', 'T']
+  let scaled = value
+  let unit = -1
+  while (Math.abs(scaled) >= 1000 && unit + 1 < units.length) {
+    scaled /= 1000
+    unit++
+  }
+  const formatted = scaled.toFixed(1).replace(/\.0$/, '')
+  return formatted + units[unit]
+}
+
+function ordinal(value) {
+  const abs = Math.abs(value)
+  const mod100 = abs % 100
+  let suffix = 'th'
+  if (mod100 < 11 || mod100 > 13) {
+    suffix = abs % 10 === 1 ? 'st' : abs % 10 === 2 ? 'nd' : abs % 10 === 3 ? 'rd' : 'th'
+  }
+  return `${value}${suffix}`
 }
