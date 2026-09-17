@@ -246,6 +246,14 @@ public final class HashUtil {
         return Ripemd160Util.hash(text);
     }
 
+    public static String shake128(String text) {
+        return ShakeUtil.shake128(text);
+    }
+
+    public static String shake256(String text) {
+        return ShakeUtil.shake256(text);
+    }
+
     public static int crc16Ccitt(byte[] data) {
         byte[] bytes = data == null ? new byte[0] : data;
         int crc = 0xffff;

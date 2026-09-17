@@ -715,6 +715,51 @@ export const clientTools = [
       title: 'NHS 号码',
       summary: '943 476 5919',
       fields: [{ name: 'value', label: 'NHS', value: '943 476 5919' }]
+    },
+    {
+      id: 'npi-local',
+      group: 'net',
+      title: 'NPI',
+      summary: '1234567893',
+      fields: [{ name: 'value', label: 'NPI', value: '1234567893' }]
+    },
+    {
+      id: 'ismn-local',
+      group: 'net',
+      title: 'ISMN',
+      summary: '979-0-2600-0043-8',
+      fields: [{ name: 'value', label: 'ISMN', value: '979-0-2600-0043-8' }]
+    },
+    {
+      id: 'nric-local',
+      group: 'net',
+      title: '新加坡 NRIC',
+      summary: 'S1234567D',
+      fields: [{ name: 'value', label: 'NRIC', value: 'S1234567D' }]
+    },
+    {
+      id: 'cologne-local',
+      group: 'text',
+      title: '科隆拼音',
+      summary: 'Müller → 657',
+      fields: [{ name: 'text', label: '姓名', value: 'Müller' }]
+    },
+    {
+      id: 'hamming-local',
+      group: 'text',
+      title: 'Hamming 距离',
+      summary: 'karolin / kathrin',
+      fields: [
+        { name: 'left', label: '左', value: 'karolin' },
+        { name: 'right', label: '右', value: 'kathrin' }
+      ]
+    },
+    {
+      id: 'uuid-v8-local',
+      group: 'gen',
+      title: 'UUID v8',
+      summary: 'RFC 9562 custom',
+      fields: []
     }
   ]
 

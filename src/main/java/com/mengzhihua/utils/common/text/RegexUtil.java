@@ -18,6 +18,7 @@ import com.mengzhihua.utils.common.validate.HkIdUtil;
 import com.mengzhihua.utils.common.validate.IbanUtil;
 import com.mengzhihua.utils.common.validate.ImeiUtil;
 import com.mengzhihua.utils.common.validate.IsbnUtil;
+import com.mengzhihua.utils.common.validate.IsmnUtil;
 import com.mengzhihua.utils.common.validate.Iso6346Util;
 import com.mengzhihua.utils.common.validate.LeiUtil;
 import com.mengzhihua.utils.common.validate.IsinUtil;
@@ -25,6 +26,8 @@ import com.mengzhihua.utils.common.validate.IsrcUtil;
 import com.mengzhihua.utils.common.validate.IssnUtil;
 import com.mengzhihua.utils.common.validate.MacUtil;
 import com.mengzhihua.utils.common.validate.NhsNumberUtil;
+import com.mengzhihua.utils.common.validate.NpiUtil;
+import com.mengzhihua.utils.common.validate.NricUtil;
 import com.mengzhihua.utils.common.validate.OrcidUtil;
 import com.mengzhihua.utils.common.validate.OrgCodeUtil;
 import com.mengzhihua.utils.common.validate.PhoneUtil;
@@ -169,6 +172,9 @@ public final class RegexUtil {
         TYPES.put("figi", FigiUtil::isValid);
         TYPES.put("lei", LeiUtil::isValid);
         TYPES.put("nhs", NhsNumberUtil::isValid);
+        TYPES.put("npi", NpiUtil::isValid);
+        TYPES.put("ismn", IsmnUtil::isValid);
+        TYPES.put("nric", NricUtil::isValid);
     }
 
     private RegexUtil() {

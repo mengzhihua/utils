@@ -722,6 +722,34 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, valid: isNhs(digits) }
     }
+    case 'npi-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isNpi(digits) }
+    }
+    case 'ismn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isIsmn(digits) }
+    }
+    case 'nric-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isNric(compact) }
+    }
+    case 'cologne-local':
+      return { code: colognePhonetic(values.text || '') }
+    case 'hamming-local': {
+      const left = String(values.left || '')
+      const right = String(values.right || '')
+      if (left.length !== right.length) {
+        throw new Error('hamming requires equal length')
+      }
+      let distance = 0
+      for (let i = 0; i < left.length; i++) {
+        if (left[i] !== right[i]) distance++
+      }
+      return { distance }
+    }
+    case 'uuid-v8-local':
+      return { uuid: uuidV8() }
     default:
       throw new Error('unknown client tool')
   }
@@ -737,6 +765,21 @@ function uuidV7() {
   bytes[4] = Number((time >> 8n) & 0xffn)
   bytes[5] = Number(time & 0xffn)
   bytes[6] = (bytes[6] & 0x0f) | 0x70
+  bytes[8] = (bytes[8] & 0x3f) | 0x80
+  const hex = [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('')
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`
+}
+
+function uuidV8() {
+  const bytes = crypto.getRandomValues(new Uint8Array(16))
+  const time = BigInt(Date.now())
+  bytes[0] = Number((time >> 40n) & 0xffn)
+  bytes[1] = Number((time >> 32n) & 0xffn)
+  bytes[2] = Number((time >> 24n) & 0xffn)
+  bytes[3] = Number((time >> 16n) & 0xffn)
+  bytes[4] = Number((time >> 8n) & 0xffn)
+  bytes[5] = Number(time & 0xffn)
+  bytes[6] = (bytes[6] & 0x0f) | 0x80
   bytes[8] = (bytes[8] & 0x3f) | 0x80
   const hex = [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('')
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`
@@ -1695,6 +1738,79 @@ function isNhs(number) {
   if (check === 11) check = 0
   if (check === 10) return false
   return check === Number(number[9])
+}
+
+function isNpi(number) {
+  return /^\d{10}$/.test(number) && luhn('80840' + number)
+}
+
+function isIsmn(number) {
+  if (!/^9790\d{9}$/.test(number)) return false
+  let sum = 0
+  let factor = 3
+  for (let i = number.length - 2; i >= 0; i--) {
+    sum += Number(number[i]) * factor
+    factor = 4 - factor
+  }
+  return number[12] === String((10 - (sum % 10)) % 10)
+}
+
+function isNric(nric) {
+  if (!/^[STFGM]\d{7}[A-Z]$/.test(nric)) return false
+  const weights = [2, 7, 6, 5, 4, 3, 2]
+  const prefix = nric[0]
+  let sum = prefix === 'T' || prefix === 'G' || prefix === 'M' ? 4 : 0
+  for (let i = 0; i < 7; i++) {
+    sum += Number(nric[i + 1]) * weights[i]
+  }
+  const table = prefix === 'F' || prefix === 'G' || prefix === 'M' ? 'XWUTRQPNMLK' : 'JZIHGFEDCBA'
+  return nric[8] === table[sum % 11]
+}
+
+function colognePhonetic(text) {
+  const word = String(text || '')
+    .toUpperCase()
+    .replaceAll('Ä', 'A')
+    .replaceAll('Ö', 'O')
+    .replaceAll('Ü', 'U')
+    .replaceAll('ß', '8')
+  const codes = []
+  let last = ''
+  const prev = (i) => (i === 0 ? '' : word[i - 1])
+  const next = (i) => (i + 1 < word.length ? word[i + 1] : '')
+  const codeOf = (i) => {
+    const c = word[i]
+    const n = next(i)
+    if ('AEIJOUY'.includes(c)) return '0'
+    if (c === 'B') return '1'
+    if (c === 'P') return n === 'H' ? '3' : '1'
+    if (c === 'D' || c === 'T') return 'CSZ'.includes(n) ? '8' : '2'
+    if ('FVW'.includes(c)) return '3'
+    if ('GKQ'.includes(c)) return '4'
+    if (c === 'C') {
+      if (i === 0) return 'AHKLOQRUX'.includes(n) ? '4' : '8'
+      if ('AHKOQUX'.includes(n) && prev(i) !== 'S' && prev(i) !== 'Z') return '4'
+      return '8'
+    }
+    if (c === 'X') return 'CKQ'.includes(prev(i)) ? '8' : '48'
+    if (c === 'L') return '5'
+    if (c === 'M' || c === 'N') return '6'
+    if (c === 'R') return '7'
+    if (c === 'S' || c === 'Z' || c === '8') return '8'
+    return ''
+  }
+  for (let i = 0; i < word.length; i++) {
+    const c = word[i]
+    if ((c < 'A' || c > 'Z') && c !== '8') continue
+    const code = codeOf(i)
+    for (const ch of code) {
+      if (ch && ch !== last) {
+        codes.push(ch)
+        last = ch
+      }
+    }
+  }
+  return codes.filter((ch, i) => ch !== '0' || i === 0).join('')
 }
 
 function solarTermDate(year, name) {

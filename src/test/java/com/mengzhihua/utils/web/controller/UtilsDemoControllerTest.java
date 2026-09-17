@@ -309,4 +309,33 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.valid").value(true));
     }
+
+    @Test
+    void shakeNpiCologneRange() throws Exception {
+        mockMvc.perform(get("/api/utils/shake").param("text", "abc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.shake128")
+                        .value("5881092dd818bf5cf8a3ddb793fbcba74097d5c526a6d35f97b83351940f2cc8"));
+
+        mockMvc.perform(get("/api/utils/npi").param("value", "1234567893"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/nric").param("value", "S1234567D"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cologne").param("text", "Müller"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.code").value("657"));
+
+        mockMvc.perform(get("/api/utils/http-range").param("header", "bytes=0-499"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.ranges[0].start").value(0))
+                .andExpect(jsonPath("$.data.ranges[0].end").value(499));
+
+        mockMvc.perform(get("/api/utils/hamming").param("left", "karolin").param("right", "kathrin"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.distance").value(3));
+    }
 }

@@ -1734,6 +1734,81 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/nhs',
       fields: [{ name: 'value', label: 'NHS', value: '943 476 5919' }]
+    },
+    {
+      id: 'shake',
+      group: 'crypto',
+      title: 'SHAKE',
+      summary: 'ShakeUtil FIPS 202',
+      method: 'GET',
+      path: '/api/utils/shake',
+      fields: [{ name: 'text', label: '原文', value: 'abc' }]
+    },
+    {
+      id: 'npi',
+      group: 'validate',
+      title: 'NPI',
+      summary: 'NpiUtil CMS Luhn',
+      method: 'GET',
+      path: '/api/utils/npi',
+      fields: [{ name: 'value', label: 'NPI', value: '1234567893' }]
+    },
+    {
+      id: 'ismn',
+      group: 'validate',
+      title: 'ISMN',
+      summary: 'IsmnUtil ISO 10957',
+      method: 'GET',
+      path: '/api/utils/ismn',
+      fields: [{ name: 'value', label: 'ISMN', value: '979-0-2600-0043-8' }]
+    },
+    {
+      id: 'nric',
+      group: 'validate',
+      title: '新加坡 NRIC',
+      summary: 'NricUtil',
+      method: 'GET',
+      path: '/api/utils/nric',
+      fields: [{ name: 'value', label: 'NRIC', value: 'S1234567D' }]
+    },
+    {
+      id: 'cologne',
+      group: 'string',
+      title: '科隆拼音',
+      summary: 'ColognePhoneticUtil',
+      method: 'GET',
+      path: '/api/utils/cologne',
+      fields: [{ name: 'text', label: '姓名', value: 'Müller' }]
+    },
+    {
+      id: 'http-range',
+      group: 'web',
+      title: 'HTTP Range',
+      summary: 'HttpRangeUtil RFC 7233',
+      method: 'GET',
+      path: '/api/utils/http-range',
+      fields: [{ name: 'header', label: 'Range', value: 'bytes=0-499' }]
+    },
+    {
+      id: 'hamming',
+      group: 'string',
+      title: 'Hamming 距离',
+      summary: 'TextUtil.hamming',
+      method: 'GET',
+      path: '/api/utils/hamming',
+      fields: [
+        { name: 'left', label: '左', value: 'karolin' },
+        { name: 'right', label: '右', value: 'kathrin' }
+      ]
+    },
+    {
+      id: 'uuid-v8',
+      group: 'id',
+      title: 'UUID v8',
+      summary: 'IdUtil.uuidV8 RFC 9562',
+      method: 'GET',
+      path: '/api/utils/uuid-v8',
+      fields: []
     }
   ]
 
