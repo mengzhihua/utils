@@ -21,6 +21,7 @@ import com.mengzhihua.utils.common.validate.IsbnUtil;
 import com.mengzhihua.utils.common.validate.IsmnUtil;
 import com.mengzhihua.utils.common.validate.Iso6346Util;
 import com.mengzhihua.utils.common.validate.LeiUtil;
+import com.mengzhihua.utils.common.validate.IsniUtil;
 import com.mengzhihua.utils.common.validate.IsinUtil;
 import com.mengzhihua.utils.common.validate.IsrcUtil;
 import com.mengzhihua.utils.common.validate.IssnUtil;
@@ -28,6 +29,7 @@ import com.mengzhihua.utils.common.validate.MacUtil;
 import com.mengzhihua.utils.common.validate.CnpjUtil;
 import com.mengzhihua.utils.common.validate.CpfUtil;
 import com.mengzhihua.utils.common.validate.NhsNumberUtil;
+import com.mengzhihua.utils.common.validate.NifUtil;
 import com.mengzhihua.utils.common.validate.NpiUtil;
 import com.mengzhihua.utils.common.validate.NricUtil;
 import com.mengzhihua.utils.common.validate.PeselUtil;
@@ -35,6 +37,8 @@ import com.mengzhihua.utils.common.validate.OrcidUtil;
 import com.mengzhihua.utils.common.validate.OrgCodeUtil;
 import com.mengzhihua.utils.common.validate.PhoneUtil;
 import com.mengzhihua.utils.common.validate.SedolUtil;
+import com.mengzhihua.utils.common.validate.SirenUtil;
+import com.mengzhihua.utils.common.validate.SiretUtil;
 import com.mengzhihua.utils.common.validate.TwIdUtil;
 import com.mengzhihua.utils.common.validate.UpcEUtil;
 import com.mengzhihua.utils.common.validate.VinUtil;
@@ -183,6 +187,10 @@ public final class RegexUtil {
         TYPES.put("cnpj", CnpjUtil::isValid);
         TYPES.put("pesel", PeselUtil::isValid);
         TYPES.put("upce", UpcEUtil::isValid);
+        TYPES.put("siren", SirenUtil::isValid);
+        TYPES.put("siret", SiretUtil::isValid);
+        TYPES.put("nif", NifUtil::isValid);
+        TYPES.put("isni", IsniUtil::isValid);
     }
 
     private RegexUtil() {

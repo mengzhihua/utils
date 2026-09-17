@@ -379,4 +379,32 @@ class UtilsDemoControllerTest {
                 .andExpect(jsonPath("$.data.hmacSm3")
                         .value("28e63256e7c5a087b1f073265dc53092163f7b82729735d06f28f10af9d52393"));
     }
+
+    @Test
+    void doubleMetaphoneSirenNifBencode() throws Exception {
+        mockMvc.perform(get("/api/utils/double-metaphone").param("text", "Smith"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.primary").value("SM0"));
+
+        mockMvc.perform(get("/api/utils/match-rating").param("left", "Smith").param("right", "Smyth"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.similar").value(true));
+
+        mockMvc.perform(get("/api/utils/siren").param("value", "732829320"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/nif").param("value", "12345678Z"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/bencode").param("text", "spam"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.encoded").value("4:spam"));
+
+        mockMvc.perform(get("/api/utils/http-accept")
+                        .param("header", "text/html,application/json;q=0.9"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.negotiated").value("text/html"));
+    }
 }

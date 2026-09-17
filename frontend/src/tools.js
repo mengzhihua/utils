@@ -1920,6 +1920,90 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/murmur128',
       fields: [{ name: 'text', label: '原文', value: 'abc' }]
+    },
+    {
+      id: 'double-metaphone',
+      group: 'string',
+      title: 'Double Metaphone',
+      summary: 'DoubleMetaphoneUtil',
+      method: 'GET',
+      path: '/api/utils/double-metaphone',
+      fields: [{ name: 'text', label: '姓名', value: 'Smith' }]
+    },
+    {
+      id: 'match-rating',
+      group: 'string',
+      title: 'Match Rating',
+      summary: 'MatchRatingUtil',
+      method: 'GET',
+      path: '/api/utils/match-rating',
+      fields: [
+        { name: 'left', label: '左', value: 'Smith' },
+        { name: 'right', label: '右', value: 'Smyth' }
+      ]
+    },
+    {
+      id: 'siren',
+      group: 'validate',
+      title: '法国 SIREN',
+      summary: 'SirenUtil Luhn',
+      method: 'GET',
+      path: '/api/utils/siren',
+      fields: [{ name: 'value', label: 'SIREN', value: '732829320' }]
+    },
+    {
+      id: 'siret',
+      group: 'validate',
+      title: '法国 SIRET',
+      summary: 'SiretUtil Luhn',
+      method: 'GET',
+      path: '/api/utils/siret',
+      fields: [{ name: 'value', label: 'SIRET', value: '73282932000074' }]
+    },
+    {
+      id: 'nif',
+      group: 'validate',
+      title: '西班牙 NIF',
+      summary: 'NifUtil DNI / NIE',
+      method: 'GET',
+      path: '/api/utils/nif',
+      fields: [{ name: 'value', label: 'NIF', value: '12345678Z' }]
+    },
+    {
+      id: 'isni',
+      group: 'validate',
+      title: 'ISNI',
+      summary: 'IsniUtil ISO 27729',
+      method: 'GET',
+      path: '/api/utils/isni',
+      fields: [{ name: 'value', label: 'ISNI', value: '0000 0001 2146 358X' }]
+    },
+    {
+      id: 'base91',
+      group: 'crypto',
+      title: 'basE91',
+      summary: 'Base91Util',
+      method: 'GET',
+      path: '/api/utils/base91',
+      fields: [{ name: 'text', label: '原文', value: 'Hello World' }]
+    },
+    {
+      id: 'bencode',
+      group: 'json',
+      title: 'Bencode',
+      summary: 'BencodeUtil',
+      method: 'GET',
+      path: '/api/utils/bencode',
+      fields: [{ name: 'text', label: '字符串', value: 'spam' }]
+    },
+    {
+      id: 'http-accept',
+      group: 'web',
+      title: 'HTTP Accept',
+      summary: 'HttpAcceptUtil RFC 9110',
+      method: 'GET',
+      path: '/api/utils/http-accept',
+      fields: [{ name: 'header', label: 'Accept', value: 'text/html,application/json;q=0.9,*/*;q=0.8' }]
     }
   ]
 

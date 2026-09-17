@@ -775,6 +775,37 @@ export async function runClientTool(id, values) {
       const iso = String(values.date || '2000-01-01')
       return { julianDayNumber: julianDayNumber(iso), iso }
     }
+    case 'double-metaphone-local': {
+      const primary = doubleMetaphone(values.text || '')
+      return { primary }
+    }
+    case 'match-rating-local':
+      return {
+        left: matchRating(values.left || ''),
+        right: matchRating(values.right || ''),
+        similar: matchRating(values.left || '') === matchRating(values.right || '')
+          || matchRatingSimilar(values.left || '', values.right || '')
+      }
+    case 'siren-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isSiren(digits) }
+    }
+    case 'siret-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isSiret(digits), siren: digits.slice(0, 9) }
+    }
+    case 'nif-local': {
+      const compact = String(values.value || '').replace(/[\s.-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isNif(compact) }
+    }
+    case 'isni-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isIsni(compact) }
+    }
+    case 'bencode-local': {
+      const text = String(values.text || '')
+      return { encoded: `${text.length}:${text}` }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2006,4 +2037,116 @@ function julianDayNumber(iso) {
   const y2 = y + 4800 - a
   const m2 = m + 12 * a - 3
   return d + Math.floor((153 * m2 + 2) / 5) + 365 * y2 + Math.floor(y2 / 4) - Math.floor(y2 / 100) + Math.floor(y2 / 400) - 32045
+}
+
+function matchRating(name) {
+  let word = String(name || '').toUpperCase().replace(/[^A-Z]/g, '')
+  if (!word || word.length === 1) return ''
+  const first = word[0]
+  let rest = word.replace(/[AEIOU]/g, '')
+  if ('AEIOU'.includes(first)) rest = first + rest
+  const doubles = ['BB', 'CC', 'DD', 'FF', 'GG', 'HH', 'JJ', 'KK', 'LL', 'MM', 'NN', 'PP', 'QQ', 'RR', 'SS', 'TT', 'VV', 'WW', 'XX', 'YY', 'ZZ']
+  for (const pair of doubles) rest = rest.replaceAll(pair, pair[0])
+  return rest.length > 6 ? rest.slice(0, 3) + rest.slice(-3) : rest
+}
+
+function matchRatingSimilar(left, right) {
+  const a = matchRating(left)
+  const b = matchRating(right)
+  return Boolean(a) && a === b
+}
+
+function isSiren(digits) {
+  return /^\d{9}$/.test(digits) && luhnAny(digits)
+}
+
+function isSiret(digits) {
+  return /^\d{14}$/.test(digits) && luhnAny(digits) && isSiren(digits.slice(0, 9))
+}
+
+function luhnAny(digits) {
+  if (!/^\d+$/.test(digits)) return false
+  let sum = 0
+  let doubleDigit = false
+  for (let i = digits.length - 1; i >= 0; i--) {
+    let n = Number(digits[i])
+    if (doubleDigit) {
+      n *= 2
+      if (n > 9) n -= 9
+    }
+    sum += n
+    doubleDigit = !doubleDigit
+  }
+  return sum % 10 === 0
+}
+
+function isNif(compact) {
+  const letters = 'TRWAGMYFPDXBNJZSQVHLCKE'
+  if (/^\d{8}[A-Z]$/.test(compact)) {
+    return compact[8] === letters[Number(compact.slice(0, 8)) % 23]
+  }
+  if (/^[XYZ]\d{7}[A-Z]$/.test(compact)) {
+    const mapped = compact[0] === 'X' ? '0' : compact[0] === 'Y' ? '1' : '2'
+    return compact[8] === letters[Number(mapped + compact.slice(1, 8)) % 23]
+  }
+  return false
+}
+
+function isIsni(compact) {
+  if (!/^\d{15}[\dX]$/.test(compact)) return false
+  let p = 0
+  for (let i = 0; i < 15; i++) p = (p + Number(compact[i])) * 2
+  const check = (12 - (p % 11)) % 11
+  const expected = check === 10 ? 'X' : String(check)
+  return compact[15] === expected
+}
+
+function doubleMetaphone(text) {
+  const word = String(text || '').toUpperCase().replace(/[^A-Z]/g, '')
+  if (!word) return ''
+  let i = /^(GN|KN|PN|WR|PS)/.test(word) ? 1 : 0
+  let out = ''
+  const vowel = (c) => 'AEIOUY'.includes(c)
+  const at = (n) => word[n] || ''
+  while (out.length < 4 && i < word.length) {
+    const c = word[i]
+    if ('AEIOUY'.includes(c)) {
+      if (i === 0) out += 'A'
+      i++
+      continue
+    }
+    if (c === 'B') { out += 'P'; i += at(i + 1) === 'B' ? 2 : 1; continue }
+    if (word.startsWith('CH', i) || word.startsWith('CIA', i) || word.startsWith('SCH', i) || word.startsWith('SH', i) || word.startsWith('SIO', i) || word.startsWith('SIA', i)) {
+      out += 'X'
+      i += word.startsWith('SCH', i) || word.startsWith('SIO', i) || word.startsWith('SIA', i) || word.startsWith('CIA', i) ? 3 : 2
+      continue
+    }
+    if (c === 'C') { out += (at(i + 1) === 'I' || at(i + 1) === 'E' || at(i + 1) === 'Y') ? 'S' : 'K'; i += at(i + 1) === 'C' ? 2 : 1; continue }
+    if (word.startsWith('DGE', i) || word.startsWith('DGI', i) || word.startsWith('DGY', i)) { out += 'J'; i += 3; continue }
+    if (c === 'D') { out += 'T'; i += (at(i + 1) === 'D' || at(i + 1) === 'T') ? 2 : 1; continue }
+    if (c === 'F') { out += 'F'; i += at(i + 1) === 'F' ? 2 : 1; continue }
+    if (c === 'G' && at(i + 1) === 'H') { i += 2; continue }
+    if (c === 'G' && (at(i + 1) === 'I' || at(i + 1) === 'E' || at(i + 1) === 'Y')) { out += 'J'; i += 2; continue }
+    if (c === 'G') { out += 'K'; i += at(i + 1) === 'G' ? 2 : 1; continue }
+    if (c === 'H') { i += vowel(at(i + 1)) && (i === 0 || vowel(at(i - 1))) ? 2 : 1; if ((i === 0 || vowel(at(i - 1))) && vowel(at(i + 1))) out += 'H'; continue }
+    if (c === 'J') { out += 'J'; i += at(i + 1) === 'J' ? 2 : 1; continue }
+    if (c === 'K') { out += 'K'; i += at(i + 1) === 'K' ? 2 : 1; continue }
+    if (c === 'L') { out += 'L'; i += at(i + 1) === 'L' ? 2 : 1; continue }
+    if (c === 'M') { out += 'M'; i += at(i + 1) === 'M' ? 2 : 1; continue }
+    if (c === 'N') { out += 'N'; i += at(i + 1) === 'N' ? 2 : 1; continue }
+    if (c === 'P' && at(i + 1) === 'H') { out += 'F'; i += 2; continue }
+    if (c === 'P') { out += 'P'; i += (at(i + 1) === 'P' || at(i + 1) === 'B') ? 2 : 1; continue }
+    if (c === 'Q') { out += 'K'; i += 1; continue }
+    if (c === 'R') { out += 'R'; i += at(i + 1) === 'R' ? 2 : 1; continue }
+    if (c === 'S') { out += 'S'; i += at(i + 1) === 'S' ? 2 : 1; continue }
+    if (word.startsWith('TH', i) || word.startsWith('TTH', i)) { out += '0'; i += word.startsWith('TTH', i) ? 3 : 2; continue }
+    if (c === 'T') { out += 'T'; i += (at(i + 1) === 'T' || at(i + 1) === 'D') ? 2 : 1; continue }
+    if (c === 'V') { out += 'F'; i += 1; continue }
+    if (c === 'W' && i === 0 && (vowel(at(1)) || word.startsWith('WH'))) { out += 'A'; i += word.startsWith('WH') ? 2 : 1; continue }
+    if (c === 'W') { i += 1; continue }
+    if (c === 'X') { out += i === 0 ? 'S' : 'KS'; i += 1; continue }
+    if (c === 'Z') { out += 'S'; i += 1; continue }
+    i++
+  }
+  return out.slice(0, 4)
 }

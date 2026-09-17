@@ -809,6 +809,58 @@ export const clientTools = [
       title: '儒略日',
       summary: '2000-01-01 → 2451545',
       fields: [{ name: 'date', label: '日期', value: '2000-01-01' }]
+    },
+    {
+      id: 'double-metaphone-local',
+      group: 'text',
+      title: 'Double Metaphone',
+      summary: 'Smith → SM0',
+      fields: [{ name: 'text', label: '姓名', value: 'Smith' }]
+    },
+    {
+      id: 'match-rating-local',
+      group: 'text',
+      title: 'Match Rating',
+      summary: 'Smith / Smyth',
+      fields: [
+        { name: 'left', label: '左', value: 'Smith' },
+        { name: 'right', label: '右', value: 'Smyth' }
+      ]
+    },
+    {
+      id: 'siren-local',
+      group: 'net',
+      title: '法国 SIREN',
+      summary: '732829320',
+      fields: [{ name: 'value', label: 'SIREN', value: '732829320' }]
+    },
+    {
+      id: 'siret-local',
+      group: 'net',
+      title: '法国 SIRET',
+      summary: '73282932000074',
+      fields: [{ name: 'value', label: 'SIRET', value: '73282932000074' }]
+    },
+    {
+      id: 'nif-local',
+      group: 'net',
+      title: '西班牙 NIF',
+      summary: '12345678Z',
+      fields: [{ name: 'value', label: 'NIF', value: '12345678Z' }]
+    },
+    {
+      id: 'isni-local',
+      group: 'net',
+      title: 'ISNI',
+      summary: '0000 0001 2146 358X',
+      fields: [{ name: 'value', label: 'ISNI', value: '0000 0001 2146 358X' }]
+    },
+    {
+      id: 'bencode-local',
+      group: 'codec',
+      title: 'Bencode',
+      summary: 'spam → 4:spam',
+      fields: [{ name: 'text', label: '字符串', value: 'spam' }]
     }
   ]
 
