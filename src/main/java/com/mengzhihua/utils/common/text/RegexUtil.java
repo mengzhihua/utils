@@ -12,6 +12,7 @@ import com.mengzhihua.utils.common.validate.BicUtil;
 import com.mengzhihua.utils.common.validate.CreditCodeUtil;
 import com.mengzhihua.utils.common.validate.CusipUtil;
 import com.mengzhihua.utils.common.validate.EanUtil;
+import com.mengzhihua.utils.common.validate.HkIdUtil;
 import com.mengzhihua.utils.common.validate.IbanUtil;
 import com.mengzhihua.utils.common.validate.ImeiUtil;
 import com.mengzhihua.utils.common.validate.IsbnUtil;
@@ -20,8 +21,10 @@ import com.mengzhihua.utils.common.validate.IsrcUtil;
 import com.mengzhihua.utils.common.validate.IssnUtil;
 import com.mengzhihua.utils.common.validate.MacUtil;
 import com.mengzhihua.utils.common.validate.OrcidUtil;
+import com.mengzhihua.utils.common.validate.OrgCodeUtil;
 import com.mengzhihua.utils.common.validate.PhoneUtil;
 import com.mengzhihua.utils.common.validate.SedolUtil;
+import com.mengzhihua.utils.common.validate.TwIdUtil;
 import com.mengzhihua.utils.common.validate.VinUtil;
 
 /**
@@ -153,6 +156,9 @@ public final class RegexUtil {
         TYPES.put("latitude", RegexUtil::isLatitude);
         TYPES.put("htmltag", RegexUtil::isHtmlTag);
         TYPES.put("semver", RegexUtil::isSemver);
+        TYPES.put("hkid", HkIdUtil::isValid);
+        TYPES.put("twid", TwIdUtil::isValid);
+        TYPES.put("orgcode", OrgCodeUtil::isValid);
     }
 
     private RegexUtil() {

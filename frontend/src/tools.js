@@ -1494,6 +1494,117 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'sm4',
+      group: 'crypto',
+      title: 'SM4 国密',
+      summary: 'Sm4Util GM/T 0002',
+      method: 'GET',
+      path: '/api/utils/sm4',
+      fields: [
+        { name: 'text', label: '原文', value: 'hello' },
+        { name: 'password', label: '密码', value: 'secret' }
+      ]
+    },
+    {
+      id: 'blake2s',
+      group: 'crypto',
+      title: 'BLAKE2s',
+      summary: 'Blake2sUtil RFC 7693',
+      method: 'GET',
+      path: '/api/utils/blake2s',
+      fields: [{ name: 'text', label: '原文', value: 'abc' }]
+    },
+    {
+      id: 'cmac',
+      group: 'crypto',
+      title: 'AES-CMAC',
+      summary: 'CmacUtil RFC 4493',
+      method: 'GET',
+      path: '/api/utils/cmac',
+      fields: [{ name: 'text', label: '原文', value: '' }]
+    },
+    {
+      id: 'hkid',
+      group: 'validate',
+      title: '香港身份证',
+      summary: 'HkIdUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/hkid',
+      fields: [{ name: 'value', label: '证件号', value: 'A123456(3)' }]
+    },
+    {
+      id: 'twid',
+      group: 'validate',
+      title: '台湾身份证',
+      summary: 'TwIdUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/twid',
+      fields: [{ name: 'value', label: '证件号', value: 'A123456789' }]
+    },
+    {
+      id: 'org-code',
+      group: 'validate',
+      title: '组织机构代码',
+      summary: 'OrgCodeUtil GB 11714',
+      method: 'GET',
+      path: '/api/utils/org-code',
+      fields: [{ name: 'code', label: '代码', value: '12345678' }]
+    },
+    {
+      id: 'solar-term',
+      group: 'datetime',
+      title: '二十四节气',
+      summary: 'SolarTermUtil',
+      method: 'GET',
+      path: '/api/utils/solar-term',
+      fields: [
+        { name: 'year', label: '年份', value: '2026' },
+        { name: 'name', label: '节气', value: '清明' }
+      ]
+    },
+    {
+      id: 'pinyin',
+      group: 'string',
+      title: '拼音首字母',
+      summary: 'PinyinUtil.firstLetters',
+      method: 'GET',
+      path: '/api/utils/pinyin',
+      fields: [{ name: 'text', label: '中文', value: '中国' }]
+    },
+    {
+      id: 'xml-pretty',
+      group: 'json',
+      title: 'XML 格式化',
+      summary: 'XmlUtil.pretty / xpath',
+      method: 'GET',
+      path: '/api/utils/xml/pretty',
+      fields: [
+        { name: 'xml', label: 'XML', type: 'textarea', value: '<root><n>Ada</n></root>' },
+        { name: 'xpath', label: 'XPath', value: '/root/n' }
+      ]
+    },
+    {
+      id: 'chacha',
+      group: 'crypto',
+      title: 'ChaCha20',
+      summary: 'EncryptUtil.chachaEncrypt',
+      method: 'GET',
+      path: '/api/utils/chacha',
+      fields: [
+        { name: 'text', label: '原文', value: 'hello' },
+        { name: 'password', label: '密码', value: 'secret' }
+      ]
+    },
+    {
+      id: 'crc64',
+      group: 'crypto',
+      title: 'CRC-64 / FNV-64',
+      summary: 'HashUtil.crc64 / fnv1a64',
+      method: 'GET',
+      path: '/api/utils/crc64',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

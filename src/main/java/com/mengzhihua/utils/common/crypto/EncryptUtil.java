@@ -11,6 +11,7 @@ import javax.crypto.Cipher;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.mengzhihua.utils.common.lang.AssertUtil;
@@ -49,6 +50,68 @@ public final class EncryptUtil {
 
     public static String sm3(String text) {
         return Sm3Util.hash(text);
+    }
+
+    public static String sm4Encrypt(String plaintext, String password) {
+        return Sm4Util.encrypt(plaintext, password);
+    }
+
+    public static String sm4Decrypt(String cipherText, String password) {
+        return Sm4Util.decrypt(cipherText, password);
+    }
+
+    /**
+     * ChaCha20-Poly1305 (RFC 8439). Output is Base64({@code nonce || ciphertext || tag}).
+     */
+    public static String chachaEncrypt(String plaintext, String password) {
+        if (plaintext == null) {
+            return null;
+        }
+        AssertUtil.notBlank(password, "ChaCha password must not be blank");
+        try {
+            byte[] nonce = new byte[12];
+            RANDOM.nextBytes(nonce);
+            Cipher cipher = Cipher.getInstance("ChaCha20-Poly1305");
+            cipher.init(Cipher.ENCRYPT_MODE, chachaKey(password), new IvParameterSpec(nonce));
+            byte[] cipherBytes = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
+            byte[] packed = new byte[nonce.length + cipherBytes.length];
+            System.arraycopy(nonce, 0, packed, 0, nonce.length);
+            System.arraycopy(cipherBytes, 0, packed, nonce.length, cipherBytes.length);
+            return Base64.getEncoder().encodeToString(packed);
+        } catch (GeneralSecurityException ex) {
+            throw new IllegalStateException("ChaCha20-Poly1305 encrypt failed", ex);
+        }
+    }
+
+    public static String chachaDecrypt(String cipherText, String password) {
+        if (cipherText == null) {
+            return null;
+        }
+        AssertUtil.notBlank(password, "ChaCha password must not be blank");
+        try {
+            byte[] packed = Base64.getDecoder().decode(cipherText);
+            if (packed.length <= 12) {
+                throw new IllegalArgumentException("invalid ChaCha cipher text");
+            }
+            byte[] nonce = new byte[12];
+            byte[] cipherBytes = new byte[packed.length - 12];
+            System.arraycopy(packed, 0, nonce, 0, 12);
+            System.arraycopy(packed, 12, cipherBytes, 0, cipherBytes.length);
+            Cipher cipher = Cipher.getInstance("ChaCha20-Poly1305");
+            cipher.init(Cipher.DECRYPT_MODE, chachaKey(password), new IvParameterSpec(nonce));
+            return new String(cipher.doFinal(cipherBytes), StandardCharsets.UTF_8);
+        } catch (GeneralSecurityException | IllegalArgumentException ex) {
+            throw new IllegalStateException("ChaCha20-Poly1305 decrypt failed", ex);
+        }
+    }
+
+    private static SecretKey chachaKey(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            return new SecretKeySpec(digest.digest(password.getBytes(StandardCharsets.UTF_8)), "ChaCha20");
+        } catch (GeneralSecurityException ex) {
+            throw new IllegalStateException("failed to derive ChaCha key", ex);
+        }
     }
 
     public static String hmacSha256(String text, String secret) {

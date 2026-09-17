@@ -32,7 +32,7 @@ public final class HolidayUtil {
         if (month == 10 && day >= 1 && day <= 3) {
             return "国庆节";
         }
-        if (month == 4 && day == qingmingDay(date.getYear())) {
+        if (month == 4 && day == SolarTermUtil.dayOf(date.getYear(), SolarTermUtil.Term.QING_MING)) {
             return "清明节";
         }
         if (date.getYear() >= 1900 && date.getYear() <= 2099) {
@@ -66,10 +66,5 @@ public final class HolidayUtil {
             cursor = cursor.plusDays(1);
         }
         return names;
-    }
-
-    static int qingmingDay(int year) {
-        int y = year % 100;
-        return (int) (y * 0.2422 + 4.81) - y / 4;
     }
 }
