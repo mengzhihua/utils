@@ -34,7 +34,7 @@
       <p v-if="error" class="curl" style="color: var(--danger)">{{ error }}</p>
       <div v-if="colorPreview" class="color-preview" :style="{ background: colorPreview }"></div>
       <img v-if="imagePreview" class="image-preview" :src="imagePreview" alt="preview" />
-      <div v-if="htmlPreview" class="panel" style="margin-top: 16px" v-html="htmlPreview"></div>
+      <div v-if="htmlPreview" class="html-preview" v-html="htmlPreview"></div>
       <div v-if="pretty" class="result result-enter">
         <div class="result-head">
           <span class="badge ok">local</span>

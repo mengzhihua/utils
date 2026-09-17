@@ -366,6 +366,20 @@ button, input, select, textarea { font: inherit; }
   border-radius: 12px;
   border: 1px solid var(--line);
 }
+.html-preview {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  line-height: 1.7;
+}
+.html-preview mark {
+  background: #fbbf24;
+  color: #1f2937;
+  padding: 0 3px;
+  border-radius: 4px;
+}
 
 .fx-lab { position: relative; }
 .fx-grid {

@@ -274,6 +274,14 @@ public final class DateTimeUtil {
         return start.isAfter(end) ? -count : count;
     }
 
+    public static int quarter(LocalDate date) {
+        return date == null ? 0 : (date.getMonthValue() - 1) / 3 + 1;
+    }
+
+    public static boolean isLeapYear(LocalDate date) {
+        return date != null && date.isLeapYear();
+    }
+
     private static DateTimeFormatter formatter(String pattern) {
         String key = StringUtil.defaultIfBlank(pattern, DATETIME_PATTERN);
         return FORMATTERS.computeIfAbsent(key, DateTimeFormatter::ofPattern);

@@ -1,14 +1,17 @@
 package com.mengzhihua.utils.util;
 
 import java.time.Duration;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 /**
- * Process-local TTL cache. Not a replacement for Redis.
+ * Process-local TTL cache with a size cap. Not a replacement for Redis.
  */
 public final class LocalCacheUtil {
 
+    private static final int MAX_SIZE = 10_000;
     private static final Map<String, Entry> CACHE = new ConcurrentHashMap<>();
 
     private LocalCacheUtil() {
@@ -18,6 +21,7 @@ public final class LocalCacheUtil {
         AssertUtil.notBlank(key, "key must not be blank");
         long expireAt = ttl == null ? Long.MAX_VALUE : System.currentTimeMillis() + Math.max(1, ttl.toMillis());
         CACHE.put(key, new Entry(value, expireAt));
+        evictIfNeeded();
     }
 
     @SuppressWarnings("unchecked")
@@ -30,10 +34,29 @@ public final class LocalCacheUtil {
             return null;
         }
         if (entry.expireAt < System.currentTimeMillis()) {
-            CACHE.remove(key);
+            CACHE.remove(key, entry);
             return null;
         }
         return (T) entry.value;
+    }
+
+    public static <T> T getOrLoad(String key, Duration ttl, Supplier<T> loader) {
+        T cached = get(key);
+        if (cached != null) {
+            return cached;
+        }
+        AssertUtil.notNull(loader, "loader must not be null");
+        return KeyedLockUtil.supply("local-cache:" + key, () -> {
+            T again = get(key);
+            if (again != null) {
+                return again;
+            }
+            T value = loader.get();
+            if (value != null) {
+                put(key, value, ttl);
+            }
+            return value;
+        });
     }
 
     public static void evict(String key) {
@@ -45,8 +68,29 @@ public final class LocalCacheUtil {
     }
 
     public static int size() {
-        CACHE.entrySet().removeIf(item -> item.getValue().expireAt < System.currentTimeMillis());
+        purgeExpired();
         return CACHE.size();
+    }
+
+    private static void purgeExpired() {
+        long now = System.currentTimeMillis();
+        CACHE.entrySet().removeIf(item -> item.getValue().expireAt < now);
+    }
+
+    private static void evictIfNeeded() {
+        if (CACHE.size() <= MAX_SIZE) {
+            return;
+        }
+        purgeExpired();
+        int overflow = CACHE.size() - MAX_SIZE;
+        if (overflow <= 0) {
+            return;
+        }
+        CACHE.entrySet().stream()
+                .sorted(Comparator.comparingLong(item -> item.getValue().expireAt))
+                .limit(overflow)
+                .map(Map.Entry::getKey)
+                .forEach(CACHE::remove);
     }
 
     private record Entry(Object value, long expireAt) {

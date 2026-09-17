@@ -75,4 +75,94 @@ public final class UrlUtil {
         }
         return map;
     }
+
+    public static Parts parse(String url) {
+        if (StringUtil.isBlank(url)) {
+            return null;
+        }
+        String text = url.trim();
+        String scheme = "http";
+        int schemeSep = text.indexOf("://");
+        if (schemeSep >= 0) {
+            scheme = text.substring(0, schemeSep);
+            text = text.substring(schemeSep + 3);
+        }
+        String fragment = null;
+        int hash = text.indexOf('#');
+        if (hash >= 0) {
+            fragment = text.substring(hash + 1);
+            text = text.substring(0, hash);
+        }
+        String query = null;
+        int q = text.indexOf('?');
+        if (q >= 0) {
+            query = text.substring(q + 1);
+            text = text.substring(0, q);
+        }
+        String userInfo = null;
+        String hostPort;
+        String path = "";
+        int slash = text.indexOf('/');
+        if (slash >= 0) {
+            hostPort = text.substring(0, slash);
+            path = text.substring(slash);
+        } else {
+            hostPort = text;
+        }
+        int at = hostPort.lastIndexOf('@');
+        if (at >= 0) {
+            userInfo = hostPort.substring(0, at);
+            hostPort = hostPort.substring(at + 1);
+        }
+        String host = hostPort;
+        Integer port = null;
+        if (hostPort.startsWith("[")) {
+            int close = hostPort.indexOf(']');
+            if (close > 0) {
+                host = hostPort.substring(1, close);
+                if (close + 1 < hostPort.length() && hostPort.charAt(close + 1) == ':') {
+                    port = Integer.parseInt(hostPort.substring(close + 2));
+                }
+            }
+        } else {
+            int colon = hostPort.lastIndexOf(':');
+            if (colon >= 0) {
+                host = hostPort.substring(0, colon);
+                String portText = hostPort.substring(colon + 1);
+                if (!portText.isEmpty()) {
+                    port = Integer.parseInt(portText);
+                }
+            }
+        }
+        return new Parts(scheme, userInfo, host, port, path, query, fragment);
+    }
+
+    public static String getProtocol(String url) {
+        Parts parts = parse(url);
+        return parts == null ? null : parts.scheme();
+    }
+
+    public static String getHost(String url) {
+        Parts parts = parse(url);
+        return parts == null ? null : parts.host();
+    }
+
+    public static Integer getPort(String url) {
+        Parts parts = parse(url);
+        return parts == null ? null : parts.port();
+    }
+
+    public static String getPath(String url) {
+        Parts parts = parse(url);
+        return parts == null ? null : parts.path();
+    }
+
+    public static String getFragment(String url) {
+        Parts parts = parse(url);
+        return parts == null ? null : parts.fragment();
+    }
+
+    public record Parts(String scheme, String userInfo, String host, Integer port,
+                        String path, String query, String fragment) {
+    }
 }

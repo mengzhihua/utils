@@ -70,6 +70,7 @@ public class UtilsDemoController {
         data.put("uuid", IdUtil.uuid());
         data.put("simpleUuid", IdUtil.simpleUuid());
         data.put("nanoId", IdUtil.nanoId(16));
+        data.put("uuidV7", IdUtil.uuidV7());
         return Result.ok(data);
     }
 
@@ -80,6 +81,7 @@ public class UtilsDemoController {
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("id", id);
         data.put("idStr", Long.toString(id));
+        data.put("parsed", IdUtil.parseSnowflake(id));
         return Result.ok(data);
     }
 
@@ -89,6 +91,8 @@ public class UtilsDemoController {
         Map<String, String> data = new LinkedHashMap<>();
         data.put("md5", EncryptUtil.md5(text));
         data.put("sha256", EncryptUtil.sha256(text));
+        data.put("sha3_256", EncryptUtil.sha3_256(text));
+        data.put("sha512", EncryptUtil.sha512(text));
         return Result.ok(data);
     }
 
@@ -108,6 +112,7 @@ public class UtilsDemoController {
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("valid", JsonUtil.isJson(request.json()));
         data.put("map", JsonUtil.toMap(request.json()));
+        data.put("pretty", JsonUtil.toPrettyJson(request.json()));
         return Result.ok(data);
     }
 
@@ -127,6 +132,14 @@ public class UtilsDemoController {
             case "plate" -> RegexUtil.isPlate(value);
             case "ipv6" -> RegexUtil.isIpv6(value);
             case "zipcode" -> RegexUtil.isZipcode(value);
+            case "qq" -> RegexUtil.isQq(value);
+            case "landline" -> RegexUtil.isLandline(value);
+            case "mac" -> RegexUtil.isMac(value);
+            case "isbn" -> RegexUtil.isIsbn(value);
+            case "cusip" -> RegexUtil.isCusip(value);
+            case "sedol" -> RegexUtil.isSedol(value);
+            case "orcid" -> RegexUtil.isOrcid(value);
+            case "isrc" -> RegexUtil.isIsrc(value);
             default -> throw new IllegalArgumentException("unsupported type: " + type);
         };
         return Result.ok(Map.of("matched", matched));

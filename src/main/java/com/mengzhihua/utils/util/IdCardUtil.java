@@ -32,10 +32,10 @@ public final class IdCardUtil {
     }
 
     public static boolean isValid(String idCard) {
-        if (!RegexUtil.isIdCard(idCard)) {
+        String normalized = to18(idCard);
+        if (!RegexUtil.isIdCard(normalized)) {
             return false;
         }
-        String normalized = idCard.toUpperCase(Locale.ROOT);
         int sum = 0;
         for (int i = 0; i < 17; i++) {
             sum += Character.digit(normalized.charAt(i), 10) * WEIGHTS[i];
@@ -48,7 +48,7 @@ public final class IdCardUtil {
     }
 
     public static LocalDate getBirthday(String idCard) {
-        return isValid(idCard) ? parseBirthday(idCard.toUpperCase(Locale.ROOT)) : null;
+        return isValid(idCard) ? parseBirthday(to18(idCard)) : null;
     }
 
     /**
@@ -58,7 +58,7 @@ public final class IdCardUtil {
         if (!isValid(idCard)) {
             return null;
         }
-        int code = Character.digit(idCard.charAt(16), 10);
+        int code = Character.digit(to18(idCard).charAt(16), 10);
         return code % 2 == 0 ? "F" : "M";
     }
 
@@ -72,6 +72,28 @@ public final class IdCardUtil {
             return null;
         }
         return PROVINCES.get(idCard.substring(0, 2));
+    }
+
+    public static String convert15To18(String id15) {
+        if (id15 != null && id15.length() == 18) {
+            return id15.toUpperCase(Locale.ROOT);
+        }
+        if (id15 == null || id15.length() != 15 || !id15.chars().allMatch(Character::isDigit)) {
+            throw new IllegalArgumentException("invalid 15-digit id card: " + id15);
+        }
+        String body = id15.substring(0, 6) + "19" + id15.substring(6);
+        int sum = 0;
+        for (int i = 0; i < 17; i++) {
+            sum += Character.digit(body.charAt(i), 10) * WEIGHTS[i];
+        }
+        return body + CHECK_CODES[sum % 11];
+    }
+
+    private static String to18(String idCard) {
+        if (idCard != null && idCard.length() == 15 && idCard.chars().allMatch(Character::isDigit)) {
+            return convert15To18(idCard);
+        }
+        return idCard == null ? null : idCard.toUpperCase(Locale.ROOT);
     }
 
     private static LocalDate parseBirthday(String idCard) {

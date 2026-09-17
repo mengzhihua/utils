@@ -56,6 +56,8 @@ public class ExtraUtilsDemoController {
             case "bank" -> DesensitizeUtil.bankCard(value);
             case "address" -> DesensitizeUtil.address(value);
             case "ip" -> DesensitizeUtil.ipv4(value);
+            case "plate" -> DesensitizeUtil.plate(value);
+            case "password" -> DesensitizeUtil.password(value);
             default -> throw new IllegalArgumentException("unsupported type: " + type);
         };
         return Result.ok(Map.of("masked", masked));
@@ -68,6 +70,8 @@ public class ExtraUtilsDemoController {
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("token", token);
         data.put("payload", JwtUtil.parse(token, "demo-secret"));
+        data.put("remainingSeconds", JwtUtil.remainingSeconds(token, "demo-secret"));
+        data.put("decoded", JwtUtil.decode(token));
         return Result.ok(data);
     }
 
@@ -119,6 +123,7 @@ public class ExtraUtilsDemoController {
         data.put("score", PasswordUtil.score(password));
         data.put("level", PasswordUtil.level(password));
         data.put("strong", PasswordUtil.isStrong(password));
+        data.put("generated", PasswordUtil.generate(16));
         return Result.ok(data);
     }
 

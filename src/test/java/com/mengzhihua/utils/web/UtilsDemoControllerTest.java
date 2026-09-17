@@ -124,4 +124,96 @@ class UtilsDemoControllerTest {
                 .andExpect(jsonPath("$.data.inCidr").value(true))
                 .andExpect(jsonPath("$.data.network").value("172.16.0.0"));
     }
+
+    @Test
+    void runtimeUtilsAntPathZodiacDuration() throws Exception {
+        mockMvc.perform(get("/api/utils/ant-path").param("pattern", "/api/**").param("path", "/api/utils/ip"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.matched").value(true));
+
+        mockMvc.perform(get("/api/utils/zodiac").param("date", "1990-03-07"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.constellation").value("双鱼座"))
+                .andExpect(jsonPath("$.data.chineseZodiac").value("马"));
+
+        mockMvc.perform(get("/api/utils/duration").param("text", "1h30m"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.millis").value(5_400_000));
+
+        mockMvc.perform(get("/api/utils/slug").param("text", "Spring Boot 工具集"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.slug").value("spring-boot-工具集"));
+    }
+
+    @Test
+    void alignUtilsExprLunarIsbn() throws Exception {
+        mockMvc.perform(get("/api/utils/expr").param("expression", "(1+2)*3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.result").value("9"));
+
+        mockMvc.perform(get("/api/utils/lunar").param("date", "2024-02-10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.month").value(1))
+                .andExpect(jsonPath("$.data.day").value(1))
+                .andExpect(jsonPath("$.data.animal").value("龙"));
+
+        mockMvc.perform(get("/api/utils/isbn").param("code", "9780306406157"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+    }
+
+    @Test
+    void moreUtilsMathImeiRoman() throws Exception {
+        mockMvc.perform(get("/api/utils/math").param("a", "12").param("b", "18"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.gcd").value(6))
+                .andExpect(jsonPath("$.data.lcm").value(36));
+
+        mockMvc.perform(get("/api/utils/imei").param("value", "490154203237518"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/roman").param("value", "1994"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.roman").value("MCMXCIV"));
+
+        mockMvc.perform(get("/api/utils/unit").param("value", "1").param("from", "km").param("to", "m"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.value").value("1000"));
+
+        mockMvc.perform(get("/api/utils/url/parse").param("url", "https://example.com:8443/search?q=1#top"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.host").value("example.com"))
+                .andExpect(jsonPath("$.data.port").value(8443));
+
+        mockMvc.perform(get("/api/utils/week").param("date", "2024-02-10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.isoWeek").value(6))
+                .andExpect(jsonPath("$.data.chinese").value("星期六"));
+    }
+
+    @Test
+    void openSourceIbanSoundexSha3() throws Exception {
+        mockMvc.perform(get("/api/utils/iban").param("value", "GB82WEST12345698765432"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/soundex").param("left", "Robert").param("right", "Rupert"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.left").value("R163"))
+                .andExpect(jsonPath("$.data.similar").value(true));
+
+        mockMvc.perform(get("/api/utils/similarity").param("left", "MARTHA").param("right", "MARHTA"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.jaroWinkler").value(org.hamcrest.Matchers.closeTo(0.9611, 0.001)));
+
+        mockMvc.perform(get("/api/utils/digest").param("text", "hello"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.sha3_256")
+                        .value("3338be694f50c5f338814986cdf0686453a888b84f424d792af4b9202398f392"));
+
+        mockMvc.perform(get("/api/utils/vin").param("value", "1M8GDM9AXKP042788"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+    }
 }

@@ -21,11 +21,24 @@ public final class TotpUtil {
     }
 
     public static String generate(String base32Secret, long unixSeconds, int periodSeconds, int digits) {
-        byte[] key = decodeBase32(base32Secret);
+        return generate(decodeBase32(base32Secret), unixSeconds, periodSeconds, digits, "HmacSHA1");
+    }
+
+    /**
+     * RFC 6238 TOTP from a raw key (Appendix B uses ASCII {@code 12345678901234567890}).
+     */
+    public static String generate(byte[] key, long unixSeconds, int periodSeconds, int digits, String hmacAlgorithm) {
+        if (key == null || key.length == 0) {
+            throw new IllegalArgumentException("TOTP key is empty");
+        }
+        if (digits < 4 || digits > 10) {
+            throw new IllegalArgumentException("digits must be 4-10");
+        }
         long counter = unixSeconds / periodSeconds;
+        String algorithm = hmacAlgorithm == null || hmacAlgorithm.isBlank() ? "HmacSHA1" : hmacAlgorithm;
         try {
-            Mac mac = Mac.getInstance("HmacSHA1");
-            mac.init(new SecretKeySpec(key, "HmacSHA1"));
+            Mac mac = Mac.getInstance(algorithm);
+            mac.init(new SecretKeySpec(key, algorithm));
             byte[] hash = mac.doFinal(ByteBuffer.allocate(8).putLong(counter).array());
             int offset = hash[hash.length - 1] & 0x0f;
             int binary = ((hash[offset] & 0x7f) << 24)

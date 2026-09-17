@@ -305,4 +305,95 @@ public final class StringUtil {
         }
         return new String(chars);
     }
+
+    public static String pad(String str, int length, char padChar) {
+        String value = str == null ? "" : str;
+        if (value.length() >= length) {
+            return value;
+        }
+        return String.valueOf(padChar).repeat(length - value.length()) + value;
+    }
+
+    public static String brief(String str, int max) {
+        if (str == null || max < 0 || str.length() <= max) {
+            return str;
+        }
+        if (max <= 1) {
+            return str.substring(0, max);
+        }
+        return str.substring(0, max - 1) + "…";
+    }
+
+    public static String commonPrefix(String left, String right) {
+        String a = left == null ? "" : left;
+        String b = right == null ? "" : right;
+        int n = Math.min(a.length(), b.length());
+        int i = 0;
+        while (i < n && a.charAt(i) == b.charAt(i)) {
+            i++;
+        }
+        return a.substring(0, i);
+    }
+
+    public static String commonSuffix(String left, String right) {
+        String a = left == null ? "" : left;
+        String b = right == null ? "" : right;
+        int n = Math.min(a.length(), b.length());
+        int i = 0;
+        while (i < n && a.charAt(a.length() - 1 - i) == b.charAt(b.length() - 1 - i)) {
+            i++;
+        }
+        return a.substring(a.length() - i);
+    }
+
+    public static String difference(String left, String right) {
+        String prefix = commonPrefix(left, right);
+        String value = right == null ? "" : right;
+        return value.substring(prefix.length());
+    }
+
+    public static String swapCase(String str) {
+        if (str == null) {
+            return null;
+        }
+        char[] chars = str.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[i];
+            if (Character.isUpperCase(c)) {
+                chars[i] = Character.toLowerCase(c);
+            } else if (Character.isLowerCase(c)) {
+                chars[i] = Character.toUpperCase(c);
+            }
+        }
+        return new String(chars);
+    }
+
+    public static String rotate(String str, int distance) {
+        if (isEmpty(str) || str.length() == 1) {
+            return str;
+        }
+        int len = str.length();
+        int shift = Math.floorMod(distance, len);
+        return str.substring(len - shift) + str.substring(0, len - shift);
+    }
+
+    public static int countMatches(String str, String search) {
+        if (isEmpty(str) || isEmpty(search)) {
+            return 0;
+        }
+        int n = 0;
+        int from = 0;
+        while (true) {
+            int index = str.indexOf(search, from);
+            if (index < 0) {
+                return n;
+            }
+            n++;
+            from = index + search.length();
+        }
+    }
+
+    public static String stripAccents(String str) {
+        return AccentUtil.strip(str);
+    }
 }

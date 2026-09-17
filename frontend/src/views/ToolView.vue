@@ -52,6 +52,8 @@
         </div>
         <pre>{{ pretty }}</pre>
       </div>
+      <div v-if="htmlPreview" class="html-preview" v-html="htmlPreview"></div>
+      <img v-if="imagePreview" class="image-preview" :src="imagePreview" alt="captcha" />
       <p v-if="result" class="curl">{{ result.curl }}</p>
     </section>
   </div>
@@ -76,6 +78,8 @@ const loading = ref(false)
 const error = ref('')
 const result = ref(null)
 const pretty = computed(() => JSON.stringify(result.value?.payload, null, 2))
+const htmlPreview = computed(() => result.value?.payload?.data?.html || '')
+const imagePreview = computed(() => result.value?.payload?.data?.dataUrl || '')
 
 function hydrate() {
   Object.keys(values).forEach((key) => delete values[key])

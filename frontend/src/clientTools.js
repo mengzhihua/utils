@@ -299,8 +299,276 @@ export const clientTools = [
     title: '图片转 Base64',
     summary: '生成 data URL',
     fields: [{ name: 'file', label: '图片', type: 'file' }]
-  }
-]
+  },
+  {
+    id: 'uuid-v7',
+    group: 'gen',
+    title: 'UUID v7',
+    summary: '时间有序 UUID，本地生成',
+    fields: []
+  },
+  {
+    id: 'js-escape',
+    group: 'codec',
+    title: 'JS / CSV 转义',
+    summary: '本地转义，不走后端',
+    fields: [{ name: 'text', label: '文本', type: 'textarea', value: 'a"b\'c' }]
+  },
+  {
+    id: 'highlight-local',
+    group: 'text',
+    title: '关键字高亮',
+    summary: '本地 HTML 高亮',
+    fields: [
+      { name: 'text', label: '文本', type: 'textarea', value: 'Spring Boot 工具集' },
+      { name: 'keyword', label: '关键字', value: '工具' }
+    ]
+  },
+  {
+    id: 'zodiac-local',
+    group: 'time',
+    title: '星座 / 生肖',
+    summary: '本地按日期计算',
+    fields: [{ name: 'date', label: '日期', value: '1990-03-07' }]
+  },
+  {
+    id: 'duration-local',
+    group: 'time',
+    title: '时长解析',
+    summary: '1h30m / 90s / PT15M',
+    fields: [{ name: 'text', label: '时长', value: '1h30m' }]
+  },
+  {
+    id: 'slug-local',
+    group: 'text',
+    title: 'URL slug',
+    summary: '本地生成 slug',
+    fields: [{ name: 'text', label: '文本', value: 'Spring Boot 工具集' }]
+  },
+  {
+    id: 'murmur-local',
+    group: 'hash',
+    title: 'Murmur3-32',
+    summary: '本地非加密哈希',
+    fields: [{ name: 'text', label: '原文', value: 'hello' }]
+  },
+  {
+    id: 'expr-local',
+    group: 'gen',
+    title: '四则运算',
+    summary: '本地计算 1+2*3',
+    fields: [{ name: 'expression', label: '表达式', value: '(1+2)*3' }]
+  },
+  {
+    id: 'radix-local',
+    group: 'hash',
+    title: '进制转换',
+    summary: '2-36 进制',
+    fields: [
+      { name: 'value', label: '数值', value: '255' },
+      { name: 'from', label: '源进制', value: '10' },
+      { name: 'to', label: '目标进制', value: '16' }
+    ]
+  },
+  {
+    id: 'isbn-local',
+    group: 'net',
+    title: 'ISBN 校验',
+    summary: 'ISBN-10 / 13',
+    fields: [{ name: 'code', label: 'ISBN', value: '9780306406157' }]
+  },
+  {
+    id: 'punycode-local',
+    group: 'net',
+    title: 'Punycode',
+    summary: '浏览器 IDN',
+    fields: [{ name: 'domain', label: '域名', value: '清华大学.cn' }]
+  },
+  {
+    id: 'roman-local',
+    group: 'gen',
+    title: '罗马数字',
+    summary: '本地 1-3999',
+    fields: [{ name: 'value', label: '数字或罗马', value: '1994' }]
+  },
+  {
+    id: 'unit-local',
+    group: 'gen',
+    title: '单位换算',
+    summary: '长度 / 质量 / 温度',
+    fields: [
+      { name: 'value', label: '数值', value: '1' },
+      { name: 'from', label: '源单位', type: 'select', value: 'km', options: [
+        { value: 'km', label: 'km' }, { value: 'm', label: 'm' }, { value: 'cm', label: 'cm' },
+        { value: 'kg', label: 'kg' }, { value: 'g', label: 'g' },
+        { value: 'c', label: '°C' }, { value: 'f', label: '°F' }
+      ] },
+      { name: 'to', label: '目标单位', type: 'select', value: 'm', options: [
+        { value: 'm', label: 'm' }, { value: 'km', label: 'km' }, { value: 'cm', label: 'cm' },
+        { value: 'kg', label: 'kg' }, { value: 'g', label: 'g' },
+        { value: 'c', label: '°C' }, { value: 'f', label: '°F' }
+      ] }
+    ]
+  },
+  {
+    id: 'gcd-local',
+    group: 'gen',
+    title: '最大公约数',
+    summary: '本地 gcd / lcm',
+    fields: [
+      { name: 'a', label: 'A', value: '12' },
+      { name: 'b', label: 'B', value: '18' }
+    ]
+  },
+  {
+    id: 'imei-local',
+    group: 'net',
+    title: 'IMEI 校验',
+    summary: '15 位 Luhn',
+    fields: [{ name: 'value', label: 'IMEI', value: '490154203237518' }]
+  },
+  {
+    id: 'url-parse-local',
+    group: 'net',
+    title: 'URL 解析',
+    summary: '浏览器 URL',
+    fields: [{ name: 'url', label: 'URL', value: 'https://example.com:8443/search?q=工具#top' }]
+  },
+  {
+    id: 'soundex-local',
+    group: 'text',
+    title: 'Soundex',
+    summary: '本地读音码',
+    fields: [
+      { name: 'left', label: '姓名 A', value: 'Robert' },
+      { name: 'right', label: '姓名 B', value: 'Rupert' }
+    ]
+  },
+  {
+    id: 'jaro-local',
+    group: 'text',
+    title: 'Jaro-Winkler',
+    summary: '本地相似度',
+    fields: [
+      { name: 'left', label: '文本 A', value: 'MARTHA' },
+      { name: 'right', label: '文本 B', value: 'MARHTA' }
+    ]
+  },
+  {
+    id: 'iban-local',
+    group: 'net',
+    title: 'IBAN 校验',
+    summary: 'MOD-97',
+    fields: [{ name: 'value', label: 'IBAN', value: 'GB82 WEST 1234 5698 7654 32' }]
+  },
+  {
+    id: 'ean-local',
+    group: 'net',
+    title: 'EAN 校验',
+    summary: 'GTIN 校验位',
+    fields: [{ name: 'value', label: '条码', value: '5901234123457' }]
+  },
+    {
+      id: 'age-local',
+      group: 'time',
+      title: '年龄',
+      summary: '本地按生日计算',
+      fields: [{ name: 'birthday', label: '生日', value: '1990-03-07' }]
+    },
+    {
+      id: 'rot13-local',
+      group: 'codec',
+      title: 'ROT13',
+      summary: '本地 ROT13',
+      fields: [{ name: 'text', label: '文本', value: 'Hello' }]
+    },
+    {
+      id: 'morse-local',
+      group: 'codec',
+      title: '摩斯电码',
+      summary: '本地编解码',
+      fields: [{ name: 'text', label: '文本', value: 'SOS' }]
+    },
+    {
+      id: 'wildcard-local',
+      group: 'text',
+      title: '通配符',
+      summary: '* / ? 匹配',
+      fields: [
+        { name: 'text', label: '文本', value: 'Foo.java' },
+        { name: 'pattern', label: '模式', value: '*.java' }
+      ]
+    },
+    {
+      id: 'isin-local',
+      group: 'net',
+      title: 'ISIN 校验',
+      summary: 'ISO 6166',
+      fields: [{ name: 'value', label: 'ISIN', value: 'US0378331005' }]
+    },
+    {
+      id: 'humanize-local',
+      group: 'text',
+      title: 'Humanize',
+      summary: '1.2K / 21st',
+      fields: [
+        { name: 'value', label: '数字', value: '1234' },
+        { name: 'ordinal', label: '序数', value: '21' }
+      ]
+    },
+    {
+      id: 'qp-local',
+      group: 'codec',
+      title: 'Quoted-Printable',
+      summary: '本地编解码',
+      fields: [{ name: 'text', label: '文本', value: 'Hello =' }]
+    },
+    {
+      id: 'contrast-local',
+      group: 'time',
+      title: 'WCAG 对比度',
+      summary: '本地亮度对比',
+      fields: [
+        { name: 'left', label: '颜色 A', value: '#FFFFFF' },
+        { name: 'right', label: '颜色 B', value: '#000000' }
+      ]
+    },
+    {
+      id: 'base45-local',
+      group: 'codec',
+      title: 'Base45',
+      summary: 'RFC 9285',
+      fields: [{ name: 'text', label: '文本', value: 'AB' }]
+    },
+    {
+      id: 'accent-local',
+      group: 'text',
+      title: '去音调',
+      summary: 'café → cafe',
+      fields: [{ name: 'text', label: '文本', value: 'café naïve' }]
+    },
+    {
+      id: 'plate-local',
+      group: 'net',
+      title: '车牌校验',
+      summary: '京A12345',
+      fields: [{ name: 'value', label: '车牌', value: '京A12345' }]
+    },
+    {
+      id: 'emoji-local',
+      group: 'text',
+      title: 'Emoji',
+      summary: '提取 / 移除',
+      fields: [{ name: 'text', label: '文本', value: 'hello 😀 工具' }]
+    },
+    {
+      id: 'cusip-local',
+      group: 'net',
+      title: 'CUSIP 校验',
+      summary: 'Apple 037833100',
+      fields: [{ name: 'value', label: 'CUSIP', value: '037833100' }]
+    }
+  ]
 
 export function getClientTool(id) {
   return clientTools.find((item) => item.id === id)

@@ -108,4 +108,18 @@ public final class JsonUtil {
             return false;
         }
     }
+
+    public static String toPrettyJson(Object value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            if (value instanceof String str && isJson(str)) {
+                return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(readTree(str));
+            }
+            return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(value);
+        } catch (JacksonException ex) {
+            throw new IllegalArgumentException("failed to serialize pretty json", ex);
+        }
+    }
 }

@@ -498,7 +498,754 @@ export async function runClientTool(id, values) {
         length: values.dataUrl.length,
         dataUrl: values.dataUrl
       }
+    case 'uuid-v7':
+      return { uuid: uuidV7() }
+    case 'js-escape': {
+      const text = values.text || ''
+      return { js: escapeJs(text), csv: escapeCsv(text) }
+    }
+    case 'highlight-local': {
+      const html = highlightHtml(values.text || '', values.keyword || '')
+      return { html, preview: true }
+    }
+    case 'zodiac-local': {
+      const date = values.date || '1990-03-07'
+      const parsed = new Date(`${date}T00:00:00`)
+      if (Number.isNaN(parsed.getTime())) {
+        throw new Error('无效日期')
+      }
+      return {
+        constellation: constellation(parsed.getMonth() + 1, parsed.getDate()),
+        chineseZodiac: chineseZodiac(parsed.getFullYear())
+      }
+    }
+    case 'duration-local': {
+      const millis = parseDuration(values.text || '0s')
+      const hours = Math.floor(millis / 3_600_000)
+      const minutes = Math.floor((millis % 3_600_000) / 60_000)
+      const seconds = Math.floor((millis % 60_000) / 1000)
+      return { millis, iso: `PT${hours}H${minutes}M${seconds}S`, formatted: `${hours}h ${minutes}m ${seconds}s` }
+    }
+    case 'slug-local':
+      return { slug: toSlug(values.text || '') }
+    case 'murmur-local': {
+      const hash = murmur32(values.text || '')
+      return { murmur32: hash, hex: (hash >>> 0).toString(16).padStart(8, '0') }
+    }
+    case 'expr-local': {
+      const expression = String(values.expression || '').trim()
+      if (!/^[\d+\-*/().\s]+$/.test(expression)) {
+        throw new Error('只支持数字和 + - * / ( )')
+      }
+      const result = Function(`"use strict"; return (${expression})`)()
+      return { result }
+    }
+    case 'radix-local': {
+      const from = Number(values.from) || 10
+      const to = Number(values.to) || 16
+      if (from < 2 || from > 36 || to < 2 || to > 36) {
+        throw new Error('进制范围 2-36')
+      }
+      const num = Number.parseInt(String(values.value || '0'), from)
+      if (Number.isNaN(num)) {
+        throw new Error('无效数值')
+      }
+      return { converted: num.toString(to), hex: num.toString(16) }
+    }
+    case 'isbn-local': {
+      const compact = String(values.code || '').replace(/[^0-9Xx]/g, '').toUpperCase()
+      return { normalized: compact, valid: isIsbn(compact) }
+    }
+    case 'punycode-local': {
+      const domain = String(values.domain || '').trim()
+      const ascii = new URL(`http://${domain}`).hostname
+      return { ascii, href: `http://${ascii}` }
+    }
+    case 'roman-local': {
+      const raw = String(values.value || '').trim()
+      if (/^\d+$/.test(raw)) {
+        const roman = toRoman(Number(raw))
+        return { roman, number: fromRoman(roman) }
+      }
+      const number = fromRoman(raw)
+      return { number, roman: toRoman(number) }
+    }
+    case 'unit-local':
+      return { value: convertUnit(values.value, values.from, values.to) }
+    case 'gcd-local': {
+      const a = Math.abs(Number(values.a) || 0)
+      const b = Math.abs(Number(values.b) || 0)
+      const g = gcd(a, b)
+      return { gcd: g, lcm: a === 0 || b === 0 ? 0 : (a / g) * b }
+    }
+    case 'imei-local': {
+      const compact = String(values.value || '').replace(/\D/g, '')
+      return { normalized: compact, valid: isImei(compact) }
+    }
+    case 'url-parse-local': {
+      const parsed = new URL(values.url || 'https://example.com')
+      return {
+        scheme: parsed.protocol.replace(':', ''),
+        host: parsed.hostname,
+        port: parsed.port || null,
+        path: parsed.pathname,
+        query: parsed.search.slice(1),
+        fragment: parsed.hash.slice(1)
+      }
+    }
+    case 'soundex-local': {
+      const left = soundex(values.left || '')
+      const right = soundex(values.right || '')
+      return { left, right, similar: left !== '' && left === right }
+    }
+    case 'jaro-local':
+      return { jaroWinkler: jaroWinkler(values.left || '', values.right || '') }
+    case 'iban-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isIban(compact) }
+    }
+    case 'ean-local': {
+      const compact = String(values.value || '').replace(/\D/g, '')
+      return { normalized: compact, valid: isEan(compact) }
+    }
+    case 'age-local': {
+      const birthday = new Date(`${values.birthday || '1990-03-07'}T00:00:00`)
+      if (Number.isNaN(birthday.getTime())) {
+        throw new Error('无效日期')
+      }
+      const today = new Date()
+      let age = today.getFullYear() - birthday.getFullYear()
+      const md = today.getMonth() - birthday.getMonth()
+      if (md < 0 || (md === 0 && today.getDate() < birthday.getDate())) {
+        age--
+      }
+      return { age }
+    }
+    case 'rot13-local':
+      return { rot13: rot13(values.text || '') }
+    case 'morse-local': {
+      const encoded = encodeMorse(values.text || 'SOS')
+      return { encoded, decoded: decodeMorse(encoded) }
+    }
+    case 'wildcard-local':
+      return { matched: wildcardMatch(values.text || '', values.pattern || '') }
+    case 'isin-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isIsin(compact) }
+    }
+    case 'humanize-local':
+      return {
+        compact: compactNumber(Number(values.value) || 0),
+        ordinal: ordinal(Number(values.ordinal) || 0)
+      }
+    case 'qp-local': {
+      const encoded = encodeQuotedPrintable(values.text || '')
+      return { encoded, decoded: decodeQuotedPrintable(encoded) }
+    }
+    case 'contrast-local':
+      return { ratio: contrastRatio(values.left || '#FFFFFF', values.right || '#000000') }
+    case 'base45-local': {
+      const encoded = encodeBase45(values.text || '')
+      return { encoded, decoded: decodeBase45(encoded) }
+    }
+    case 'accent-local':
+      return { stripped: stripAccents(values.text || '') }
+    case 'plate-local': {
+      const plate = String(values.value || '')
+      return { valid: isPlate(plate), newEnergy: /^[\u4e00-\u9fa5][A-Z][A-Z0-9]{5}[A-Z0-9挂学警港澳]$/.test(plate) }
+    }
+    case 'emoji-local': {
+      const extracted = extractEmoji(values.text || '')
+      return { contains: extracted.length > 0, count: extracted.length, extracted, removed: removeEmoji(values.text || '') }
+    }
+    case 'cusip-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isCusip(compact) }
+    }
     default:
       throw new Error('unknown client tool')
   }
+}
+
+function uuidV7() {
+  const bytes = crypto.getRandomValues(new Uint8Array(16))
+  const time = BigInt(Date.now())
+  bytes[0] = Number((time >> 40n) & 0xffn)
+  bytes[1] = Number((time >> 32n) & 0xffn)
+  bytes[2] = Number((time >> 24n) & 0xffn)
+  bytes[3] = Number((time >> 16n) & 0xffn)
+  bytes[4] = Number((time >> 8n) & 0xffn)
+  bytes[5] = Number(time & 0xffn)
+  bytes[6] = (bytes[6] & 0x0f) | 0x70
+  bytes[8] = (bytes[8] & 0x3f) | 0x80
+  const hex = [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('')
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`
+}
+
+function escapeJs(text) {
+  return String(text)
+    .replaceAll('\\', '\\\\')
+    .replaceAll("'", "\\'")
+    .replaceAll('"', '\\"')
+    .replaceAll('\n', '\\n')
+    .replaceAll('\r', '\\r')
+    .replaceAll('\t', '\\t')
+    .replaceAll('/', '\\/')
+}
+
+function escapeCsv(text) {
+  const value = String(text)
+  if (/[",\n\r]/.test(value)) {
+    return `"${value.replaceAll('"', '""')}"`
+  }
+  return value
+}
+
+function highlightHtml(text, keyword) {
+  const escaped = escapeHtml(text)
+  const needle = escapeHtml(keyword)
+  if (!needle) {
+    return escaped
+  }
+  const lower = escaped.toLowerCase()
+  const needleLower = needle.toLowerCase()
+  let from = 0
+  let html = ''
+  let index = lower.indexOf(needleLower, from)
+  while (index >= 0) {
+    html += escaped.slice(from, index) + `<mark>${escaped.slice(index, index + needle.length)}</mark>`
+    from = index + needle.length
+    index = lower.indexOf(needleLower, from)
+  }
+  return html + escaped.slice(from)
+}
+
+function chineseZodiac(year) {
+  const animals = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪']
+  return animals[((year - 4) % 12 + 12) % 12]
+}
+
+function constellation(month, day) {
+  const md = month * 100 + day
+  if (md >= 321 && md < 420) return '白羊座'
+  if (md >= 420 && md < 521) return '金牛座'
+  if (md >= 521 && md < 622) return '双子座'
+  if (md >= 622 && md < 723) return '巨蟹座'
+  if (md >= 723 && md < 823) return '狮子座'
+  if (md >= 823 && md < 923) return '处女座'
+  if (md >= 923 && md < 1024) return '天秤座'
+  if (md >= 1024 && md < 1123) return '天蝎座'
+  if (md >= 1123 && md < 1222) return '射手座'
+  if (md >= 1222 || md < 120) return '摩羯座'
+  if (md >= 120 && md < 219) return '水瓶座'
+  return '双鱼座'
+}
+
+function parseDuration(text) {
+  const trimmed = String(text).trim()
+  if (/^P/i.test(trimmed)) {
+    const iso = trimmed.toUpperCase()
+    const match = iso.match(/^P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$/)
+    if (!match) {
+      throw new Error('无效 ISO 时长')
+    }
+    return ((Number(match[1]) || 0) * 86400 + (Number(match[2]) || 0) * 3600 + (Number(match[3]) || 0) * 60 + (Number(match[4]) || 0)) * 1000
+  }
+  if (/^\d+$/.test(trimmed)) {
+    return Number(trimmed)
+  }
+  const token = /(\d+)\s*(ms|s|m|h|d)(?![a-zA-Z])/gi
+  let millis = 0
+  let consumed = ''
+  let found = false
+  let match
+  while ((match = token.exec(trimmed))) {
+    found = true
+    consumed += match[0]
+    const value = Number(match[1])
+    const unit = match[2].toLowerCase()
+    millis += unit === 'ms' ? value
+      : unit === 's' ? value * 1000
+        : unit === 'm' ? value * 60_000
+          : unit === 'h' ? value * 3_600_000
+            : value * 86_400_000
+  }
+  if (!found || trimmed.replace(/\s+/g, '') !== consumed.replaceAll(' ', '')) {
+    throw new Error('无效时长')
+  }
+  return millis
+}
+
+function toSlug(text) {
+  return String(text)
+    .trim()
+    .normalize('NFKD')
+    .replace(/\p{M}/gu, '')
+    .replace(/[^\p{L}\p{N}]+/gu, '-')
+    .replace(/-{2,}/g, '-')
+    .replace(/^-|-$/g, '')
+    .toLowerCase()
+}
+
+function murmur32(text) {
+  const data = new TextEncoder().encode(text)
+  const c1 = 0xcc9e2d51
+  const c2 = 0x1b873593
+  let h1 = 0
+  const roundedEnd = (data.length >> 2) << 2
+  for (let i = 0; i < roundedEnd; i += 4) {
+    let k1 = (data[i] | (data[i + 1] << 8) | (data[i + 2] << 16) | (data[i + 3] << 24)) >>> 0
+    k1 = Math.imul(k1, c1)
+    k1 = (k1 << 15) | (k1 >>> 17)
+    k1 = Math.imul(k1, c2)
+    h1 ^= k1
+    h1 = (h1 << 13) | (h1 >>> 19)
+    h1 = (Math.imul(h1, 5) + 0xe6546b64) | 0
+  }
+  let k1 = 0
+  switch (data.length & 3) {
+    case 3:
+      k1 ^= data[roundedEnd + 2] << 16
+    // fall through
+    case 2:
+      k1 ^= data[roundedEnd + 1] << 8
+    // fall through
+    case 1:
+      k1 |= data[roundedEnd]
+      k1 = Math.imul(k1, c1)
+      k1 = (k1 << 15) | (k1 >>> 17)
+      k1 = Math.imul(k1, c2)
+      h1 ^= k1
+      break
+    default:
+      break
+  }
+  h1 ^= data.length
+  h1 ^= h1 >>> 16
+  h1 = Math.imul(h1, 0x85ebca6b)
+  h1 ^= h1 >>> 13
+  h1 = Math.imul(h1, 0xc2b2ae35)
+  h1 ^= h1 >>> 16
+  return h1 | 0
+}
+
+function toRoman(number) {
+  if (number < 1 || number > 3999) {
+    throw new Error('罗马数字范围 1-3999')
+  }
+  const table = [
+    [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'],
+    [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']
+  ]
+  let remaining = number
+  let out = ''
+  for (const [value, symbol] of table) {
+    while (remaining >= value) {
+      out += symbol
+      remaining -= value
+    }
+  }
+  return out
+}
+
+function fromRoman(roman) {
+  const text = String(roman).trim().toUpperCase()
+  const map = { M: 1000, D: 500, C: 100, L: 50, X: 10, V: 5, I: 1 }
+  let value = 0
+  for (let i = 0; i < text.length; i++) {
+    const cur = map[text[i]]
+    const next = map[text[i + 1]]
+    if (!cur) {
+      throw new Error('无效罗马数字')
+    }
+    value += next && cur < next ? -cur : cur
+  }
+  if (toRoman(value) !== text) {
+    throw new Error('无效罗马数字')
+  }
+  return value
+}
+
+function gcd(a, b) {
+  while (b) {
+    const t = a % b
+    a = b
+    b = t
+  }
+  return a
+}
+
+function convertUnit(value, from, to) {
+  const amount = Number(value)
+  if (Number.isNaN(amount)) {
+    throw new Error('无效数值')
+  }
+  const length = { mm: 0.001, cm: 0.01, m: 1, km: 1000, in: 0.0254, ft: 0.3048 }
+  const mass = { mg: 0.001, g: 1, kg: 1000, t: 1_000_000, lb: 453.59237 }
+  const src = String(from || '').toLowerCase()
+  const dest = String(to || '').toLowerCase()
+  if (length[src] && length[dest]) {
+    return amount * length[src] / length[dest]
+  }
+  if (mass[src] && mass[dest]) {
+    return amount * mass[src] / mass[dest]
+  }
+  const toC = src === 'c' ? amount : src === 'f' ? (amount - 32) * 5 / 9 : src === 'k' ? amount - 273.15 : null
+  if (toC == null || !['c', 'f', 'k'].includes(dest)) {
+    throw new Error('无法换算这两个单位')
+  }
+  return dest === 'c' ? toC : dest === 'f' ? toC * 9 / 5 + 32 : toC + 273.15
+}
+
+function isImei(compact) {
+  if (compact.length !== 15) {
+    return false
+  }
+  let sum = 0
+  let doubleDigit = false
+  for (let i = compact.length - 1; i >= 0; i--) {
+    let n = Number(compact[i])
+    if (Number.isNaN(n)) {
+      return false
+    }
+    if (doubleDigit) {
+      n *= 2
+      if (n > 9) {
+        n -= 9
+      }
+    }
+    sum += n
+    doubleDigit = !doubleDigit
+  }
+  return sum % 10 === 0
+}
+
+function isEan(compact) {
+  if (![8, 12, 13, 14].includes(compact.length) || !/^\d+$/.test(compact)) {
+    return false
+  }
+  let sum = 0
+  let factor = 3
+  for (let i = compact.length - 2; i >= 0; i--) {
+    sum += Number(compact[i]) * factor
+    factor = 4 - factor
+  }
+  return Number(compact[compact.length - 1]) === (10 - (sum % 10)) % 10
+}
+
+function isIban(compact) {
+  if (compact.length < 15 || compact.length > 34 || !/^[A-Z]{2}\d{2}[A-Z0-9]+$/.test(compact)) {
+    return false
+  }
+  const rearranged = compact.slice(4) + compact.slice(0, 4)
+  let numeric = ''
+  for (const ch of rearranged) {
+    numeric += /[A-Z]/.test(ch) ? String(ch.charCodeAt(0) - 55) : ch
+  }
+  let remainder = 0
+  for (const ch of numeric) {
+    remainder = (remainder * 10 + Number(ch)) % 97
+  }
+  return remainder === 1
+}
+
+function soundex(text) {
+  const map = '01230120022455012623010202'
+  const letters = String(text).toUpperCase().replace(/[^A-Z]/g, '')
+  if (!letters) {
+    return ''
+  }
+  let out = letters[0]
+  let last = map[letters.charCodeAt(0) - 65]
+  for (let i = 1; i < letters.length && out.length < 4; i++) {
+    const mapped = map[letters.charCodeAt(i) - 65]
+    if (mapped !== '0' && mapped !== last) {
+      out += mapped
+    }
+    if (mapped !== '0') {
+      last = mapped
+    }
+  }
+  return (out + '000').slice(0, 4)
+}
+
+function jaroWinkler(left, right) {
+  const j = jaro(left, right)
+  let prefix = 0
+  const limit = Math.min(4, left.length, right.length)
+  while (prefix < limit && left[prefix] === right[prefix]) {
+    prefix++
+  }
+  return j + prefix * 0.1 * (1 - j)
+}
+
+function jaro(a, b) {
+  if (a === b) {
+    return 1
+  }
+  if (!a.length || !b.length) {
+    return 0
+  }
+  const matchDistance = Math.max(a.length, b.length) / 2 - 1
+  const aMatch = Array(a.length).fill(false)
+  const bMatch = Array(b.length).fill(false)
+  let matches = 0
+  for (let i = 0; i < a.length; i++) {
+    const from = Math.max(0, i - matchDistance)
+    const to = Math.min(i + matchDistance + 1, b.length)
+    for (let j = from; j < to; j++) {
+      if (bMatch[j] || a[i] !== b[j]) {
+        continue
+      }
+      aMatch[i] = true
+      bMatch[j] = true
+      matches++
+      break
+    }
+  }
+  if (!matches) {
+    return 0
+  }
+  let transpositions = 0
+  let k = 0
+  for (let i = 0; i < a.length; i++) {
+    if (!aMatch[i]) {
+      continue
+    }
+    while (!bMatch[k]) {
+      k++
+    }
+    if (a[i] !== b[k]) {
+      transpositions++
+    }
+    k++
+  }
+  const m = matches
+  return (m / a.length + m / b.length + (m - transpositions / 2) / m) / 3
+}
+
+function isIsbn(compact) {
+  if (compact.length === 10) {
+    let sum = 0
+    for (let i = 0; i < 9; i++) {
+      const digit = Number(compact[i])
+      if (Number.isNaN(digit)) return false
+      sum += digit * (10 - i)
+    }
+    const last = compact[9] === 'X' ? 10 : Number(compact[9])
+    return last >= 0 && (sum + last) % 11 === 0
+  }
+  if (compact.length === 13) {
+    let sum = 0
+    for (let i = 0; i < 13; i++) {
+      const digit = Number(compact[i])
+      if (Number.isNaN(digit)) return false
+      sum += digit * (i % 2 === 0 ? 1 : 3)
+    }
+    return sum % 10 === 0
+  }
+  return false
+}
+
+function rot13(text) {
+  return String(text).replace(/[a-zA-Z]/g, (ch) => {
+    const base = ch <= 'Z' ? 65 : 97
+    return String.fromCharCode(base + ((ch.charCodeAt(0) - base + 13) % 26))
+  })
+}
+
+const MORSE_LETTERS = ['.-', '-...', '-.-.', '-..', '.', '..-.', '--.', '....', '..', '.---', '-.-', '.-..', '--', '-.', '---', '.--.', '--.-', '.-.', '...', '-', '..-', '...-', '.--', '-..-', '-.--', '--..']
+const MORSE_DIGITS = ['-----', '.----', '..---', '...--', '....-', '.....', '-....', '--...', '---..', '----.']
+const MORSE_DECODE = Object.fromEntries([
+  ...MORSE_LETTERS.map((code, i) => [code, String.fromCharCode(65 + i)]),
+  ...MORSE_DIGITS.map((code, i) => [code, String(i)])
+])
+
+function encodeMorse(text) {
+  return String(text).toUpperCase().trim().split(/\s+/).map((word) => [...word].map((ch) => {
+    if (ch >= 'A' && ch <= 'Z') return MORSE_LETTERS[ch.charCodeAt(0) - 65]
+    if (ch >= '0' && ch <= '9') return MORSE_DIGITS[Number(ch)]
+    return ''
+  }).filter(Boolean).join(' ')).join(' / ')
+}
+
+function decodeMorse(morse) {
+  return String(morse).trim().split(/\s+\/\s+/).map((word) => word.split(/\s+/).map((code) => MORSE_DECODE[code] || '').join('')).join(' ')
+}
+
+function wildcardMatch(text, pattern) {
+  const regex = '^' + String(pattern).replace(/[.+^${}()|[\]\\]/g, '\\$&').replaceAll('*', '.*').replaceAll('?', '.') + '$'
+  return new RegExp(regex).test(text)
+}
+
+function isIsin(compact) {
+  if (compact.length !== 12 || !/^[A-Z]{2}[A-Z0-9]{9}[0-9]$/.test(compact)) {
+    return false
+  }
+  let numeric = ''
+  for (const ch of compact.slice(0, 11)) {
+    numeric += /[A-Z]/.test(ch) ? String(ch.charCodeAt(0) - 55) : ch
+  }
+  numeric += compact[11]
+  let sum = 0
+  let doubleDigit = false
+  for (let i = numeric.length - 1; i >= 0; i--) {
+    let n = Number(numeric[i])
+    if (doubleDigit) {
+      n *= 2
+      if (n > 9) n -= 9
+    }
+    sum += n
+    doubleDigit = !doubleDigit
+  }
+  return sum % 10 === 0
+}
+
+function compactNumber(value) {
+  const abs = Math.abs(value)
+  if (abs < 1000) return String(value)
+  const units = ['K', 'M', 'B', 'T']
+  let scaled = value
+  let unit = -1
+  while (Math.abs(scaled) >= 1000 && unit + 1 < units.length) {
+    scaled /= 1000
+    unit++
+  }
+  const formatted = scaled.toFixed(1).replace(/\.0$/, '')
+  return formatted + units[unit]
+}
+
+function ordinal(value) {
+  const abs = Math.abs(value)
+  const mod100 = abs % 100
+  let suffix = 'th'
+  if (mod100 < 11 || mod100 > 13) {
+    suffix = abs % 10 === 1 ? 'st' : abs % 10 === 2 ? 'nd' : abs % 10 === 3 ? 'rd' : 'th'
+  }
+  return `${value}${suffix}`
+}
+
+function encodeQuotedPrintable(text) {
+  const bytes = new TextEncoder().encode(text)
+  let out = ''
+  for (let i = 0; i < bytes.length; i++) {
+    const b = bytes[i]
+    const encode = b > 126 || b < 32 || b === 61 || ((b === 32 || b === 9) && i === bytes.length - 1)
+    out += encode ? `=${b.toString(16).toUpperCase().padStart(2, '0')}` : String.fromCharCode(b)
+  }
+  return out
+}
+
+function decodeQuotedPrintable(text) {
+  const compact = String(text).replace(/=\r?\n/g, '')
+  const bytes = []
+  for (let i = 0; i < compact.length; i++) {
+    if (compact[i] === '=' && i + 2 < compact.length) {
+      bytes.push(Number.parseInt(compact.slice(i + 1, i + 3), 16))
+      i += 2
+    } else {
+      bytes.push(compact.charCodeAt(i))
+    }
+  }
+  return new TextDecoder().decode(new Uint8Array(bytes))
+}
+
+function channel(value) {
+  const s = value / 255
+  return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4
+}
+
+function luminance(hex) {
+  const value = String(hex).replace('#', '')
+  const n = Number.parseInt(value, 16)
+  const r = (n >> 16) & 255
+  const g = (n >> 8) & 255
+  const b = n & 255
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b)
+}
+
+function contrastRatio(left, right) {
+  const a = luminance(left)
+  const b = luminance(right)
+  const light = Math.max(a, b)
+  const dark = Math.min(a, b)
+  return (light + 0.05) / (dark + 0.05)
+}
+
+const BASE45 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'
+
+function encodeBase45(text) {
+  const bytes = new TextEncoder().encode(text)
+  let out = ''
+  for (let i = 0; i < bytes.length; i += 2) {
+    if (i + 1 < bytes.length) {
+      let value = (bytes[i] << 8) | bytes[i + 1]
+      const c = value % 45
+      value = Math.floor(value / 45)
+      const d = value % 45
+      const e = Math.floor(value / 45)
+      out += BASE45[c] + BASE45[d] + BASE45[e]
+    } else {
+      const value = bytes[i]
+      out += BASE45[value % 45] + BASE45[Math.floor(value / 45)]
+    }
+  }
+  return out
+}
+
+function decodeBase45(text) {
+  const bytes = []
+  for (let i = 0; i < text.length; ) {
+    if (i + 2 < text.length) {
+      const value = BASE45.indexOf(text[i]) + BASE45.indexOf(text[i + 1]) * 45 + BASE45.indexOf(text[i + 2]) * 2025
+      bytes.push((value >> 8) & 255, value & 255)
+      i += 3
+    } else {
+      bytes.push(BASE45.indexOf(text[i]) + BASE45.indexOf(text[i + 1]) * 45)
+      i += 2
+    }
+  }
+  return new TextDecoder().decode(new Uint8Array(bytes))
+}
+
+function stripAccents(text) {
+  return String(text).normalize('NFD').replace(/\p{M}+/gu, '')
+}
+
+function isPlate(plate) {
+  return /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-HJ-NP-Z][A-HJ-NP-Z0-9]{4,6}[A-HJ-NP-Z0-9挂学警港澳]$/.test(plate)
+}
+
+function extractEmoji(text) {
+  const chars = []
+  for (const ch of text) {
+    if (/\p{Extended_Pictographic}/u.test(ch)) {
+      chars.push(ch)
+    }
+  }
+  return chars
+}
+
+function removeEmoji(text) {
+  return String(text).replace(/\p{Extended_Pictographic}/gu, '')
+}
+
+function isCusip(compact) {
+  if (compact.length !== 9 || !/^[0-9A-Z*@#]{9}$/.test(compact)) {
+    return false
+  }
+  const valueOf = (c) => {
+    if (c >= '0' && c <= '9') return c.charCodeAt(0) - 48
+    if (c >= 'A' && c <= 'Z') return c.charCodeAt(0) - 55
+    if (c === '*') return 36
+    if (c === '@') return 37
+    if (c === '#') return 38
+    return -1
+  }
+  let sum = 0
+  for (let i = 0; i < 8; i++) {
+    const weighted = valueOf(compact[i]) * ((9 - i) % 2 === 0 ? 2 : 1)
+    sum += Math.floor(weighted / 10) + (weighted % 10)
+  }
+  return compact[8] === String((10 - (sum % 10)) % 10)
 }

@@ -20,6 +20,9 @@ public final class RegexUtil {
     public static final Pattern ZIPCODE = Pattern.compile("^\\d{6}$");
     public static final Pattern QQ = Pattern.compile("^[1-9]\\d{4,11}$");
     public static final Pattern LANDLINE = Pattern.compile("^0\\d{2,3}-?\\d{7,8}$");
+    public static final Pattern UUID = Pattern.compile(
+            "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$");
+    public static final Pattern UUID_SIMPLE = Pattern.compile("^[0-9a-fA-F]{32}$");
 
     private RegexUtil() {
     }
@@ -66,5 +69,69 @@ public final class RegexUtil {
 
     public static boolean isZipcode(String value) {
         return isMatch(ZIPCODE, value);
+    }
+
+    public static boolean isQq(String value) {
+        return isMatch(QQ, value);
+    }
+
+    public static boolean isLandline(String value) {
+        return isMatch(LANDLINE, value);
+    }
+
+    public static boolean isMac(String value) {
+        return MacUtil.isValid(value);
+    }
+
+    public static boolean isIsbn(String value) {
+        return IsbnUtil.isValid(value);
+    }
+
+    public static boolean isUuid(String value) {
+        return isMatch(UUID, value) || isMatch(UUID_SIMPLE, value);
+    }
+
+    public static boolean isImei(String value) {
+        return ImeiUtil.isValid(value);
+    }
+
+    public static boolean isIban(String value) {
+        return IbanUtil.isValid(value);
+    }
+
+    public static boolean isVin(String value) {
+        return VinUtil.isValid(value);
+    }
+
+    public static boolean isIssn(String value) {
+        return IssnUtil.isValid(value);
+    }
+
+    public static boolean isEan(String value) {
+        return EanUtil.isValid(value);
+    }
+
+    public static boolean isIsin(String value) {
+        return IsinUtil.isValid(value);
+    }
+
+    public static boolean isBic(String value) {
+        return BicUtil.isValid(value);
+    }
+
+    public static boolean isCusip(String value) {
+        return CusipUtil.isValid(value);
+    }
+
+    public static boolean isSedol(String value) {
+        return SedolUtil.isValid(value);
+    }
+
+    public static boolean isOrcid(String value) {
+        return OrcidUtil.isValid(value);
+    }
+
+    public static boolean isIsrc(String value) {
+        return IsrcUtil.isValid(value);
     }
 }

@@ -59,7 +59,9 @@ export const tools = [
           { value: 'idcard', label: '身份证' },
           { value: 'bank', label: '银行卡' },
           { value: 'address', label: '地址' },
-          { value: 'ip', label: 'IP' }
+          { value: 'ip', label: 'IP' },
+          { value: 'plate', label: '车牌' },
+          { value: 'password', label: '密码' }
         ]
       },
       { name: 'value', label: '原文', value: '张三丰' }
@@ -78,7 +80,7 @@ export const tools = [
     id: 'uuid',
     group: 'id',
     title: 'UUID / NanoId',
-    summary: 'IdUtil.uuid',
+    summary: 'IdUtil.uuid / uuidV7',
     method: 'GET',
     path: '/api/utils/id/uuid',
     fields: []
@@ -87,7 +89,7 @@ export const tools = [
     id: 'snowflake',
     group: 'id',
     title: '雪花 ID',
-    summary: 'IdUtil.snowflakeId',
+    summary: '生成并解析 worker / 时间',
     method: 'GET',
     path: '/api/utils/id/snowflake',
     fields: []
@@ -104,7 +106,7 @@ export const tools = [
   {
     id: 'digest',
     group: 'crypto',
-    title: 'MD5 / SHA-256',
+    title: 'MD5 / SHA-256 / SHA3',
     summary: 'EncryptUtil 摘要',
     method: 'GET',
     path: '/api/utils/encrypt/digest',
@@ -163,7 +165,11 @@ export const tools = [
           { value: 'credit', label: '信用代码' },
           { value: 'plate', label: '车牌' },
           { value: 'ipv6', label: 'IPv6' },
-          { value: 'zipcode', label: '邮编' }
+          { value: 'zipcode', label: '邮编' },
+          { value: 'qq', label: 'QQ' },
+          { value: 'landline', label: '固话' },
+          { value: 'mac', label: 'MAC' },
+          { value: 'isbn', label: 'ISBN' }
         ]
       },
       { name: 'value', label: '值', value: '13812345678' }
@@ -453,8 +459,926 @@ export const tools = [
     method: 'GET',
     path: '/api/utils/system',
     fields: []
-  }
-]
+  },
+  {
+    id: 'ant-path',
+    group: 'web',
+    title: 'Ant 路径匹配',
+    summary: 'AntPathUtil.match',
+    method: 'GET',
+    path: '/api/utils/ant-path',
+    fields: [
+      { name: 'pattern', label: 'pattern', value: '/api/**' },
+      { name: 'path', label: 'path', value: '/api/utils/ip' }
+    ]
+  },
+  {
+    id: 'color-java',
+    group: 'web',
+    title: '颜色亮度',
+    summary: 'ColorUtil.isDark',
+    method: 'GET',
+    path: '/api/utils/color',
+    fields: [{ name: 'hex', label: 'HEX', value: '#0f766e' }]
+  },
+  {
+    id: 'zodiac',
+    group: 'datetime',
+    title: '星座 / 生肖',
+    summary: 'ZodiacUtil',
+    method: 'GET',
+    path: '/api/utils/zodiac',
+    fields: [{ name: 'date', label: '日期', value: '1990-03-07' }]
+  },
+  {
+    id: 'map-path',
+    group: 'structure',
+    title: 'Map 点路径',
+    summary: 'MapPathUtil.get',
+    method: 'GET',
+    path: '/api/utils/map-path',
+    fields: []
+  },
+  {
+    id: 'file-type',
+    group: 'web',
+    title: '文件类型 / 文件名',
+    summary: 'FileTypeUtil / FileUtil.sanitize',
+    method: 'GET',
+    path: '/api/utils/file-type',
+    fields: [
+      { name: 'filename', label: '文件名', value: '../../a.png' },
+      { name: 'hex', label: 'Magic HEX', value: '89504e47' }
+    ]
+  },
+  {
+    id: 'murmur',
+    group: 'crypto',
+    title: 'Murmur3-32',
+    summary: 'HashUtil.murmur32',
+    method: 'GET',
+    path: '/api/utils/hash/murmur',
+    fields: [{ name: 'text', label: '原文', value: 'hello' }]
+  },
+  {
+    id: 'escape-js',
+    group: 'string',
+    title: 'JS / CSV 转义',
+    summary: 'EscapeUtil',
+    method: 'GET',
+    path: '/api/utils/escape',
+    fields: [{ name: 'text', label: '文本', value: 'a"b\'c' }]
+  },
+  {
+    id: 'highlight',
+    group: 'string',
+    title: '关键字高亮',
+    summary: 'HighlightUtil.html',
+    method: 'GET',
+    path: '/api/utils/highlight',
+    fields: [
+      { name: 'text', label: '文本', value: 'Spring Boot 工具集' },
+      { name: 'keyword', label: '关键字', value: '工具' }
+    ]
+  },
+  {
+    id: 'weight-random',
+    group: 'structure',
+    title: '加权随机',
+    summary: 'WeightRandomUtil.pick',
+    method: 'GET',
+    path: '/api/utils/weight-random',
+    fields: []
+  },
+  {
+    id: 'rate-limit',
+    group: 'web',
+    title: '令牌桶限流',
+    summary: 'RateLimiterUtil.tryAcquire',
+    method: 'GET',
+    path: '/api/utils/rate-limit',
+    fields: [
+      { name: 'key', label: 'key', value: 'demo' },
+      { name: 'qps', label: 'QPS', value: '3' }
+    ]
+  },
+  {
+    id: 'duration',
+    group: 'datetime',
+    title: '时长解析',
+    summary: 'DurationUtil.parse',
+    method: 'GET',
+    path: '/api/utils/duration',
+    fields: [{ name: 'text', label: '时长', value: '1h30m' }]
+  },
+  {
+    id: 'slug',
+    group: 'string',
+    title: 'URL slug',
+    summary: 'SlugUtil.of',
+    method: 'GET',
+    path: '/api/utils/slug',
+    fields: [{ name: 'text', label: '文本', value: 'Spring Boot 工具集' }]
+  },
+  {
+    id: 'verify-code',
+    group: 'id',
+    title: '验证码',
+    summary: 'VerifyCodeUtil.numeric',
+    method: 'GET',
+    path: '/api/utils/verify-code',
+    fields: [{ name: 'length', label: '长度', value: '6' }]
+  },
+  {
+    id: 'percent',
+    group: 'number',
+    title: '百分比',
+    summary: 'PercentUtil.of',
+    method: 'GET',
+    path: '/api/utils/percent',
+    fields: [
+      { name: 'part', label: '部分', value: '25' },
+      { name: 'total', label: '总量', value: '200' }
+    ]
+  },
+  {
+    id: 'circuit',
+    group: 'web',
+    title: '熔断器',
+    summary: 'CircuitBreakerUtil.allow',
+    method: 'GET',
+    path: '/api/utils/circuit',
+    fields: [{ name: 'name', label: 'name', value: 'demo' }]
+  },
+  {
+    id: 'unicode-java',
+    group: 'string',
+    title: 'Unicode 转义',
+    summary: 'UnicodeUtil.toUnicode',
+    method: 'GET',
+    path: '/api/utils/unicode',
+    fields: [{ name: 'text', label: '文本', value: '工具集' }]
+  },
+  {
+    id: 'radix',
+    group: 'number',
+    title: '进制转换',
+    summary: 'RadixUtil.convert',
+    method: 'GET',
+    path: '/api/utils/radix',
+    fields: [
+      { name: 'value', label: '数值', value: '255' },
+      { name: 'from', label: '源进制', value: '10' },
+      { name: 'to', label: '目标进制', value: '16' }
+    ]
+  },
+  {
+    id: 'object-id',
+    group: 'id',
+    title: 'ObjectId',
+    summary: 'IdUtil.objectId',
+    method: 'GET',
+    path: '/api/utils/object-id',
+    fields: []
+  },
+  {
+    id: 'idn',
+    group: 'web',
+    title: '国际化域名',
+    summary: 'IdnUtil.toAscii',
+    method: 'GET',
+    path: '/api/utils/idn',
+    fields: [{ name: 'domain', label: '域名', value: '清华大学.cn' }]
+  },
+  {
+    id: 'expr',
+    group: 'number',
+    title: '四则运算',
+    summary: 'ExprUtil.eval',
+    method: 'GET',
+    path: '/api/utils/expr',
+    fields: [{ name: 'expression', label: '表达式', value: '(1+2)*3' }]
+  },
+  {
+    id: 'lunar',
+    group: 'datetime',
+    title: '农历',
+    summary: 'LunarUtil.of',
+    method: 'GET',
+    path: '/api/utils/lunar',
+    fields: [{ name: 'date', label: '公历', value: '2024-02-10' }]
+  },
+  {
+    id: 'json-path',
+    group: 'json',
+    title: 'JSON Pointer',
+    summary: 'JsonPathUtil.getStr',
+    method: 'POST',
+    path: '/api/utils/json-path',
+    fields: [
+      { name: 'json', label: 'JSON', type: 'textarea', value: '{"user":{"name":"Ada"}}' },
+      { name: 'path', label: '路径', value: 'user.name' }
+    ]
+  },
+  {
+    id: 'captcha',
+    group: 'validate',
+    title: '图片验证码',
+    summary: 'CaptchaUtil.create',
+    method: 'GET',
+    path: '/api/utils/captcha',
+    fields: []
+  },
+  {
+    id: 'isbn',
+    group: 'validate',
+    title: 'ISBN',
+    summary: 'IsbnUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/isbn',
+    fields: [{ name: 'code', label: 'ISBN', value: '9780306406157' }]
+  },
+  {
+    id: 'mac',
+    group: 'web',
+    title: 'MAC 地址',
+    summary: 'MacUtil.normalize',
+    method: 'GET',
+    path: '/api/utils/mac',
+    fields: [{ name: 'value', label: 'MAC', value: '00-1A-2B-3C-4D-5E' }]
+  },
+  {
+    id: 'idcard-convert',
+    group: 'validate',
+    title: '身份证 15 升 18',
+    summary: 'IdCardUtil.convert15To18',
+    method: 'GET',
+    path: '/api/utils/idcard/convert',
+    fields: [{ name: 'idNo', label: '15 位身份证', value: '110101900307893' }]
+  },
+  {
+    id: 'base32',
+    group: 'crypto',
+    title: 'Base32',
+    summary: 'Base32Util.encode',
+    method: 'GET',
+    path: '/api/utils/base32',
+    fields: [{ name: 'text', label: '原文', value: 'hello' }]
+  },
+  {
+    id: 'math',
+    group: 'number',
+    title: '最大公约数',
+    summary: 'MathUtil.gcd / lcm',
+    method: 'GET',
+    path: '/api/utils/math',
+    fields: [
+      { name: 'a', label: 'A', value: '12' },
+      { name: 'b', label: 'B', value: '18' }
+    ]
+  },
+  {
+    id: 'unit',
+    group: 'number',
+    title: '单位换算',
+    summary: 'UnitConvertUtil.convert',
+    method: 'GET',
+    path: '/api/utils/unit',
+    fields: [
+      { name: 'value', label: '数值', value: '1' },
+      { name: 'from', label: '源单位', type: 'select', value: 'km', options: [
+        { value: 'km', label: 'km' },
+        { value: 'm', label: 'm' },
+        { value: 'cm', label: 'cm' },
+        { value: 'mm', label: 'mm' },
+        { value: 'ft', label: 'ft' },
+        { value: 'in', label: 'in' },
+        { value: 'kg', label: 'kg' },
+        { value: 'g', label: 'g' },
+        { value: 'lb', label: 'lb' },
+        { value: 'c', label: '°C' },
+        { value: 'f', label: '°F' },
+        { value: 'k', label: 'K' }
+      ] },
+      { name: 'to', label: '目标单位', type: 'select', value: 'm', options: [
+        { value: 'm', label: 'm' },
+        { value: 'km', label: 'km' },
+        { value: 'cm', label: 'cm' },
+        { value: 'mm', label: 'mm' },
+        { value: 'ft', label: 'ft' },
+        { value: 'in', label: 'in' },
+        { value: 'kg', label: 'kg' },
+        { value: 'g', label: 'g' },
+        { value: 'lb', label: 'lb' },
+        { value: 'c', label: '°C' },
+        { value: 'f', label: '°F' },
+        { value: 'k', label: 'K' }
+      ] }
+    ]
+  },
+  {
+    id: 'imei',
+    group: 'validate',
+    title: 'IMEI',
+    summary: 'ImeiUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/imei',
+    fields: [{ name: 'value', label: 'IMEI', value: '490154203237518' }]
+  },
+  {
+    id: 'url-parse',
+    group: 'web',
+    title: 'URL 解析',
+    summary: 'UrlUtil.parse',
+    method: 'GET',
+    path: '/api/utils/url/parse',
+    fields: [{ name: 'url', label: 'URL', value: 'https://example.com:8443/search?q=工具#top' }]
+  },
+  {
+    id: 'url-build',
+    group: 'web',
+    title: 'URL 拼接',
+    summary: 'UrlBuilder.build',
+    method: 'GET',
+    path: '/api/utils/url/build',
+    fields: [
+      { name: 'scheme', label: '协议', value: 'https' },
+      { name: 'host', label: '主机', value: 'example.com' },
+      { name: 'path', label: '路径', value: '/search' },
+      { name: 'key', label: '参数名', value: 'q' },
+      { name: 'value', label: '参数值', value: '工具' }
+    ]
+  },
+  {
+    id: 'text-diff-java',
+    group: 'string',
+    title: '文本行 Diff',
+    summary: 'TextDiffUtil.unified',
+    method: 'POST',
+    path: '/api/utils/text-diff',
+    fields: [
+      { name: 'left', label: '原文', type: 'textarea', value: 'a\nb\nc' },
+      { name: 'right', label: '新文', type: 'textarea', value: 'a\nc\nd' }
+    ]
+  },
+  {
+    id: 'base58',
+    group: 'crypto',
+    title: 'Base58',
+    summary: 'Base58Util.encode',
+    method: 'GET',
+    path: '/api/utils/base58',
+    fields: [{ name: 'text', label: '原文', value: 'hello' }]
+  },
+  {
+    id: 'roman',
+    group: 'number',
+    title: '罗马数字',
+    summary: 'RomanUtil.toRoman',
+    method: 'GET',
+    path: '/api/utils/roman',
+    fields: [{ name: 'value', label: '数字或罗马', value: '1994' }]
+  },
+  {
+    id: 'hashids',
+    group: 'id',
+    title: 'Hashids',
+    summary: 'HashidsUtil.encode',
+    method: 'GET',
+    path: '/api/utils/hashids',
+    fields: [{ name: 'id', label: '数字 ID', value: '123' }]
+  },
+  {
+    id: 'week',
+    group: 'datetime',
+    title: 'ISO 周',
+    summary: 'WeekUtil.isoWeek',
+    method: 'GET',
+    path: '/api/utils/week',
+    fields: [{ name: 'date', label: '日期', value: '2024-02-10' }]
+  },
+  {
+    id: 'seq',
+    group: 'id',
+    title: '日期序列号',
+    summary: 'SeqUtil.next',
+    method: 'GET',
+    path: '/api/utils/seq',
+    fields: [{ name: 'prefix', label: '前缀', value: 'ORD' }]
+  },
+  {
+    id: 're',
+    group: 'string',
+    title: '正则提取',
+    summary: 'ReUtil.findAll',
+    method: 'GET',
+    path: '/api/utils/re',
+    fields: [
+      { name: 'pattern', label: '正则', value: '\\d+' },
+      { name: 'text', label: '文本', value: 'ab12cd34' }
+    ]
+  },
+  {
+    id: 'similarity',
+    group: 'string',
+    title: '文本相似度',
+    summary: 'Jaro-Winkler / Jaccard',
+    method: 'GET',
+    path: '/api/utils/similarity',
+    fields: [
+      { name: 'left', label: '文本 A', value: 'MARTHA' },
+      { name: 'right', label: '文本 B', value: 'MARHTA' }
+    ]
+  },
+  {
+    id: 'soundex',
+    group: 'string',
+    title: 'Soundex',
+    summary: 'SoundexUtil.encode',
+    method: 'GET',
+    path: '/api/utils/soundex',
+    fields: [
+      { name: 'left', label: '姓名 A', value: 'Robert' },
+      { name: 'right', label: '姓名 B', value: 'Rupert' }
+    ]
+  },
+  {
+    id: 'iban',
+    group: 'validate',
+    title: 'IBAN',
+    summary: 'IbanUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/iban',
+    fields: [{ name: 'value', label: 'IBAN', value: 'GB82WEST12345698765432' }]
+  },
+  {
+    id: 'vin',
+    group: 'validate',
+    title: 'VIN 车架号',
+    summary: 'VinUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/vin',
+    fields: [{ name: 'value', label: 'VIN', value: '1M8GDM9AXKP042788' }]
+  },
+  {
+    id: 'ean',
+    group: 'validate',
+    title: 'EAN / GTIN',
+    summary: 'EanUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/ean',
+    fields: [{ name: 'value', label: '条码', value: '5901234123457' }]
+  },
+  {
+    id: 'issn',
+    group: 'validate',
+    title: 'ISSN',
+    summary: 'IssnUtil.isValid',
+    method: 'GET',
+    path: '/api/utils/issn',
+    fields: [{ name: 'value', label: 'ISSN', value: '0317-8471' }]
+  },
+  {
+    id: 'age',
+    group: 'datetime',
+    title: '年龄',
+    summary: 'AgeUtil.age',
+    method: 'GET',
+    path: '/api/utils/age',
+    fields: [{ name: 'birthday', label: '生日', value: '1990-03-07' }]
+  },
+  {
+    id: 'sha3',
+    group: 'crypto',
+    title: 'SHA3-256',
+    summary: 'EncryptUtil.sha3_256',
+    method: 'GET',
+    path: '/api/utils/digest',
+    fields: [{ name: 'text', label: '原文', value: 'hello' }]
+  },
+  {
+    id: 'ksuid',
+    group: 'id',
+    title: 'KSUID / TypeID',
+    summary: 'KsuidUtil / TypeIdUtil',
+    method: 'GET',
+    path: '/api/utils/ksuid',
+    fields: []
+  },
+  {
+    id: 'host-port',
+    group: 'web',
+    title: 'host:port',
+    summary: 'HostAndPortUtil.parse',
+    method: 'GET',
+    path: '/api/utils/host-port',
+    fields: [{ name: 'value', label: '主机端口', value: 'example.com:8443' }]
+  },
+    {
+      id: 'word',
+      group: 'string',
+      title: '单词处理',
+      summary: 'WordUtil.initials',
+      method: 'GET',
+      path: '/api/utils/word',
+      fields: [{ name: 'text', label: '文本', value: 'spring BOOT utils' }]
+    },
+    {
+      id: 'sqids',
+      group: 'id',
+      title: 'Sqids',
+      summary: 'SqidsUtil.encode',
+      method: 'GET',
+      path: '/api/utils/sqids',
+      fields: [{ name: 'numbers', label: '数字', value: '1,2,3' }]
+    },
+    {
+      id: 'uuid-name',
+      group: 'id',
+      title: 'UUID v3 / v5 / NanoID / CUID2',
+      summary: 'IdUtil.uuidV5',
+      method: 'GET',
+      path: '/api/utils/uuid-name',
+      fields: [{ name: 'name', label: '名称', value: 'www.example.com' }]
+    },
+    {
+      id: 'metaphone',
+      group: 'string',
+      title: 'Metaphone',
+      summary: 'MetaphoneUtil.encode',
+      method: 'GET',
+      path: '/api/utils/metaphone',
+      fields: [
+        { name: 'left', label: '姓名 A', value: 'Philip' },
+        { name: 'right', label: '姓名 B', value: 'Phillip' }
+      ]
+    },
+    {
+      id: 'isin',
+      group: 'validate',
+      title: 'ISIN',
+      summary: 'IsinUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/isin',
+      fields: [{ name: 'value', label: 'ISIN', value: 'US0378331005' }]
+    },
+    {
+      id: 'bic',
+      group: 'validate',
+      title: 'SWIFT BIC',
+      summary: 'BicUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/bic',
+      fields: [{ name: 'value', label: 'BIC', value: 'DEUTDEFF' }]
+    },
+    {
+      id: 'case-format',
+      group: 'string',
+      title: 'CaseFormat',
+      summary: 'CaseFormatUtil.to',
+      method: 'GET',
+      path: '/api/utils/case-format',
+      fields: [{ name: 'text', label: '文本', value: 'springBootUtils' }]
+    },
+    {
+      id: 'media-type',
+      group: 'web',
+      title: 'MediaType',
+      summary: 'MediaTypeUtil.parse',
+      method: 'GET',
+      path: '/api/utils/media-type',
+      fields: [{ name: 'value', label: '类型', value: 'application/json; charset=utf-8' }]
+    },
+    {
+      id: 'morse',
+      group: 'string',
+      title: '摩斯电码',
+      summary: 'MorseUtil.encode',
+      method: 'GET',
+      path: '/api/utils/morse',
+      fields: [{ name: 'text', label: '文本', value: 'SOS' }]
+    },
+    {
+      id: 'gzip',
+      group: 'crypto',
+      title: 'Gzip',
+      summary: 'ZipUtil.gzipBase64',
+      method: 'GET',
+      path: '/api/utils/gzip',
+      fields: [{ name: 'text', label: '文本', value: 'hello 工具' }]
+    },
+    {
+      id: 'bech32',
+      group: 'crypto',
+      title: 'Bech32',
+      summary: 'Bech32Util.encodeText',
+      method: 'GET',
+      path: '/api/utils/bech32',
+      fields: [
+        { name: 'hrp', label: 'HRP', value: 'xyz' },
+        { name: 'text', label: '文本', value: 'hello' }
+      ]
+    },
+    {
+      id: 'hkdf',
+      group: 'crypto',
+      title: 'HKDF-SHA256',
+      summary: 'HkdfUtil.deriveHex',
+      method: 'GET',
+      path: '/api/utils/hkdf',
+      fields: [
+        { name: 'ikm', label: 'IKM', value: 'hello' },
+        { name: 'salt', label: 'Salt', value: 'salt' },
+        { name: 'info', label: 'Info', value: 'info' },
+        { name: 'length', label: '长度', value: '32' }
+      ]
+    },
+    {
+      id: 'check-digit',
+      group: 'validate',
+      title: '校验位',
+      summary: 'Luhn / Verhoeff / Damm',
+      method: 'GET',
+      path: '/api/utils/check-digit',
+      fields: [{ name: 'value', label: '数字', value: '79927398713' }]
+    },
+    {
+      id: 'humanize',
+      group: 'number',
+      title: 'Humanize',
+      summary: 'compact / ordinal',
+      method: 'GET',
+      path: '/api/utils/humanize',
+      fields: [
+        { name: 'value', label: '数字', value: '1234' },
+        { name: 'ordinal', label: '序数', value: '21' }
+      ]
+    },
+    {
+      id: 'rot13',
+      group: 'string',
+      title: 'ROT13',
+      summary: 'RotUtil.rot13',
+      method: 'GET',
+      path: '/api/utils/rot13',
+      fields: [{ name: 'text', label: '文本', value: 'Hello' }]
+    },
+    {
+      id: 'wildcard',
+      group: 'web',
+      title: '通配符',
+      summary: 'WildcardUtil.match',
+      method: 'GET',
+      path: '/api/utils/wildcard',
+      fields: [
+        { name: 'text', label: '文本', value: 'Foo.java' },
+        { name: 'pattern', label: '模式', value: '*.java' }
+      ]
+    },
+    {
+      id: 'email-parse',
+      group: 'validate',
+      title: '邮箱解析',
+      summary: 'EmailUtil.parse',
+      method: 'GET',
+      path: '/api/utils/email-parse',
+      fields: [{ name: 'value', label: '邮箱', value: 'ada+dev@example.com' }]
+    },
+    {
+      id: 'crc32c',
+      group: 'crypto',
+      title: 'CRC-32C',
+      summary: 'HashUtil.crc32c',
+      method: 'GET',
+      path: '/api/utils/hash/crc32c',
+      fields: [{ name: 'text', label: '文本', value: '123456789' }]
+    },
+    {
+      id: 'hotp',
+      group: 'crypto',
+      title: 'HOTP',
+      summary: 'HotpUtil.generate',
+      method: 'GET',
+      path: '/api/utils/hotp',
+      fields: [
+        { name: 'key', label: '密钥', value: '12345678901234567890' },
+        { name: 'counter', label: '计数', value: '0' }
+      ]
+    },
+    {
+      id: 'quoted-printable',
+      group: 'string',
+      title: 'Quoted-Printable',
+      summary: 'QuotedPrintableUtil.encode',
+      method: 'GET',
+      path: '/api/utils/quoted-printable',
+      fields: [{ name: 'text', label: '文本', value: 'Hello = 工具' }]
+    },
+    {
+      id: 'base45',
+      group: 'crypto',
+      title: 'Base45',
+      summary: 'Base45Util.encode',
+      method: 'GET',
+      path: '/api/utils/base45',
+      fields: [{ name: 'text', label: '文本', value: 'AB' }]
+    },
+    {
+      id: 'base85',
+      group: 'crypto',
+      title: 'Ascii85',
+      summary: 'Base85Util.encode',
+      method: 'GET',
+      path: '/api/utils/base85',
+      fields: [{ name: 'text', label: '文本', value: 'Man' }]
+    },
+    {
+      id: 'xxhash',
+      group: 'crypto',
+      title: 'xxHash / SipHash',
+      summary: 'XxHashUtil / SipHashUtil',
+      method: 'GET',
+      path: '/api/utils/xxhash',
+      fields: [{ name: 'text', label: '文本', value: 'hello' }]
+    },
+    {
+      id: 'holiday',
+      group: 'datetime',
+      title: '中国节假日',
+      summary: 'HolidayUtil.name',
+      method: 'GET',
+      path: '/api/utils/holiday',
+      fields: [{ name: 'date', label: '日期', value: '2026-10-01' }]
+    },
+    {
+      id: 'json-patch',
+      group: 'json',
+      title: 'JSON Patch',
+      summary: 'JsonPatchUtil.apply',
+      method: 'GET',
+      path: '/api/utils/json-patch',
+      fields: [
+        { name: 'json', label: 'JSON', type: 'textarea', value: '{"name":"Bob"}' },
+        { name: 'patch', label: 'Patch', type: 'textarea', value: '[{"op":"replace","path":"/name","value":"Ada"}]' }
+      ]
+    },
+    {
+      id: 'contrast',
+      group: 'web',
+      title: 'WCAG 对比度',
+      summary: 'ColorUtil.contrastRatio',
+      method: 'GET',
+      path: '/api/utils/contrast',
+      fields: [
+        { name: 'left', label: '颜色 A', value: '#FFFFFF' },
+        { name: 'right', label: '颜色 B', value: '#000000' }
+      ]
+    },
+    {
+      id: 'ini',
+      group: 'json',
+      title: 'INI',
+      summary: 'IniUtil.parse',
+      method: 'GET',
+      path: '/api/utils/ini',
+      fields: [{ name: 'text', label: 'INI', type: 'textarea', value: '[database]\nhost=localhost\nport=3306' }]
+    },
+    {
+      id: 'language-tag',
+      group: 'web',
+      title: 'BCP 47',
+      summary: 'LanguageTagUtil.parse',
+      method: 'GET',
+      path: '/api/utils/language-tag',
+      fields: [{ name: 'tag', label: '语言标签', value: 'zh-CN' }]
+    },
+    {
+      id: 'uuid-v6',
+      group: 'id',
+      title: 'UUID v6',
+      summary: 'IdUtil.uuidV6',
+      method: 'GET',
+      path: '/api/utils/uuid-v6',
+      fields: []
+    },
+    {
+      id: 'cusip',
+      group: 'validate',
+      title: 'CUSIP',
+      summary: 'CusipUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/cusip',
+      fields: [{ name: 'value', label: 'CUSIP', value: '037833100' }]
+    },
+    {
+      id: 'sedol',
+      group: 'validate',
+      title: 'SEDOL',
+      summary: 'SedolUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/sedol',
+      fields: [{ name: 'value', label: 'SEDOL', value: '1234565' }]
+    },
+    {
+      id: 'orcid',
+      group: 'validate',
+      title: 'ORCID',
+      summary: 'OrcidUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/orcid',
+      fields: [{ name: 'value', label: 'ORCID', value: '0000-0002-1825-0097' }]
+    },
+    {
+      id: 'isrc',
+      group: 'validate',
+      title: 'ISRC',
+      summary: 'IsrcUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/isrc',
+      fields: [{ name: 'value', label: 'ISRC', value: 'US-S1Z-99-00001' }]
+    },
+    {
+      id: 'json-merge-patch',
+      group: 'json',
+      title: 'JSON Merge Patch',
+      summary: 'JsonMergePatchUtil.apply',
+      method: 'GET',
+      path: '/api/utils/json-merge-patch',
+      fields: [
+        { name: 'json', label: 'JSON', type: 'textarea', value: '{"a":"b"}' },
+        { name: 'patch', label: 'Patch', type: 'textarea', value: '{"a":"c"}' }
+      ]
+    },
+    {
+      id: 'http-date',
+      group: 'web',
+      title: 'HTTP Date',
+      summary: 'HttpDateUtil.format',
+      method: 'GET',
+      path: '/api/utils/http-date',
+      fields: [{ name: 'epochMilli', label: 'Epoch 毫秒', value: '0' }]
+    },
+    {
+      id: 'emoji',
+      group: 'string',
+      title: 'Emoji',
+      summary: 'EmojiUtil.remove',
+      method: 'GET',
+      path: '/api/utils/emoji',
+      fields: [{ name: 'text', label: '文本', value: 'hello 😀 工具' }]
+    },
+    {
+      id: 'accent',
+      group: 'string',
+      title: '去音调',
+      summary: 'AccentUtil.strip',
+      method: 'GET',
+      path: '/api/utils/accent',
+      fields: [{ name: 'text', label: '文本', value: 'café naïve' }]
+    },
+    {
+      id: 'plate',
+      group: 'validate',
+      title: '车牌号',
+      summary: 'PlateUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/plate',
+      fields: [{ name: 'value', label: '车牌', value: '京A12345' }]
+    },
+    {
+      id: 'uri-template',
+      group: 'web',
+      title: 'URI Template',
+      summary: 'UriTemplateUtil.expand',
+      method: 'GET',
+      path: '/api/utils/uri-template',
+      fields: [
+        { name: 'template', label: '模板', value: '/users/{id}' },
+        { name: 'id', label: 'id', value: '42' }
+      ]
+    },
+    {
+      id: 'totp-rfc6238',
+      group: 'crypto',
+      title: 'RFC 6238 TOTP',
+      summary: 'TotpUtil RFC Appendix B',
+      method: 'GET',
+      path: '/api/utils/totp-rfc6238',
+      fields: [
+        { name: 'key', label: '密钥', value: '12345678901234567890' },
+        { name: 'unixSeconds', label: 'Unix 秒', value: '59' }
+      ]
+    },
+    {
+      id: 'encoded-word',
+      group: 'string',
+      title: 'Encoded-Word',
+      summary: 'EncodedWordUtil.encode',
+      method: 'GET',
+      path: '/api/utils/encoded-word',
+      fields: [{ name: 'text', label: '文本', value: '工具' }]
+    }
+  ]
 
 export function getTool(id) {
   return tools.find((item) => item.id === id)

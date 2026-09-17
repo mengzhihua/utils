@@ -48,4 +48,36 @@ public final class PasswordUtil {
         }
         return "strong";
     }
+
+    public static String generate(int length) {
+        int size = Math.min(64, Math.max(8, length));
+        final String alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*";
+        char[] chars = new char[size];
+        java.security.SecureRandom random = new java.security.SecureRandom();
+        boolean hasLower = false;
+        boolean hasUpper = false;
+        boolean hasDigit = false;
+        boolean hasSymbol = false;
+        for (int i = 0; i < size; i++) {
+            char c = alphabet.charAt(random.nextInt(alphabet.length()));
+            chars[i] = c;
+            hasLower |= Character.isLowerCase(c);
+            hasUpper |= Character.isUpperCase(c);
+            hasDigit |= Character.isDigit(c);
+            hasSymbol |= !Character.isLetterOrDigit(c);
+        }
+        if (!(hasLower && hasUpper && hasDigit && hasSymbol)) {
+            chars[0] = 'a';
+            chars[1] = 'A';
+            chars[2] = '7';
+            chars[3] = '!';
+            for (int i = 0; i < size; i++) {
+                int j = random.nextInt(size);
+                char tmp = chars[i];
+                chars[i] = chars[j];
+                chars[j] = tmp;
+            }
+        }
+        return new String(chars);
+    }
 }

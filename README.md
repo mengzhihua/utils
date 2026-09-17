@@ -33,15 +33,76 @@
 | 文件 | `FileUtil` / `IoUtil` / `ZipUtil` / `MimeUtil` / `PathUtil` / `DownloadUtil` | 读写、压缩（防 zip-slip）、下载头 |
 | 网络 / Web | `IpUtil` / `NetUtil` / `UrlUtil` / `HttpUtil` / `ServletUtil` / `CookieUtil` / `UserAgentUtil` | 客户端 IP、CIDR、Query 解析、UA |
 | 树 / 地理 | `TreeUtil` / `GeoUtil` | 建树、距离、WGS84 / GCJ-02 / BD-09 |
-| 并发 / 系统 | `ThreadUtil` / `RetryUtil` / `StopWatchUtil` / `LocalCacheUtil` / `SystemUtil` | 虚拟线程、重试、计时、本地 TTL 缓存 |
+| 并发 / 系统 | `ThreadUtil` / `RetryUtil` / `StopWatchUtil` / `LocalCacheUtil` / `SystemUtil` / `KeyedLockUtil` / `RateLimiterUtil` / `CircuitBreakerUtil` | 虚拟线程、指数退避重试、计时、本地 TTL 缓存（容量上限 + 同 key 加载锁）、按 key 串行、令牌桶、熔断 |
 | 反射 | `ReflectUtil` / `EnumUtil` / `ClassUtil` / `ExceptionUtil` | 字段读写、枚举查找、堆栈 |
+
+### 运行时补充
+
+| 模块 | 类 | 说明 |
+| --- | --- | --- |
+| 路径 / 结构 | `AntPathUtil` / `MapPathUtil` / `BatchUtil` | Ant 匹配、点路径取值与扁平化、分批处理 |
+| 文件 / 资源 | `FileTypeUtil` / `ImageUtil` / `ResourceUtil` / `HashUtil` | Magic 探测、图片尺寸、classpath 读取、文件摘要 / Murmur3 |
+| 文本 | `EscapeUtil` / `HighlightUtil` / `SlugUtil` / `DurationUtil` | JS/CSV/JSON 转义、关键字高亮、URL slug、时长解析 |
+| 其它 | `ColorUtil` / `ZodiacUtil` / `WeightRandomUtil` / `BloomFilterUtil` / `VerifyCodeUtil` / `PercentUtil` | 亮度、星座生肖、加权随机、布隆过滤器、验证码、百分比 |
+| ID 增强 | `IdUtil.uuidV7` / `SnowflakeIdGenerator.parse` / `JwtUtil.decode` / `PasswordUtil.generate` / `FileUtil.sanitize` | UUID v7、雪花解析、JWT 剩余 TTL、强密码、安全文件名 |
+
+### 对标 Hutool 常用能力
+
+| 模块 | 类 | 说明 |
+| --- | --- | --- |
+| 编码 / 进制 | `UnicodeUtil` / `RadixUtil` / `Base32Util` / `CharsetUtil` / `CharUtil` | Unicode 转义、2-62 进制、Base32、字符集、字符判断 |
+| 标识 / 密码 | `ObjectIdUtil` / `Pbkdf2Util` / `IdnUtil` / `BasicAuthUtil` | Mongo ObjectId、PBKDF2、Punycode、Basic Auth |
+| 日期 / 计算 | `LunarUtil` / `ExprUtil` / `JsonPathUtil` | 农历（1900-2099）、四则运算、JSON Pointer |
+| 校验 / 图形 | `IsbnUtil` / `MacUtil` / `CaptchaUtil` / `IdCardUtil.convert15To18` | ISBN、MAC、图片验证码、15 升 18 位身份证 |
+| 正则 / 数学 | `ReUtil` / `MathUtil` / `UnitConvertUtil` / `WeekUtil` | 正则提取、公约数组合、单位换算、ISO 周 |
+| 编码 / ID | `Base58Util` / `HashidsUtil` / `SeqUtil` / `RomanUtil` | Base58、混淆 ID、日期序列、罗马数字 |
+| URL / 文本 | `UrlBuilder` / `UrlUtil.parse` / `TextDiffUtil` / `ImeiUtil` | URL 拼接解析、行 diff、IMEI |
+| 分布 / 图形 | `ConsistentHashUtil` / `ImageUtil.scale` / `RandomUtil.randomEle` | 一致性哈希、缩放水印、随机抽样 |
+
+### 对标 Commons / Guava / Hutool
+
+| 模块 | 类 | 对标 | 说明 |
+| --- | --- | --- | --- |
+| 文本相似 | `TextUtil.jaroWinkler` / `SimHashUtil` / `SoundexUtil` | Commons Text / Codec | Jaro-Winkler、Jaccard、SimHash、Soundex |
+| 国际校验 | `IbanUtil` / `VinUtil` / `IssnUtil` / `EanUtil` | Commons Validator | IBAN、VIN、ISSN、EAN/GTIN |
+| 日期 / 比较 | `AgeUtil` / `CompareUtil` / `RangeUtil` | Hutool / Guava | 年龄、空值比较、区间 |
+| 编码 / ID | `Base64Util` / `KsuidUtil` / `TypeIdUtil` / `EncryptUtil.sha3_256` | Commons Codec / Segment / TypeID | URL Base64、KSUID、TypeID、SHA3 |
+| 网络 / 词 | `HostAndPortUtil` / `WordUtil` | Guava / Commons Text | host:port、首字母与标题化 |
+
+### 对标 Sqids / Commons Codec / Guava / Hutool
+
+| 模块 | 类 | 对标 | 说明 |
+| --- | --- | --- | --- |
+| ID | `SqidsUtil` / `IdUtil.uuidV5` / `Cuid2Util` / `IdUtil.nanoId()` | sqids.org / RFC 4122 / cuid2 / nanoid | 可逆短 ID、UUID v3/v5、CUID2、NanoID |
+| 读音 / 校验 | `MetaphoneUtil` / `IsinUtil` / `BicUtil` / `CheckDigitUtil` | Commons Codec / Validator | Metaphone、ISIN、SWIFT BIC、Luhn/Verhoeff/Damm |
+| 文本 / 格式 | `CaseFormatUtil` / `MediaTypeUtil` / `MorseUtil` / `RotUtil` / `HumanizeUtil` / `InflectorUtil` | Guava / Hutool / Commons Text | 命名风格、MIME、摩斯、ROT13、1.2K / 21st、英文复数 |
+| 编码 / 密钥 | `Bech32Util` / `HkdfUtil` / `HashUtil.crc32c` / `ZipUtil.gzip` | BIP-173 / RFC 5869 / Guava | Bech32、HKDF-SHA256、CRC-32C、Gzip |
+| 其它 | `WildcardUtil` / `EmailUtil` / `BitUtil` / `TextUtil.dice` | Commons IO / Validator / Hutool | 通配符、邮箱解析、位标记、Dice / Cosine / Damerau |
+
+### 对标 RFC / Commons Codec / Guava
+
+| 模块 | 类 | 对标 | 说明 |
+| --- | --- | --- | --- |
+| OTP / 编码 | `HotpUtil` / `QuotedPrintableUtil` / `Base45Util` / `Base85Util` | RFC 4226 / 2045 / 9285 / Ascii85 | HOTP、QP、Base45、Ascii85 |
+| 哈希 | `XxHashUtil` / `SipHashUtil` / `HashUtil.adler32` | xxHash / Guava SipHash | xxHash32、SipHash-2-4、Adler32 |
+| 日历 / 无障碍 | `HolidayUtil` / `ColorUtil.contrastRatio` / `IdUtil.uuidV6` | Hutool / WCAG / RFC 9562 | 中国法定节假日、对比度、UUID v6 |
+| 数据 | `JsonPatchUtil` / `IniUtil` / `PemUtil` / `LanguageTagUtil` / `ZipUtil.zlib` | RFC 6902 / BCP 47 | JSON Patch、INI、PEM、语言标签、zlib |
+
+### 对标 Commons Validator / RFC 6238 / 7396 / 6570
+
+| 模块 | 类 | 对标 | 说明 |
+| --- | --- | --- | --- |
+| 证券 / 学术 | `CusipUtil` / `SedolUtil` / `OrcidUtil` / `IsrcUtil` | Commons Validator / ISO | CUSIP、SEDOL、ORCID、ISRC |
+| JSON / HTTP | `JsonMergePatchUtil` / `HttpDateUtil` / `UriTemplateUtil` / `EncodedWordUtil` | RFC 7396 / 7231 / 6570 / 2047 | Merge Patch、HTTP Date、URI 模板、MIME encoded-word |
+| 文本 / 号牌 | `EmojiUtil` / `AccentUtil` / `PlateUtil` | Hutool / Commons Lang | Emoji、去音调、车牌 |
+| OTP / 哈希 | `TotpUtil` RFC 6238 / `XxHashUtil.hash64` | RFC 6238 / xxHash | Appendix B 8 位 TOTP、xxHash64 |
 
 ## 前端控制台（Vue 3）
 
 启动后打开 <http://localhost:8080/> 即可在页面上自测常用工具：脱敏、身份证、JWT、AES、人民币大写、雪花 ID 等。源码在 `frontend/`，构建产物输出到 `src/main/resources/static/`。控制台包含：
 
-- 后端 Java 工具演示（脱敏、JWT、AES、身份证、信用代码、坐标系、签名、TOTP、Cron 等）
-- 浏览器本地工具：JSON/XML、Base64、JWT 解码、Markdown、命名风格、全角半角、行处理、文本对比、MD5/HMAC/CRC32、ULID、CIDR、UA/Cookie 等
+- 后端 Java 工具演示（脱敏、JWT、AES、身份证、信用代码、坐标系、签名、TOTP、Cron、Ant 路径、限流、星座、slug、时长、农历、表达式、ISBN、验证码、单位换算、IMEI、Hashids、罗马数字、URL 解析、IBAN、VIN、EAN、Soundex、Jaro-Winkler、SHA3、KSUID、Sqids、UUID v5/v6、Metaphone、ISIN、BIC、Bech32、HKDF、摩斯电码、CaseFormat、HOTP、Base45、JSON Patch、节假日、WCAG 对比度、CUSIP、SEDOL、ORCID、ISRC、JSON Merge Patch、HTTP Date、车牌、URI Template 等）
+- 浏览器本地工具：JSON/XML、Base64、JWT 解码、Markdown、命名风格、全角半角、行处理、文本对比、MD5/HMAC/CRC32/Murmur3、ULID、UUID v7、CIDR、UA/Cookie、星座、高亮、四则运算、进制、ISBN、Punycode、罗马数字、单位换算、IMEI、URL 解析、Soundex、Jaro-Winkler、IBAN、EAN、年龄、ROT13、摩斯、通配符、ISIN、Humanize、Quoted-Printable、Base45、WCAG 对比度、去音调、车牌、Emoji、CUSIP 等
 - 特效实验室：玻璃拟态、光晕、礼花、打字机、涟漪、聚光跟随
 - 深色模式、页面过渡、复制 Toast
 

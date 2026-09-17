@@ -13,8 +13,6 @@ import java.util.Locale;
  */
 public final class FileUtil {
 
-    private static final String[] SIZE_UNITS = {"B", "KB", "MB", "GB", "TB"};
-
     private FileUtil() {
     }
 
@@ -49,19 +47,16 @@ public final class FileUtil {
     }
 
     public static String formatSize(long bytes) {
-        if (bytes < 0) {
-            return "0 B";
+        return ByteSizeUtil.format(Math.max(0, bytes));
+    }
+
+    public static String sanitize(String filename) {
+        String name = getName(filename);
+        if (StringUtil.isBlank(name)) {
+            return "file";
         }
-        double value = bytes;
-        int unit = 0;
-        while (value >= 1024 && unit < SIZE_UNITS.length - 1) {
-            value /= 1024;
-            unit++;
-        }
-        if (unit == 0) {
-            return bytes + " " + SIZE_UNITS[0];
-        }
-        return String.format(Locale.ROOT, "%.2f %s", value, SIZE_UNITS[unit]);
+        String cleaned = name.replaceAll("[\\\\/:*?\"<>|]", "_").replace("..", "_");
+        return StringUtil.isBlank(cleaned) ? "file" : cleaned;
     }
 
     public static boolean exists(Path path) {

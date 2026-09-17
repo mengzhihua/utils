@@ -63,6 +63,26 @@ public final class JwtUtil {
         return constantTimeEquals(expected, parts[2]);
     }
 
+    public static Map<String, Object> decode(String token) {
+        if (StringUtil.isBlank(token)) {
+            throw new IllegalArgumentException("invalid jwt");
+        }
+        String[] parts = token.split("\\.");
+        if (parts.length < 2) {
+            throw new IllegalArgumentException("invalid jwt");
+        }
+        return JsonUtil.toMap(new String(URL_DECODER.decode(parts[1]), StandardCharsets.UTF_8));
+    }
+
+    public static long remainingSeconds(String token, String secret) {
+        Map<String, Object> payload = parse(token, secret);
+        Object exp = payload.get("exp");
+        if (exp instanceof Number number) {
+            return Math.max(0L, number.longValue() - Instant.now().getEpochSecond());
+        }
+        return 0L;
+    }
+
     private static String sign(String signingInput, String secret) {
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
