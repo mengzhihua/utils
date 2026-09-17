@@ -1,5 +1,6 @@
 package com.mengzhihua.utils.config;
 
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "utils.snowflake")

@@ -1,9 +1,10 @@
 package com.mengzhihua.utils.common.api;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serial;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Unified API response wrapper.

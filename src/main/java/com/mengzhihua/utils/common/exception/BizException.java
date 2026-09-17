@@ -1,8 +1,9 @@
 package com.mengzhihua.utils.common.exception;
 
-import com.mengzhihua.utils.common.api.ResultCode;
 
 import java.io.Serial;
+
+import com.mengzhihua.utils.common.api.ResultCode;
 
 /**
  * Business exception that is translated into a unified {@code Result} by the global handler.

@@ -1,6 +1,37 @@
 # Java Utils Toolkit
 
-基于 **Spring Boot 4.1 + Java 21** 的通用工具集。既可直接运行演示服务，也可把 `com.mengzhihua.utils.util` 下的工具类复用到业务项目。
+基于 **Spring Boot 4.1 + Java 21** 的通用工具集。既可直接运行演示服务，也可把 `com.mengzhihua.utils.common` 下按领域分包的工具类复用到业务项目。
+
+## 工程结构
+
+按《阿里巴巴 Java 开发手册》分层：Web 与 Common 分离，工具类按领域分包，不再平铺在单一 `util` 包。本仓库是工具库，不伪造 DAO / Service 空壳；演示接口直接调用 common 静态方法，HTTP 路径仍为 `/api/utils/**`。
+
+```
+com.mengzhihua.utils
+├── common                 # 通用层（可复用，无 Servlet 依赖除 net.ServletUtil）
+│   ├── api                # Result / PageResult / ResultCode
+│   ├── exception           # BizException
+│   ├── lang               # 字符串、集合、断言、随机
+│   ├── bean               # Bean、反射、类型转换
+│   ├── text               # 脱敏、正则、HTML、敏感词
+│   ├── codec              # Base32/45/58/64/85、Hex
+│   ├── crypto             # 加解密、哈希、JWT、TOTP
+│   ├── id                 # UUID、雪花、KSUID、Sqids
+│   ├── time               # 日期、农历、节假日
+│   ├── io                 # 文件、压缩、MIME
+│   ├── net                # IP、URL、HTTP、UA
+│   ├── json               # JSON / CSV / YAML / Patch
+│   ├── validate           # 身份证、银行卡、ISBN 等
+│   ├── math               # 金额、版本、表达式
+│   ├── concurrent         # 重试、限流、本地缓存
+│   ├── extra              # 验证码、树、地理、链路
+│   └── spring             # SpringContextHolder / SpEL
+├── web
+│   ├── controller         # 演示接口 /api/utils/**
+│   ├── advice             # GlobalExceptionHandler
+│   └── filter             # TraceIdFilter
+└── config                 # Spring / OpenAPI 装配
+```
 
 ## 能力一览
 
@@ -146,9 +177,16 @@ curl "http://localhost:8080/api/utils/idcard/parse?idNo=110101199003078937"
 curl "http://localhost:8080/api/utils/jwt?subject=ada"
 ```
 
-代码内直接调用：
+代码内按领域包引用：
 
 ```java
+import com.mengzhihua.utils.common.crypto.JwtUtil;
+import com.mengzhihua.utils.common.extra.GeoUtil;
+import com.mengzhihua.utils.common.extra.TreeUtil;
+import com.mengzhihua.utils.common.lang.StringUtil;
+import com.mengzhihua.utils.common.math.ChineseNumberUtil;
+import com.mengzhihua.utils.common.validate.IdCardUtil;
+
 String phone = StringUtil.maskPhone("13812345678");
 boolean ok = IdCardUtil.isValid(idNo);
 String token = JwtUtil.create(Map.of("sub", userId), secret, Duration.ofHours(2));
