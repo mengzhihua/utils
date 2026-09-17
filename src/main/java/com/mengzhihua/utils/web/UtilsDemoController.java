@@ -10,6 +10,7 @@ import com.mengzhihua.utils.util.IpUtil;
 import com.mengzhihua.utils.util.JsonUtil;
 import com.mengzhihua.utils.util.NumberUtil;
 import com.mengzhihua.utils.util.RegexUtil;
+import com.mengzhihua.utils.util.ReUtil;
 import com.mengzhihua.utils.util.StringUtil;
 import com.mengzhihua.utils.util.TreeNode;
 import com.mengzhihua.utils.util.TreeUtil;
@@ -118,31 +119,34 @@ public class UtilsDemoController {
 
     @GetMapping("/regex/validate")
     @Operation(summary = "常用格式校验")
-    public Result<Map<String, Boolean>> validate(
+    public Result<Map<String, Object>> validate(
             @RequestParam String value,
             @RequestParam String type) {
-        boolean matched = switch (type.toLowerCase()) {
-            case "mobile" -> RegexUtil.isMobile(value);
-            case "email" -> RegexUtil.isEmail(value);
-            case "idcard" -> RegexUtil.isIdCard(value);
-            case "ipv4" -> RegexUtil.isIpv4(value);
-            case "url" -> RegexUtil.isUrl(value);
-            case "username" -> RegexUtil.isUsername(value);
-            case "credit" -> RegexUtil.isCreditCode(value);
-            case "plate" -> RegexUtil.isPlate(value);
-            case "ipv6" -> RegexUtil.isIpv6(value);
-            case "zipcode" -> RegexUtil.isZipcode(value);
-            case "qq" -> RegexUtil.isQq(value);
-            case "landline" -> RegexUtil.isLandline(value);
-            case "mac" -> RegexUtil.isMac(value);
-            case "isbn" -> RegexUtil.isIsbn(value);
-            case "cusip" -> RegexUtil.isCusip(value);
-            case "sedol" -> RegexUtil.isSedol(value);
-            case "orcid" -> RegexUtil.isOrcid(value);
-            case "isrc" -> RegexUtil.isIsrc(value);
-            default -> throw new IllegalArgumentException("unsupported type: " + type);
-        };
-        return Result.ok(Map.of("matched", matched));
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("matched", RegexUtil.is(type, value));
+        data.put("type", RegexUtil.normalizeType(type));
+        return Result.ok(data);
+    }
+
+    @GetMapping("/regex/extract")
+    @Operation(summary = "从文本抽取手机号 / 邮箱 / URL / IP / 日期 / 色值")
+    public Result<Map<String, Object>> extractRegex(
+            @RequestParam(defaultValue = "联系 Ada ada@example.com 电话 13812345678 打开 https://example.com 颜色 #0F766E 日期 2026-09-17") String text) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("mobiles", ReUtil.extractMobiles(text));
+        data.put("emails", ReUtil.extractEmails(text));
+        data.put("urls", ReUtil.extractUrls(text));
+        data.put("ipv4", ReUtil.extractIpv4(text));
+        data.put("dates", ReUtil.extractDates(text));
+        data.put("hexColors", ReUtil.extractHexColors(text));
+        data.put("idCards", ReUtil.extractIdCards(text));
+        return Result.ok(data);
+    }
+
+    @GetMapping("/regex/types")
+    @Operation(summary = "可用正则校验类型")
+    public Result<Map<String, Object>> regexTypes() {
+        return Result.ok(Map.of("types", RegexUtil.types()));
     }
 
     @GetMapping("/number/money")

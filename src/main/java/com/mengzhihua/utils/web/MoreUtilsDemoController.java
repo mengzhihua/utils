@@ -183,13 +183,19 @@ public class MoreUtilsDemoController {
     @Operation(summary = "正则提取")
     public Result<Map<String, Object>> re(
             @RequestParam(defaultValue = "\\d+") String pattern,
-            @RequestParam(defaultValue = "ab12cd34") String text) {
+            @RequestParam(defaultValue = "ab12cd34") String text,
+            @RequestParam(defaultValue = "*") String replacement) {
         Map<String, Object> data = new LinkedHashMap<>();
+        data.put("valid", ReUtil.isValid(pattern));
         data.put("matches", ReUtil.isMatch(pattern, text));
         data.put("contains", ReUtil.contains(pattern, text));
         data.put("first", ReUtil.getGroup0(pattern, text));
         data.put("all", ReUtil.findAll(pattern, text));
         data.put("count", ReUtil.count(pattern, text));
+        data.put("groups", ReUtil.getAllGroups(pattern, text));
+        data.put("named", ReUtil.getNamedGroups(pattern, text));
+        data.put("split", ReUtil.split(pattern, text));
+        data.put("replaced", ReUtil.replaceAll(text, pattern, replacement));
         data.put("escaped", ReUtil.escape(pattern));
         return Result.ok(data);
     }

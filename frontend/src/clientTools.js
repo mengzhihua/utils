@@ -184,6 +184,25 @@ export const clientTools = [
     ]
   },
   {
+    id: 'regex-extract-local',
+    group: 'text',
+    title: '正则抽取',
+    summary: '本地提取手机 / 邮箱 / URL',
+    fields: [{
+      name: 'text',
+      label: '文本',
+      type: 'textarea',
+      value: '联系 Ada ada@example.com 电话 13812345678 打开 https://example.com 颜色 #0F766E 日期 2026-09-17'
+    }]
+  },
+  {
+    id: 'regex-escape-local',
+    group: 'text',
+    title: '正则转义',
+    summary: '转义元字符',
+    fields: [{ name: 'text', label: '文本', value: 'a.b+(c)' }]
+  },
+  {
     id: 'sha256',
     group: 'hash',
     title: 'SHA-256',

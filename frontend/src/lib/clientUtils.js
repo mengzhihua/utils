@@ -408,6 +408,10 @@ export async function runClientTool(id, values) {
       }))
       return { matched: matches.length > 0, count: matches.length, matches }
     }
+    case 'regex-extract-local':
+      return extractFromText(values.text || '')
+    case 'regex-escape-local':
+      return { escaped: escapeRegex(values.text || '') }
     case 'color-convert': {
       const raw = String(values.hex || '#0f766e').trim()
       if (values.mode === 'rgb') {
@@ -1248,4 +1252,20 @@ function isCusip(compact) {
     sum += Math.floor(weighted / 10) + (weighted % 10)
   }
   return compact[8] === String((10 - (sum % 10)) % 10)
+}
+
+function extractFromText(text) {
+  const source = String(text || '')
+  return {
+    mobiles: source.match(/(?<!\d)1[3-9]\d{9}(?!\d)/g) || [],
+    emails: source.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g) || [],
+    urls: source.match(/https?:\/\/[\w.-]+(?:\.[\w.-]+)+(?:[/#?][^\s]*)?/gi) || [],
+    ipv4: source.match(/(?:(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)/g) || [],
+    dates: source.match(/\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])/g) || [],
+    hexColors: source.match(/#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3})(?![0-9A-Fa-f])/g) || []
+  }
+}
+
+function escapeRegex(text) {
+  return String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }

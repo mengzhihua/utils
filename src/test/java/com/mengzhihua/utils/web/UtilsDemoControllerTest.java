@@ -80,6 +80,22 @@ class UtilsDemoControllerTest {
     }
 
     @Test
+    void regexExtractAndHexColor() throws Exception {
+        mockMvc.perform(get("/api/utils/regex/validate")
+                        .param("type", "hexcolor")
+                        .param("value", "#0f766e"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.matched").value(true));
+
+        mockMvc.perform(get("/api/utils/regex/extract")
+                        .param("text", "Ada ada@example.com 13812345678 https://example.com"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.mobiles[0]").value("13812345678"))
+                .andExpect(jsonPath("$.data.emails[0]").value("ada@example.com"))
+                .andExpect(jsonPath("$.data.urls[0]").value("https://example.com"));
+    }
+
+    @Test
     void vueConsoleIsServedAtRoot() throws Exception {
         mockMvc.perform(get("/index.html"))
                 .andExpect(status().isOk())

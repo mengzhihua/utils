@@ -146,7 +146,7 @@ export const tools = [
     id: 'regex',
     group: 'validate',
     title: '格式校验',
-    summary: '手机 / 邮箱 / 身份证 / IPv4 / URL',
+    summary: '手机 / 邮箱 / 颜色 / 中文 / 日期',
     method: 'GET',
     path: '/api/utils/regex/validate',
     fields: [
@@ -169,7 +169,21 @@ export const tools = [
           { value: 'qq', label: 'QQ' },
           { value: 'landline', label: '固话' },
           { value: 'mac', label: 'MAC' },
-          { value: 'isbn', label: 'ISBN' }
+          { value: 'isbn', label: 'ISBN' },
+          { value: 'hexcolor', label: 'HEX 颜色' },
+          { value: 'date', label: '日期' },
+          { value: 'time', label: '时间' },
+          { value: 'chinese', label: '中文' },
+          { value: 'chinesename', label: '中文姓名' },
+          { value: 'domain', label: '域名' },
+          { value: 'money', label: '金额' },
+          { value: 'wechat', label: '微信号' },
+          { value: 'bankcard', label: '银行卡号' },
+          { value: 'strongpassword', label: '强密码' },
+          { value: 'jwt', label: 'JWT' },
+          { value: 'md5', label: 'MD5' },
+          { value: 'cidr', label: 'CIDR' },
+          { value: 'semver', label: 'SemVer' }
         ]
       },
       { name: 'value', label: '值', value: '13812345678' }
@@ -875,8 +889,23 @@ export const tools = [
     path: '/api/utils/re',
     fields: [
       { name: 'pattern', label: '正则', value: '\\d+' },
-      { name: 'text', label: '文本', value: 'ab12cd34' }
+      { name: 'text', label: '文本', value: 'ab12cd34' },
+      { name: 'replacement', label: '替换为', value: '*' }
     ]
+  },
+  {
+    id: 'regex-extract',
+    group: 'validate',
+    title: '正则抽取',
+    summary: 'ReUtil.extractMobiles / emails / urls',
+    method: 'GET',
+    path: '/api/utils/regex/extract',
+    fields: [{
+      name: 'text',
+      label: '文本',
+      type: 'textarea',
+      value: '联系 Ada ada@example.com 电话 13812345678 打开 https://example.com 颜色 #0F766E 日期 2026-09-17'
+    }]
   },
   {
     id: 'similarity',
