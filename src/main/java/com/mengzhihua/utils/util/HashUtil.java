@@ -137,8 +137,20 @@ public final class HashUtil {
 
     public static int crc16(String text) {
         byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Modbus(data);
+    }
+
+    public static String crc16Hex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16(text));
+    }
+
+    /**
+     * CRC-16/MODBUS (poly 0xA001, init 0xFFFF). {@code 123456789} → {@code 4b37}.
+     */
+    public static int crc16Modbus(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
         int crc = 0xffff;
-        for (byte b : data) {
+        for (byte b : bytes) {
             crc ^= b & 0xff;
             for (int i = 0; i < 8; i++) {
                 if ((crc & 1) != 0) {
@@ -149,6 +161,35 @@ public final class HashUtil {
             }
         }
         return crc & 0xffff;
+    }
+
+    /**
+     * CRC-16/CCITT-FALSE (poly 0x1021, init 0xFFFF). {@code 123456789} → {@code 29b1}.
+     */
+    public static int crc16Ccitt(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Ccitt(data);
+    }
+
+    public static String crc16CcittHex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Ccitt(text));
+    }
+
+    public static int crc16Ccitt(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0xffff;
+        for (byte b : bytes) {
+            crc ^= (b & 0xff) << 8;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 0x8000) != 0) {
+                    crc = (crc << 1) ^ 0x1021;
+                } else {
+                    crc <<= 1;
+                }
+                crc &= 0xffff;
+            }
+        }
+        return crc;
     }
 
     private static String digestFile(String algorithm, Path path) {

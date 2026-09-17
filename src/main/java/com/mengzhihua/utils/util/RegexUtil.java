@@ -84,6 +84,10 @@ public final class RegexUtil {
         TYPES.put("credit", RegexUtil::isCreditCode);
         TYPES.put("plate", RegexUtil::isPlate);
         TYPES.put("ipv6", RegexUtil::isIpv6);
+        TYPES.put("mobilehk", PhoneUtil::isMobileHk);
+        TYPES.put("mobiletw", PhoneUtil::isMobileTw);
+        TYPES.put("mobilemo", PhoneUtil::isMobileMo);
+        TYPES.put("tel400", PhoneUtil::isTel400);
         TYPES.put("zipcode", RegexUtil::isZipcode);
         TYPES.put("qq", RegexUtil::isQq);
         TYPES.put("landline", RegexUtil::isLandline);
@@ -189,7 +193,7 @@ public final class RegexUtil {
     }
 
     public static boolean isIpv6(String value) {
-        return isMatch(IPV6, value);
+        return Ipv6Util.isValid(value);
     }
 
     public static boolean isZipcode(String value) {

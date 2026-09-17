@@ -396,4 +396,86 @@ public final class StringUtil {
     public static String stripAccents(String str) {
         return AccentUtil.strip(str);
     }
+
+    public static String padEnd(String str, int length, char padChar) {
+        String value = str == null ? EMPTY : str;
+        if (value.length() >= length) {
+            return value;
+        }
+        return value + String.valueOf(padChar).repeat(length - value.length());
+    }
+
+    public static String abbreviate(String str, int maxWidth) {
+        if (str == null) {
+            return null;
+        }
+        if (maxWidth < 4) {
+            throw new IllegalArgumentException("maxWidth must be at least 4");
+        }
+        if (str.length() <= maxWidth) {
+            return str;
+        }
+        return str.substring(0, maxWidth - 3) + "...";
+    }
+
+    public static String normalizeSpace(String str) {
+        if (str == null) {
+            return null;
+        }
+        return str.trim().replaceAll("\\s+", " ");
+    }
+
+    public static String wrap(String str, String prefix, String suffix) {
+        if (str == null) {
+            return null;
+        }
+        return defaultIfEmpty(prefix, EMPTY) + str + defaultIfEmpty(suffix, EMPTY);
+    }
+
+    public static String unWrap(String str, String prefix, String suffix) {
+        if (isEmpty(str) || isEmpty(prefix) || isEmpty(suffix)) {
+            return str;
+        }
+        if (str.startsWith(prefix) && str.endsWith(suffix) && str.length() >= prefix.length() + suffix.length()) {
+            return str.substring(prefix.length(), str.length() - suffix.length());
+        }
+        return str;
+    }
+
+    public static String subBetween(String str, String before, String after) {
+        if (isEmpty(str) || isEmpty(before) || isEmpty(after)) {
+            return null;
+        }
+        int start = str.indexOf(before);
+        if (start < 0) {
+            return null;
+        }
+        start += before.length();
+        int end = str.indexOf(after, start);
+        if (end < 0) {
+            return null;
+        }
+        return str.substring(start, end);
+    }
+
+    public static List<String> subBetweenAll(String str, String before, String after) {
+        List<String> list = new ArrayList<>();
+        if (isEmpty(str) || isEmpty(before) || isEmpty(after)) {
+            return list;
+        }
+        int from = 0;
+        while (true) {
+            int start = str.indexOf(before, from);
+            if (start < 0) {
+                return list;
+            }
+            start += before.length();
+            int end = str.indexOf(after, start);
+            if (end < 0) {
+                return list;
+            }
+            list.add(str.substring(start, end));
+            from = end + after.length();
+        }
+    }
 }

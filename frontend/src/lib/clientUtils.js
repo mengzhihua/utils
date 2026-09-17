@@ -666,6 +666,19 @@ export async function runClientTool(id, values) {
       const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
       return { normalized: compact, valid: isCusip(compact) }
     }
+    case 'isbn-convert-local':
+      return convertIsbn(values.code || '')
+    case 'ipv6-local':
+      return formatIpv6(values.ip || '')
+    case 'bank-brand-local':
+      return { brand: cardBrand(values.cardNo || ''), valid: luhn(String(values.cardNo || '').replace(/\s+/g, '')) }
+    case 'between-local':
+      return { formatted: formatBetween(Number(values.seconds) || 0) }
+    case 'sub-between-local':
+      return {
+        first: subBetween(values.text || '', values.before || '', values.after || ''),
+        all: subBetweenAll(values.text || '', values.before || '', values.after || '')
+      }
     default:
       throw new Error('unknown client tool')
   }
@@ -1268,4 +1281,221 @@ function extractFromText(text) {
 
 function escapeRegex(text) {
   return String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function convertIsbn(code) {
+  const compact = String(code || '').replace(/[^0-9Xx]/g, '').toUpperCase()
+  const valid = isIsbn(compact)
+  const out = { normalized: compact, valid }
+  if (!valid) {
+    return out
+  }
+  if (compact.length === 10) {
+    out.isbn10 = compact
+    out.isbn13 = isbn10To13(compact)
+  } else {
+    out.isbn13 = compact
+    if (compact.startsWith('978')) {
+      out.isbn10 = isbn13To10(compact)
+    }
+  }
+  return out
+}
+
+function isbn10To13(isbn10) {
+  const body = `978${compact9(isbn10)}`
+  let sum = 0
+  for (let i = 0; i < 12; i++) {
+    sum += Number(body[i]) * (i % 2 === 0 ? 1 : 3)
+  }
+  return body + String((10 - (sum % 10)) % 10)
+}
+
+function compact9(isbn10) {
+  return isbn10.slice(0, 9)
+}
+
+function isbn13To10(isbn13) {
+  const body = isbn13.slice(3, 12)
+  let sum = 0
+  for (let i = 0; i < 9; i++) {
+    sum += Number(body[i]) * (10 - i)
+  }
+  const check = (11 - (sum % 11)) % 11
+  return body + (check === 10 ? 'X' : String(check))
+}
+
+function parseIpv6(ip) {
+  let value = String(ip || '').trim()
+  const zone = value.indexOf('%')
+  if (zone >= 0) {
+    value = value.slice(0, zone)
+  }
+  if (!value || (value.startsWith(':') && !value.startsWith('::')) || (value.endsWith(':') && !value.endsWith('::'))) {
+    return null
+  }
+  if (value.indexOf('::') !== value.lastIndexOf('::')) {
+    return null
+  }
+  let ipv4 = null
+  const lastColon = value.lastIndexOf(':')
+  const lastDot = value.lastIndexOf('.')
+  if (lastDot > lastColon) {
+    ipv4 = value.slice(lastColon + 1)
+    if (!/^(?:(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)$/.test(ipv4)) {
+      return null
+    }
+    value = `${lastColon >= 0 ? value.slice(0, lastColon + 1) : ''}0:0`
+  }
+  const fold = value.indexOf('::')
+  const toGroups = (part) => {
+    if (!part) {
+      return []
+    }
+    const items = part.split(':')
+    const groups = []
+    for (const item of items) {
+      if (!item || item.length > 4 || !/^[0-9a-fA-F]+$/.test(item)) {
+        return null
+      }
+      groups.push(Number.parseInt(item, 16))
+    }
+    return groups
+  }
+  let groups
+  if (fold >= 0) {
+    const left = toGroups(value.slice(0, fold))
+    const right = toGroups(value.slice(fold + 2))
+    if (!left || !right) {
+      return null
+    }
+    const missing = 8 - left.length - right.length
+    if (missing < 1) {
+      return null
+    }
+    groups = [...left, ...Array(missing).fill(0), ...right]
+  } else {
+    groups = toGroups(value)
+    if (!groups || groups.length !== 8) {
+      return null
+    }
+  }
+  if (ipv4) {
+    const parts = ipv4.split('.').map(Number)
+    groups[6] = (parts[0] << 8) | parts[1]
+    groups[7] = (parts[2] << 8) | parts[3]
+  }
+  return groups
+}
+
+function formatIpv6(ip) {
+  const groups = parseIpv6(ip)
+  if (!groups) {
+    return { valid: false, expanded: '', compressed: '' }
+  }
+  const expanded = groups.map((g) => g.toString(16).padStart(4, '0')).join(':')
+  let bestStart = -1
+  let bestLen = 0
+  let run = -1
+  for (let i = 0; i <= 8; i++) {
+    if (i < 8 && groups[i] === 0) {
+      if (run < 0) run = i
+    } else if (run >= 0) {
+      const len = i - run
+      if (len > bestLen) {
+        bestStart = run
+        bestLen = len
+      }
+      run = -1
+    }
+  }
+  if (bestLen < 2) {
+    bestStart = -1
+    bestLen = 0
+  }
+  let compressed = ''
+  for (let i = 0; i < 8; ) {
+    if (i === bestStart) {
+      compressed += '::'
+      i += bestLen
+      continue
+    }
+    if (compressed && !compressed.endsWith(':')) {
+      compressed += ':'
+    }
+    compressed += groups[i].toString(16)
+    i++
+  }
+  return { valid: true, expanded, compressed }
+}
+
+function cardBrand(cardNo) {
+  const digits = String(cardNo || '').replace(/\s+/g, '')
+  if (!/^\d+$/.test(digits)) {
+    return '未知'
+  }
+  if (digits.startsWith('4')) return 'Visa'
+  if (digits.startsWith('34') || digits.startsWith('37')) return 'American Express'
+  if (digits.startsWith('62')) return 'UnionPay'
+  if (digits.startsWith('35')) return 'JCB'
+  if (digits.startsWith('6011') || digits.startsWith('65')) return 'Discover'
+  const prefix2 = Number(digits.slice(0, 2))
+  if (prefix2 >= 51 && prefix2 <= 55) return 'Mastercard'
+  const prefix4 = Number(digits.slice(0, 4))
+  if (prefix4 >= 2221 && prefix4 <= 2720) return 'Mastercard'
+  return '未知'
+}
+
+function luhn(digits) {
+  if (digits.length < 12 || digits.length > 19 || !/^\d+$/.test(digits)) {
+    return false
+  }
+  let sum = 0
+  let doubleDigit = false
+  for (let i = digits.length - 1; i >= 0; i--) {
+    let n = Number(digits[i])
+    if (doubleDigit) {
+      n *= 2
+      if (n > 9) n -= 9
+    }
+    sum += n
+    doubleDigit = !doubleDigit
+  }
+  return sum % 10 === 0
+}
+
+function formatBetween(seconds) {
+  const abs = Math.abs(seconds)
+  const days = Math.floor(abs / 86400)
+  const hours = Math.floor((abs % 86400) / 3600)
+  const minutes = Math.floor((abs % 3600) / 60)
+  const secs = abs % 60
+  let out = ''
+  if (days) out += `${days}天`
+  if (hours) out += `${hours}小时`
+  if (minutes) out += `${minutes}分钟`
+  if (secs || !out) out += `${secs}秒`
+  return out
+}
+
+function subBetween(text, before, after) {
+  const start = text.indexOf(before)
+  if (start < 0) return null
+  const from = start + before.length
+  const end = text.indexOf(after, from)
+  return end < 0 ? null : text.slice(from, end)
+}
+
+function subBetweenAll(text, before, after) {
+  const all = []
+  let from = 0
+  while (true) {
+    const start = text.indexOf(before, from)
+    if (start < 0) return all
+    const begin = start + before.length
+    const end = text.indexOf(after, begin)
+    if (end < 0) return all
+    all.push(text.slice(begin, end))
+    from = end + after.length
+  }
 }

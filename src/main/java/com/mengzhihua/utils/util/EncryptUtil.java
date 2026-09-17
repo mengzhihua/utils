@@ -44,6 +44,10 @@ public final class EncryptUtil {
         return digest("SHA3-256", text);
     }
 
+    public static String sm3(String text) {
+        return Sm3Util.hash(text);
+    }
+
     public static String hmacSha256(String text, String secret) {
         if (text == null || secret == null) {
             return null;

@@ -1406,6 +1406,94 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/encoded-word',
       fields: [{ name: 'text', label: '文本', value: '工具' }]
+    },
+    {
+      id: 'sm3',
+      group: 'crypto',
+      title: 'SM3 国密',
+      summary: 'Sm3Util.hash GM/T 0004',
+      method: 'GET',
+      path: '/api/utils/sm3',
+      fields: [{ name: 'text', label: '原文', value: 'abc' }]
+    },
+    {
+      id: 'isbn-convert',
+      group: 'validate',
+      title: 'ISBN 互转',
+      summary: 'IsbnUtil.toIsbn13 / toIsbn10',
+      method: 'GET',
+      path: '/api/utils/isbn/convert',
+      fields: [{ name: 'code', label: 'ISBN', value: '0306406152' }]
+    },
+    {
+      id: 'between',
+      group: 'datetime',
+      title: '时长差',
+      summary: 'DateTimeUtil.formatBetween',
+      method: 'GET',
+      path: '/api/utils/between',
+      fields: [{ name: 'seconds', label: '秒数', value: '183900' }]
+    },
+    {
+      id: 'sub-between',
+      group: 'string',
+      title: '提取中间串',
+      summary: 'StringUtil.subBetween',
+      method: 'GET',
+      path: '/api/utils/sub-between',
+      fields: [
+        { name: 'text', label: '文本', value: 'name=<Ada> age=<18>' },
+        { name: 'before', label: '前', value: '<' },
+        { name: 'after', label: '后', value: '>' }
+      ]
+    },
+    {
+      id: 'ipv6',
+      group: 'web',
+      title: 'IPv6 展开',
+      summary: 'Ipv6Util.expand / compress',
+      method: 'GET',
+      path: '/api/utils/ipv6',
+      fields: [{ name: 'ip', label: 'IPv6', value: '2001:db8::1' }]
+    },
+    {
+      id: 'semver-compare',
+      group: 'number',
+      title: 'SemVer 比较',
+      summary: 'SemverUtil.compare',
+      method: 'GET',
+      path: '/api/utils/semver',
+      fields: [
+        { name: 'left', label: '版本 A', value: '1.0.0-alpha' },
+        { name: 'right', label: '版本 B', value: '1.0.0' }
+      ]
+    },
+    {
+      id: 'phone-region',
+      group: 'validate',
+      title: '港澳台手机号',
+      summary: 'PhoneUtil.isMobileHk / Tw / Mo',
+      method: 'GET',
+      path: '/api/utils/phone/region',
+      fields: [{ name: 'mobile', label: '号码', value: '51234567' }]
+    },
+    {
+      id: 'bank-brand',
+      group: 'validate',
+      title: '银行卡组织',
+      summary: 'BankCardUtil.brand',
+      method: 'GET',
+      path: '/api/utils/bankcard/brand',
+      fields: [{ name: 'cardNo', label: '卡号', value: '6222021234567890' }]
+    },
+    {
+      id: 'crc16',
+      group: 'crypto',
+      title: 'CRC-16',
+      summary: 'MODBUS / CCITT-FALSE',
+      method: 'GET',
+      path: '/api/utils/crc16',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

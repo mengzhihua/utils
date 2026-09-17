@@ -57,6 +57,7 @@ public class BusinessUtilsDemoController {
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("valid", BankCardUtil.isValid(cardNo));
         data.put("masked", BankCardUtil.mask(cardNo));
+        data.put("brand", BankCardUtil.brand(cardNo));
         return Result.ok(data);
     }
 
@@ -79,6 +80,8 @@ public class BusinessUtilsDemoController {
         data.put("valid", RegexUtil.isMobile(mobile));
         data.put("carrier", PhoneUtil.carrier(mobile));
         data.put("virtual", PhoneUtil.isVirtual(mobile));
+        data.put("region", PhoneUtil.region(mobile));
+        data.put("hidden", PhoneUtil.hide(mobile));
         return Result.ok(data);
     }
 

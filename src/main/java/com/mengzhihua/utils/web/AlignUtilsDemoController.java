@@ -128,6 +128,13 @@ public class AlignUtilsDemoController {
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("valid", IsbnUtil.isValid(code));
         data.put("normalized", IsbnUtil.normalize(code));
+        if (IsbnUtil.isValid(code)) {
+            data.put("isbn13", IsbnUtil.toIsbn13(code));
+            String compact = IsbnUtil.normalize(code);
+            if (compact.length() == 10 || compact.startsWith("978")) {
+                data.put("isbn10", IsbnUtil.toIsbn10(code));
+            }
+        }
         return Result.ok(data);
     }
 

@@ -232,4 +232,25 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.valid").value(true));
     }
+
+    @Test
+    void sm3IsbnIpv6Between() throws Exception {
+        mockMvc.perform(get("/api/utils/sm3").param("text", "abc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.sm3")
+                        .value("66c7f0f462eeedd9d1f2d46bdc10e4e24167c4875cf2f7a2297da02b8f4ba8e0"));
+
+        mockMvc.perform(get("/api/utils/isbn/convert").param("code", "0306406152"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.isbn13").value("9780306406157"));
+
+        mockMvc.perform(get("/api/utils/ipv6").param("ip", "2001:db8::1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.expanded").value("2001:0db8:0000:0000:0000:0000:0000:0001"));
+
+        mockMvc.perform(get("/api/utils/between").param("seconds", "183900"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.formatted").value("2天3小时5分钟"));
+    }
 }

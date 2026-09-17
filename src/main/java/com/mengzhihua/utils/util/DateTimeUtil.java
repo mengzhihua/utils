@@ -282,6 +282,41 @@ public final class DateTimeUtil {
         return date != null && date.isLeapYear();
     }
 
+    public static String formatBetween(LocalDateTime start, LocalDateTime end) {
+        if (start == null || end == null) {
+            return "";
+        }
+        return formatBetween(Duration.between(start, end));
+    }
+
+    /**
+     * Hutool-style between formatter, e.g. {@code 2天3小时5分钟}.
+     */
+    public static String formatBetween(Duration duration) {
+        if (duration == null) {
+            return "0秒";
+        }
+        long seconds = Math.abs(duration.getSeconds());
+        long days = seconds / 86_400;
+        long hours = (seconds % 86_400) / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long secs = seconds % 60;
+        StringBuilder builder = new StringBuilder();
+        if (days > 0) {
+            builder.append(days).append("天");
+        }
+        if (hours > 0) {
+            builder.append(hours).append("小时");
+        }
+        if (minutes > 0) {
+            builder.append(minutes).append("分钟");
+        }
+        if (secs > 0 || builder.isEmpty()) {
+            builder.append(secs).append("秒");
+        }
+        return builder.toString();
+    }
+
     private static DateTimeFormatter formatter(String pattern) {
         String key = StringUtil.defaultIfBlank(pattern, DATETIME_PATTERN);
         return FORMATTERS.computeIfAbsent(key, DateTimeFormatter::ofPattern);

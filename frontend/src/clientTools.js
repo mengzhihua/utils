@@ -586,6 +586,45 @@ export const clientTools = [
       title: 'CUSIP 校验',
       summary: 'Apple 037833100',
       fields: [{ name: 'value', label: 'CUSIP', value: '037833100' }]
+    },
+    {
+      id: 'isbn-convert-local',
+      group: 'net',
+      title: 'ISBN 互转',
+      summary: '10 ↔ 13',
+      fields: [{ name: 'code', label: 'ISBN', value: '0306406152' }]
+    },
+    {
+      id: 'ipv6-local',
+      group: 'net',
+      title: 'IPv6 展开',
+      summary: '本地压缩 / 展开',
+      fields: [{ name: 'ip', label: 'IPv6', value: '2001:db8::1' }]
+    },
+    {
+      id: 'bank-brand-local',
+      group: 'net',
+      title: '卡组织',
+      summary: 'Visa / 银联',
+      fields: [{ name: 'cardNo', label: '卡号', value: '4111111111111111' }]
+    },
+    {
+      id: 'between-local',
+      group: 'time',
+      title: '时长差',
+      summary: '秒 → 天小时分',
+      fields: [{ name: 'seconds', label: '秒数', value: '183900' }]
+    },
+    {
+      id: 'sub-between-local',
+      group: 'text',
+      title: '提取中间串',
+      summary: 'subBetween',
+      fields: [
+        { name: 'text', label: '文本', value: 'name=<Ada> age=<18>' },
+        { name: 'before', label: '前', value: '<' },
+        { name: 'after', label: '后', value: '>' }
+      ]
     }
   ]
 

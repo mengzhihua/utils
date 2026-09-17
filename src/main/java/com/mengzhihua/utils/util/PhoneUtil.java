@@ -49,4 +49,71 @@ public final class PhoneUtil {
     public static boolean isVirtual(String mobile) {
         return "虚拟运营商".equals(carrier(mobile));
     }
+
+    public static String hide(String mobile) {
+        return StringUtil.maskPhone(digits(mobile));
+    }
+
+    public static boolean isMobileHk(String mobile) {
+        String digits = digits(mobile);
+        if (digits.startsWith("852")) {
+            digits = digits.substring(3);
+        }
+        return digits.length() == 8 && "569".indexOf(digits.charAt(0)) >= 0 && digits.chars().allMatch(Character::isDigit);
+    }
+
+    public static boolean isMobileTw(String mobile) {
+        String digits = digits(mobile);
+        if (digits.startsWith("886")) {
+            digits = digits.substring(3);
+            if (digits.startsWith("0")) {
+                digits = digits.substring(1);
+            }
+        }
+        return digits.length() == 9 && digits.startsWith("9") && digits.chars().allMatch(Character::isDigit)
+                || digits.length() == 10 && digits.startsWith("09") && digits.chars().allMatch(Character::isDigit);
+    }
+
+    public static boolean isMobileMo(String mobile) {
+        String digits = digits(mobile);
+        if (digits.startsWith("853")) {
+            digits = digits.substring(3);
+        }
+        return digits.length() == 8 && digits.startsWith("6") && digits.chars().allMatch(Character::isDigit);
+    }
+
+    public static boolean isTel400(String value) {
+        String digits = digits(value);
+        return digits.length() == 10 && digits.startsWith("400");
+    }
+
+    public static String region(String mobile) {
+        if (RegexUtil.isMobile(mobile)) {
+            return "CN";
+        }
+        if (isMobileHk(mobile)) {
+            return "HK";
+        }
+        if (isMobileTw(mobile)) {
+            return "TW";
+        }
+        if (isMobileMo(mobile)) {
+            return "MO";
+        }
+        return "未知";
+    }
+
+    private static String digits(String value) {
+        if (value == null) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder(value.length());
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            if (c >= '0' && c <= '9') {
+                builder.append(c);
+            }
+        }
+        return builder.toString();
+    }
 }

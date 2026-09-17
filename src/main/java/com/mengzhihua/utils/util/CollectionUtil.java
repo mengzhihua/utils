@@ -182,6 +182,10 @@ public final class CollectionUtil {
         return result;
     }
 
+    public static <T> List<T> disjunction(Collection<T> left, Collection<T> right) {
+        return union(subtract(left, right), subtract(right, left));
+    }
+
     public record Diff<T>(List<T> added, List<T> removed, List<T> kept) {
     }
 }
