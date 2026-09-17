@@ -136,6 +136,10 @@ public class UtilsDemoController {
             case "landline" -> RegexUtil.isLandline(value);
             case "mac" -> RegexUtil.isMac(value);
             case "isbn" -> RegexUtil.isIsbn(value);
+            case "cusip" -> RegexUtil.isCusip(value);
+            case "sedol" -> RegexUtil.isSedol(value);
+            case "orcid" -> RegexUtil.isOrcid(value);
+            case "isrc" -> RegexUtil.isIsrc(value);
             default -> throw new IllegalArgumentException("unsupported type: " + type);
         };
         return Result.ok(Map.of("matched", matched));

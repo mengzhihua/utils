@@ -515,6 +515,58 @@ export const clientTools = [
         { name: 'value', label: '数字', value: '1234' },
         { name: 'ordinal', label: '序数', value: '21' }
       ]
+    },
+    {
+      id: 'qp-local',
+      group: 'codec',
+      title: 'Quoted-Printable',
+      summary: '本地编解码',
+      fields: [{ name: 'text', label: '文本', value: 'Hello =' }]
+    },
+    {
+      id: 'contrast-local',
+      group: 'time',
+      title: 'WCAG 对比度',
+      summary: '本地亮度对比',
+      fields: [
+        { name: 'left', label: '颜色 A', value: '#FFFFFF' },
+        { name: 'right', label: '颜色 B', value: '#000000' }
+      ]
+    },
+    {
+      id: 'base45-local',
+      group: 'codec',
+      title: 'Base45',
+      summary: 'RFC 9285',
+      fields: [{ name: 'text', label: '文本', value: 'AB' }]
+    },
+    {
+      id: 'accent-local',
+      group: 'text',
+      title: '去音调',
+      summary: 'café → cafe',
+      fields: [{ name: 'text', label: '文本', value: 'café naïve' }]
+    },
+    {
+      id: 'plate-local',
+      group: 'net',
+      title: '车牌校验',
+      summary: '京A12345',
+      fields: [{ name: 'value', label: '车牌', value: '京A12345' }]
+    },
+    {
+      id: 'emoji-local',
+      group: 'text',
+      title: 'Emoji',
+      summary: '提取 / 移除',
+      fields: [{ name: 'text', label: '文本', value: 'hello 😀 工具' }]
+    },
+    {
+      id: 'cusip-local',
+      group: 'net',
+      title: 'CUSIP 校验',
+      summary: 'Apple 037833100',
+      fields: [{ name: 'value', label: 'CUSIP', value: '037833100' }]
     }
   ]
 

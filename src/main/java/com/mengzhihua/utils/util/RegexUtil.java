@@ -118,4 +118,20 @@ public final class RegexUtil {
     public static boolean isBic(String value) {
         return BicUtil.isValid(value);
     }
+
+    public static boolean isCusip(String value) {
+        return CusipUtil.isValid(value);
+    }
+
+    public static boolean isSedol(String value) {
+        return SedolUtil.isValid(value);
+    }
+
+    public static boolean isOrcid(String value) {
+        return OrcidUtil.isValid(value);
+    }
+
+    public static boolean isIsrc(String value) {
+        return IsrcUtil.isValid(value);
+    }
 }

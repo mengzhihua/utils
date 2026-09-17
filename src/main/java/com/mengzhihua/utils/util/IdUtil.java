@@ -109,6 +109,37 @@ public final class IdUtil {
         return uuid.toString();
     }
 
+    /**
+     * RFC 9562 UUID version 6 (time-ordered Gregorian).
+     */
+    public static String uuidV6() {
+        long unixMs = System.currentTimeMillis();
+        long uuidTime = unixMs * 10_000L + 0x01B21DD213814000L;
+        long timeHigh = (uuidTime >>> 28) & 0xffffffffL;
+        long timeMid = (uuidTime >>> 12) & 0xffffL;
+        long timeLow = uuidTime & 0xfffL;
+        byte[] bytes = new byte[16];
+        ThreadLocalRandom.current().nextBytes(bytes);
+        bytes[0] = (byte) (timeHigh >>> 24);
+        bytes[1] = (byte) (timeHigh >>> 16);
+        bytes[2] = (byte) (timeHigh >>> 8);
+        bytes[3] = (byte) timeHigh;
+        bytes[4] = (byte) (timeMid >>> 8);
+        bytes[5] = (byte) timeMid;
+        bytes[6] = (byte) ((timeLow >>> 8) & 0x0f | 0x60);
+        bytes[7] = (byte) timeLow;
+        bytes[8] = (byte) ((bytes[8] & 0x3f) | 0x80);
+        UUID uuid = new UUID(
+                ((bytes[0] & 0xffL) << 56) | ((bytes[1] & 0xffL) << 48) | ((bytes[2] & 0xffL) << 40)
+                        | ((bytes[3] & 0xffL) << 32) | ((bytes[4] & 0xffL) << 24) | ((bytes[5] & 0xffL) << 16)
+                        | ((bytes[6] & 0xffL) << 8) | (bytes[7] & 0xffL),
+                ((bytes[8] & 0xffL) << 56) | ((bytes[9] & 0xffL) << 48) | ((bytes[10] & 0xffL) << 40)
+                        | ((bytes[11] & 0xffL) << 32) | ((bytes[12] & 0xffL) << 24) | ((bytes[13] & 0xffL) << 16)
+                        | ((bytes[14] & 0xffL) << 8) | (bytes[15] & 0xffL)
+        );
+        return uuid.toString();
+    }
+
     public static String objectId() {
         return ObjectIdUtil.next();
     }

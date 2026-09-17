@@ -124,6 +124,17 @@ public final class HashUtil {
         return ~crc;
     }
 
+    public static int adler32(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        java.util.zip.Adler32 adler = new java.util.zip.Adler32();
+        adler.update(data);
+        return (int) adler.getValue();
+    }
+
+    public static String adler32Hex(String text) {
+        return String.format(Locale.ROOT, "%08x", adler32(text));
+    }
+
     public static int crc16(String text) {
         byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
         int crc = 0xffff;

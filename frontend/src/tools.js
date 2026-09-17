@@ -1152,6 +1152,231 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/hash/crc32c',
       fields: [{ name: 'text', label: '文本', value: '123456789' }]
+    },
+    {
+      id: 'hotp',
+      group: 'crypto',
+      title: 'HOTP',
+      summary: 'HotpUtil.generate',
+      method: 'GET',
+      path: '/api/utils/hotp',
+      fields: [
+        { name: 'key', label: '密钥', value: '12345678901234567890' },
+        { name: 'counter', label: '计数', value: '0' }
+      ]
+    },
+    {
+      id: 'quoted-printable',
+      group: 'string',
+      title: 'Quoted-Printable',
+      summary: 'QuotedPrintableUtil.encode',
+      method: 'GET',
+      path: '/api/utils/quoted-printable',
+      fields: [{ name: 'text', label: '文本', value: 'Hello = 工具' }]
+    },
+    {
+      id: 'base45',
+      group: 'crypto',
+      title: 'Base45',
+      summary: 'Base45Util.encode',
+      method: 'GET',
+      path: '/api/utils/base45',
+      fields: [{ name: 'text', label: '文本', value: 'AB' }]
+    },
+    {
+      id: 'base85',
+      group: 'crypto',
+      title: 'Ascii85',
+      summary: 'Base85Util.encode',
+      method: 'GET',
+      path: '/api/utils/base85',
+      fields: [{ name: 'text', label: '文本', value: 'Man' }]
+    },
+    {
+      id: 'xxhash',
+      group: 'crypto',
+      title: 'xxHash / SipHash',
+      summary: 'XxHashUtil / SipHashUtil',
+      method: 'GET',
+      path: '/api/utils/xxhash',
+      fields: [{ name: 'text', label: '文本', value: 'hello' }]
+    },
+    {
+      id: 'holiday',
+      group: 'datetime',
+      title: '中国节假日',
+      summary: 'HolidayUtil.name',
+      method: 'GET',
+      path: '/api/utils/holiday',
+      fields: [{ name: 'date', label: '日期', value: '2026-10-01' }]
+    },
+    {
+      id: 'json-patch',
+      group: 'json',
+      title: 'JSON Patch',
+      summary: 'JsonPatchUtil.apply',
+      method: 'GET',
+      path: '/api/utils/json-patch',
+      fields: [
+        { name: 'json', label: 'JSON', type: 'textarea', value: '{"name":"Bob"}' },
+        { name: 'patch', label: 'Patch', type: 'textarea', value: '[{"op":"replace","path":"/name","value":"Ada"}]' }
+      ]
+    },
+    {
+      id: 'contrast',
+      group: 'web',
+      title: 'WCAG 对比度',
+      summary: 'ColorUtil.contrastRatio',
+      method: 'GET',
+      path: '/api/utils/contrast',
+      fields: [
+        { name: 'left', label: '颜色 A', value: '#FFFFFF' },
+        { name: 'right', label: '颜色 B', value: '#000000' }
+      ]
+    },
+    {
+      id: 'ini',
+      group: 'json',
+      title: 'INI',
+      summary: 'IniUtil.parse',
+      method: 'GET',
+      path: '/api/utils/ini',
+      fields: [{ name: 'text', label: 'INI', type: 'textarea', value: '[database]\nhost=localhost\nport=3306' }]
+    },
+    {
+      id: 'language-tag',
+      group: 'web',
+      title: 'BCP 47',
+      summary: 'LanguageTagUtil.parse',
+      method: 'GET',
+      path: '/api/utils/language-tag',
+      fields: [{ name: 'tag', label: '语言标签', value: 'zh-CN' }]
+    },
+    {
+      id: 'uuid-v6',
+      group: 'id',
+      title: 'UUID v6',
+      summary: 'IdUtil.uuidV6',
+      method: 'GET',
+      path: '/api/utils/uuid-v6',
+      fields: []
+    },
+    {
+      id: 'cusip',
+      group: 'validate',
+      title: 'CUSIP',
+      summary: 'CusipUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/cusip',
+      fields: [{ name: 'value', label: 'CUSIP', value: '037833100' }]
+    },
+    {
+      id: 'sedol',
+      group: 'validate',
+      title: 'SEDOL',
+      summary: 'SedolUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/sedol',
+      fields: [{ name: 'value', label: 'SEDOL', value: '1234565' }]
+    },
+    {
+      id: 'orcid',
+      group: 'validate',
+      title: 'ORCID',
+      summary: 'OrcidUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/orcid',
+      fields: [{ name: 'value', label: 'ORCID', value: '0000-0002-1825-0097' }]
+    },
+    {
+      id: 'isrc',
+      group: 'validate',
+      title: 'ISRC',
+      summary: 'IsrcUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/isrc',
+      fields: [{ name: 'value', label: 'ISRC', value: 'US-S1Z-99-00001' }]
+    },
+    {
+      id: 'json-merge-patch',
+      group: 'json',
+      title: 'JSON Merge Patch',
+      summary: 'JsonMergePatchUtil.apply',
+      method: 'GET',
+      path: '/api/utils/json-merge-patch',
+      fields: [
+        { name: 'json', label: 'JSON', type: 'textarea', value: '{"a":"b"}' },
+        { name: 'patch', label: 'Patch', type: 'textarea', value: '{"a":"c"}' }
+      ]
+    },
+    {
+      id: 'http-date',
+      group: 'web',
+      title: 'HTTP Date',
+      summary: 'HttpDateUtil.format',
+      method: 'GET',
+      path: '/api/utils/http-date',
+      fields: [{ name: 'epochMilli', label: 'Epoch 毫秒', value: '0' }]
+    },
+    {
+      id: 'emoji',
+      group: 'string',
+      title: 'Emoji',
+      summary: 'EmojiUtil.remove',
+      method: 'GET',
+      path: '/api/utils/emoji',
+      fields: [{ name: 'text', label: '文本', value: 'hello 😀 工具' }]
+    },
+    {
+      id: 'accent',
+      group: 'string',
+      title: '去音调',
+      summary: 'AccentUtil.strip',
+      method: 'GET',
+      path: '/api/utils/accent',
+      fields: [{ name: 'text', label: '文本', value: 'café naïve' }]
+    },
+    {
+      id: 'plate',
+      group: 'validate',
+      title: '车牌号',
+      summary: 'PlateUtil.isValid',
+      method: 'GET',
+      path: '/api/utils/plate',
+      fields: [{ name: 'value', label: '车牌', value: '京A12345' }]
+    },
+    {
+      id: 'uri-template',
+      group: 'web',
+      title: 'URI Template',
+      summary: 'UriTemplateUtil.expand',
+      method: 'GET',
+      path: '/api/utils/uri-template',
+      fields: [
+        { name: 'template', label: '模板', value: '/users/{id}' },
+        { name: 'id', label: 'id', value: '42' }
+      ]
+    },
+    {
+      id: 'totp-rfc6238',
+      group: 'crypto',
+      title: 'RFC 6238 TOTP',
+      summary: 'TotpUtil RFC Appendix B',
+      method: 'GET',
+      path: '/api/utils/totp-rfc6238',
+      fields: [
+        { name: 'key', label: '密钥', value: '12345678901234567890' },
+        { name: 'unixSeconds', label: 'Unix 秒', value: '59' }
+      ]
+    },
+    {
+      id: 'encoded-word',
+      group: 'string',
+      title: 'Encoded-Word',
+      summary: 'EncodedWordUtil.encode',
+      method: 'GET',
+      path: '/api/utils/encoded-word',
+      fields: [{ name: 'text', label: '文本', value: '工具' }]
     }
   ]
 

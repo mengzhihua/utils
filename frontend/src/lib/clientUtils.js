@@ -638,6 +638,30 @@ export async function runClientTool(id, values) {
         compact: compactNumber(Number(values.value) || 0),
         ordinal: ordinal(Number(values.ordinal) || 0)
       }
+    case 'qp-local': {
+      const encoded = encodeQuotedPrintable(values.text || '')
+      return { encoded, decoded: decodeQuotedPrintable(encoded) }
+    }
+    case 'contrast-local':
+      return { ratio: contrastRatio(values.left || '#FFFFFF', values.right || '#000000') }
+    case 'base45-local': {
+      const encoded = encodeBase45(values.text || '')
+      return { encoded, decoded: decodeBase45(encoded) }
+    }
+    case 'accent-local':
+      return { stripped: stripAccents(values.text || '') }
+    case 'plate-local': {
+      const plate = String(values.value || '')
+      return { valid: isPlate(plate), newEnergy: /^[\u4e00-\u9fa5][A-Z][A-Z0-9]{5}[A-Z0-9挂学警港澳]$/.test(plate) }
+    }
+    case 'emoji-local': {
+      const extracted = extractEmoji(values.text || '')
+      return { contains: extracted.length > 0, count: extracted.length, extracted, removed: removeEmoji(values.text || '') }
+    }
+    case 'cusip-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isCusip(compact) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -1099,4 +1123,129 @@ function ordinal(value) {
     suffix = abs % 10 === 1 ? 'st' : abs % 10 === 2 ? 'nd' : abs % 10 === 3 ? 'rd' : 'th'
   }
   return `${value}${suffix}`
+}
+
+function encodeQuotedPrintable(text) {
+  const bytes = new TextEncoder().encode(text)
+  let out = ''
+  for (let i = 0; i < bytes.length; i++) {
+    const b = bytes[i]
+    const encode = b > 126 || b < 32 || b === 61 || ((b === 32 || b === 9) && i === bytes.length - 1)
+    out += encode ? `=${b.toString(16).toUpperCase().padStart(2, '0')}` : String.fromCharCode(b)
+  }
+  return out
+}
+
+function decodeQuotedPrintable(text) {
+  const compact = String(text).replace(/=\r?\n/g, '')
+  const bytes = []
+  for (let i = 0; i < compact.length; i++) {
+    if (compact[i] === '=' && i + 2 < compact.length) {
+      bytes.push(Number.parseInt(compact.slice(i + 1, i + 3), 16))
+      i += 2
+    } else {
+      bytes.push(compact.charCodeAt(i))
+    }
+  }
+  return new TextDecoder().decode(new Uint8Array(bytes))
+}
+
+function channel(value) {
+  const s = value / 255
+  return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4
+}
+
+function luminance(hex) {
+  const value = String(hex).replace('#', '')
+  const n = Number.parseInt(value, 16)
+  const r = (n >> 16) & 255
+  const g = (n >> 8) & 255
+  const b = n & 255
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b)
+}
+
+function contrastRatio(left, right) {
+  const a = luminance(left)
+  const b = luminance(right)
+  const light = Math.max(a, b)
+  const dark = Math.min(a, b)
+  return (light + 0.05) / (dark + 0.05)
+}
+
+const BASE45 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'
+
+function encodeBase45(text) {
+  const bytes = new TextEncoder().encode(text)
+  let out = ''
+  for (let i = 0; i < bytes.length; i += 2) {
+    if (i + 1 < bytes.length) {
+      let value = (bytes[i] << 8) | bytes[i + 1]
+      const c = value % 45
+      value = Math.floor(value / 45)
+      const d = value % 45
+      const e = Math.floor(value / 45)
+      out += BASE45[c] + BASE45[d] + BASE45[e]
+    } else {
+      const value = bytes[i]
+      out += BASE45[value % 45] + BASE45[Math.floor(value / 45)]
+    }
+  }
+  return out
+}
+
+function decodeBase45(text) {
+  const bytes = []
+  for (let i = 0; i < text.length; ) {
+    if (i + 2 < text.length) {
+      const value = BASE45.indexOf(text[i]) + BASE45.indexOf(text[i + 1]) * 45 + BASE45.indexOf(text[i + 2]) * 2025
+      bytes.push((value >> 8) & 255, value & 255)
+      i += 3
+    } else {
+      bytes.push(BASE45.indexOf(text[i]) + BASE45.indexOf(text[i + 1]) * 45)
+      i += 2
+    }
+  }
+  return new TextDecoder().decode(new Uint8Array(bytes))
+}
+
+function stripAccents(text) {
+  return String(text).normalize('NFD').replace(/\p{M}+/gu, '')
+}
+
+function isPlate(plate) {
+  return /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-HJ-NP-Z][A-HJ-NP-Z0-9]{4,6}[A-HJ-NP-Z0-9挂学警港澳]$/.test(plate)
+}
+
+function extractEmoji(text) {
+  const chars = []
+  for (const ch of text) {
+    if (/\p{Extended_Pictographic}/u.test(ch)) {
+      chars.push(ch)
+    }
+  }
+  return chars
+}
+
+function removeEmoji(text) {
+  return String(text).replace(/\p{Extended_Pictographic}/gu, '')
+}
+
+function isCusip(compact) {
+  if (compact.length !== 9 || !/^[0-9A-Z*@#]{9}$/.test(compact)) {
+    return false
+  }
+  const valueOf = (c) => {
+    if (c >= '0' && c <= '9') return c.charCodeAt(0) - 48
+    if (c >= 'A' && c <= 'Z') return c.charCodeAt(0) - 55
+    if (c === '*') return 36
+    if (c === '@') return 37
+    if (c === '#') return 38
+    return -1
+  }
+  let sum = 0
+  for (let i = 0; i < 8; i++) {
+    const weighted = valueOf(compact[i]) * ((9 - i) % 2 === 0 ? 2 : 1)
+    sum += Math.floor(weighted / 10) + (weighted % 10)
+  }
+  return compact[8] === String((10 - (sum % 10)) % 10)
 }

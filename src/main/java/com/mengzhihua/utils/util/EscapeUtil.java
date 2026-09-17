@@ -50,4 +50,39 @@ public final class EscapeUtil {
     public static String html(String text) {
         return HtmlUtil.escape(text);
     }
+
+    /**
+     * Percent-encoding of UTF-8 bytes (Guava {@code PercentEscaper} style, unreserved kept).
+     */
+    public static String percent(String text) {
+        if (text == null) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder();
+        for (byte b : text.getBytes(java.nio.charset.StandardCharsets.UTF_8)) {
+            int n = b & 0xff;
+            if (unreserved(n)) {
+                builder.append((char) n);
+            } else {
+                builder.append(String.format("%%%02X", n));
+            }
+        }
+        return builder.toString();
+    }
+
+    public static String unpercent(String text) {
+        if (text == null) {
+            return "";
+        }
+        try {
+            return java.net.URLDecoder.decode(text, java.nio.charset.StandardCharsets.UTF_8);
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("invalid percent encoding", ex);
+        }
+    }
+
+    private static boolean unreserved(int n) {
+        return (n >= 'A' && n <= 'Z') || (n >= 'a' && n <= 'z') || (n >= '0' && n <= '9')
+                || n == '-' || n == '_' || n == '.' || n == '~';
+    }
 }

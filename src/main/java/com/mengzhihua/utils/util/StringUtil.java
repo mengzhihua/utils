@@ -392,4 +392,8 @@ public final class StringUtil {
             from = index + search.length();
         }
     }
+
+    public static String stripAccents(String str) {
+        return AccentUtil.strip(str);
+    }
 }

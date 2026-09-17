@@ -65,6 +65,25 @@ public final class ColorUtil {
         );
     }
 
+    /**
+     * WCAG 2.1 contrast ratio of two colors.
+     */
+    public static double contrastRatio(String left, String right) {
+        double a = luminance(left);
+        double b = luminance(right);
+        double light = Math.max(a, b);
+        double dark = Math.min(a, b);
+        return (light + 0.05) / (dark + 0.05);
+    }
+
+    public static boolean aa(String foreground, String background) {
+        return contrastRatio(foreground, background) >= 4.5;
+    }
+
+    public static boolean aaa(String foreground, String background) {
+        return contrastRatio(foreground, background) >= 7;
+    }
+
     private static String normalize(String hex) {
         String value = hex == null ? "" : hex.trim();
         if (value.startsWith("#")) {

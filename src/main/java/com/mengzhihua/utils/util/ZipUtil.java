@@ -10,8 +10,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
+import java.util.zip.Deflater;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import java.util.zip.Inflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -109,6 +111,55 @@ public final class ZipUtil {
             return "";
         }
         return new String(ungzip(Base64.getDecoder().decode(base64)), StandardCharsets.UTF_8);
+    }
+
+    public static byte[] zlib(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        Deflater deflater = new Deflater();
+        deflater.setInput(bytes);
+        deflater.finish();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        while (!deflater.finished()) {
+            int n = deflater.deflate(buffer);
+            out.write(buffer, 0, n);
+        }
+        deflater.end();
+        return out.toByteArray();
+    }
+
+    public static byte[] unzlib(byte[] data) {
+        AssertUtil.notNull(data, "zlib data must not be null");
+        Inflater inflater = new Inflater();
+        inflater.setInput(data);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        try {
+            while (!inflater.finished()) {
+                int n = inflater.inflate(buffer);
+                if (n == 0 && inflater.needsInput()) {
+                    break;
+                }
+                out.write(buffer, 0, n);
+            }
+        } catch (java.util.zip.DataFormatException ex) {
+            throw new IllegalArgumentException("invalid zlib data", ex);
+        } finally {
+            inflater.end();
+        }
+        return out.toByteArray();
+    }
+
+    public static String zlibBase64(String text) {
+        byte[] bytes = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return Base64.getEncoder().encodeToString(zlib(bytes));
+    }
+
+    public static String unzlibBase64(String base64) {
+        if (StringUtil.isBlank(base64)) {
+            return "";
+        }
+        return new String(unzlib(Base64.getDecoder().decode(base64)), StandardCharsets.UTF_8);
     }
 
     private static void putEntry(ZipOutputStream zipOut, Path base, Path file) {
