@@ -1605,6 +1605,135 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc64',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'blake2b',
+      group: 'crypto',
+      title: 'BLAKE2b',
+      summary: 'Blake2bUtil RFC 7693',
+      method: 'GET',
+      path: '/api/utils/blake2b',
+      fields: [{ name: 'text', label: '原文', value: 'abc' }]
+    },
+    {
+      id: 'aes-kw',
+      group: 'crypto',
+      title: 'AES Key Wrap',
+      summary: 'AesKwUtil RFC 3394',
+      method: 'GET',
+      path: '/api/utils/aes-kw',
+      fields: []
+    },
+    {
+      id: 'ed25519',
+      group: 'crypto',
+      title: 'Ed25519',
+      summary: 'Ed25519Util RFC 8032',
+      method: 'GET',
+      path: '/api/utils/ed25519',
+      fields: [{ name: 'text', label: '原文', value: 'hello' }]
+    },
+    {
+      id: 'tsid',
+      group: 'id',
+      title: 'TSID',
+      summary: 'TsidUtil 时间有序 ID',
+      method: 'GET',
+      path: '/api/utils/tsid',
+      fields: []
+    },
+    {
+      id: 'ganzhi',
+      group: 'datetime',
+      title: '天干地支',
+      summary: 'GanZhiUtil 生肖',
+      method: 'GET',
+      path: '/api/utils/ganzhi',
+      fields: [{ name: 'year', label: '年份', value: '2026' }]
+    },
+    {
+      id: 'jump-hash',
+      group: 'structure',
+      title: 'Jump Hash',
+      summary: 'JumpHashUtil Guava',
+      method: 'GET',
+      path: '/api/utils/jump-hash',
+      fields: [
+        { name: 'key', label: 'key', value: '42' },
+        { name: 'buckets', label: '分桶', value: '100' }
+      ]
+    },
+    {
+      id: 'iso6346',
+      group: 'validate',
+      title: '集装箱号',
+      summary: 'Iso6346Util ISO 6346',
+      method: 'GET',
+      path: '/api/utils/iso6346',
+      fields: [{ name: 'code', label: '箱号', value: 'CSQU3054383' }]
+    },
+    {
+      id: 'bech32m',
+      group: 'crypto',
+      title: 'Bech32m',
+      summary: 'Bech32Util.encodeM BIP-350',
+      method: 'GET',
+      path: '/api/utils/bech32m',
+      fields: [{ name: 'text', label: '原文', value: 'hello' }]
+    },
+    {
+      id: 'aba',
+      group: 'validate',
+      title: 'ABA 路由号',
+      summary: 'AbaRoutingUtil',
+      method: 'GET',
+      path: '/api/utils/aba',
+      fields: [{ name: 'number', label: '路由号', value: '021000021' }]
+    },
+    {
+      id: 'x25519',
+      group: 'crypto',
+      title: 'X25519',
+      summary: 'X25519Util RFC 7748',
+      method: 'GET',
+      path: '/api/utils/x25519',
+      fields: []
+    },
+    {
+      id: 'ripemd160',
+      group: 'crypto',
+      title: 'RIPEMD-160',
+      summary: 'Ripemd160Util',
+      method: 'GET',
+      path: '/api/utils/ripemd160',
+      fields: [{ name: 'text', label: '原文', value: 'abc' }]
+    },
+    {
+      id: 'figi',
+      group: 'validate',
+      title: 'FIGI',
+      summary: 'FigiUtil OpenFIGI',
+      method: 'GET',
+      path: '/api/utils/figi',
+      fields: [{ name: 'value', label: 'FIGI', value: 'BBG000B9XRY4' }]
+    },
+    {
+      id: 'lei',
+      group: 'validate',
+      title: 'LEI',
+      summary: 'LeiUtil ISO 17442',
+      method: 'GET',
+      path: '/api/utils/lei',
+      fields: [{ name: 'value', label: 'LEI', value: '5493001KJTIIGC8Y1R12' }]
+    },
+    {
+      id: 'nhs',
+      group: 'validate',
+      title: 'NHS 号码',
+      summary: 'NhsNumberUtil Mod 11',
+      method: 'GET',
+      path: '/api/utils/nhs',
+      fields: [{ name: 'value', label: 'NHS', value: '943 476 5919' }]
     }
   ]
 

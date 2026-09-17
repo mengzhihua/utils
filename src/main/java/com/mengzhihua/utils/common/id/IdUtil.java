@@ -161,6 +161,14 @@ public final class IdUtil {
         return Cuid2Util.next();
     }
 
+    public static long tsid() {
+        return TsidUtil.next();
+    }
+
+    public static String tsidStr() {
+        return TsidUtil.nextStr();
+    }
+
     /**
      * RFC 4122 UUID version 3 (MD5 name-based).
      */

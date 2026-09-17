@@ -238,6 +238,14 @@ public final class HashUtil {
         return String.format(Locale.ROOT, "%04x", crc16Ccitt(text));
     }
 
+    public static String blake2b(String text) {
+        return Blake2bUtil.hash(text);
+    }
+
+    public static String ripemd160(String text) {
+        return Ripemd160Util.hash(text);
+    }
+
     public static int crc16Ccitt(byte[] data) {
         byte[] bytes = data == null ? new byte[0] : data;
         int crc = 0xffff;

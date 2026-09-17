@@ -8,18 +8,23 @@ import java.util.regex.Pattern;
 
 import com.mengzhihua.utils.common.codec.HexUtil;
 import com.mengzhihua.utils.common.net.Ipv6Util;
+import com.mengzhihua.utils.common.validate.AbaRoutingUtil;
 import com.mengzhihua.utils.common.validate.BicUtil;
 import com.mengzhihua.utils.common.validate.CreditCodeUtil;
 import com.mengzhihua.utils.common.validate.CusipUtil;
 import com.mengzhihua.utils.common.validate.EanUtil;
+import com.mengzhihua.utils.common.validate.FigiUtil;
 import com.mengzhihua.utils.common.validate.HkIdUtil;
 import com.mengzhihua.utils.common.validate.IbanUtil;
 import com.mengzhihua.utils.common.validate.ImeiUtil;
 import com.mengzhihua.utils.common.validate.IsbnUtil;
+import com.mengzhihua.utils.common.validate.Iso6346Util;
+import com.mengzhihua.utils.common.validate.LeiUtil;
 import com.mengzhihua.utils.common.validate.IsinUtil;
 import com.mengzhihua.utils.common.validate.IsrcUtil;
 import com.mengzhihua.utils.common.validate.IssnUtil;
 import com.mengzhihua.utils.common.validate.MacUtil;
+import com.mengzhihua.utils.common.validate.NhsNumberUtil;
 import com.mengzhihua.utils.common.validate.OrcidUtil;
 import com.mengzhihua.utils.common.validate.OrgCodeUtil;
 import com.mengzhihua.utils.common.validate.PhoneUtil;
@@ -159,6 +164,11 @@ public final class RegexUtil {
         TYPES.put("hkid", HkIdUtil::isValid);
         TYPES.put("twid", TwIdUtil::isValid);
         TYPES.put("orgcode", OrgCodeUtil::isValid);
+        TYPES.put("iso6346", Iso6346Util::isValid);
+        TYPES.put("aba", AbaRoutingUtil::isValid);
+        TYPES.put("figi", FigiUtil::isValid);
+        TYPES.put("lei", LeiUtil::isValid);
+        TYPES.put("nhs", NhsNumberUtil::isValid);
     }
 
     private RegexUtil() {

@@ -9,12 +9,14 @@ import java.util.Locale;
 import com.mengzhihua.utils.common.lang.StringUtil;
 
 /**
- * BIP-173 Bech32 (Apache Commons Codec / Bitcoin addresses).
+ * BIP-173 Bech32 and BIP-350 Bech32m.
  */
 public final class Bech32Util {
 
     private static final String CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
     private static final int[] GEN = {0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3};
+    private static final int BECH32 = 1;
+    private static final int BECH32M = 0x2bc830a3;
 
     private Bech32Util() {
     }
@@ -24,10 +26,26 @@ public final class Bech32Util {
             throw new IllegalArgumentException("hrp is blank");
         }
         int[] values = convertBits(data == null ? new byte[0] : data, 8, 5, true);
-        return encode5(hrp.toLowerCase(Locale.ROOT), values);
+        return encode5(hrp.toLowerCase(Locale.ROOT), values, BECH32);
+    }
+
+    public static String encodeM(String hrp, byte[] data) {
+        if (StringUtil.isBlank(hrp)) {
+            throw new IllegalArgumentException("hrp is blank");
+        }
+        int[] values = convertBits(data == null ? new byte[0] : data, 8, 5, true);
+        return encode5(hrp.toLowerCase(Locale.ROOT), values, BECH32M);
     }
 
     public static Decoded decode(String address) {
+        return decode(address, BECH32);
+    }
+
+    public static Decoded decodeM(String address) {
+        return decode(address, BECH32M);
+    }
+
+    private static Decoded decode(String address, int constant) {
         if (StringUtil.isBlank(address)) {
             throw new IllegalArgumentException("bech32 is blank");
         }
@@ -51,7 +69,7 @@ public final class Bech32Util {
             }
             data[i] = idx;
         }
-        if (polymod(cat(expandHrp(hrp), data)) != 1) {
+        if (polymod(cat(expandHrp(hrp), data)) != constant) {
             throw new IllegalArgumentException("invalid bech32 checksum");
         }
         int[] payload = new int[data.length - 6];
@@ -74,8 +92,8 @@ public final class Bech32Util {
         return new String(decode(address).data(), StandardCharsets.UTF_8);
     }
 
-    private static String encode5(String hrp, int[] values) {
-        int[] checksum = createChecksum(hrp, values);
+    private static String encode5(String hrp, int[] values, int constant) {
+        int[] checksum = createChecksum(hrp, values, constant);
         int[] combined = cat(values, checksum);
         StringBuilder builder = new StringBuilder(hrp).append('1');
         for (int v : combined) {
@@ -84,11 +102,11 @@ public final class Bech32Util {
         return builder.toString();
     }
 
-    private static int[] createChecksum(String hrp, int[] values) {
+    private static int[] createChecksum(String hrp, int[] values, int constant) {
         int[] expanded = cat(expandHrp(hrp), values);
         int[] withZeros = new int[expanded.length + 6];
         System.arraycopy(expanded, 0, withZeros, 0, expanded.length);
-        int mod = polymod(withZeros) ^ 1;
+        int mod = polymod(withZeros) ^ constant;
         int[] checksum = new int[6];
         for (int i = 0; i < 6; i++) {
             checksum[i] = (mod >>> 5 * (5 - i)) & 31;

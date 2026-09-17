@@ -146,12 +146,21 @@ com.mengzhihua.utils
 | 历法 / 文本 | `SolarTermUtil` / `PinyinUtil` / `XmlUtil.pretty` | Hutool SolarTerms / PinyinUtil | 二十四节气、拼音首字母、XML 格式化 |
 | 编码 / 字节 | `HashUtil.crc64` / `Base32Util.encodeCrockford` / `ByteUtil` / `EncryptUtil.chachaEncrypt` | CRC-64/ECMA / Crockford / RFC 8439 | CRC-8/64、FNV-1a 64、ChaCha20-Poly1305 |
 
+### 对标 RFC 7693 / 3394 / 8032 / 7748 / ISO
+
+| 模块 | 类 | 对标 | 说明 |
+| --- | --- | --- | --- |
+| 哈希 / 密钥 | `Blake2bUtil` / `AesKwUtil` / `Ed25519Util` / `X25519Util` / `Ripemd160Util` | RFC 7693 / 3394 / 8032 / 7748 / ISO 10118-3 | BLAKE2b-512、AES-KW、Ed25519、X25519、RIPEMD-160 |
+| ID / 路由 | `TsidUtil` / `JumpHashUtil` / `GanZhiUtil` | Hypersistence TSID / Guava / Hutool | 42+10+12 时间序 ID、Jump Hash、天干地支 |
+| 编码 / 箱号 | `Bech32Util.encodeM` / `Iso6346Util` / `AbaRoutingUtil` | BIP-350 / ISO 6346 / ABA | Bech32m、集装箱号、美国银行路由号 |
+| 金融 / 医疗 | `FigiUtil` / `LeiUtil` / `NhsNumberUtil` | OpenFIGI / ISO 17442 / NHS | FIGI、法人识别码、英国 NHS 号 |
+
 ## 前端控制台（Vue 3）
 
 启动后打开 <http://localhost:8080/> 即可在页面上自测常用工具：脱敏、身份证、JWT、AES、人民币大写、雪花 ID 等。源码在 `frontend/`，构建产物输出到 `src/main/resources/static/`。控制台包含：
 
-- 后端 Java 工具演示（脱敏、JWT、AES、身份证、信用代码、坐标系、签名、TOTP、Cron、Ant 路径、限流、星座、slug、时长、农历、表达式、ISBN、验证码、单位换算、IMEI、Hashids、罗马数字、URL 解析、IBAN、VIN、EAN、Soundex、Jaro-Winkler、SHA3、KSUID、Sqids、UUID v5/v6、Metaphone、ISIN、BIC、Bech32、HKDF、摩斯电码、CaseFormat、HOTP、Base45、JSON Patch、节假日、WCAG 对比度、CUSIP、SEDOL、ORCID、ISRC、JSON Merge Patch、HTTP Date、车牌、URI Template、正则抽取、SM3、ISBN 互转、IPv6、SemVer、CRC-16、SM4、BLAKE2s、CMAC、香港/台湾身份证、组织机构代码、节气、拼音、XML、ChaCha20、CRC-64 等）
-- 浏览器本地工具：JSON/XML、Base64、JWT 解码、Markdown、命名风格、全角半角、行处理、文本对比、MD5/HMAC/CRC32/Murmur3、ULID、UUID v7、CIDR、UA/Cookie、星座、高亮、四则运算、进制、ISBN、Punycode、罗马数字、单位换算、IMEI、URL 解析、Soundex、Jaro-Winkler、IBAN、EAN、年龄、ROT13、摩斯、通配符、ISIN、Humanize、Quoted-Printable、Base45、WCAG 对比度、去音调、车牌、Emoji、CUSIP、正则抽取/转义、ISBN 互转、IPv6、卡组织、时长差、拼音首字母、港澳台证件、组织机构代码、节气 等
+- 后端 Java 工具演示（脱敏、JWT、AES、身份证、信用代码、坐标系、签名、TOTP、Cron、Ant 路径、限流、星座、slug、时长、农历、表达式、ISBN、验证码、单位换算、IMEI、Hashids、罗马数字、URL 解析、IBAN、VIN、EAN、Soundex、Jaro-Winkler、SHA3、KSUID、Sqids、UUID v5/v6、Metaphone、ISIN、BIC、Bech32、HKDF、摩斯电码、CaseFormat、HOTP、Base45、JSON Patch、节假日、WCAG 对比度、CUSIP、SEDOL、ORCID、ISRC、JSON Merge Patch、HTTP Date、车牌、URI Template、正则抽取、SM3、ISBN 互转、IPv6、SemVer、CRC-16、SM4、BLAKE2s、CMAC、香港/台湾身份证、组织机构代码、节气、拼音、XML、ChaCha20、CRC-64、BLAKE2b、AES-KW、Ed25519、TSID、干支、Jump Hash、集装箱号、Bech32m、ABA、X25519、RIPEMD-160、FIGI、LEI、NHS 等）
+- 浏览器本地工具：JSON/XML、Base64、JWT 解码、Markdown、命名风格、全角半角、行处理、文本对比、MD5/HMAC/CRC32/Murmur3、ULID、UUID v7、CIDR、UA/Cookie、星座、高亮、四则运算、进制、ISBN、Punycode、罗马数字、单位换算、IMEI、URL 解析、Soundex、Jaro-Winkler、IBAN、EAN、年龄、ROT13、摩斯、通配符、ISIN、Humanize、Quoted-Printable、Base45、WCAG 对比度、去音调、车牌、Emoji、CUSIP、正则抽取/转义、ISBN 互转、IPv6、卡组织、时长差、拼音首字母、港澳台证件、组织机构代码、节气、干支、ABA、集装箱号、Jump Hash、FIGI、LEI、NHS 等
 - 特效实验室：玻璃拟态、光晕、礼花、打字机、涟漪、聚光跟随
 - 深色模式、页面过渡、复制 Toast
 

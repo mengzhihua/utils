@@ -663,6 +663,58 @@ export const clientTools = [
         { name: 'year', label: '年份', value: '2026' },
         { name: 'name', label: '节气', value: '清明' }
       ]
+    },
+    {
+      id: 'ganzhi-local',
+      group: 'time',
+      title: '天干地支',
+      summary: '1984=甲子鼠',
+      fields: [{ name: 'year', label: '年份', value: '2026' }]
+    },
+    {
+      id: 'aba-local',
+      group: 'net',
+      title: 'ABA 路由号',
+      summary: '021000021',
+      fields: [{ name: 'number', label: '路由号', value: '021000021' }]
+    },
+    {
+      id: 'iso6346-local',
+      group: 'net',
+      title: '集装箱号',
+      summary: 'CSQU3054383',
+      fields: [{ name: 'code', label: '箱号', value: 'CSQU3054383' }]
+    },
+    {
+      id: 'jump-hash-local',
+      group: 'gen',
+      title: 'Jump Hash',
+      summary: 'Guava consistentHash',
+      fields: [
+        { name: 'key', label: 'key', value: '42' },
+        { name: 'buckets', label: '分桶', value: '100' }
+      ]
+    },
+    {
+      id: 'figi-local',
+      group: 'net',
+      title: 'FIGI',
+      summary: 'BBG000B9XRY4',
+      fields: [{ name: 'value', label: 'FIGI', value: 'BBG000B9XRY4' }]
+    },
+    {
+      id: 'lei-local',
+      group: 'net',
+      title: 'LEI',
+      summary: 'ISO 17442',
+      fields: [{ name: 'value', label: 'LEI', value: '5493001KJTIIGC8Y1R12' }]
+    },
+    {
+      id: 'nhs-local',
+      group: 'net',
+      title: 'NHS 号码',
+      summary: '943 476 5919',
+      fields: [{ name: 'value', label: 'NHS', value: '943 476 5919' }]
     }
   ]
 

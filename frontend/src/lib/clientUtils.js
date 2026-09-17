@@ -696,6 +696,32 @@ export async function runClientTool(id, values) {
       const year = Number(values.year) || 2026
       return { date: solarTermDate(year, values.name || '清明'), qingming: solarTermDate(year, '清明') }
     }
+    case 'ganzhi-local': {
+      const year = Number(values.year) || 2026
+      return { ganzhi: ganZhiYear(year), animal: ganZhiAnimal(year), formatted: ganZhiYear(year) + ganZhiAnimal(year) }
+    }
+    case 'aba-local': {
+      const digits = String(values.number || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isAba(digits) }
+    }
+    case 'iso6346-local': {
+      const compact = String(values.code || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isIso6346(compact) }
+    }
+    case 'jump-hash-local':
+      return { bucket: jumpHash(Number(values.key) || 0, Number(values.buckets) || 100) }
+    case 'figi-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isFigi(compact) }
+    }
+    case 'lei-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isLei(compact) }
+    }
+    case 'nhs-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isNhs(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -1581,6 +1607,94 @@ function isOrgCode(code) {
   const compact = String(code || '').replace(/[-\s]/g, '').toUpperCase()
   if (compact.length !== 9) return false
   return compact[8] === orgCodeCheck(compact.slice(0, 8))
+}
+
+function ganZhiYear(year) {
+  const stems = '甲乙丙丁戊己庚辛壬癸'
+  const branches = '子丑寅卯辰巳午未申酉戌亥'
+  const idx = ((year - 1984) % 60 + 60) % 60
+  return stems[idx % 10] + branches[idx % 12]
+}
+
+function ganZhiAnimal(year) {
+  const animals = '鼠牛虎兔龙蛇马羊猴鸡狗猪'
+  return animals[((year - 1984) % 12 + 12) % 12]
+}
+
+function isAba(number) {
+  if (!/^\d{9}$/.test(number)) return false
+  const d = [...number].map(Number)
+  return (3 * (d[0] + d[3] + d[6]) + 7 * (d[1] + d[4] + d[7]) + (d[2] + d[5] + d[8])) % 10 === 0
+}
+
+function iso6346Value(c) {
+  if (c >= '0' && c <= '9') return c.charCodeAt(0) - 48
+  const n = c.charCodeAt(0) - 65 + 10
+  return n + Math.floor(n / 11)
+}
+
+function isIso6346(code) {
+  if (!/^[A-Z]{3}[UJZ]\d{7}$/.test(code)) return false
+  let sum = 0
+  let weight = 1
+  for (let i = 0; i < 10; i++) {
+    sum += iso6346Value(code[i]) * weight
+    weight *= 2
+  }
+  const check = sum % 11
+  return code[10] === String(check === 10 ? 0 : check)
+}
+
+function jumpHash(key, buckets) {
+  if (buckets <= 0) throw new Error('buckets must be > 0')
+  let b = -1n
+  let j = 0n
+  let k = BigInt(key)
+  const n = BigInt(buckets)
+  while (j < n) {
+    b = j
+    k = (k * 2862933555777941757n + 1n) & 0xffffffffffffffffn
+    j = BigInt(Math.floor(Number(b + 1n) * (2147483648 / (Number(k >> 33n) + 1))))
+  }
+  return Number(b)
+}
+
+function isFigi(figi) {
+  if (!/^[0-9BCDFGHJKLMNPQRSTVWXYZ]{12}$/.test(figi)) return false
+  const body = figi.slice(0, 11)
+  let sum = 0
+  for (let i = 0; i < 11; i++) {
+    const ch = body[i]
+    const value = ch >= '0' && ch <= '9' ? Number(ch) : ch.charCodeAt(0) - 55
+    if ((10 - i) % 2 === 0) {
+      const weighted = value * 2
+      sum += Math.floor(weighted / 10) + (weighted % 10)
+    } else {
+      sum += value
+    }
+  }
+  return figi[11] === String((10 - (sum % 10)) % 10)
+}
+
+function isLei(lei) {
+  if (!/^[A-Z0-9]{18}\d{2}$/.test(lei)) return false
+  let numeric = ''
+  for (const ch of lei) {
+    numeric += /[A-Z]/.test(ch) ? String(ch.charCodeAt(0) - 55) : ch
+  }
+  return BigInt(numeric) % 97n === 1n
+}
+
+function isNhs(number) {
+  if (!/^\d{10}$/.test(number)) return false
+  let sum = 0
+  for (let i = 0; i < 9; i++) {
+    sum += Number(number[i]) * (10 - i)
+  }
+  let check = 11 - (sum % 11)
+  if (check === 11) check = 0
+  if (check === 10) return false
+  return check === Number(number[9])
 }
 
 function solarTermDate(year, name) {

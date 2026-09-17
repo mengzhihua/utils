@@ -271,4 +271,42 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.qingming").value("2026-04-05"));
     }
+
+    @Test
+    void blake2bTsidFigiNhs() throws Exception {
+        mockMvc.perform(get("/api/utils/blake2b").param("text", "abc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.blake2b")
+                        .value("ba80a53f981c4d0d6a2797b69f12f6e94c212f14685ac4b74b12bb6fdbffa2d17d87c5392aab792dc252d5de4533cc9518d38aa8dbf1925ab92386edd4009923"));
+
+        mockMvc.perform(get("/api/utils/aes-kw"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.wrapped")
+                        .value("1FA68B0A8112B447AEF34BD8FB5A7B829D3E862371D2CFE5"));
+
+        mockMvc.perform(get("/api/utils/ganzhi").param("year", "2026"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.ganzhi").value("丙午"))
+                .andExpect(jsonPath("$.data.animal").value("马"));
+
+        mockMvc.perform(get("/api/utils/iso6346").param("code", "CSQU3054383"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/bech32m").param("text", ""))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.empty").value("a1lqfn3a"));
+
+        mockMvc.perform(get("/api/utils/ripemd160").param("text", "abc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.ripemd160").value("8eb208f7e05d987a9b044a8e98c6b087f15a0bfc"));
+
+        mockMvc.perform(get("/api/utils/figi").param("value", "BBG000B9XRY4"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/nhs").param("value", "943 476 5919"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+    }
 }
