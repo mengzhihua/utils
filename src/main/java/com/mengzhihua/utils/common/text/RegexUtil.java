@@ -62,6 +62,27 @@ import com.mengzhihua.utils.common.validate.PanUtil;
 import com.mengzhihua.utils.common.validate.PpsUtil;
 import com.mengzhihua.utils.common.validate.SinUtil;
 import com.mengzhihua.utils.common.validate.VatUtil;
+import com.mengzhihua.utils.common.validate.AfmUtil;
+import com.mengzhihua.utils.common.validate.CprUtil;
+import com.mengzhihua.utils.common.validate.MyNumberUtil;
+import com.mengzhihua.utils.common.validate.NinoUtil;
+import com.mengzhihua.utils.common.validate.NrnUtil;
+import com.mengzhihua.utils.common.validate.PtNifUtil;
+import com.mengzhihua.utils.common.validate.RrnUtil;
+import com.mengzhihua.utils.common.validate.SvnrUtil;
+import com.mengzhihua.utils.common.validate.CuitUtil;
+import com.mengzhihua.utils.common.validate.IrdUtil;
+import com.mengzhihua.utils.common.validate.MyKadUtil;
+import com.mengzhihua.utils.common.validate.RutUtil;
+import com.mengzhihua.utils.common.validate.SaIdUtil;
+import com.mengzhihua.utils.common.validate.CnpUtil;
+import com.mengzhihua.utils.common.validate.EgnUtil;
+import com.mengzhihua.utils.common.validate.IcoUtil;
+import com.mengzhihua.utils.common.validate.IsraeliIdUtil;
+import com.mengzhihua.utils.common.validate.OibUtil;
+import com.mengzhihua.utils.common.validate.RegonUtil;
+import com.mengzhihua.utils.common.validate.TcKimlikUtil;
+import com.mengzhihua.utils.common.validate.ThaiIdUtil;
 import com.mengzhihua.utils.common.validate.VinUtil;
 
 /**
@@ -233,6 +254,27 @@ public final class RegexUtil {
         TYPES.put("pan", PanUtil::isValid);
         TYPES.put("sin", SinUtil::isValid);
         TYPES.put("pps", PpsUtil::isValid);
+        TYPES.put("cpr", CprUtil::isValid);
+        TYPES.put("nrn", NrnUtil::isValid);
+        TYPES.put("svnr", SvnrUtil::isValid);
+        TYPES.put("ptnif", PtNifUtil::isValid);
+        TYPES.put("afm", AfmUtil::isValid);
+        TYPES.put("nino", NinoUtil::isValid);
+        TYPES.put("rrn", RrnUtil::isValid);
+        TYPES.put("mynumber", MyNumberUtil::isValid);
+        TYPES.put("rut", RutUtil::isValid);
+        TYPES.put("cuit", CuitUtil::isValid);
+        TYPES.put("said", SaIdUtil::isValid);
+        TYPES.put("ird", IrdUtil::isValid);
+        TYPES.put("mykad", MyKadUtil::isValid);
+        TYPES.put("tckn", TcKimlikUtil::isValid);
+        TYPES.put("israeliid", IsraeliIdUtil::isValid);
+        TYPES.put("cnp", CnpUtil::isValid);
+        TYPES.put("oib", OibUtil::isValid);
+        TYPES.put("egn", EgnUtil::isValid);
+        TYPES.put("thaiid", ThaiIdUtil::isValid);
+        TYPES.put("regon", RegonUtil::isValid);
+        TYPES.put("ico", IcoUtil::isValid);
     }
 
     private RegexUtil() {

@@ -205,12 +205,35 @@ com.mengzhihua.utils
 | 证件 | `AadhaarUtil` / `PanUtil` / `SinUtil` / `PpsUtil` | UIDAI / ITD / CRA / DSP | Verhoeff Aadhaar、PAN、加拿大 SIN、爱尔兰 `1234567T` |
 | HTTP / 编码 | `CacheControlUtil` / `Z85Util` / `HashUtil.crc16Xmodem` | RFC 9111 / 32 / XMODEM | `max-age=3600`、`HelloWorld`→`864fd26f...`、`31c3` |
 
+### 对标丹麦 CPR / 比利时 NRN / 葡希税号 / yEnc / Base36
+
+| 模块 | 类 | 对标 | 说明 |
+| --- | --- | --- | --- |
+| 证件 | `CprUtil` / `NrnUtil` / `SvnrUtil` / `RrnUtil` | CPR / NRN / SVNR / 주민등록 | 丹麦 `010170-0003`、比利时 `93.05.18-223.61`、奥地利 `1237010180`、韩国 `900101-1234568` |
+| 税号 / 保险号 | `PtNifUtil` / `AfmUtil` / `NinoUtil` / `MyNumberUtil` | AT / ΑΑΔΕ / HMRC / マイナンバー | 葡萄牙 NIF、希腊 AFM、英国 `AB123456C`、日本 `123456789019` |
+| 编码 / HTTP / ID | `YencUtil` / `Base36Util` / `RetryAfterUtil` / `IdUtil.uuidV1` | yEnc / Hutool / RFC 9110 / 4122 | `Hello`→`728f969699`、`kf12oi`、`Retry-After: 120`、UUID v1 |
+
+### 对标智利 RUT / 阿根廷 CUIT / 南非 ID / CORS
+
+| 模块 | 类 | 对标 | 说明 |
+| --- | --- | --- | --- |
+| 证件 / 税号 | `RutUtil` / `CuitUtil` / `SaIdUtil` / `IrdUtil` / `MyKadUtil` | SII / AFIP / DHA / IRD / JPN | 智利 `12.345.678-5`、阿根廷 `20-12345678-6`、南非 `8001015009087`、IRD `49091850`、MyKad |
+| HTTP | `CorsUtil` / `WwwAuthenticateUtil` | Fetch CORS / RFC 9110 | Allow-Origin 匹配、`Bearer realm="api"` |
+
+### 对标土耳其 TCKN / 罗马尼亚 CNP / HSTS / CSP
+
+| 模块 | 类 | 对标 | 说明 |
+| --- | --- | --- | --- |
+| 证件 | `TcKimlikUtil` / `IsraeliIdUtil` / `CnpUtil` / `OibUtil` / `EgnUtil` / `ThaiIdUtil` | NVI / MOI / CNP / OIB / GRAO | 土耳其 `10000000146`、以色列 Luhn、罗马尼亚 `1800101010015`、克罗地亚 OIB、保加利亚 EGN、泰国身份证 |
+| 税号 | `RegonUtil` / `IcoUtil` | GUS / ČSÚ | 波兰 REGON `123456785`、捷克 IČO `25596641` |
+| HTTP / CRC | `HstsUtil` / `CspUtil` / `AcceptEncodingUtil` / `HashUtil.crc16Kermit` | RFC 6797 / CSP / 9110 / KERMIT | `max-age=31536000`、`default-src 'self'`、`2189` / `fc891918` |
+
 ## 前端控制台（Vue 3）
 
 启动后打开 <http://localhost:8080/> 即可在页面上自测常用工具：脱敏、身份证、JWT、AES、人民币大写、雪花 ID 等。源码在 `frontend/`，构建产物输出到 `src/main/resources/static/`。控制台包含：
 
-- 后端 Java 工具演示（脱敏、JWT、AES、身份证、信用代码、坐标系、签名、TOTP、Cron、Ant 路径、限流、星座、slug、时长、农历、表达式、ISBN、验证码、单位换算、IMEI、Hashids、罗马数字、URL 解析、IBAN、VIN、EAN、Soundex、Jaro-Winkler、SHA3、KSUID、Sqids、UUID v5/v6、Metaphone、ISIN、BIC、Bech32、HKDF、摩斯电码、CaseFormat、HOTP、Base45、JSON Patch、节假日、WCAG 对比度、CUSIP、SEDOL、ORCID、ISRC、JSON Merge Patch、HTTP Date、车牌、URI Template、正则抽取、SM3、ISBN 互转、IPv6、SemVer、CRC-16、SM4、BLAKE2s、CMAC、香港/台湾身份证、组织机构代码、节气、拼音、XML、ChaCha20、CRC-64、BLAKE2b、AES-KW、Ed25519、TSID、干支、Jump Hash、集装箱号、Bech32m、ABA、X25519、RIPEMD-160、FIGI、LEI、NHS、SHAKE、NPI、ISMN、NRIC、科隆拼音、HTTP Range、Hamming、UUID v8、NYSIIS、Caverphone、Sonyflake、Content-Disposition、儒略日、CPF、CNPJ、PESEL、UPC-E、CRC-32/MPEG-2、HMAC-SM3、Murmur3-128、Double Metaphone、Match Rating、SIREN、SIRET、NIF、ISNI、basE91、Bencode、HTTP Accept、Refined Soundex、Porter、NIR、意大利税号、德国税号、EORI、DOI、PMID、ICCID、HTTP Forwarded、Fletcher、瑞典/芬兰/挪威个人号、ISWC、SSCC、ABN、TFN、HTTP Link、ETag、uuencode、VAT、AHV、NIP、Aadhaar、PAN、SIN、PPS、Cache-Control、Z85、CRC-16/XMODEM 等）
-- 浏览器本地工具：JSON/XML、Base64、JWT 解码、Markdown、命名风格、全角半角、行处理、文本对比、MD5/HMAC/CRC32/Murmur3、ULID、UUID v7、CIDR、UA/Cookie、星座、高亮、四则运算、进制、ISBN、Punycode、罗马数字、单位换算、IMEI、URL 解析、Soundex、Jaro-Winkler、IBAN、EAN、年龄、ROT13、摩斯、通配符、ISIN、Humanize、Quoted-Printable、Base45、WCAG 对比度、去音调、车牌、Emoji、CUSIP、正则抽取/转义、ISBN 互转、IPv6、卡组织、时长差、拼音首字母、港澳台证件、组织机构代码、节气、干支、ABA、集装箱号、Jump Hash、FIGI、LEI、NHS、NPI、ISMN、NRIC、科隆拼音、Hamming、UUID v8、NYSIIS、Caverphone、CPF、CNPJ、PESEL、UPC-E、儒略日、Double Metaphone、Match Rating、SIREN、SIRET、NIF、ISNI、Bencode、Refined Soundex、NIR、意大利税号、德国税号、EORI、DOI、PMID、ICCID、瑞典/芬兰/挪威个人号、ISWC、ABN、TFN、SSCC、VAT、AHV、NIP、Aadhaar、PAN、SIN、PPS 等
+- 后端 Java 工具演示（脱敏、JWT、AES、身份证、信用代码、坐标系、签名、TOTP、Cron、Ant 路径、限流、星座、slug、时长、农历、表达式、ISBN、验证码、单位换算、IMEI、Hashids、罗马数字、URL 解析、IBAN、VIN、EAN、Soundex、Jaro-Winkler、SHA3、KSUID、Sqids、UUID v5/v6、Metaphone、ISIN、BIC、Bech32、HKDF、摩斯电码、CaseFormat、HOTP、Base45、JSON Patch、节假日、WCAG 对比度、CUSIP、SEDOL、ORCID、ISRC、JSON Merge Patch、HTTP Date、车牌、URI Template、正则抽取、SM3、ISBN 互转、IPv6、SemVer、CRC-16、SM4、BLAKE2s、CMAC、香港/台湾身份证、组织机构代码、节气、拼音、XML、ChaCha20、CRC-64、BLAKE2b、AES-KW、Ed25519、TSID、干支、Jump Hash、集装箱号、Bech32m、ABA、X25519、RIPEMD-160、FIGI、LEI、NHS、SHAKE、NPI、ISMN、NRIC、科隆拼音、HTTP Range、Hamming、UUID v8、NYSIIS、Caverphone、Sonyflake、Content-Disposition、儒略日、CPF、CNPJ、PESEL、UPC-E、CRC-32/MPEG-2、HMAC-SM3、Murmur3-128、Double Metaphone、Match Rating、SIREN、SIRET、NIF、ISNI、basE91、Bencode、HTTP Accept、Refined Soundex、Porter、NIR、意大利税号、德国税号、EORI、DOI、PMID、ICCID、HTTP Forwarded、Fletcher、瑞典/芬兰/挪威个人号、ISWC、SSCC、ABN、TFN、HTTP Link、ETag、uuencode、VAT、AHV、NIP、Aadhaar、PAN、SIN、PPS、Cache-Control、Z85、CRC-16/XMODEM、丹麦 CPR、比利时 NRN、奥地利 SVNR、葡萄牙 NIF、希腊 AFM、英国 NINO、韩国居民号、日本个人番号、yEnc、Base36、Retry-After、UUID v1、智利 RUT、阿根廷 CUIT、南非身份证、新西兰 IRD、马来西亚 MyKad、CORS、WWW-Authenticate、土耳其 TCKN、以色列身份证、罗马尼亚 CNP、克罗地亚 OIB、保加利亚 EGN、泰国身份证、波兰 REGON、捷克 IČO、HSTS、CSP、Accept-Encoding、CRC-16/KERMIT 等）
+- 浏览器本地工具：JSON/XML、Base64、JWT 解码、Markdown、命名风格、全角半角、行处理、文本对比、MD5/HMAC/CRC32/Murmur3、ULID、UUID v7、CIDR、UA/Cookie、星座、高亮、四则运算、进制、ISBN、Punycode、罗马数字、单位换算、IMEI、URL 解析、Soundex、Jaro-Winkler、IBAN、EAN、年龄、ROT13、摩斯、通配符、ISIN、Humanize、Quoted-Printable、Base45、WCAG 对比度、去音调、车牌、Emoji、CUSIP、正则抽取/转义、ISBN 互转、IPv6、卡组织、时长差、拼音首字母、港澳台证件、组织机构代码、节气、干支、ABA、集装箱号、Jump Hash、FIGI、LEI、NHS、NPI、ISMN、NRIC、科隆拼音、Hamming、UUID v8、NYSIIS、Caverphone、CPF、CNPJ、PESEL、UPC-E、儒略日、Double Metaphone、Match Rating、SIREN、SIRET、NIF、ISNI、Bencode、Refined Soundex、NIR、意大利税号、德国税号、EORI、DOI、PMID、ICCID、瑞典/芬兰/挪威个人号、ISWC、ABN、TFN、SSCC、VAT、AHV、NIP、Aadhaar、PAN、SIN、PPS、丹麦 CPR、葡萄牙 NIF、英国 NINO、韩国居民号、希腊 AFM、智利 RUT、阿根廷 CUIT、南非身份证、土耳其 TCKN、罗马尼亚 CNP、泰国身份证、克罗地亚 OIB 等
 - 特效实验室：玻璃拟态、光晕、礼花、打字机、涟漪、聚光跟随
 - 深色模式、页面过渡、复制 Toast
 

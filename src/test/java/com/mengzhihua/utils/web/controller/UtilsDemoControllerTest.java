@@ -485,4 +485,76 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc16Xmodem").value("31c3"));
     }
+
+    @Test
+    void cprPtNifYencBase36() throws Exception {
+        mockMvc.perform(get("/api/utils/cpr").param("value", "010170-0003"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/nrn").param("value", "93.05.18-223.61"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/pt-nif").param("value", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/yenc").param("text", "Hello"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.encodedHex").value("728f969699"));
+
+        mockMvc.perform(get("/api/utils/base36").param("text", "hello").param("value", "1234567890"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.encodedLong").value("kf12oi"));
+    }
+
+    @Test
+    void rutCuitSaIdCors() throws Exception {
+        mockMvc.perform(get("/api/utils/rut").param("value", "12.345.678-5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cuit").param("value", "20-12345678-6"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/sa-id").param("value", "8001015009087"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/ird").param("value", "49091850"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cors")
+                        .param("allowOrigin", "*")
+                        .param("origin", "https://example.com"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.allowsOrigin").value(true));
+    }
+
+    @Test
+    void tcknCnpThaiHsts() throws Exception {
+        mockMvc.perform(get("/api/utils/tckn").param("value", "10000000146"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cnp").param("value", "1800101010015"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/thai-id").param("value", "1234567890121"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/hsts")
+                        .param("header", "max-age=31536000; includeSubDomains; preload"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.maxAge").value(31536000));
+
+        mockMvc.perform(get("/api/utils/crc16-kermit").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Kermit").value("2189"));
+    }
 }

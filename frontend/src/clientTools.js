@@ -1015,6 +1015,90 @@ export const clientTools = [
       title: '爱尔兰 PPS',
       summary: '1234567T',
       fields: [{ name: 'value', label: 'PPS', value: '1234567T' }]
+    },
+    {
+      id: 'cpr-local',
+      group: 'net',
+      title: '丹麦 CPR',
+      summary: '010170-0003',
+      fields: [{ name: 'value', label: 'CPR', value: '010170-0003' }]
+    },
+    {
+      id: 'pt-nif-local',
+      group: 'net',
+      title: '葡萄牙 NIF',
+      summary: '123456789',
+      fields: [{ name: 'value', label: 'NIF', value: '123456789' }]
+    },
+    {
+      id: 'nino-local',
+      group: 'net',
+      title: '英国 NINO',
+      summary: 'AB123456C',
+      fields: [{ name: 'value', label: 'NINO', value: 'AB123456C' }]
+    },
+    {
+      id: 'rrn-local',
+      group: 'net',
+      title: '韩国居民登记号',
+      summary: '900101-1234568',
+      fields: [{ name: 'value', label: 'RRN', value: '900101-1234568' }]
+    },
+    {
+      id: 'afm-local',
+      group: 'net',
+      title: '希腊 AFM',
+      summary: '090000045',
+      fields: [{ name: 'value', label: 'AFM', value: '090000045' }]
+    },
+    {
+      id: 'rut-local',
+      group: 'net',
+      title: '智利 RUT',
+      summary: '12.345.678-5',
+      fields: [{ name: 'value', label: 'RUT', value: '12.345.678-5' }]
+    },
+    {
+      id: 'cuit-local',
+      group: 'net',
+      title: '阿根廷 CUIT',
+      summary: '20-12345678-6',
+      fields: [{ name: 'value', label: 'CUIT', value: '20-12345678-6' }]
+    },
+    {
+      id: 'said-local',
+      group: 'net',
+      title: '南非身份证',
+      summary: '8001015009087',
+      fields: [{ name: 'value', label: 'ID', value: '8001015009087' }]
+    },
+    {
+      id: 'tckn-local',
+      group: 'net',
+      title: '土耳其身份证',
+      summary: '10000000146',
+      fields: [{ name: 'value', label: 'TCKN', value: '10000000146' }]
+    },
+    {
+      id: 'cnp-local',
+      group: 'net',
+      title: '罗马尼亚 CNP',
+      summary: '1800101010015',
+      fields: [{ name: 'value', label: 'CNP', value: '1800101010015' }]
+    },
+    {
+      id: 'thai-id-local',
+      group: 'net',
+      title: '泰国身份证',
+      summary: '1234567890121',
+      fields: [{ name: 'value', label: 'ID', value: '1234567890121' }]
+    },
+    {
+      id: 'oib-local',
+      group: 'net',
+      title: '克罗地亚 OIB',
+      summary: '12345678903',
+      fields: [{ name: 'value', label: 'OIB', value: '12345678903' }]
     }
   ]
 

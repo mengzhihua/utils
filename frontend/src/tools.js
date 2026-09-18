@@ -2289,6 +2289,293 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-xmodem',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'cpr',
+      group: 'validate',
+      title: '丹麦 CPR',
+      summary: 'CprUtil MOD 11',
+      method: 'GET',
+      path: '/api/utils/cpr',
+      fields: [{ name: 'value', label: 'CPR', value: '010170-0003' }]
+    },
+    {
+      id: 'nrn',
+      group: 'validate',
+      title: '比利时国家登记号',
+      summary: 'NrnUtil %97',
+      method: 'GET',
+      path: '/api/utils/nrn',
+      fields: [{ name: 'value', label: 'NRN', value: '93.05.18-223.61' }]
+    },
+    {
+      id: 'svnr',
+      group: 'validate',
+      title: '奥地利社保号',
+      summary: 'SvnrUtil',
+      method: 'GET',
+      path: '/api/utils/svnr',
+      fields: [{ name: 'value', label: 'SVNR', value: '1237010180' }]
+    },
+    {
+      id: 'pt-nif',
+      group: 'validate',
+      title: '葡萄牙 NIF',
+      summary: 'PtNifUtil',
+      method: 'GET',
+      path: '/api/utils/pt-nif',
+      fields: [{ name: 'value', label: 'NIF', value: '123456789' }]
+    },
+    {
+      id: 'afm',
+      group: 'validate',
+      title: '希腊 AFM',
+      summary: 'AfmUtil',
+      method: 'GET',
+      path: '/api/utils/afm',
+      fields: [{ name: 'value', label: 'AFM', value: '090000045' }]
+    },
+    {
+      id: 'nino',
+      group: 'validate',
+      title: '英国 NINO',
+      summary: 'NinoUtil',
+      method: 'GET',
+      path: '/api/utils/nino',
+      fields: [{ name: 'value', label: 'NINO', value: 'AB123456C' }]
+    },
+    {
+      id: 'rrn',
+      group: 'validate',
+      title: '韩国居民登记号',
+      summary: 'RrnUtil',
+      method: 'GET',
+      path: '/api/utils/rrn',
+      fields: [{ name: 'value', label: 'RRN', value: '900101-1234568' }]
+    },
+    {
+      id: 'my-number',
+      group: 'validate',
+      title: '日本个人番号',
+      summary: 'MyNumberUtil',
+      method: 'GET',
+      path: '/api/utils/my-number',
+      fields: [{ name: 'value', label: '番号', value: '123456789019' }]
+    },
+    {
+      id: 'yenc',
+      group: 'crypto',
+      title: 'yEnc',
+      summary: 'YencUtil',
+      method: 'GET',
+      path: '/api/utils/yenc',
+      fields: [{ name: 'text', label: '原文', value: 'Hello' }]
+    },
+    {
+      id: 'base36',
+      group: 'crypto',
+      title: 'Base36',
+      summary: 'Base36Util',
+      method: 'GET',
+      path: '/api/utils/base36',
+      fields: [
+        { name: 'text', label: '文本', value: 'hello' },
+        { name: 'value', label: '整数', value: '1234567890' }
+      ]
+    },
+    {
+      id: 'retry-after',
+      group: 'web',
+      title: 'HTTP Retry-After',
+      summary: 'RetryAfterUtil RFC 9110',
+      method: 'GET',
+      path: '/api/utils/retry-after',
+      fields: [{ name: 'header', label: 'Retry-After', value: '120' }]
+    },
+    {
+      id: 'uuid-v1',
+      group: 'id',
+      title: 'UUID v1',
+      summary: 'IdUtil.uuidV1 RFC 4122',
+      method: 'GET',
+      path: '/api/utils/uuid-v1',
+      fields: []
+    },
+    {
+      id: 'rut',
+      group: 'validate',
+      title: '智利 RUT',
+      summary: 'RutUtil MOD 11',
+      method: 'GET',
+      path: '/api/utils/rut',
+      fields: [{ name: 'value', label: 'RUT', value: '12.345.678-5' }]
+    },
+    {
+      id: 'cuit',
+      group: 'validate',
+      title: '阿根廷 CUIT',
+      summary: 'CuitUtil',
+      method: 'GET',
+      path: '/api/utils/cuit',
+      fields: [{ name: 'value', label: 'CUIT', value: '20-12345678-6' }]
+    },
+    {
+      id: 'sa-id',
+      group: 'validate',
+      title: '南非身份证',
+      summary: 'SaIdUtil Luhn',
+      method: 'GET',
+      path: '/api/utils/sa-id',
+      fields: [{ name: 'value', label: 'ID', value: '8001015009087' }]
+    },
+    {
+      id: 'ird',
+      group: 'validate',
+      title: '新西兰 IRD',
+      summary: 'IrdUtil',
+      method: 'GET',
+      path: '/api/utils/ird',
+      fields: [{ name: 'value', label: 'IRD', value: '49091850' }]
+    },
+    {
+      id: 'mykad',
+      group: 'validate',
+      title: '马来西亚 MyKad',
+      summary: 'MyKadUtil',
+      method: 'GET',
+      path: '/api/utils/mykad',
+      fields: [{ name: 'value', label: 'MyKad', value: '900101-14-5671' }]
+    },
+    {
+      id: 'cors',
+      group: 'web',
+      title: 'CORS',
+      summary: 'CorsUtil Access-Control',
+      method: 'GET',
+      path: '/api/utils/cors',
+      fields: [
+        { name: 'allowOrigin', label: 'Allow-Origin', value: 'https://example.com' },
+        { name: 'origin', label: '请求 Origin', value: 'https://example.com' },
+        { name: 'allowMethods', label: 'Allow-Methods', value: 'GET, POST' },
+        { name: 'allowHeaders', label: 'Allow-Headers', value: 'Content-Type' }
+      ]
+    },
+    {
+      id: 'www-authenticate',
+      group: 'web',
+      title: 'WWW-Authenticate',
+      summary: 'WwwAuthenticateUtil RFC 9110',
+      method: 'GET',
+      path: '/api/utils/www-authenticate',
+      fields: [{ name: 'header', label: 'WWW-Authenticate', value: 'Bearer realm="api", error="invalid_token"' }]
+    },
+    {
+      id: 'tckn',
+      group: 'validate',
+      title: '土耳其身份证',
+      summary: 'TcKimlikUtil',
+      method: 'GET',
+      path: '/api/utils/tckn',
+      fields: [{ name: 'value', label: 'TCKN', value: '10000000146' }]
+    },
+    {
+      id: 'israeli-id',
+      group: 'validate',
+      title: '以色列身份证',
+      summary: 'IsraeliIdUtil Luhn',
+      method: 'GET',
+      path: '/api/utils/israeli-id',
+      fields: [{ name: 'value', label: 'ID', value: '123456782' }]
+    },
+    {
+      id: 'cnp',
+      group: 'validate',
+      title: '罗马尼亚 CNP',
+      summary: 'CnpUtil',
+      method: 'GET',
+      path: '/api/utils/cnp',
+      fields: [{ name: 'value', label: 'CNP', value: '1800101010015' }]
+    },
+    {
+      id: 'oib',
+      group: 'validate',
+      title: '克罗地亚 OIB',
+      summary: 'OibUtil ISO 7064',
+      method: 'GET',
+      path: '/api/utils/oib',
+      fields: [{ name: 'value', label: 'OIB', value: '12345678903' }]
+    },
+    {
+      id: 'egn',
+      group: 'validate',
+      title: '保加利亚 EGN',
+      summary: 'EgnUtil',
+      method: 'GET',
+      path: '/api/utils/egn',
+      fields: [{ name: 'value', label: 'EGN', value: '8001010008' }]
+    },
+    {
+      id: 'thai-id',
+      group: 'validate',
+      title: '泰国身份证',
+      summary: 'ThaiIdUtil',
+      method: 'GET',
+      path: '/api/utils/thai-id',
+      fields: [{ name: 'value', label: 'ID', value: '1234567890121' }]
+    },
+    {
+      id: 'regon',
+      group: 'validate',
+      title: '波兰 REGON',
+      summary: 'RegonUtil',
+      method: 'GET',
+      path: '/api/utils/regon',
+      fields: [{ name: 'value', label: 'REGON', value: '123456785' }]
+    },
+    {
+      id: 'ico',
+      group: 'validate',
+      title: '捷克 IČO',
+      summary: 'IcoUtil',
+      method: 'GET',
+      path: '/api/utils/ico',
+      fields: [{ name: 'value', label: 'IČO', value: '25596641' }]
+    },
+    {
+      id: 'hsts',
+      group: 'web',
+      title: 'HTTP HSTS',
+      summary: 'HstsUtil RFC 6797',
+      method: 'GET',
+      path: '/api/utils/hsts',
+      fields: [{ name: 'header', label: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' }]
+    },
+    {
+      id: 'csp',
+      group: 'web',
+      title: 'Content-Security-Policy',
+      summary: 'CspUtil',
+      method: 'GET',
+      path: '/api/utils/csp',
+      fields: [{ name: 'header', label: 'CSP', value: "default-src 'self'; script-src 'self' https://cdn.example" }]
+    },
+    {
+      id: 'accept-encoding',
+      group: 'web',
+      title: 'Accept-Encoding',
+      summary: 'AcceptEncodingUtil RFC 9110',
+      method: 'GET',
+      path: '/api/utils/accept-encoding',
+      fields: [{ name: 'header', label: 'Accept-Encoding', value: 'gzip;q=1.0, br;q=0.8, deflate;q=0.5' }]
+    },
+    {
+      id: 'crc16-kermit',
+      group: 'crypto',
+      title: 'CRC-16/KERMIT',
+      summary: 'HashUtil.crc16Kermit',
+      method: 'GET',
+      path: '/api/utils/crc16-kermit',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 
