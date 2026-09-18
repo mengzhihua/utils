@@ -2666,6 +2666,174 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-arc',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'lv-pk',
+      group: 'validate',
+      title: '拉脱维亚个人号',
+      summary: 'LatvianPkUtil',
+      method: 'GET',
+      path: '/api/utils/lv-pk',
+      fields: [{ name: 'value', label: 'personas kods', value: '111111-11111' }]
+    },
+    {
+      id: 'lt-ak',
+      group: 'validate',
+      title: '立陶宛个人号',
+      summary: 'LithuanianAkUtil',
+      method: 'GET',
+      path: '/api/utils/lt-ak',
+      fields: [{ name: 'value', label: 'asmens kodas', value: '33309240064' }]
+    },
+    {
+      id: 'emso',
+      group: 'validate',
+      title: '斯洛文尼亚 EMŠO',
+      summary: 'EmsoUtil',
+      method: 'GET',
+      path: '/api/utils/emso',
+      fields: [{ name: 'value', label: 'EMŠO', value: '0101006500006' }]
+    },
+    {
+      id: 'pe-dni',
+      group: 'validate',
+      title: '秘鲁 DNI',
+      summary: 'PeDniUtil',
+      method: 'GET',
+      path: '/api/utils/pe-dni',
+      fields: [{ name: 'value', label: 'DNI', value: '713903006' }]
+    },
+    {
+      id: 'mx-rfc',
+      group: 'validate',
+      title: '墨西哥 RFC',
+      summary: 'MxRfcUtil SAT',
+      method: 'GET',
+      path: '/api/utils/mx-rfc',
+      fields: [{ name: 'value', label: 'RFC', value: 'GODE561231GR8' }]
+    },
+    {
+      id: 'http-age',
+      group: 'web',
+      title: 'HTTP Age',
+      summary: 'HttpAgeUtil RFC 9111',
+      method: 'GET',
+      path: '/api/utils/http-age',
+      fields: [{ name: 'header', label: 'Age', value: '3600' }]
+    },
+    {
+      id: 'warning',
+      group: 'web',
+      title: 'HTTP Warning',
+      summary: 'WarningUtil RFC 7234',
+      method: 'GET',
+      path: '/api/utils/warning',
+      fields: [{ name: 'header', label: 'Warning', value: '110 - "Response is Stale"' }]
+    },
+    {
+      id: 'crc16-maxim',
+      group: 'crypto',
+      title: 'CRC-16/MAXIM',
+      summary: 'HashUtil.crc16Maxim',
+      method: 'GET',
+      path: '/api/utils/crc16-maxim',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'bsn',
+      group: 'validate',
+      title: '荷兰 BSN',
+      summary: 'BsnUtil elfproef',
+      method: 'GET',
+      path: '/api/utils/bsn',
+      fields: [{ name: 'value', label: 'BSN', value: '111222333' }]
+    },
+    {
+      id: 'rodne',
+      group: 'validate',
+      title: '捷克出生号',
+      summary: 'RodneCisloUtil',
+      method: 'GET',
+      path: '/api/utils/rodne',
+      fields: [{ name: 'value', label: 'rodné číslo', value: '680101/0007' }]
+    },
+    {
+      id: 'base92',
+      group: 'crypto',
+      title: 'Base92',
+      summary: 'Base92Util',
+      method: 'GET',
+      path: '/api/utils/base92',
+      fields: [
+        { name: 'action', label: '动作', type: 'select', value: 'encode', options: [
+          { value: 'encode', label: '编码' },
+          { value: 'decode', label: '解码' }
+        ]},
+        { name: 'text', label: '文本', value: 'Hello' }
+      ]
+    },
+    {
+      id: 'structured-fields',
+      group: 'web',
+      title: 'Structured Fields',
+      summary: 'StructuredFieldUtil RFC 8941',
+      method: 'GET',
+      path: '/api/utils/structured-fields',
+      fields: [{ name: 'header', label: 'Dictionary', value: 'abc=123, def=?0, title="hi"' }]
+    },
+    {
+      id: 'y-tunnus',
+      group: 'validate',
+      title: '芬兰企业号',
+      summary: 'YTunnusUtil',
+      method: 'GET',
+      path: '/api/utils/y-tunnus',
+      fields: [{ name: 'value', label: 'Y-tunnus', value: '1234567-1' }]
+    },
+    {
+      id: 'orgnr',
+      group: 'validate',
+      title: '挪威企业号',
+      summary: 'OrgnrUtil',
+      method: 'GET',
+      path: '/api/utils/orgnr',
+      fields: [{ name: 'value', label: 'orgnr', value: '123456785' }]
+    },
+    {
+      id: 'cvr',
+      group: 'validate',
+      title: '丹麦 CVR',
+      summary: 'CvrUtil',
+      method: 'GET',
+      path: '/api/utils/cvr',
+      fields: [{ name: 'value', label: 'CVR', value: '35408002' }]
+    },
+    {
+      id: 'cif',
+      group: 'validate',
+      title: '西班牙 CIF',
+      summary: 'CifUtil AEAT',
+      method: 'GET',
+      path: '/api/utils/cif',
+      fields: [{ name: 'value', label: 'CIF', value: 'A58818501' }]
+    },
+    {
+      id: 'orgnr-se',
+      group: 'validate',
+      title: '瑞典企业号',
+      summary: 'SeOrgNrUtil',
+      method: 'GET',
+      path: '/api/utils/orgnr-se',
+      fields: [{ name: 'value', label: 'organisationsnummer', value: '556036-0793' }]
+    },
+    {
+      id: 'crc32-posix',
+      group: 'crypto',
+      title: 'CRC-32/POSIX',
+      summary: 'HashUtil.crc32Posix',
+      method: 'GET',
+      path: '/api/utils/crc32-posix',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

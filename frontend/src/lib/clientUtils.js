@@ -964,6 +964,42 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, valid: isNit(digits) }
     }
+    case 'lv-pk-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isLatvianPk(digits) }
+    }
+    case 'emso-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isEmso(digits) }
+    }
+    case 'pe-dni-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isPeDni(compact) }
+    }
+    case 'mx-rfc-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isMxRfc(compact) }
+    }
+    case 'bsn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isBsn(digits) }
+    }
+    case 'rodne-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isRodne(digits) }
+    }
+    case 'y-tunnus-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isYTunnus(digits) }
+    }
+    case 'cvr-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isCvr(digits) }
+    }
+    case 'cif-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isCif(compact) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2543,6 +2579,118 @@ function isNit(digits) {
   const rem = sum % 11
   const check = rem <= 1 ? rem : 11 - rem
   return Number(digits[digits.length - 1]) === check
+}
+
+function isLatvianPk(digits) {
+  if (!/^\d{11}$/.test(digits)) return false
+  const w = [1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1]
+  let sum = 0
+  for (let i = 0; i < 11; i++) sum += Number(digits[i]) * w[i]
+  return sum % 11 === 1
+}
+
+function isEmso(digits) {
+  if (!/^\d{13}$/.test(digits)) return false
+  const region = Number(digits.slice(7, 9))
+  if (region < 50 || region > 59) return false
+  const w = [7, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 12; i++) sum += Number(digits[i]) * w[i]
+  let rem = 11 - (sum % 11)
+  if (rem >= 10) rem = 0
+  return Number(digits[12]) === rem
+}
+
+function isPeDni(compact) {
+  if (!/^\d{8}[0-9A-JK]$/.test(compact)) return false
+  const w = [3, 2, 7, 6, 5, 4, 3, 2]
+  const numeric = ['6', '7', '8', '9', '0', '1', '1', '2', '3', '4', '5']
+  const letters = ['K', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+  let sum = 0
+  for (let i = 0; i < 8; i++) sum += Number(compact[i]) * w[i]
+  let key = 11 - (sum % 11)
+  if (key === 11) key = 0
+  const last = compact[8]
+  return last === numeric[key] || last === letters[key]
+}
+
+function isBsn(digits) {
+  const padded = digits.length === 8 ? `0${digits}` : digits
+  if (!/^[1-9]\d{8}$/.test(padded) && !/^0[1-9]\d{7}$/.test(padded)) return false
+  const w = [9, 8, 7, 6, 5, 4, 3, 2, -1]
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += Number(padded[i]) * w[i]
+  return sum !== 0 && sum % 11 === 0
+}
+
+function isYTunnus(digits) {
+  if (!/^\d{8}$/.test(digits)) return false
+  const w = [7, 9, 10, 5, 8, 4, 2]
+  let sum = 0
+  for (let i = 0; i < 7; i++) sum += Number(digits[i]) * w[i]
+  const rem = sum % 11
+  if (rem === 1) return false
+  const check = rem === 0 ? 0 : 11 - rem
+  return Number(digits[7]) === check
+}
+
+function isCvr(digits) {
+  if (!/^\d{8}$/.test(digits)) return false
+  const w = [2, 7, 6, 5, 4, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 7; i++) sum += Number(digits[i]) * w[i]
+  const rem = sum % 11
+  if (rem === 1) return false
+  const check = rem === 0 ? 0 : 11 - rem
+  return Number(digits[7]) === check
+}
+
+function isCif(compact) {
+  if (!/^[ABCDEFGHJNPQRSUVW]\d{7}[0-9A-J]$/.test(compact)) return false
+  const body = compact.slice(1, 8)
+  let sum = 0
+  for (let i = 0; i < 7; i++) {
+    let n = Number(body[i])
+    if (i % 2 === 0) {
+      n *= 2
+      sum += Math.floor(n / 10) + (n % 10)
+    } else {
+      sum += n
+    }
+  }
+  const digit = String((10 - (sum % 10)) % 10)
+  const letter = 'JABCDEFGHI'[Number(digit)]
+  const type = compact[0]
+  const last = compact[8]
+  if ('KPQS'.includes(type)) return last === letter
+  if ('ABEH'.includes(type)) return last === digit
+  return last === digit || last === letter
+}
+
+function isRodne(digits) {
+  if (!/^\d{9,10}$/.test(digits)) return false
+  if (digits.length === 9) return true
+  const n = Number(digits)
+  if (n % 11 === 0) return true
+  return Number(digits.slice(0, 9)) % 11 === 10 && digits[9] === '0'
+}
+
+function isMxRfc(compact) {
+  if (compact === 'XAXX010101000' || compact === 'XEXX010101000') return true
+  if (!/^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/.test(compact)) return false
+  const map = '0123456789ABCDEFGHIJKLMN&OPQRSTUVWXYZ '
+  let body = compact.slice(0, -1)
+  if (body.length === 11) body = ` ${body}`
+  if (body.length !== 12) return false
+  let sum = 0
+  for (let i = 0; i < 12; i++) {
+    const ch = body[i]
+    const value = ch === 'Ñ' ? 38 : Math.max(0, map.indexOf(ch))
+    sum += value * (13 - i)
+  }
+  const rem = sum % 11
+  const check = rem === 0 ? '0' : rem === 1 ? 'A' : String(11 - rem)
+  return compact[compact.length - 1] === check
 }
 
 function isSscc(digits) {
