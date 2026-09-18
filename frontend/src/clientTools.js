@@ -1050,6 +1050,27 @@ export const clientTools = [
       title: '希腊 AFM',
       summary: '090000045',
       fields: [{ name: 'value', label: 'AFM', value: '090000045' }]
+    },
+    {
+      id: 'rut-local',
+      group: 'net',
+      title: '智利 RUT',
+      summary: '12.345.678-5',
+      fields: [{ name: 'value', label: 'RUT', value: '12.345.678-5' }]
+    },
+    {
+      id: 'cuit-local',
+      group: 'net',
+      title: '阿根廷 CUIT',
+      summary: '20-12345678-6',
+      fields: [{ name: 'value', label: 'CUIT', value: '20-12345678-6' }]
+    },
+    {
+      id: 'said-local',
+      group: 'net',
+      title: '南非身份证',
+      summary: '8001015009087',
+      fields: [{ name: 'value', label: 'ID', value: '8001015009087' }]
     }
   ]
 

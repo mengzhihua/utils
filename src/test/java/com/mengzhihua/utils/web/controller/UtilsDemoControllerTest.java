@@ -508,4 +508,29 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.encodedLong").value("kf12oi"));
     }
+
+    @Test
+    void rutCuitSaIdCors() throws Exception {
+        mockMvc.perform(get("/api/utils/rut").param("value", "12.345.678-5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cuit").param("value", "20-12345678-6"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/sa-id").param("value", "8001015009087"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/ird").param("value", "49091850"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cors")
+                        .param("allowOrigin", "*")
+                        .param("origin", "https://example.com"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.allowsOrigin").value(true));
+    }
 }

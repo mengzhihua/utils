@@ -920,6 +920,18 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, valid: isAfm(digits) }
     }
+    case 'rut-local': {
+      const compact = String(values.value || '').replace(/[.\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isRut(compact) }
+    }
+    case 'cuit-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isCuit(digits) }
+    }
+    case 'said-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: /^\d{13}$/.test(digits) && luhnAny(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2390,6 +2402,31 @@ function isAfm(digits) {
   let sum = 0
   for (let i = 0; i < 8; i++) sum += Number(digits[i]) * (2 ** (8 - i))
   return Number(digits[8]) === (sum % 11) % 10
+}
+
+function isRut(compact) {
+  if (!/^\d{7,8}[0-9K]$/.test(compact)) return false
+  const body = compact.slice(0, -1)
+  let sum = 0
+  let weight = 2
+  for (let i = body.length - 1; i >= 0; i--) {
+    sum += Number(body[i]) * weight
+    weight = weight === 7 ? 2 : weight + 1
+  }
+  const rem = 11 - (sum % 11)
+  const check = rem === 11 ? '0' : rem === 10 ? 'K' : String(rem)
+  return compact.slice(-1) === check
+}
+
+function isCuit(digits) {
+  if (!/^\d{11}$/.test(digits)) return false
+  const w = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 10; i++) sum += Number(digits[i]) * w[i]
+  let rem = 11 - (sum % 11)
+  if (rem === 11) rem = 0
+  if (rem === 10) rem = 9
+  return Number(digits[10]) === rem
 }
 
 function isSscc(digits) {

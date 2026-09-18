@@ -2400,6 +2400,74 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/uuid-v1',
       fields: []
+    },
+    {
+      id: 'rut',
+      group: 'validate',
+      title: '智利 RUT',
+      summary: 'RutUtil MOD 11',
+      method: 'GET',
+      path: '/api/utils/rut',
+      fields: [{ name: 'value', label: 'RUT', value: '12.345.678-5' }]
+    },
+    {
+      id: 'cuit',
+      group: 'validate',
+      title: '阿根廷 CUIT',
+      summary: 'CuitUtil',
+      method: 'GET',
+      path: '/api/utils/cuit',
+      fields: [{ name: 'value', label: 'CUIT', value: '20-12345678-6' }]
+    },
+    {
+      id: 'sa-id',
+      group: 'validate',
+      title: '南非身份证',
+      summary: 'SaIdUtil Luhn',
+      method: 'GET',
+      path: '/api/utils/sa-id',
+      fields: [{ name: 'value', label: 'ID', value: '8001015009087' }]
+    },
+    {
+      id: 'ird',
+      group: 'validate',
+      title: '新西兰 IRD',
+      summary: 'IrdUtil',
+      method: 'GET',
+      path: '/api/utils/ird',
+      fields: [{ name: 'value', label: 'IRD', value: '49091850' }]
+    },
+    {
+      id: 'mykad',
+      group: 'validate',
+      title: '马来西亚 MyKad',
+      summary: 'MyKadUtil',
+      method: 'GET',
+      path: '/api/utils/mykad',
+      fields: [{ name: 'value', label: 'MyKad', value: '900101-14-5671' }]
+    },
+    {
+      id: 'cors',
+      group: 'web',
+      title: 'CORS',
+      summary: 'CorsUtil Access-Control',
+      method: 'GET',
+      path: '/api/utils/cors',
+      fields: [
+        { name: 'allowOrigin', label: 'Allow-Origin', value: 'https://example.com' },
+        { name: 'origin', label: '请求 Origin', value: 'https://example.com' },
+        { name: 'allowMethods', label: 'Allow-Methods', value: 'GET, POST' },
+        { name: 'allowHeaders', label: 'Allow-Headers', value: 'Content-Type' }
+      ]
+    },
+    {
+      id: 'www-authenticate',
+      group: 'web',
+      title: 'WWW-Authenticate',
+      summary: 'WwwAuthenticateUtil RFC 9110',
+      method: 'GET',
+      path: '/api/utils/www-authenticate',
+      fields: [{ name: 'header', label: 'WWW-Authenticate', value: 'Bearer realm="api", error="invalid_token"' }]
     }
   ]
 

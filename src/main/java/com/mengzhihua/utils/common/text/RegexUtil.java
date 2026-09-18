@@ -70,6 +70,11 @@ import com.mengzhihua.utils.common.validate.NrnUtil;
 import com.mengzhihua.utils.common.validate.PtNifUtil;
 import com.mengzhihua.utils.common.validate.RrnUtil;
 import com.mengzhihua.utils.common.validate.SvnrUtil;
+import com.mengzhihua.utils.common.validate.CuitUtil;
+import com.mengzhihua.utils.common.validate.IrdUtil;
+import com.mengzhihua.utils.common.validate.MyKadUtil;
+import com.mengzhihua.utils.common.validate.RutUtil;
+import com.mengzhihua.utils.common.validate.SaIdUtil;
 import com.mengzhihua.utils.common.validate.VinUtil;
 
 /**
@@ -249,6 +254,11 @@ public final class RegexUtil {
         TYPES.put("nino", NinoUtil::isValid);
         TYPES.put("rrn", RrnUtil::isValid);
         TYPES.put("mynumber", MyNumberUtil::isValid);
+        TYPES.put("rut", RutUtil::isValid);
+        TYPES.put("cuit", CuitUtil::isValid);
+        TYPES.put("said", SaIdUtil::isValid);
+        TYPES.put("ird", IrdUtil::isValid);
+        TYPES.put("mykad", MyKadUtil::isValid);
     }
 
     private RegexUtil() {
