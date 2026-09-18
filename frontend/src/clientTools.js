@@ -1632,6 +1632,34 @@ export const clientTools = [
       title: '塞内加尔企业号',
       summary: '30672212G2',
       fields: [{ name: 'value', label: 'NINEA', value: '30672212G2' }]
+    },
+    {
+      id: 'mz-nuit-local',
+      group: 'net',
+      title: '莫桑比克税号',
+      summary: '400339910',
+      fields: [{ name: 'value', label: 'NUIT', value: '400339910' }]
+    },
+    {
+      id: 'cu-ni-local',
+      group: 'net',
+      title: '古巴身份证',
+      summary: '91021027775',
+      fields: [{ name: 'value', label: 'NI', value: '91021027775' }]
+    },
+    {
+      id: 'gn-nifp-local',
+      group: 'net',
+      title: '几内亚税号',
+      summary: '693770885',
+      fields: [{ name: 'value', label: 'NIFp', value: '693-770-885' }]
+    },
+    {
+      id: 'sm-coe-local',
+      group: 'net',
+      title: '圣马力诺经营者号',
+      summary: '24165',
+      fields: [{ name: 'value', label: 'COE', value: '024165' }]
     }
   ]
 

@@ -3779,6 +3779,60 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc8-rohc',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'mz-nuit',
+      group: 'validate',
+      title: '莫桑比克税号',
+      summary: 'MzNuitUtil',
+      method: 'GET',
+      path: '/api/utils/mz-nuit',
+      fields: [{ name: 'value', label: 'NUIT', value: '400339910' }]
+    },
+    {
+      id: 'cu-ni',
+      group: 'validate',
+      title: '古巴身份证',
+      summary: 'CuNiUtil',
+      method: 'GET',
+      path: '/api/utils/cu-ni',
+      fields: [{ name: 'value', label: 'NI', value: '91021027775' }]
+    },
+    {
+      id: 'gn-nifp',
+      group: 'validate',
+      title: '几内亚税号',
+      summary: 'GnNifpUtil',
+      method: 'GET',
+      path: '/api/utils/gn-nifp',
+      fields: [{ name: 'value', label: 'NIFp', value: '693-770-885' }]
+    },
+    {
+      id: 'sm-coe',
+      group: 'validate',
+      title: '圣马力诺经营者号',
+      summary: 'SmCoeUtil',
+      method: 'GET',
+      path: '/api/utils/sm-coe',
+      fields: [{ name: 'value', label: 'COE', value: '024165' }]
+    },
+    {
+      id: 'alt-svc',
+      group: 'web',
+      title: 'HTTP Alt-Svc',
+      summary: 'AltSvcUtil',
+      method: 'GET',
+      path: '/api/utils/alt-svc',
+      fields: [{ name: 'header', label: 'Alt-Svc', value: 'h3=":443"; ma=86400, h2=":443"; ma=2592000' }]
+    },
+    {
+      id: 'crc16-mcrf4xx',
+      group: 'crypto',
+      title: 'CRC-16/MCRF4XX',
+      summary: 'HashUtil.crc16Mcrf4xx',
+      method: 'GET',
+      path: '/api/utils/crc16-mcrf4xx',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

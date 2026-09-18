@@ -987,4 +987,35 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc8Rohc").value("d0"));
     }
+
+    @Test
+    void mozambiqueCubaGuineaSanMarino() throws Exception {
+        mockMvc.perform(get("/api/utils/mz-nuit").param("value", "400339910"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cu-ni").param("value", "91021027775"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.birthDate").value("1991-02-10"))
+                .andExpect(jsonPath("$.data.female").value(true));
+
+        mockMvc.perform(get("/api/utils/gn-nifp").param("value", "693-770-885"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/sm-coe").param("value", "024165"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("24165"));
+
+        mockMvc.perform(get("/api/utils/alt-svc").param("header", "h3=\":443\"; ma=86400, h2=\":443\"; ma=2592000"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.firstProtocol").value("h3"))
+                .andExpect(jsonPath("$.data.hasH3").value(true));
+
+        mockMvc.perform(get("/api/utils/crc16-mcrf4xx").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Mcrf4xx").value("6f63"));
+    }
 }
