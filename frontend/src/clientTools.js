@@ -917,6 +917,55 @@ export const clientTools = [
       title: 'SIM ICCID',
       summary: '89014103211118510720',
       fields: [{ name: 'value', label: 'ICCID', value: '89014103211118510720' }]
+    },
+    {
+      id: 'personnummer-local',
+      group: 'net',
+      title: '瑞典个人号',
+      summary: '19811218-9876',
+      fields: [{ name: 'value', label: '个人号', value: '19811218-9876' }]
+    },
+    {
+      id: 'hetu-local',
+      group: 'net',
+      title: '芬兰个人号',
+      summary: '131052-308T',
+      fields: [{ name: 'value', label: 'HETU', value: '131052-308T' }]
+    },
+    {
+      id: 'fodselsnummer-local',
+      group: 'net',
+      title: '挪威个人号',
+      summary: '11077941012',
+      fields: [{ name: 'value', label: 'FNR', value: '11077941012' }]
+    },
+    {
+      id: 'iswc-local',
+      group: 'net',
+      title: 'ISWC',
+      summary: 'T-034.524.680-8',
+      fields: [{ name: 'value', label: 'ISWC', value: 'T-034.524.680-8' }]
+    },
+    {
+      id: 'abn-local',
+      group: 'net',
+      title: '澳大利亚 ABN',
+      summary: '51 824 753 556',
+      fields: [{ name: 'value', label: 'ABN', value: '51 824 753 556' }]
+    },
+    {
+      id: 'tfn-local',
+      group: 'net',
+      title: '澳大利亚 TFN',
+      summary: '123456782',
+      fields: [{ name: 'value', label: 'TFN', value: '123456782' }]
+    },
+    {
+      id: 'sscc-local',
+      group: 'net',
+      title: 'GS1 SSCC',
+      summary: '106141411234567897',
+      fields: [{ name: 'value', label: 'SSCC', value: '106141411234567897' }]
     }
   ]
 

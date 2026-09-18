@@ -843,6 +843,35 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, valid: /^89\d{17,18}$/.test(digits) && luhnAny(digits) }
     }
+    case 'personnummer-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      const ten = digits.length === 12 ? digits.slice(2) : digits
+      return { normalized: digits, valid: isPersonnummer(ten) }
+    }
+    case 'hetu-local': {
+      const compact = String(values.value || '').replace(/[\s.]/g, '').toUpperCase()
+      return { normalized: compact, valid: isHetu(compact) }
+    }
+    case 'fodselsnummer-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isFodselsnummer(digits) }
+    }
+    case 'iswc-local': {
+      const compact = String(values.value || '').replace(/[\s.-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isIswc(compact) }
+    }
+    case 'abn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isAbn(digits) }
+    }
+    case 'tfn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isTfn(digits) }
+    }
+    case 'sscc-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isSscc(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2136,6 +2165,66 @@ function isIsni(compact) {
   const check = (12 - (p % 11)) % 11
   const expected = check === 10 ? 'X' : String(check)
   return compact[15] === expected
+}
+
+function isPersonnummer(ten) {
+  return /^\d{10}$/.test(ten) && luhnAny(ten)
+}
+
+function isHetu(compact) {
+  if (!/^\d{6}[-+A-GU-Y]\d{3}[0-9A-Z]$/.test(compact)) return false
+  const check = '0123456789ABCDEFHJKLMNPRSTUVWXY'
+  const body = compact.slice(0, 6) + compact.slice(7, 10)
+  return compact[10] === check[Number(body) % 31]
+}
+
+function isFodselsnummer(digits) {
+  if (!/^\d{11}$/.test(digits)) return false
+  const w1 = [3, 7, 6, 1, 8, 9, 4, 5, 2]
+  const w2 = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+  const mod11 = (weights, len) => {
+    let sum = 0
+    for (let i = 0; i < len; i++) sum += Number(digits[i]) * weights[i]
+    const rem = sum % 11
+    if (rem === 0) return 0
+    const check = 11 - rem
+    return check === 10 ? -1 : check
+  }
+  return mod11(w1, 9) === Number(digits[9]) && mod11(w2, 10) === Number(digits[10])
+}
+
+function isIswc(compact) {
+  if (!/^T\d{10}$/.test(compact)) return false
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += Number(compact[i + 1]) * (i + 1)
+  return compact[10] === String(sum % 10)
+}
+
+function isAbn(digits) {
+  if (!/^\d{11}$/.test(digits)) return false
+  const w = [10, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+  let sum = (Number(digits[0]) - 1) * w[0]
+  for (let i = 1; i < 11; i++) sum += Number(digits[i]) * w[i]
+  return sum % 89 === 0
+}
+
+function isTfn(digits) {
+  if (!/^\d{9}$/.test(digits)) return false
+  const w = [1, 4, 3, 7, 5, 8, 6, 9, 10]
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += Number(digits[i]) * w[i]
+  return sum % 11 === 0
+}
+
+function isSscc(digits) {
+  if (!/^\d{18}$/.test(digits)) return false
+  let sum = 0
+  let factor = 3
+  for (let i = 16; i >= 0; i--) {
+    sum += Number(digits[i]) * factor
+    factor = 4 - factor
+  }
+  return digits[17] === String((10 - (sum % 10)) % 10)
 }
 
 function refinedSoundex(text) {

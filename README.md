@@ -189,12 +189,20 @@ com.mengzhihua.utils
 | 证件 / 税号 | `NirUtil` / `CodiceFiscaleUtil` / `SteuerIdUtil` / `EoriUtil` | INSEE / Agenzia Entrate / BZSt / EU | 法国 NIR、意大利税号、德国税号、EORI |
 | 学术 / SIM / HTTP | `DoiUtil` / `PmidUtil` / `IccidUtil` / `ForwardedUtil` / `HashUtil.fletcher16` | ISO 26324 / PubMed / ITU / RFC 7239 | DOI、PMID、ICCID、Forwarded、Fletcher-16 `1ede` |
 
+### 对标北欧证件 / GS1 / ATO / RFC 8288 / 9110
+
+| 模块 | 类 | 对标 | 说明 |
+| --- | --- | --- | --- |
+| 证件 | `PersonnummerUtil` / `HetuUtil` / `FodselsnummerUtil` | Skatteverket / VRK / Skatteetaten | 瑞典 `19811218-9876`、芬兰 `131052-308T`、挪威 `11077941012` |
+| 作品 / 物流 / 税号 | `IswcUtil` / `SsccUtil` / `AbnUtil` / `TfnUtil` | ISO 15707 / GS1 / ATO | ISWC、SSCC 18 位、ABN `51824753556`、TFN `123456782` |
+| HTTP / 编码 | `LinkHeaderUtil` / `EtagUtil` / `UuencodeUtil` | RFC 8288 / 9110 / Commons Codec | Link `rel=previous`、ETag 弱比较、`Cat`→`#0V%T` |
+
 ## 前端控制台（Vue 3）
 
 启动后打开 <http://localhost:8080/> 即可在页面上自测常用工具：脱敏、身份证、JWT、AES、人民币大写、雪花 ID 等。源码在 `frontend/`，构建产物输出到 `src/main/resources/static/`。控制台包含：
 
-- 后端 Java 工具演示（脱敏、JWT、AES、身份证、信用代码、坐标系、签名、TOTP、Cron、Ant 路径、限流、星座、slug、时长、农历、表达式、ISBN、验证码、单位换算、IMEI、Hashids、罗马数字、URL 解析、IBAN、VIN、EAN、Soundex、Jaro-Winkler、SHA3、KSUID、Sqids、UUID v5/v6、Metaphone、ISIN、BIC、Bech32、HKDF、摩斯电码、CaseFormat、HOTP、Base45、JSON Patch、节假日、WCAG 对比度、CUSIP、SEDOL、ORCID、ISRC、JSON Merge Patch、HTTP Date、车牌、URI Template、正则抽取、SM3、ISBN 互转、IPv6、SemVer、CRC-16、SM4、BLAKE2s、CMAC、香港/台湾身份证、组织机构代码、节气、拼音、XML、ChaCha20、CRC-64、BLAKE2b、AES-KW、Ed25519、TSID、干支、Jump Hash、集装箱号、Bech32m、ABA、X25519、RIPEMD-160、FIGI、LEI、NHS、SHAKE、NPI、ISMN、NRIC、科隆拼音、HTTP Range、Hamming、UUID v8、NYSIIS、Caverphone、Sonyflake、Content-Disposition、儒略日、CPF、CNPJ、PESEL、UPC-E、CRC-32/MPEG-2、HMAC-SM3、Murmur3-128、Double Metaphone、Match Rating、SIREN、SIRET、NIF、ISNI、basE91、Bencode、HTTP Accept、Refined Soundex、Porter、NIR、意大利税号、德国税号、EORI、DOI、PMID、ICCID、HTTP Forwarded、Fletcher 等）
-- 浏览器本地工具：JSON/XML、Base64、JWT 解码、Markdown、命名风格、全角半角、行处理、文本对比、MD5/HMAC/CRC32/Murmur3、ULID、UUID v7、CIDR、UA/Cookie、星座、高亮、四则运算、进制、ISBN、Punycode、罗马数字、单位换算、IMEI、URL 解析、Soundex、Jaro-Winkler、IBAN、EAN、年龄、ROT13、摩斯、通配符、ISIN、Humanize、Quoted-Printable、Base45、WCAG 对比度、去音调、车牌、Emoji、CUSIP、正则抽取/转义、ISBN 互转、IPv6、卡组织、时长差、拼音首字母、港澳台证件、组织机构代码、节气、干支、ABA、集装箱号、Jump Hash、FIGI、LEI、NHS、NPI、ISMN、NRIC、科隆拼音、Hamming、UUID v8、NYSIIS、Caverphone、CPF、CNPJ、PESEL、UPC-E、儒略日、Double Metaphone、Match Rating、SIREN、SIRET、NIF、ISNI、Bencode、Refined Soundex、NIR、意大利税号、德国税号、EORI、DOI、PMID、ICCID 等
+- 后端 Java 工具演示（脱敏、JWT、AES、身份证、信用代码、坐标系、签名、TOTP、Cron、Ant 路径、限流、星座、slug、时长、农历、表达式、ISBN、验证码、单位换算、IMEI、Hashids、罗马数字、URL 解析、IBAN、VIN、EAN、Soundex、Jaro-Winkler、SHA3、KSUID、Sqids、UUID v5/v6、Metaphone、ISIN、BIC、Bech32、HKDF、摩斯电码、CaseFormat、HOTP、Base45、JSON Patch、节假日、WCAG 对比度、CUSIP、SEDOL、ORCID、ISRC、JSON Merge Patch、HTTP Date、车牌、URI Template、正则抽取、SM3、ISBN 互转、IPv6、SemVer、CRC-16、SM4、BLAKE2s、CMAC、香港/台湾身份证、组织机构代码、节气、拼音、XML、ChaCha20、CRC-64、BLAKE2b、AES-KW、Ed25519、TSID、干支、Jump Hash、集装箱号、Bech32m、ABA、X25519、RIPEMD-160、FIGI、LEI、NHS、SHAKE、NPI、ISMN、NRIC、科隆拼音、HTTP Range、Hamming、UUID v8、NYSIIS、Caverphone、Sonyflake、Content-Disposition、儒略日、CPF、CNPJ、PESEL、UPC-E、CRC-32/MPEG-2、HMAC-SM3、Murmur3-128、Double Metaphone、Match Rating、SIREN、SIRET、NIF、ISNI、basE91、Bencode、HTTP Accept、Refined Soundex、Porter、NIR、意大利税号、德国税号、EORI、DOI、PMID、ICCID、HTTP Forwarded、Fletcher、瑞典/芬兰/挪威个人号、ISWC、SSCC、ABN、TFN、HTTP Link、ETag、uuencode 等）
+- 浏览器本地工具：JSON/XML、Base64、JWT 解码、Markdown、命名风格、全角半角、行处理、文本对比、MD5/HMAC/CRC32/Murmur3、ULID、UUID v7、CIDR、UA/Cookie、星座、高亮、四则运算、进制、ISBN、Punycode、罗马数字、单位换算、IMEI、URL 解析、Soundex、Jaro-Winkler、IBAN、EAN、年龄、ROT13、摩斯、通配符、ISIN、Humanize、Quoted-Printable、Base45、WCAG 对比度、去音调、车牌、Emoji、CUSIP、正则抽取/转义、ISBN 互转、IPv6、卡组织、时长差、拼音首字母、港澳台证件、组织机构代码、节气、干支、ABA、集装箱号、Jump Hash、FIGI、LEI、NHS、NPI、ISMN、NRIC、科隆拼音、Hamming、UUID v8、NYSIIS、Caverphone、CPF、CNPJ、PESEL、UPC-E、儒略日、Double Metaphone、Match Rating、SIREN、SIRET、NIF、ISNI、Bencode、Refined Soundex、NIR、意大利税号、德国税号、EORI、DOI、PMID、ICCID、瑞典/芬兰/挪威个人号、ISWC、ABN、TFN、SSCC 等
 - 特效实验室：玻璃拟态、光晕、礼花、打字机、涟漪、聚光跟随
 - 深色模式、页面过渡、复制 Toast
 

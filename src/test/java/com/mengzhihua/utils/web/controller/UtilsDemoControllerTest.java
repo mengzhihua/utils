@@ -434,4 +434,32 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.fletcher16").value("1ede"));
     }
+
+    @Test
+    void personnummerHetuIswcUuencode() throws Exception {
+        mockMvc.perform(get("/api/utils/personnummer").param("value", "19811218-9876"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/hetu").param("value", "131052-308T"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/iswc").param("value", "T-034.524.680-8"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/abn").param("value", "51 824 753 556"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/uuencode").param("text", "Cat"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.encoded").value("#0V%T"));
+
+        mockMvc.perform(get("/api/utils/link")
+                        .param("header", "<https://example.com/x>; rel=\"previous\""))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.previous").value("https://example.com/x"));
+    }
 }

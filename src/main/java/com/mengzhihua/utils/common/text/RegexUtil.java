@@ -48,6 +48,13 @@ import com.mengzhihua.utils.common.validate.IccidUtil;
 import com.mengzhihua.utils.common.validate.NirUtil;
 import com.mengzhihua.utils.common.validate.PmidUtil;
 import com.mengzhihua.utils.common.validate.SteuerIdUtil;
+import com.mengzhihua.utils.common.validate.AbnUtil;
+import com.mengzhihua.utils.common.validate.FodselsnummerUtil;
+import com.mengzhihua.utils.common.validate.HetuUtil;
+import com.mengzhihua.utils.common.validate.IswcUtil;
+import com.mengzhihua.utils.common.validate.PersonnummerUtil;
+import com.mengzhihua.utils.common.validate.SsccUtil;
+import com.mengzhihua.utils.common.validate.TfnUtil;
 import com.mengzhihua.utils.common.validate.VinUtil;
 
 /**
@@ -205,6 +212,13 @@ public final class RegexUtil {
         TYPES.put("doi", DoiUtil::isValid);
         TYPES.put("pmid", PmidUtil::isValid);
         TYPES.put("iccid", IccidUtil::isValid);
+        TYPES.put("personnummer", PersonnummerUtil::isValid);
+        TYPES.put("hetu", HetuUtil::isValid);
+        TYPES.put("fodselsnummer", FodselsnummerUtil::isValid);
+        TYPES.put("iswc", IswcUtil::isValid);
+        TYPES.put("sscc", SsccUtil::isValid);
+        TYPES.put("abn", AbnUtil::isValid);
+        TYPES.put("tfn", TfnUtil::isValid);
     }
 
     private RegexUtil() {
