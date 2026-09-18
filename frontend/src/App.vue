@@ -49,6 +49,8 @@
         <div class="locale-switch">
           <button type="button" :class="{ active: locale === 'zh' }" @click="setLocale('zh')">{{ t('localeZh') }}</button>
           <button type="button" :class="{ active: locale === 'en' }" @click="setLocale('en')">{{ t('localeEn') }}</button>
+          <button type="button" :class="{ active: locale === 'ja' }" @click="setLocale('ja')">{{ t('localeJa') }}</button>
+          <button type="button" :class="{ active: locale === 'de' }" @click="setLocale('de')">{{ t('localeDe') }}</button>
         </div>
         <button class="theme-toggle" type="button" @click="toggle">{{ isDark ? t('themeDark') : t('themeLight') }}</button>
         <a href="/swagger-ui.html" target="_blank" rel="noreferrer">{{ t('swagger') }}</a>

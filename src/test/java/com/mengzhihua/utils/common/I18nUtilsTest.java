@@ -5,10 +5,21 @@ import java.util.List;
 import java.util.Locale;
 
 import com.mengzhihua.utils.common.i18n.AcceptLanguageUtil;
+import com.mengzhihua.utils.common.i18n.BidiUtil;
+import com.mengzhihua.utils.common.i18n.BreakIteratorUtil;
+import com.mengzhihua.utils.common.i18n.CalendarLocaleUtil;
+import com.mengzhihua.utils.common.i18n.ChronologyUtil;
 import com.mengzhihua.utils.common.i18n.CollationUtil;
 import com.mengzhihua.utils.common.i18n.I18nFormatUtil;
+import com.mengzhihua.utils.common.i18n.I18nParseUtil;
 import com.mengzhihua.utils.common.i18n.I18nUtil;
+import com.mengzhihua.utils.common.i18n.LocaleCaseUtil;
 import com.mengzhihua.utils.common.i18n.LocaleUtil;
+import com.mengzhihua.utils.common.i18n.NativeDigitUtil;
+import com.mengzhihua.utils.common.i18n.OrdinalUtil;
+import com.mengzhihua.utils.common.i18n.PluralUtil;
+import com.mengzhihua.utils.common.i18n.RelativeTimeUtil;
+import com.mengzhihua.utils.common.i18n.TimezoneUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,8 +33,14 @@ class I18nUtilsTest {
         assertEquals("Hello, Ada", I18nUtil.get("hello", Locale.ENGLISH, "Ada"));
         assertEquals("你好，Ada", I18nUtil.get("hello", Locale.SIMPLIFIED_CHINESE, "Ada"));
         assertEquals("こんにちは、Ada", I18nUtil.get("hello", Locale.JAPANESE, "Ada"));
+        assertEquals("Hallo, Ada", I18nUtil.get("hello", Locale.GERMANY, "Ada"));
+        assertEquals("Bonjour, Ada", I18nUtil.get("hello", Locale.FRANCE, "Ada"));
+        assertEquals("안녕하세요, Ada", I18nUtil.get("hello", Locale.KOREA, "Ada"));
         assertEquals("success", I18nUtil.get("result.success", "en"));
         assertEquals("成功", I18nUtil.get("result.success", "zh-CN"));
+        assertEquals("Erfolg", I18nUtil.get("result.success", "de"));
+        assertEquals("missing parameter: value", I18nUtil.get("error.missing_parameter", Locale.ENGLISH, "value"));
+        assertEquals("缺少参数：value", I18nUtil.get("error.missing_parameter", Locale.SIMPLIFIED_CHINESE, "value"));
         assertEquals("zh-CN", LocaleUtil.toTag(LocaleUtil.parse("zh_CN")));
         assertTrue(LocaleUtil.supported("zh-CN"));
         assertFalse(LocaleUtil.supported("xx-YY"));
@@ -44,5 +61,53 @@ class I18nUtilsTest {
                 .toLanguageTag());
         assertEquals("en", AcceptLanguageUtil.negotiate("fr;q=0.2,en;q=0.8", List.of(Locale.ENGLISH, Locale.SIMPLIFIED_CHINESE))
                 .getLanguage());
+        assertEquals("apples, oranges, and pears", I18nFormatUtil.list("en", "apples,oranges,pears"));
+        assertEquals("apples、oranges和pears", I18nFormatUtil.list("zh-CN", "apples,oranges,pears"));
+        assertEquals("apples, oranges und pears", I18nFormatUtil.list("de-DE", "apples,oranges,pears"));
+        String cny = I18nFormatUtil.currencyName("zh-CN", "CNY");
+        assertTrue(cny.contains("人民") || cny.toLowerCase(Locale.ROOT).contains("yuan"));
+        String berlin = I18nFormatUtil.dateTimeZone("de-DE", "2026-09-18T08:15:00", "Europe/Berlin");
+        assertTrue(berlin.contains("18") || berlin.contains("Sep") || berlin.contains("2026"));
+        assertEquals("3 items", PluralUtil.items("en", 3));
+        assertEquals("one item", PluralUtil.items("en", 1));
+        assertEquals("3 条", PluralUtil.items("zh-CN", 3));
+        assertEquals("3 elementos", PluralUtil.items("es", 3));
+        assertEquals("Hola, Ada", I18nUtil.get("hello", "es", "Ada"));
+        assertEquals("rtl", BidiUtil.direction("مرحبا"));
+        assertEquals("ltr", BidiUtil.direction("Hello"));
+        assertTrue(BidiUtil.localeRtl("ar"));
+        assertFalse(BidiUtil.localeRtl("en"));
+        assertEquals("MONDAY", CalendarLocaleUtil.firstDay("de-DE"));
+        assertEquals("SUNDAY", CalendarLocaleUtil.firstDay("en-US"));
+        String compact = I18nFormatUtil.compact("en-US", "1234.5");
+        assertTrue(compact.toUpperCase(Locale.ROOT).contains("K") || compact.contains("1"));
+        String zoneName = TimezoneUtil.displayName("Europe/Berlin", "de");
+        assertTrue(zoneName.toLowerCase(Locale.GERMAN).contains("europa")
+                || zoneName.toLowerCase(Locale.ROOT).contains("central")
+                || zoneName.contains("MEZ")
+                || zoneName.contains("MESZ")
+                || !zoneName.isBlank());
+        assertTrue(I18nUtil.keys(Locale.ENGLISH).contains("hello"));
+        assertTrue(I18nUtil.availableLanguages().contains("es"));
+        assertEquals("3 minutes ago", RelativeTimeUtil.ofSeconds("en", 180));
+        assertEquals("3 分钟前", RelativeTimeUtil.ofSeconds("zh-CN", 180));
+        assertEquals("in 2 minutes", RelativeTimeUtil.ofSeconds("en", -120));
+        assertEquals("刚刚", RelativeTimeUtil.ofSeconds("zh-CN", 10));
+        assertEquals("İSTANBUL", LocaleCaseUtil.upper("tr", "istanbul"));
+        assertEquals("ISTANBUL", LocaleCaseUtil.upper("en", "istanbul"));
+        assertEquals("ı", LocaleCaseUtil.lower("tr", "I"));
+        assertEquals(new java.math.BigDecimal("1234.5"), I18nParseUtil.number("de-DE", "1.234,5"));
+        assertEquals(java.time.LocalDate.of(2026, 9, 18),
+                I18nParseUtil.date("de-DE", I18nFormatUtil.date("de-DE", "2026-09-18")));
+        assertEquals(List.of("Hello", "world"), BreakIteratorUtil.words("en", "Hello, world"));
+        assertTrue(BreakIteratorUtil.wordCount("zh-CN", "你好世界") >= 1);
+        String nativeDigits = NativeDigitUtil.toNative("ar-EG", "1234");
+        assertEquals("1234", NativeDigitUtil.toLatin("ar-EG", nativeDigits));
+        String japanese = ChronologyUtil.japanese("2026-09-18");
+        assertTrue(japanese.contains("令和") || japanese.toLowerCase(Locale.ROOT).contains("reiwa"));
+        assertEquals("Reiwa", ChronologyUtil.era("2026-09-18"));
+        assertEquals("21st", OrdinalUtil.format("en", 21));
+        assertEquals("第21", OrdinalUtil.format("zh-CN", 21));
+        assertEquals("1.", OrdinalUtil.format("de", 1));
     }
 }

@@ -3420,7 +3420,9 @@ export const tools = [
         { name: 'locale', label: 'Locale', value: 'de-DE' },
         { name: 'amount', label: '金额', value: '1234.5' },
         { name: 'currency', label: '货币', value: 'EUR' },
-        { name: 'date', label: '日期', value: '2026-09-18' }
+        { name: 'date', label: '日期', value: '2026-09-18' },
+        { name: 'zone', label: '时区', value: 'Europe/Berlin' },
+        { name: 'items', label: '列表', value: 'apples,oranges,pears' }
       ]
     },
     {
@@ -3443,6 +3445,178 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/accept-language',
       fields: [{ name: 'header', label: 'Accept-Language', value: 'zh-CN,zh;q=0.9,en;q=0.8' }]
+    },
+    {
+      id: 'gt-nit',
+      group: 'validate',
+      title: '危地马拉税号',
+      summary: 'GtNitUtil',
+      method: 'GET',
+      path: '/api/utils/gt-nit',
+      fields: [{ name: 'value', label: 'NIT', value: '576937-K' }]
+    },
+    {
+      id: 'cr-cpf',
+      group: 'validate',
+      title: '哥斯达黎加身份证',
+      summary: 'CrCpfUtil',
+      method: 'GET',
+      path: '/api/utils/cr-cpf',
+      fields: [{ name: 'value', label: 'CPF', value: '3-0455-0175' }]
+    },
+    {
+      id: 'cr-cpj',
+      group: 'validate',
+      title: '哥斯达黎加税号',
+      summary: 'CrCpjUtil',
+      method: 'GET',
+      path: '/api/utils/cr-cpj',
+      fields: [{ name: 'value', label: 'CPJ', value: '3-101-999999' }]
+    },
+    {
+      id: 'tn-mf',
+      group: 'validate',
+      title: '突尼斯税号',
+      summary: 'TnMfUtil',
+      method: 'GET',
+      path: '/api/utils/tn-mf',
+      fields: [{ name: 'value', label: 'MF', value: '1234567/M/A/E/001' }]
+    },
+    {
+      id: 'server-timing',
+      group: 'web',
+      title: 'HTTP Server-Timing',
+      summary: 'ServerTimingUtil',
+      method: 'GET',
+      path: '/api/utils/server-timing',
+      fields: [{ name: 'header', label: 'Server-Timing', value: 'miss, db;dur=53, app;dur=47.2' }]
+    },
+    {
+      id: 'crc8-sae',
+      group: 'crypto',
+      title: 'CRC-8/SAE-J1850',
+      summary: 'HashUtil.crc8SaeJ1850',
+      method: 'GET',
+      path: '/api/utils/crc8-sae',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'i18n-timezone',
+      group: 'web',
+      title: '时区显示名',
+      summary: 'TimezoneUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/timezone',
+      fields: [
+        { name: 'zone', label: '时区', value: 'Europe/Berlin' },
+        { name: 'locale', label: 'Locale', value: 'de' }
+      ]
+    },
+    {
+      id: 'i18n-plural',
+      group: 'web',
+      title: '复数选择',
+      summary: 'PluralUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/plural',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'en' },
+        { name: 'count', label: '数量', value: '3' }
+      ]
+    },
+    {
+      id: 'i18n-bidi',
+      group: 'web',
+      title: '双向文本',
+      summary: 'BidiUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/bidi',
+      fields: [
+        { name: 'text', label: '文本', value: 'مرحبا' },
+        { name: 'locale', label: 'Locale', value: 'ar' }
+      ]
+    },
+    {
+      id: 'i18n-calendar',
+      group: 'web',
+      title: '本地化日历',
+      summary: 'CalendarLocaleUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/calendar',
+      fields: [{ name: 'locale', label: 'Locale', value: 'de-DE' }]
+    },
+    {
+      id: 'i18n-relative',
+      group: 'web',
+      title: '相对时间',
+      summary: 'RelativeTimeUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/relative',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'zh-CN' },
+        { name: 'seconds', label: '秒（过去）', value: '180' }
+      ]
+    },
+    {
+      id: 'i18n-case',
+      group: 'web',
+      title: '本地化大小写',
+      summary: 'LocaleCaseUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/case',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'tr' },
+        { name: 'text', label: '文本', value: 'istanbul' }
+      ]
+    },
+    {
+      id: 'i18n-parse',
+      group: 'web',
+      title: '解析本地化数字',
+      summary: 'I18nParseUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/parse',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'de-DE' },
+        { name: 'number', label: '数字', value: '1.234,5' },
+        { name: 'date', label: '日期', value: '2026-09-18' }
+      ]
+    },
+    {
+      id: 'i18n-break',
+      group: 'web',
+      title: '本地化分词',
+      summary: 'BreakIteratorUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/break',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'en' },
+        { name: 'text', label: '文本', value: 'Hello, world' }
+      ]
+    },
+    {
+      id: 'i18n-digits',
+      group: 'web',
+      title: '本地数字',
+      summary: 'NativeDigitUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/digits',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'ar-EG' },
+        { name: 'text', label: '数字', value: '1234' }
+      ]
+    },
+    {
+      id: 'i18n-chrono',
+      group: 'web',
+      title: '和历 / 序数',
+      summary: 'ChronologyUtil / OrdinalUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/chrono',
+      fields: [
+        { name: 'date', label: '日期', value: '2026-09-18' },
+        { name: 'locale', label: 'Locale', value: 'ja' }
+      ]
     }
   ]
 

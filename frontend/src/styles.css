@@ -148,10 +148,11 @@ button, input, select, textarea { font: inherit; }
 }
 .locale-switch {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 .locale-switch button {
-  flex: 1;
+  flex: 1 1 calc(50% - 3px);
   border: 1px solid #334155;
   background: transparent;
   color: #9fb0c2;

@@ -1460,6 +1460,94 @@ export const clientTools = [
         { name: 'amount', label: '金额', value: '1234.5' },
         { name: 'currency', label: '货币', value: 'CNY' }
       ]
+    },
+    {
+      id: 'gt-nit-local',
+      group: 'net',
+      title: '危地马拉税号',
+      summary: '576937-K',
+      fields: [{ name: 'value', label: 'NIT', value: '576937-K' }]
+    },
+    {
+      id: 'cr-cpf-local',
+      group: 'net',
+      title: '哥斯达黎加身份证',
+      summary: '3-0455-0175',
+      fields: [{ name: 'value', label: 'CPF', value: '3-0455-0175' }]
+    },
+    {
+      id: 'cr-cpj-local',
+      group: 'net',
+      title: '哥斯达黎加税号',
+      summary: '3-101-999999',
+      fields: [{ name: 'value', label: 'CPJ', value: '3-101-999999' }]
+    },
+    {
+      id: 'tn-mf-local',
+      group: 'net',
+      title: '突尼斯税号',
+      summary: '1234567/M/A/E/001',
+      fields: [{ name: 'value', label: 'MF', value: '1234567/M/A/E/001' }]
+    },
+    {
+      id: 'i18n-plural-local',
+      group: 'text',
+      title: '复数选择',
+      summary: 'Intl.PluralRules',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'en' },
+        { name: 'count', label: '数量', value: '3' }
+      ]
+    },
+    {
+      id: 'i18n-bidi-local',
+      group: 'text',
+      title: '双向文本',
+      summary: 'RTL / LTR',
+      fields: [
+        { name: 'text', label: '文本', value: 'مرحبا' },
+        { name: 'locale', label: 'Locale', value: 'ar' }
+      ]
+    },
+    {
+      id: 'i18n-timezone-local',
+      group: 'text',
+      title: '时区显示名',
+      summary: 'Intl.DateTimeFormat',
+      fields: [
+        { name: 'zone', label: '时区', value: 'Europe/Berlin' },
+        { name: 'locale', label: 'Locale', value: 'de' }
+      ]
+    },
+    {
+      id: 'i18n-relative-local',
+      group: 'text',
+      title: '相对时间',
+      summary: '3 minutes ago',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'zh-CN' },
+        { name: 'seconds', label: '秒（过去）', value: '180' }
+      ]
+    },
+    {
+      id: 'i18n-case-local',
+      group: 'text',
+      title: '本地化大小写',
+      summary: 'tr: istanbul → İSTANBUL',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'tr' },
+        { name: 'text', label: '文本', value: 'istanbul' }
+      ]
+    },
+    {
+      id: 'i18n-digits-local',
+      group: 'text',
+      title: '本地数字',
+      summary: '1234 → ١٢٣٤',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'ar-EG' },
+        { name: 'text', label: '数字', value: '1234' }
+      ]
     }
   ]
 

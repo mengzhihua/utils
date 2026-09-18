@@ -829,5 +829,77 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.first").value("zh-CN"))
                 .andExpect(jsonPath("$.data.negotiated").value("zh-CN"));
+
+        mockMvc.perform(get("/api/utils/i18n/format").param("locale", "en").param("items", "apples,oranges,pears"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.list").value("apples, oranges, and pears"));
+
+        mockMvc.perform(get("/api/utils/i18n/message").param("key", "hello").param("arg", "Ada").param("locale", "de"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.bundle").value("Hallo, Ada"));
+
+        mockMvc.perform(get("/api/utils/gt-nit").param("value", "576937-K"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cr-cpf").param("value", "3-0455-0175"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("0304550175"));
+
+        mockMvc.perform(get("/api/utils/cr-cpj").param("value", "3-101-999999"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/tn-mf").param("value", "1234567/M/A/E/001"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/server-timing").param("header", "miss, db;dur=53, app;dur=47.2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.first").value("miss"))
+                .andExpect(jsonPath("$.data.dbDuration").value("53"));
+
+        mockMvc.perform(get("/api/utils/crc8-sae").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc8Sae").value("4b"));
+
+        mockMvc.perform(get("/api/utils/i18n/plural").param("locale", "en").param("count", "3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.items").value("3 items"));
+
+        mockMvc.perform(get("/api/utils/i18n/bidi").param("text", "مرحبا").param("locale", "ar"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.direction").value("rtl"))
+                .andExpect(jsonPath("$.data.localeRtl").value(true));
+
+        mockMvc.perform(get("/api/utils/i18n/calendar").param("locale", "de-DE"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.firstDay").value("MONDAY"));
+
+        mockMvc.perform(get("/api/utils/i18n/timezone").param("zone", "Europe/Berlin").param("locale", "de"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value("Europe/Berlin"));
+
+        mockMvc.perform(get("/api/utils/i18n/relative").param("locale", "en").param("seconds", "180"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.text").value("3 minutes ago"));
+
+        mockMvc.perform(get("/api/utils/i18n/case").param("locale", "tr").param("text", "istanbul"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.upper").value("İSTANBUL"));
+
+        mockMvc.perform(get("/api/utils/i18n/parse").param("locale", "de-DE").param("number", "1.234,5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.number").value("1234.5"));
+
+        mockMvc.perform(get("/api/utils/i18n/break").param("locale", "en").param("text", "Hello, world"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.wordCount").value(2));
+
+        mockMvc.perform(get("/api/utils/i18n/chrono").param("date", "2026-09-18").param("locale", "ja"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.era").value("Reiwa"))
+                .andExpect(jsonPath("$.data.ordinal").value("第21"));
     }
 }
