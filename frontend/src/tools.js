@@ -3617,6 +3617,60 @@ export const tools = [
         { name: 'date', label: '日期', value: '2026-09-18' },
         { name: 'locale', label: 'Locale', value: 'ja' }
       ]
+    },
+    {
+      id: 'eg-tn',
+      group: 'validate',
+      title: '埃及税号',
+      summary: 'EgTnUtil',
+      method: 'GET',
+      path: '/api/utils/eg-tn',
+      fields: [{ name: 'value', label: 'TN', value: '100-531-385' }]
+    },
+    {
+      id: 'lu-tva',
+      group: 'validate',
+      title: '卢森堡税号',
+      summary: 'LuTvaUtil',
+      method: 'GET',
+      path: '/api/utils/lu-tva',
+      fields: [{ name: 'value', label: 'TVA', value: 'LU 150 274 42' }]
+    },
+    {
+      id: 'sv-nit',
+      group: 'validate',
+      title: '萨尔瓦多税号',
+      summary: 'SvNitUtil',
+      method: 'GET',
+      path: '/api/utils/sv-nit',
+      fields: [{ name: 'value', label: 'NIT', value: '0614-050707-104-8' }]
+    },
+    {
+      id: 'mk-edb',
+      group: 'validate',
+      title: '北马其顿税号',
+      summary: 'MkEdbUtil',
+      method: 'GET',
+      path: '/api/utils/mk-edb',
+      fields: [{ name: 'value', label: 'ЕДБ', value: '4030000375897' }]
+    },
+    {
+      id: 'content-language',
+      group: 'web',
+      title: 'HTTP Content-Language',
+      summary: 'ContentLanguageUtil',
+      method: 'GET',
+      path: '/api/utils/content-language',
+      fields: [{ name: 'header', label: 'Content-Language', value: 'zh-CN, en' }]
+    },
+    {
+      id: 'crc8-darc',
+      group: 'crypto',
+      title: 'CRC-8/DARC',
+      summary: 'HashUtil.crc8Darc',
+      method: 'GET',
+      path: '/api/utils/crc8-darc',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

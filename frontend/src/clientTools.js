@@ -1548,6 +1548,34 @@ export const clientTools = [
         { name: 'locale', label: 'Locale', value: 'ar-EG' },
         { name: 'text', label: '数字', value: '1234' }
       ]
+    },
+    {
+      id: 'eg-tn-local',
+      group: 'net',
+      title: '埃及税号',
+      summary: '100-531-385',
+      fields: [{ name: 'value', label: 'TN', value: '100-531-385' }]
+    },
+    {
+      id: 'lu-tva-local',
+      group: 'net',
+      title: '卢森堡税号',
+      summary: '15027442',
+      fields: [{ name: 'value', label: 'TVA', value: 'LU 150 274 42' }]
+    },
+    {
+      id: 'sv-nit-local',
+      group: 'net',
+      title: '萨尔瓦多税号',
+      summary: '0614-050707-104-8',
+      fields: [{ name: 'value', label: 'NIT', value: '0614-050707-104-8' }]
+    },
+    {
+      id: 'mk-edb-local',
+      group: 'net',
+      title: '北马其顿税号',
+      summary: '4030000375897',
+      fields: [{ name: 'value', label: 'ЕДБ', value: '4030000375897' }]
     }
   ]
 

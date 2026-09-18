@@ -130,8 +130,12 @@ import com.mengzhihua.utils.common.validate.ItinUtil;
 import com.mengzhihua.utils.common.validate.KePinUtil;
 import com.mengzhihua.utils.common.validate.CrCpfUtil;
 import com.mengzhihua.utils.common.validate.CrCpjUtil;
+import com.mengzhihua.utils.common.validate.EgTnUtil;
 import com.mengzhihua.utils.common.validate.GtNitUtil;
+import com.mengzhihua.utils.common.validate.LuTvaUtil;
 import com.mengzhihua.utils.common.validate.MaIceUtil;
+import com.mengzhihua.utils.common.validate.MkEdbUtil;
+import com.mengzhihua.utils.common.validate.SvNitUtil;
 import com.mengzhihua.utils.common.validate.PyRucUtil;
 import com.mengzhihua.utils.common.validate.TnMfUtil;
 import com.mengzhihua.utils.common.validate.UyRutUtil;
@@ -397,6 +401,10 @@ public final class RegexUtil {
         TYPES.put("crcpf", CrCpfUtil::isValid);
         TYPES.put("crcpj", CrCpjUtil::isValid);
         TYPES.put("tnmf", TnMfUtil::isValid);
+        TYPES.put("egtn", EgTnUtil::isValid);
+        TYPES.put("lutva", LuTvaUtil::isValid);
+        TYPES.put("svnit", SvNitUtil::isValid);
+        TYPES.put("mkedb", MkEdbUtil::isValid);
     }
 
     private RegexUtil() {

@@ -1252,6 +1252,22 @@ export async function runClientTool(id, values) {
       }
       return { locale, native, latin: text }
     }
+    case 'eg-tn-local': {
+      const digits = normalizeEgTn(values.value)
+      return { normalized: digits, formatted: digits.length === 9 ? `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}` : digits, valid: /^\d{9}$/.test(digits) }
+    }
+    case 'lu-tva-local': {
+      const digits = normalizeLuTva(values.value)
+      return { normalized: digits, valid: isLuTva(digits) }
+    }
+    case 'sv-nit-local': {
+      const digits = normalizeSvNit(values.value)
+      return { normalized: digits, formatted: digits.length === 14 ? `${digits.slice(0, 4)}-${digits.slice(4, 10)}-${digits.slice(10, 13)}-${digits.slice(13)}` : digits, valid: isSvNit(digits) }
+    }
+    case 'mk-edb-local': {
+      const digits = normalizeMkEdb(values.value)
+      return { normalized: digits, valid: isMkEdb(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -3354,6 +3370,52 @@ function isTnMf(compact) {
   if (!'APBDN'.includes(compact[8]) || !'MPCNE'.includes(compact[9])) return false
   if (!/^\d{3}$/.test(compact.slice(10))) return false
   return compact.slice(10) === '000' || compact[9] === 'E'
+}
+
+function normalizeEgTn(value) {
+  const mapped = String(value || '').replace(/[\u0660-\u0669]/g, (ch) => String(ch.charCodeAt(0) - 0x0660)).replace(/[\u06F0-\u06F9]/g, (ch) => String(ch.charCodeAt(0) - 0x06F0))
+  return mapped.replace(/\D/g, '')
+}
+
+function normalizeLuTva(value) {
+  let compact = String(value || '').replace(/[\s:.-]/g, '').toUpperCase()
+  if (compact.startsWith('LU')) compact = compact.slice(2)
+  return compact.replace(/\D/g, '')
+}
+
+function isLuTva(digits) {
+  return /^\d{8}$/.test(digits) && Number(digits.slice(0, 6)) % 89 === Number(digits.slice(6))
+}
+
+function normalizeSvNit(value) {
+  let compact = String(value || '').replace(/[\s-]/g, '').toUpperCase()
+  if (compact.startsWith('SV')) compact = compact.slice(2)
+  return compact.replace(/\D/g, '')
+}
+
+function isSvNit(digits) {
+  if (!/^[019]\d{13}$/.test(digits)) return false
+  const body = digits.slice(0, 13)
+  const old = body.slice(10) <= '100'
+  const weights = old ? [14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2] : [2, 7, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 13; i++) sum += Number(body[i]) * weights[i]
+  const rem = old ? (sum % 11) % 10 : (((-sum % 11) + 11) % 11) % 10
+  return digits[13] === String(rem)
+}
+
+function normalizeMkEdb(value) {
+  let compact = String(value || '').replace(/[\s-]/g, '').toUpperCase()
+  if (compact.startsWith('MK') || compact.startsWith('МК')) compact = compact.slice(2)
+  return compact.replace(/\D/g, '')
+}
+
+function isMkEdb(digits) {
+  if (!/^\d{13}$/.test(digits)) return false
+  const w = [7, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 12; i++) sum += Number(digits[i]) * w[i]
+  return digits[12] === String((((-sum % 11) + 11) % 11) % 10)
 }
 
 function isRegistrikood(digits) {
