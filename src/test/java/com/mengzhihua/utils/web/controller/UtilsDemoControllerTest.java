@@ -729,4 +729,24 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc16Dnp").value("ea82"));
     }
+
+    @Test
+    void einOgrnSnils() throws Exception {
+        mockMvc.perform(get("/api/utils/ein").param("value", "91-1144442"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.campus").value("Philadelphia"));
+
+        mockMvc.perform(get("/api/utils/ogrn").param("value", "1022200525819"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/snils").param("value", "112-233-445 95"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/crc16-cms").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Cms").value("aee7"));
+    }
 }

@@ -1337,6 +1337,34 @@ export const clientTools = [
       title: '越南税号',
       summary: '0100233488',
       fields: [{ name: 'value', label: 'MST', value: '0100233488' }]
+    },
+    {
+      id: 'ein-local',
+      group: 'net',
+      title: '美国雇主识别号',
+      summary: '91-1144442',
+      fields: [{ name: 'value', label: 'EIN', value: '91-1144442' }]
+    },
+    {
+      id: 'ogrn-local',
+      group: 'net',
+      title: '俄罗斯统一注册号',
+      summary: '1022200525819',
+      fields: [{ name: 'value', label: 'ОГРН', value: '1022200525819' }]
+    },
+    {
+      id: 'snils-local',
+      group: 'net',
+      title: '俄罗斯养老金号',
+      summary: '11223344595',
+      fields: [{ name: 'value', label: 'СНИЛС', value: '112-233-445 95' }]
+    },
+    {
+      id: 'nipt-local',
+      group: 'net',
+      title: '阿尔巴尼亚税号',
+      summary: 'J91402501L',
+      fields: [{ name: 'value', label: 'NIPT', value: 'J91402501L' }]
     }
   ]
 

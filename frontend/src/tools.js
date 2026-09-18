@@ -3149,6 +3149,69 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-dnp',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'ein',
+      group: 'validate',
+      title: '美国雇主识别号',
+      summary: 'EinUtil',
+      method: 'GET',
+      path: '/api/utils/ein',
+      fields: [{ name: 'value', label: 'EIN', value: '91-1144442' }]
+    },
+    {
+      id: 'ogrn',
+      group: 'validate',
+      title: '俄罗斯统一注册号',
+      summary: 'OgrnUtil',
+      method: 'GET',
+      path: '/api/utils/ogrn',
+      fields: [{ name: 'value', label: 'ОГРН', value: '1022200525819' }]
+    },
+    {
+      id: 'snils',
+      group: 'validate',
+      title: '俄罗斯养老金号',
+      summary: 'SnilsUtil',
+      method: 'GET',
+      path: '/api/utils/snils',
+      fields: [{ name: 'value', label: 'СНИЛС', value: '112-233-445 95' }]
+    },
+    {
+      id: 'nipt',
+      group: 'validate',
+      title: '阿尔巴尼亚税号',
+      summary: 'NiptUtil',
+      method: 'GET',
+      path: '/api/utils/nipt',
+      fields: [{ name: 'value', label: 'NIPT', value: 'J91402501L' }]
+    },
+    {
+      id: 'timing-allow',
+      group: 'web',
+      title: 'HTTP Timing-Allow-Origin',
+      summary: 'TimingAllowUtil',
+      method: 'GET',
+      path: '/api/utils/timing-allow',
+      fields: [{ name: 'header', label: 'Timing-Allow-Origin', value: '*' }]
+    },
+    {
+      id: 'oac',
+      group: 'web',
+      title: 'HTTP Origin-Agent-Cluster',
+      summary: 'OacUtil',
+      method: 'GET',
+      path: '/api/utils/oac',
+      fields: [{ name: 'header', label: 'OAC', value: '?1' }]
+    },
+    {
+      id: 'crc16-cms',
+      group: 'crypto',
+      title: 'CRC-16/CMS',
+      summary: 'HashUtil.crc16Cms',
+      method: 'GET',
+      path: '/api/utils/crc16-cms',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 
