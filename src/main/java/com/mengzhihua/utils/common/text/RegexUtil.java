@@ -97,6 +97,21 @@ import com.mengzhihua.utils.common.validate.OrgnrUtil;
 import com.mengzhihua.utils.common.validate.PeDniUtil;
 import com.mengzhihua.utils.common.validate.SeOrgNrUtil;
 import com.mengzhihua.utils.common.validate.YTunnusUtil;
+import com.mengzhihua.utils.common.validate.AdoszamUtil;
+import com.mengzhihua.utils.common.validate.CheUidUtil;
+import com.mengzhihua.utils.common.validate.CuiUtil;
+import com.mengzhihua.utils.common.validate.EdrpouUtil;
+import com.mengzhihua.utils.common.validate.EikUtil;
+import com.mengzhihua.utils.common.validate.HojinUtil;
+import com.mengzhihua.utils.common.validate.KboUtil;
+import com.mengzhihua.utils.common.validate.KrBrnUtil;
+import com.mengzhihua.utils.common.validate.PibUtil;
+import com.mengzhihua.utils.common.validate.TwGuiUtil;
+import com.mengzhihua.utils.common.validate.AcnUtil;
+import com.mengzhihua.utils.common.validate.GstinUtil;
+import com.mengzhihua.utils.common.validate.NpwpUtil;
+import com.mengzhihua.utils.common.validate.RegistrikoodUtil;
+import com.mengzhihua.utils.common.validate.VknUtil;
 import com.mengzhihua.utils.common.validate.RodneCisloUtil;
 import com.mengzhihua.utils.common.validate.TajUtil;
 import com.mengzhihua.utils.common.validate.TcKimlikUtil;
@@ -311,6 +326,21 @@ public final class RegexUtil {
         TYPES.put("cvr", CvrUtil::isValid);
         TYPES.put("cif", CifUtil::isValid);
         TYPES.put("orgnrse", SeOrgNrUtil::isValid);
+        TYPES.put("cheuid", CheUidUtil::isValid);
+        TYPES.put("eik", EikUtil::isValid);
+        TYPES.put("rocui", CuiUtil::isValid);
+        TYPES.put("adoszam", AdoszamUtil::isValid);
+        TYPES.put("kbo", KboUtil::isValid);
+        TYPES.put("hojin", HojinUtil::isValid);
+        TYPES.put("krbrn", KrBrnUtil::isValid);
+        TYPES.put("twgui", TwGuiUtil::isValid);
+        TYPES.put("edrpou", EdrpouUtil::isValid);
+        TYPES.put("rspib", PibUtil::isValid);
+        TYPES.put("gstin", GstinUtil::isValid);
+        TYPES.put("acn", AcnUtil::isValid);
+        TYPES.put("vkn", VknUtil::isValid);
+        TYPES.put("npwp", NpwpUtil::isValid);
+        TYPES.put("registrikood", RegistrikoodUtil::isValid);
     }
 
     private RegexUtil() {

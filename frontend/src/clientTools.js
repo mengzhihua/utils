@@ -1190,6 +1190,97 @@ export const clientTools = [
       title: '西班牙 CIF',
       summary: 'A58818501',
       fields: [{ name: 'value', label: 'CIF', value: 'A58818501' }]
+    },
+    {
+      id: 'che-uid-local',
+      group: 'net',
+      title: '瑞士企业号',
+      summary: 'CHE-109.322.551',
+      fields: [{ name: 'value', label: 'CHE-UID', value: 'CHE-109.322.551' }]
+    },
+    {
+      id: 'cui-local',
+      group: 'net',
+      title: '罗马尼亚 CUI',
+      summary: '18547290',
+      fields: [{ name: 'value', label: 'CUI', value: '18547290' }]
+    },
+    {
+      id: 'kbo-local',
+      group: 'net',
+      title: '比利时企业号',
+      summary: '0123456749',
+      fields: [{ name: 'value', label: 'KBO', value: '0123.456.749' }]
+    },
+    {
+      id: 'hojin-local',
+      group: 'net',
+      title: '日本法人番号',
+      summary: '8700110005901',
+      fields: [{ name: 'value', label: '法人番号', value: '8700110005901' }]
+    },
+    {
+      id: 'kr-brn-local',
+      group: 'net',
+      title: '韩国事业者号',
+      summary: '120-81-47521',
+      fields: [{ name: 'value', label: 'BRN', value: '120-81-47521' }]
+    },
+    {
+      id: 'tw-gui-local',
+      group: 'net',
+      title: '台湾统一编号',
+      summary: '53212539',
+      fields: [{ name: 'value', label: 'GUI', value: '53212539' }]
+    },
+    {
+      id: 'edrpou-local',
+      group: 'net',
+      title: '乌克兰 EDRPOU',
+      summary: '14360570',
+      fields: [{ name: 'value', label: 'EDRPOU', value: '14360570' }]
+    },
+    {
+      id: 'pib-local',
+      group: 'net',
+      title: '塞尔维亚 PIB',
+      summary: '101134702',
+      fields: [{ name: 'value', label: 'PIB', value: '101134702' }]
+    },
+    {
+      id: 'gstin-local',
+      group: 'net',
+      title: '印度 GSTIN',
+      summary: '27AAPFU0939F1ZV',
+      fields: [{ name: 'value', label: 'GSTIN', value: '27AAPFU0939F1ZV' }]
+    },
+    {
+      id: 'acn-local',
+      group: 'net',
+      title: '澳大利亚公司号',
+      summary: '000000019',
+      fields: [{ name: 'value', label: 'ACN', value: '000 000 019' }]
+    },
+    {
+      id: 'vkn-local',
+      group: 'net',
+      title: '土耳其税号',
+      summary: '4540536920',
+      fields: [{ name: 'value', label: 'VKN', value: '4540536920' }]
+    },
+    {
+      id: 'npwp-local',
+      group: 'net',
+      title: '印尼税号',
+      summary: '013121660091000',
+      fields: [{ name: 'value', label: 'NPWP', value: '01.312.166.0-091.000' }]
+    },
+    {
+      id: 'registrikood-local',
+      group: 'net',
+      title: '爱沙尼亚企业号',
+      summary: '12345678',
+      fields: [{ name: 'value', label: 'registrikood', value: '12345678' }]
     }
   ]
 

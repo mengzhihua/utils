@@ -634,4 +634,61 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc32Posix").value("765e7680"));
     }
+
+    @Test
+    void cheUidCuiKbo() throws Exception {
+        mockMvc.perform(get("/api/utils/che-uid").param("value", "CHE-109.322.551"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/ro-cui").param("value", "18547290"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/kbo").param("value", "0123.456.749"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/crc16-usb").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Usb").value("b4c8"));
+    }
+
+    @Test
+    void hojinBrnEdrpou() throws Exception {
+        mockMvc.perform(get("/api/utils/hojin").param("value", "8700110005901"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/kr-brn").param("value", "120-81-47521"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/edrpou").param("value", "14360570"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/crc8-smbus").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc8Smbus").value("f4"));
+    }
+
+    @Test
+    void gstinAcnVkn() throws Exception {
+        mockMvc.perform(get("/api/utils/gstin").param("value", "27AAPFU0939F1ZV"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/acn").param("value", "000 000 019"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/vkn").param("value", "4540536920"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/crc16-genibus").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Genibus").value("d64e"));
+    }
 }
