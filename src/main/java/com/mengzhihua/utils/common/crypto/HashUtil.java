@@ -688,6 +688,23 @@ public final class HashUtil {
         return String.format(Locale.ROOT, "%08x", crc32Autosar(text));
     }
 
+    /**
+     * CRC-16/GSM (poly {@code 0x1021}, init 0, xorout {@code 0xFFFF}).
+     * {@code 123456789} → {@code ce3c}.
+     */
+    public static int crc16Gsm(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Gsm(data);
+    }
+
+    public static String crc16GsmHex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Gsm(text));
+    }
+
+    public static int crc16Gsm(byte[] data) {
+        return crc16Shift(data, 0) ^ 0xffff;
+    }
+
     public static int crc32Autosar(byte[] data) {
         byte[] bytes = data == null ? new byte[0] : data;
         int crc = 0xffffffff;

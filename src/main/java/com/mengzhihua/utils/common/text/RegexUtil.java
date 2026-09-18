@@ -128,6 +128,10 @@ import com.mengzhihua.utils.common.validate.GhTinUtil;
 import com.mengzhihua.utils.common.validate.IdnoUtil;
 import com.mengzhihua.utils.common.validate.ItinUtil;
 import com.mengzhihua.utils.common.validate.KePinUtil;
+import com.mengzhihua.utils.common.validate.MaIceUtil;
+import com.mengzhihua.utils.common.validate.PyRucUtil;
+import com.mengzhihua.utils.common.validate.UyRutUtil;
+import com.mengzhihua.utils.common.validate.VoenUtil;
 import com.mengzhihua.utils.common.validate.RifUtil;
 import com.mengzhihua.utils.common.validate.RncUtil;
 import com.mengzhihua.utils.common.validate.UnpUtil;
@@ -381,6 +385,10 @@ public final class RegexUtil {
         TYPES.put("idno", IdnoUtil::isValid);
         TYPES.put("ghtin", GhTinUtil::isValid);
         TYPES.put("kepin", KePinUtil::isValid);
+        TYPES.put("maice", MaIceUtil::isValid);
+        TYPES.put("voen", VoenUtil::isValid);
+        TYPES.put("uyrut", UyRutUtil::isValid);
+        TYPES.put("pyruc", PyRucUtil::isValid);
     }
 
     private RegexUtil() {

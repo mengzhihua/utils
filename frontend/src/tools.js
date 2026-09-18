@@ -3329,6 +3329,60 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc32-autosar',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'ma-ice',
+      group: 'validate',
+      title: '摩洛哥企业号',
+      summary: 'MaIceUtil',
+      method: 'GET',
+      path: '/api/utils/ma-ice',
+      fields: [{ name: 'value', label: 'ICE', value: '001561191000066' }]
+    },
+    {
+      id: 'voen',
+      group: 'validate',
+      title: '阿塞拜疆税号',
+      summary: 'VoenUtil',
+      method: 'GET',
+      path: '/api/utils/voen',
+      fields: [{ name: 'value', label: 'VÖEN', value: '140 155 5071' }]
+    },
+    {
+      id: 'uy-rut',
+      group: 'validate',
+      title: '乌拉圭税号',
+      summary: 'UyRutUtil',
+      method: 'GET',
+      path: '/api/utils/uy-rut',
+      fields: [{ name: 'value', label: 'RUT', value: '21-100342-001-7' }]
+    },
+    {
+      id: 'py-ruc',
+      group: 'validate',
+      title: '巴拉圭税号',
+      summary: 'PyRucUtil',
+      method: 'GET',
+      path: '/api/utils/py-ruc',
+      fields: [{ name: 'value', label: 'RUC', value: '80028061-0' }]
+    },
+    {
+      id: 'x-robots-tag',
+      group: 'web',
+      title: 'HTTP X-Robots-Tag',
+      summary: 'XRobotsTagUtil',
+      method: 'GET',
+      path: '/api/utils/x-robots-tag',
+      fields: [{ name: 'header', label: 'X-Robots-Tag', value: 'noindex, nofollow' }]
+    },
+    {
+      id: 'crc16-gsm',
+      group: 'crypto',
+      title: 'CRC-16/GSM',
+      summary: 'HashUtil.crc16Gsm',
+      method: 'GET',
+      path: '/api/utils/crc16-gsm',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

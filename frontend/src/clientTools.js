@@ -1421,6 +1421,34 @@ export const clientTools = [
       title: '肯尼亚税号',
       summary: 'P051365947M',
       fields: [{ name: 'value', label: 'PIN', value: 'P051365947M' }]
+    },
+    {
+      id: 'ma-ice-local',
+      group: 'net',
+      title: '摩洛哥企业号',
+      summary: '001561191000066',
+      fields: [{ name: 'value', label: 'ICE', value: '001561191000066' }]
+    },
+    {
+      id: 'voen-local',
+      group: 'net',
+      title: '阿塞拜疆税号',
+      summary: '1401555071',
+      fields: [{ name: 'value', label: 'VÖEN', value: '140 155 5071' }]
+    },
+    {
+      id: 'uy-rut-local',
+      group: 'net',
+      title: '乌拉圭税号',
+      summary: '21-100342-001-7',
+      fields: [{ name: 'value', label: 'RUT', value: '21-100342-001-7' }]
+    },
+    {
+      id: 'py-ruc-local',
+      group: 'net',
+      title: '巴拉圭税号',
+      summary: '80028061-0',
+      fields: [{ name: 'value', label: 'RUC', value: '80028061-0' }]
     }
   ]
 
