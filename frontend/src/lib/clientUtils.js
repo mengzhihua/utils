@@ -3102,7 +3102,7 @@ function isItin(raw) {
 }
 
 function isCnic(digits) {
-  if (!/^[1-7]\d{10}[1-9]$/.test(digits)) return false
+  if (!/^[1-7]\d{11}[1-9]$/.test(digits)) return false
   return '123456789'.includes(digits[12])
 }
 

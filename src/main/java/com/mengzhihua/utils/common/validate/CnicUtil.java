@@ -23,7 +23,7 @@ public final class CnicUtil {
 
     public static boolean isValid(String value) {
         String digits = normalize(value);
-        return digits.matches("[1-7]\\d{10}[1-9]") && gender(digits) != null && province(digits) != null;
+        return digits.matches("[1-7]\\d{11}[1-9]") && gender(digits) != null && province(digits) != null;
     }
 
     public static String gender(String value) {
