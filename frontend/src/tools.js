@@ -3671,6 +3671,60 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc8-darc',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'me-pib',
+      group: 'validate',
+      title: '黑山税号',
+      summary: 'MePibUtil',
+      method: 'GET',
+      path: '/api/utils/me-pib',
+      fields: [{ name: 'value', label: 'PIB', value: '02655284' }]
+    },
+    {
+      id: 'om-vat',
+      group: 'validate',
+      title: '阿曼税号',
+      summary: 'OmVatUtil',
+      method: 'GET',
+      path: '/api/utils/om-vat',
+      fields: [{ name: 'value', label: 'VATIN', value: 'OM1100006083' }]
+    },
+    {
+      id: 'cy-vat',
+      group: 'validate',
+      title: '塞浦路斯税号',
+      summary: 'CyVatUtil',
+      method: 'GET',
+      path: '/api/utils/cy-vat',
+      fields: [{ name: 'value', label: 'VAT', value: 'CY-10259033P' }]
+    },
+    {
+      id: 'mt-vat',
+      group: 'validate',
+      title: '马耳他税号',
+      summary: 'MtVatUtil',
+      method: 'GET',
+      path: '/api/utils/mt-vat',
+      fields: [{ name: 'value', label: 'VAT', value: 'MT 1167-9112' }]
+    },
+    {
+      id: 'vary',
+      group: 'web',
+      title: 'HTTP Vary',
+      summary: 'VaryUtil',
+      method: 'GET',
+      path: '/api/utils/vary',
+      fields: [{ name: 'header', label: 'Vary', value: 'Accept-Encoding, User-Agent' }]
+    },
+    {
+      id: 'crc8-icode',
+      group: 'crypto',
+      title: 'CRC-8/I-CODE',
+      summary: 'HashUtil.crc8Icode',
+      method: 'GET',
+      path: '/api/utils/crc8-icode',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

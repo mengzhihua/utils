@@ -122,6 +122,7 @@ import com.mengzhihua.utils.common.validate.UenUtil;
 import com.mengzhihua.utils.common.validate.EinUtil;
 import com.mengzhihua.utils.common.validate.NiptUtil;
 import com.mengzhihua.utils.common.validate.OgrnUtil;
+import com.mengzhihua.utils.common.validate.OmVatUtil;
 import com.mengzhihua.utils.common.validate.SnilsUtil;
 import com.mengzhihua.utils.common.validate.CnicUtil;
 import com.mengzhihua.utils.common.validate.GhTinUtil;
@@ -130,11 +131,14 @@ import com.mengzhihua.utils.common.validate.ItinUtil;
 import com.mengzhihua.utils.common.validate.KePinUtil;
 import com.mengzhihua.utils.common.validate.CrCpfUtil;
 import com.mengzhihua.utils.common.validate.CrCpjUtil;
+import com.mengzhihua.utils.common.validate.CyVatUtil;
 import com.mengzhihua.utils.common.validate.EgTnUtil;
 import com.mengzhihua.utils.common.validate.GtNitUtil;
 import com.mengzhihua.utils.common.validate.LuTvaUtil;
 import com.mengzhihua.utils.common.validate.MaIceUtil;
+import com.mengzhihua.utils.common.validate.MePibUtil;
 import com.mengzhihua.utils.common.validate.MkEdbUtil;
+import com.mengzhihua.utils.common.validate.MtVatUtil;
 import com.mengzhihua.utils.common.validate.SvNitUtil;
 import com.mengzhihua.utils.common.validate.PyRucUtil;
 import com.mengzhihua.utils.common.validate.TnMfUtil;
@@ -405,6 +409,10 @@ public final class RegexUtil {
         TYPES.put("lutva", LuTvaUtil::isValid);
         TYPES.put("svnit", SvNitUtil::isValid);
         TYPES.put("mkedb", MkEdbUtil::isValid);
+        TYPES.put("mepib", MePibUtil::isValid);
+        TYPES.put("omvat", OmVatUtil::isValid);
+        TYPES.put("cyvat", CyVatUtil::isValid);
+        TYPES.put("mtvat", MtVatUtil::isValid);
     }
 
     private RegexUtil() {

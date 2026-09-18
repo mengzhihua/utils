@@ -930,4 +930,32 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc8Darc").value("15"));
     }
+
+    @Test
+    void montenegroOmanCyprusMalta() throws Exception {
+        mockMvc.perform(get("/api/utils/me-pib").param("value", "02655284"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/om-vat").param("value", "OM1100006083"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cy-vat").param("value", "CY-10259033P"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/mt-vat").param("value", "MT 1167-9112"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/vary").param("header", "Accept-Encoding, User-Agent"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.first").value("Accept-Encoding"))
+                .andExpect(jsonPath("$.data.hasAcceptEncoding").value(true));
+
+        mockMvc.perform(get("/api/utils/crc8-icode").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc8Icode").value("7e"));
+    }
 }

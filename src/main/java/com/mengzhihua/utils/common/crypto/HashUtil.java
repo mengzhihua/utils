@@ -346,6 +346,35 @@ public final class HashUtil {
     }
 
     /**
+     * CRC-8/I-CODE (poly {@code 0x1D}, init {@code 0xFD}). {@code 123456789} → {@code 7e}.
+     */
+    public static int crc8Icode(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc8Icode(data);
+    }
+
+    public static String crc8IcodeHex(String text) {
+        return String.format(Locale.ROOT, "%02x", crc8Icode(text));
+    }
+
+    public static int crc8Icode(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0xfd;
+        for (byte b : bytes) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 0x80) != 0) {
+                    crc = (crc << 1) ^ 0x1d;
+                } else {
+                    crc <<= 1;
+                }
+                crc &= 0xff;
+            }
+        }
+        return crc;
+    }
+
+    /**
      * CRC-64/ECMA-182. {@code 123456789} → {@code 6c40df5f0b497347}.
      */
     public static long crc64(String text) {

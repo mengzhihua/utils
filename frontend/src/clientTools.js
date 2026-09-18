@@ -1576,6 +1576,34 @@ export const clientTools = [
       title: '北马其顿税号',
       summary: '4030000375897',
       fields: [{ name: 'value', label: 'ЕДБ', value: '4030000375897' }]
+    },
+    {
+      id: 'me-pib-local',
+      group: 'net',
+      title: '黑山税号',
+      summary: '02655284',
+      fields: [{ name: 'value', label: 'PIB', value: '02655284' }]
+    },
+    {
+      id: 'om-vat-local',
+      group: 'net',
+      title: '阿曼税号',
+      summary: 'OM1100006083',
+      fields: [{ name: 'value', label: 'VATIN', value: 'OM1100006083' }]
+    },
+    {
+      id: 'cy-vat-local',
+      group: 'net',
+      title: '塞浦路斯税号',
+      summary: 'CY-10259033P',
+      fields: [{ name: 'value', label: 'VAT', value: 'CY-10259033P' }]
+    },
+    {
+      id: 'mt-vat-local',
+      group: 'net',
+      title: '马耳他税号',
+      summary: '11679112',
+      fields: [{ name: 'value', label: 'VAT', value: 'MT 1167-9112' }]
     }
   ]
 
