@@ -1,6 +1,7 @@
 package com.mengzhihua.utils.web.advice;
 
 
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +13,8 @@ import com.mengzhihua.utils.common.api.ResultCode;
 import com.mengzhihua.utils.common.exception.BizException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -29,6 +32,12 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    private final MessageSource messageSource;
+
+    public GlobalExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @ExceptionHandler(BizException.class)
     public Result<Void> handleBizException(BizException ex, HttpServletRequest request) {
@@ -56,22 +65,22 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Result<Void> handleMissingParameter(MissingServletRequestParameterException ex) {
-        return Result.fail(ResultCode.BAD_REQUEST.getCode(), "missing parameter: " + ex.getParameterName());
+        return Result.fail(ResultCode.BAD_REQUEST.getCode(), message("error.missing_parameter", ex.getParameterName()));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Result<Void> handleNotReadable(HttpMessageNotReadableException ex) {
-        return Result.fail(ResultCode.BAD_REQUEST.getCode(), "request body is invalid");
+        return Result.fail(ResultCode.BAD_REQUEST.getCode(), message("error.invalid_body"));
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Result<Void> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
-        return Result.fail(ResultCode.BAD_REQUEST.getCode(), "method not supported: " + ex.getMethod());
+        return Result.fail(ResultCode.BAD_REQUEST.getCode(), message("error.method_not_supported", ex.getMethod()));
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
     public Result<Void> handleNotFound(NoResourceFoundException ex) {
-        return Result.fail(ResultCode.NOT_FOUND.getCode(), "resource not found");
+        return Result.fail(ResultCode.NOT_FOUND.getCode(), message("error.not_found"));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -82,7 +91,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result<Void> handleException(Exception ex, HttpServletRequest request) {
         log.error("Unhandled error {} {}", request.getMethod(), request.getRequestURI(), ex);
-        return Result.fail(ResultCode.FAILED);
+        return Result.fail(ResultCode.FAILED.getCode(), message("result.failed"));
+    }
+
+    private String message(String key, Object... args) {
+        Locale locale = LocaleContextHolder.getLocale();
+        return messageSource.getMessage(key, args, key, locale == null ? Locale.ENGLISH : locale);
     }
 
     private static String firstFieldError(BindException ex) {

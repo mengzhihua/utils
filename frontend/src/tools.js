@@ -3420,7 +3420,9 @@ export const tools = [
         { name: 'locale', label: 'Locale', value: 'de-DE' },
         { name: 'amount', label: '金额', value: '1234.5' },
         { name: 'currency', label: '货币', value: 'EUR' },
-        { name: 'date', label: '日期', value: '2026-09-18' }
+        { name: 'date', label: '日期', value: '2026-09-18' },
+        { name: 'zone', label: '时区', value: 'Europe/Berlin' },
+        { name: 'items', label: '列表', value: 'apples,oranges,pears' }
       ]
     },
     {
@@ -3443,6 +3445,60 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/accept-language',
       fields: [{ name: 'header', label: 'Accept-Language', value: 'zh-CN,zh;q=0.9,en;q=0.8' }]
+    },
+    {
+      id: 'gt-nit',
+      group: 'validate',
+      title: '危地马拉税号',
+      summary: 'GtNitUtil',
+      method: 'GET',
+      path: '/api/utils/gt-nit',
+      fields: [{ name: 'value', label: 'NIT', value: '576937-K' }]
+    },
+    {
+      id: 'cr-cpf',
+      group: 'validate',
+      title: '哥斯达黎加身份证',
+      summary: 'CrCpfUtil',
+      method: 'GET',
+      path: '/api/utils/cr-cpf',
+      fields: [{ name: 'value', label: 'CPF', value: '3-0455-0175' }]
+    },
+    {
+      id: 'cr-cpj',
+      group: 'validate',
+      title: '哥斯达黎加税号',
+      summary: 'CrCpjUtil',
+      method: 'GET',
+      path: '/api/utils/cr-cpj',
+      fields: [{ name: 'value', label: 'CPJ', value: '3-101-999999' }]
+    },
+    {
+      id: 'tn-mf',
+      group: 'validate',
+      title: '突尼斯税号',
+      summary: 'TnMfUtil',
+      method: 'GET',
+      path: '/api/utils/tn-mf',
+      fields: [{ name: 'value', label: 'MF', value: '1234567/M/A/E/001' }]
+    },
+    {
+      id: 'server-timing',
+      group: 'web',
+      title: 'HTTP Server-Timing',
+      summary: 'ServerTimingUtil',
+      method: 'GET',
+      path: '/api/utils/server-timing',
+      fields: [{ name: 'header', label: 'Server-Timing', value: 'miss, db;dur=53, app;dur=47.2' }]
+    },
+    {
+      id: 'crc8-sae',
+      group: 'crypto',
+      title: 'CRC-8/SAE-J1850',
+      summary: 'HashUtil.crc8SaeJ1850',
+      method: 'GET',
+      path: '/api/utils/crc8-sae',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

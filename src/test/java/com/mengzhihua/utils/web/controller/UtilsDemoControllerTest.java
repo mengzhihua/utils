@@ -829,5 +829,39 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.first").value("zh-CN"))
                 .andExpect(jsonPath("$.data.negotiated").value("zh-CN"));
+
+        mockMvc.perform(get("/api/utils/i18n/format").param("locale", "en").param("items", "apples,oranges,pears"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.list").value("apples, oranges, and pears"));
+
+        mockMvc.perform(get("/api/utils/i18n/message").param("key", "hello").param("arg", "Ada").param("locale", "de"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.bundle").value("Hallo, Ada"));
+
+        mockMvc.perform(get("/api/utils/gt-nit").param("value", "576937-K"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cr-cpf").param("value", "3-0455-0175"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("0304550175"));
+
+        mockMvc.perform(get("/api/utils/cr-cpj").param("value", "3-101-999999"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/tn-mf").param("value", "1234567/M/A/E/001"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/server-timing").param("header", "miss, db;dur=53, app;dur=47.2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.first").value("miss"))
+                .andExpect(jsonPath("$.data.dbDuration").value("53"));
+
+        mockMvc.perform(get("/api/utils/crc8-sae").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc8Sae").value("4b"));
     }
 }

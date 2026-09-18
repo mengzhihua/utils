@@ -22,8 +22,14 @@ class I18nUtilsTest {
         assertEquals("Hello, Ada", I18nUtil.get("hello", Locale.ENGLISH, "Ada"));
         assertEquals("你好，Ada", I18nUtil.get("hello", Locale.SIMPLIFIED_CHINESE, "Ada"));
         assertEquals("こんにちは、Ada", I18nUtil.get("hello", Locale.JAPANESE, "Ada"));
+        assertEquals("Hallo, Ada", I18nUtil.get("hello", Locale.GERMANY, "Ada"));
+        assertEquals("Bonjour, Ada", I18nUtil.get("hello", Locale.FRANCE, "Ada"));
+        assertEquals("안녕하세요, Ada", I18nUtil.get("hello", Locale.KOREA, "Ada"));
         assertEquals("success", I18nUtil.get("result.success", "en"));
         assertEquals("成功", I18nUtil.get("result.success", "zh-CN"));
+        assertEquals("Erfolg", I18nUtil.get("result.success", "de"));
+        assertEquals("missing parameter: value", I18nUtil.get("error.missing_parameter", Locale.ENGLISH, "value"));
+        assertEquals("缺少参数：value", I18nUtil.get("error.missing_parameter", Locale.SIMPLIFIED_CHINESE, "value"));
         assertEquals("zh-CN", LocaleUtil.toTag(LocaleUtil.parse("zh_CN")));
         assertTrue(LocaleUtil.supported("zh-CN"));
         assertFalse(LocaleUtil.supported("xx-YY"));
@@ -44,5 +50,12 @@ class I18nUtilsTest {
                 .toLanguageTag());
         assertEquals("en", AcceptLanguageUtil.negotiate("fr;q=0.2,en;q=0.8", List.of(Locale.ENGLISH, Locale.SIMPLIFIED_CHINESE))
                 .getLanguage());
+        assertEquals("apples, oranges, and pears", I18nFormatUtil.list("en", "apples,oranges,pears"));
+        assertEquals("apples、oranges和pears", I18nFormatUtil.list("zh-CN", "apples,oranges,pears"));
+        assertEquals("apples, oranges und pears", I18nFormatUtil.list("de-DE", "apples,oranges,pears"));
+        String cny = I18nFormatUtil.currencyName("zh-CN", "CNY");
+        assertTrue(cny.contains("人民") || cny.toLowerCase(Locale.ROOT).contains("yuan"));
+        String berlin = I18nFormatUtil.dateTimeZone("de-DE", "2026-09-18T08:15:00", "Europe/Berlin");
+        assertTrue(berlin.contains("18") || berlin.contains("Sep") || berlin.contains("2026"));
     }
 }

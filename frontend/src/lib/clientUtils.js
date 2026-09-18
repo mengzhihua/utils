@@ -1154,13 +1154,40 @@ export async function runClientTool(id, values) {
       const locale = String(values.locale || 'zh-CN')
       const amount = Number(values.amount || 0)
       const currency = String(values.currency || 'CNY')
+      let currencyName = currency
+      try {
+        currencyName = new Intl.DisplayNames([locale], { type: 'currency' }).of(currency)
+      } catch {
+        currencyName = currency
+      }
+      const list = typeof Intl.ListFormat === 'function'
+        ? new Intl.ListFormat(locale, { style: 'long', type: 'conjunction' }).format(['apples', 'oranges', 'pears'])
+        : 'apples, oranges, pears'
       return {
         locale,
         number: new Intl.NumberFormat(locale).format(amount),
         currency: new Intl.NumberFormat(locale, { style: 'currency', currency }).format(amount),
+        currencyName,
         percent: new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(0.125),
-        date: new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date('2026-09-18T00:00:00'))
+        date: new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date('2026-09-18T00:00:00')),
+        list
       }
+    }
+    case 'gt-nit-local': {
+      const compact = normalizeGtNit(values.value)
+      return { normalized: compact, formatted: compact.length >= 2 ? `${compact.slice(0, -1)}-${compact.slice(-1)}` : compact, valid: isGtNit(compact) }
+    }
+    case 'cr-cpf-local': {
+      const digits = normalizeCrCpf(values.value)
+      return { normalized: digits, formatted: digits.length === 10 ? `${digits.slice(0, 2)}-${digits.slice(2, 6)}-${digits.slice(6)}` : digits, valid: isCrCpf(digits) }
+    }
+    case 'cr-cpj-local': {
+      const digits = String(values.value || '').replace(/[\s-]/g, '')
+      return { normalized: digits, formatted: digits.length === 10 ? `${digits[0]}-${digits.slice(1, 4)}-${digits.slice(4)}` : digits, valid: isCrCpj(digits) }
+    }
+    case 'tn-mf-local': {
+      const compact = normalizeTnMf(values.value)
+      return { normalized: compact, formatted: formatTnMf(compact), valid: isTnMf(compact) }
     }
     default:
       throw new Error('unknown client tool')
@@ -3197,6 +3224,73 @@ function isPyRuc(digits) {
   let sum = 0
   for (let i = 0; i < body.length; i++) sum += (i + 2) * Number(body[body.length - 1 - i])
   return digits[digits.length - 1] === String((((-sum % 11) + 11) % 11) % 10)
+}
+
+function normalizeGtNit(value) {
+  return String(value || '').replace(/[\s-]/g, '').toUpperCase().replace(/^0+/, '')
+}
+
+function isGtNit(compact) {
+  if (compact.length < 2 || compact.length > 12) return false
+  const body = compact.slice(0, -1)
+  const check = compact.slice(-1)
+  if (!/^\d+$/.test(body) || (check !== 'K' && !/^\d$/.test(check))) return false
+  let sum = 0
+  for (let i = 0; i < body.length; i++) sum += Number(body[body.length - 1 - i]) * (i + 2)
+  const rem = ((-sum % 11) + 11) % 11
+  return check === (rem === 10 ? 'K' : String(rem))
+}
+
+function normalizeCrCpf(value) {
+  let text = String(value || '').replace(/\s+/g, '').toUpperCase()
+  const parts = text.split('-')
+  if (parts.length === 3) {
+    text = parts[0].replace(/\D/g, '').padStart(2, '0') + parts[1].replace(/\D/g, '').padStart(4, '0') + parts[2].replace(/\D/g, '').padStart(4, '0')
+  } else {
+    text = text.replace(/\D/g, '')
+  }
+  return text.length === 9 ? `0${text}` : text
+}
+
+function isCrCpf(digits) {
+  return /^0\d{9}$/.test(digits)
+}
+
+function isCrCpj(digits) {
+  if (!/^\d{10}$/.test(digits)) return false
+  const cls = digits[0]
+  const type = digits.slice(1, 4)
+  if (cls === '2') return ['100', '200', '300', '400'].includes(type)
+  if (cls === '3') {
+    return ['002', '003', '004', '005', '006', '007', '008', '009', '010', '011', '012', '013', '014',
+      '101', '102', '103', '104', '105', '106', '107', '108', '109', '110'].includes(type)
+  }
+  if (cls === '4') return type === '000'
+  if (cls === '5') return type === '001'
+  return false
+}
+
+function normalizeTnMf(value) {
+  const compact = String(value || '').replace(/[\s/.-]/g, '').toUpperCase()
+  const match = compact.match(/^(\d+)(.*)$/)
+  if (!match) return compact
+  return match[1].padStart(7, '0') + match[2]
+}
+
+function formatTnMf(compact) {
+  if (compact.length === 8) return `${compact.slice(0, 7)}/${compact[7]}`
+  if (compact.length === 13) return `${compact.slice(0, 7)}/${compact[7]}/${compact[8]}/${compact[9]}/${compact.slice(10)}`
+  return compact
+}
+
+function isTnMf(compact) {
+  if (compact.length !== 8 && compact.length !== 13) return false
+  if (!/^\d{7}/.test(compact)) return false
+  if (!'ABCDEFGHJKLMNPQRSTVWXYZ'.includes(compact[7])) return false
+  if (compact.length === 8) return true
+  if (!'APBDN'.includes(compact[8]) || !'MPCNE'.includes(compact[9])) return false
+  if (!/^\d{3}$/.test(compact.slice(10))) return false
+  return compact.slice(10) === '000' || compact[9] === 'E'
 }
 
 function isRegistrikood(digits) {

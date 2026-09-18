@@ -69,12 +69,18 @@ public class I18nUtilsDemoController {
             @RequestParam(defaultValue = "zh-CN") String locale,
             @RequestParam(defaultValue = "1234.5") String amount,
             @RequestParam(defaultValue = "CNY") String currency,
-            @RequestParam(defaultValue = "2026-09-18") String date) {
+            @RequestParam(defaultValue = "2026-09-18") String date,
+            @RequestParam(defaultValue = "Europe/Berlin") String zone,
+            @RequestParam(defaultValue = "apples,oranges,pears") String items) {
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("number", I18nFormatUtil.number(locale, amount));
         data.put("currency", I18nFormatUtil.currency(locale, amount, currency));
+        data.put("currencyName", I18nFormatUtil.currencyName(locale, currency));
+        data.put("currencySymbol", I18nFormatUtil.currencySymbol(locale, currency));
         data.put("percent", I18nFormatUtil.percent(locale, "0.125"));
         data.put("date", I18nFormatUtil.date(locale, date));
+        data.put("dateTimeZone", I18nFormatUtil.dateTimeZone(locale, date + "T08:15:00", zone));
+        data.put("list", I18nFormatUtil.list(locale, items));
         return Result.ok(data);
     }
 

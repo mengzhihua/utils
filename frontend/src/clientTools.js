@@ -1460,6 +1460,34 @@ export const clientTools = [
         { name: 'amount', label: '金额', value: '1234.5' },
         { name: 'currency', label: '货币', value: 'CNY' }
       ]
+    },
+    {
+      id: 'gt-nit-local',
+      group: 'net',
+      title: '危地马拉税号',
+      summary: '576937-K',
+      fields: [{ name: 'value', label: 'NIT', value: '576937-K' }]
+    },
+    {
+      id: 'cr-cpf-local',
+      group: 'net',
+      title: '哥斯达黎加身份证',
+      summary: '3-0455-0175',
+      fields: [{ name: 'value', label: 'CPF', value: '3-0455-0175' }]
+    },
+    {
+      id: 'cr-cpj-local',
+      group: 'net',
+      title: '哥斯达黎加税号',
+      summary: '3-101-999999',
+      fields: [{ name: 'value', label: 'CPJ', value: '3-101-999999' }]
+    },
+    {
+      id: 'tn-mf-local',
+      group: 'net',
+      title: '突尼斯税号',
+      summary: '1234567/M/A/E/001',
+      fields: [{ name: 'value', label: 'MF', value: '1234567/M/A/E/001' }]
     }
   ]
 
