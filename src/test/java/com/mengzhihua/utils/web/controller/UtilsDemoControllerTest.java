@@ -958,4 +958,33 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc8Icode").value("7e"));
     }
+
+    @Test
+    void andorraLiechtensteinAlgeriaSenegal() throws Exception {
+        mockMvc.perform(get("/api/utils/ad-nrt").param("value", "U-132950-X"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/li-peid").param("value", "00001234567"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("1234567"));
+
+        mockMvc.perform(get("/api/utils/dz-nif").param("value", "416001000000007"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/sn-ninea").param("value", "30672212G2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/origin").param("header", "https://example.com:8443"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.host").value("example.com"))
+                .andExpect(jsonPath("$.data.secure").value(true));
+
+        mockMvc.perform(get("/api/utils/crc8-rohc").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc8Rohc").value("d0"));
+    }
 }

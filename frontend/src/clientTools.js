@@ -1604,6 +1604,34 @@ export const clientTools = [
       title: '马耳他税号',
       summary: '11679112',
       fields: [{ name: 'value', label: 'VAT', value: 'MT 1167-9112' }]
+    },
+    {
+      id: 'ad-nrt-local',
+      group: 'net',
+      title: '安道尔税号',
+      summary: 'U-132950-X',
+      fields: [{ name: 'value', label: 'NRT', value: 'U-132950-X' }]
+    },
+    {
+      id: 'li-peid-local',
+      group: 'net',
+      title: '列支敦士登识别号',
+      summary: '1234567',
+      fields: [{ name: 'value', label: 'PEID', value: '00001234567' }]
+    },
+    {
+      id: 'dz-nif-local',
+      group: 'net',
+      title: '阿尔及利亚税号',
+      summary: '416001000000007',
+      fields: [{ name: 'value', label: 'NIF', value: '416001000000007' }]
+    },
+    {
+      id: 'sn-ninea-local',
+      group: 'net',
+      title: '塞内加尔企业号',
+      summary: '30672212G2',
+      fields: [{ name: 'value', label: 'NINEA', value: '30672212G2' }]
     }
   ]
 

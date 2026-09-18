@@ -3725,6 +3725,60 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc8-icode',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'ad-nrt',
+      group: 'validate',
+      title: '安道尔税号',
+      summary: 'AdNrtUtil',
+      method: 'GET',
+      path: '/api/utils/ad-nrt',
+      fields: [{ name: 'value', label: 'NRT', value: 'U-132950-X' }]
+    },
+    {
+      id: 'li-peid',
+      group: 'validate',
+      title: '列支敦士登识别号',
+      summary: 'LiPeidUtil',
+      method: 'GET',
+      path: '/api/utils/li-peid',
+      fields: [{ name: 'value', label: 'PEID', value: '00001234567' }]
+    },
+    {
+      id: 'dz-nif',
+      group: 'validate',
+      title: '阿尔及利亚税号',
+      summary: 'DzNifUtil',
+      method: 'GET',
+      path: '/api/utils/dz-nif',
+      fields: [{ name: 'value', label: 'NIF', value: '416001000000007' }]
+    },
+    {
+      id: 'sn-ninea',
+      group: 'validate',
+      title: '塞内加尔企业号',
+      summary: 'SnNineaUtil',
+      method: 'GET',
+      path: '/api/utils/sn-ninea',
+      fields: [{ name: 'value', label: 'NINEA', value: '30672212G2' }]
+    },
+    {
+      id: 'origin',
+      group: 'web',
+      title: 'HTTP Origin',
+      summary: 'OriginUtil',
+      method: 'GET',
+      path: '/api/utils/origin',
+      fields: [{ name: 'header', label: 'Origin', value: 'https://example.com:8443' }]
+    },
+    {
+      id: 'crc8-rohc',
+      group: 'crypto',
+      title: 'CRC-8/ROHC',
+      summary: 'HashUtil.crc8Rohc',
+      method: 'GET',
+      path: '/api/utils/crc8-rohc',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

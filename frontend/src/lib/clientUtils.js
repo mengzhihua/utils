@@ -1284,6 +1284,22 @@ export async function runClientTool(id, values) {
       const digits = normalizeMtVat(values.value)
       return { normalized: digits, formatted: digits.length === 8 ? `${digits.slice(0, 4)}-${digits.slice(4)}` : digits, valid: isMtVat(digits) }
     }
+    case 'ad-nrt-local': {
+      const compact = normalizeAdNrt(values.value)
+      return { normalized: compact, formatted: compact.length === 8 ? `${compact[0]}-${compact.slice(1, 7)}-${compact[7]}` : compact, valid: isAdNrt(compact) }
+    }
+    case 'li-peid-local': {
+      const digits = normalizeLiPeid(values.value)
+      return { normalized: digits, valid: /^\d{4,12}$/.test(digits) }
+    }
+    case 'dz-nif-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: /^\d{15}$|^\d{20}$/.test(digits) }
+    }
+    case 'sn-ninea-local': {
+      const compact = normalizeSnNinea(values.value)
+      return { normalized: compact, formatted: compact.length > 9 ? `${compact.slice(0, -3)} ${compact.slice(-3)}` : compact, valid: isSnNinea(compact) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -3490,6 +3506,43 @@ function isMtVat(digits) {
   let sum = 0
   for (let i = 0; i < 8; i++) sum += Number(digits[i]) * w[i]
   return sum % 37 === 0
+}
+
+function normalizeAdNrt(value) {
+  return String(value || '').replace(/[\s.-]/g, '').toUpperCase()
+}
+
+function isAdNrt(compact) {
+  if (!/^[A-Z]\d{6}[A-Z]$/.test(compact)) return false
+  if (!'ACDEFGLOPU'.includes(compact[0])) return false
+  const mid = compact.slice(1, 7)
+  if (compact[0] === 'F' && mid > '699999') return false
+  if ((compact[0] === 'A' || compact[0] === 'L') && !(mid > '699999' && mid < '800000')) return false
+  return true
+}
+
+function normalizeLiPeid(value) {
+  return String(value || '').replace(/\D/g, '').replace(/^0+/, '')
+}
+
+function normalizeSnNinea(value) {
+  return String(value || '').replace(/[\s/,\-]/g, '').toUpperCase()
+}
+
+function isSnNinea(compact) {
+  let body = compact
+  let cofi = ''
+  if (compact.length > 9) {
+    cofi = compact.slice(-3)
+    body = compact.slice(0, -3)
+  }
+  if (!/^\d{7}$|^\d{9}$/.test(body)) return false
+  if (cofi && !/^[012][ABCDEFGHJKLMNPQRSTUVWZ]\d$/.test(cofi)) return false
+  const padded = body.padStart(9, '0')
+  const w = [1, 2, 1, 2, 1, 2, 1, 2, 1]
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += Number(padded[i]) * w[i]
+  return sum % 10 === 0
 }
 
 function isRegistrikood(digits) {

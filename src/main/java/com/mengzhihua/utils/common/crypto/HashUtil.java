@@ -375,6 +375,34 @@ public final class HashUtil {
     }
 
     /**
+     * CRC-8/ROHC (poly {@code 0x07}, reflected, init {@code 0xFF}). {@code 123456789} → {@code d0}.
+     */
+    public static int crc8Rohc(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc8Rohc(data);
+    }
+
+    public static String crc8RohcHex(String text) {
+        return String.format(Locale.ROOT, "%02x", crc8Rohc(text));
+    }
+
+    public static int crc8Rohc(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0xff;
+        for (byte b : bytes) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 1) != 0) {
+                    crc = (crc >>> 1) ^ 0xe0;
+                } else {
+                    crc >>>= 1;
+                }
+            }
+        }
+        return crc & 0xff;
+    }
+
+    /**
      * CRC-64/ECMA-182. {@code 123456789} → {@code 6c40df5f0b497347}.
      */
     public static long crc64(String text) {

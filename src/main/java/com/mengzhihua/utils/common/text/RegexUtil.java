@@ -21,6 +21,7 @@ import com.mengzhihua.utils.common.validate.IsbnUtil;
 import com.mengzhihua.utils.common.validate.IsmnUtil;
 import com.mengzhihua.utils.common.validate.Iso6346Util;
 import com.mengzhihua.utils.common.validate.LeiUtil;
+import com.mengzhihua.utils.common.validate.LiPeidUtil;
 import com.mengzhihua.utils.common.validate.IsniUtil;
 import com.mengzhihua.utils.common.validate.IsinUtil;
 import com.mengzhihua.utils.common.validate.IsrcUtil;
@@ -42,6 +43,7 @@ import com.mengzhihua.utils.common.validate.SiretUtil;
 import com.mengzhihua.utils.common.validate.TwIdUtil;
 import com.mengzhihua.utils.common.validate.UpcEUtil;
 import com.mengzhihua.utils.common.validate.CodiceFiscaleUtil;
+import com.mengzhihua.utils.common.validate.DzNifUtil;
 import com.mengzhihua.utils.common.validate.DoiUtil;
 import com.mengzhihua.utils.common.validate.EoriUtil;
 import com.mengzhihua.utils.common.validate.IccidUtil;
@@ -107,6 +109,7 @@ import com.mengzhihua.utils.common.validate.KboUtil;
 import com.mengzhihua.utils.common.validate.KrBrnUtil;
 import com.mengzhihua.utils.common.validate.PibUtil;
 import com.mengzhihua.utils.common.validate.TwGuiUtil;
+import com.mengzhihua.utils.common.validate.AdNrtUtil;
 import com.mengzhihua.utils.common.validate.AcnUtil;
 import com.mengzhihua.utils.common.validate.GstinUtil;
 import com.mengzhihua.utils.common.validate.NpwpUtil;
@@ -124,6 +127,7 @@ import com.mengzhihua.utils.common.validate.NiptUtil;
 import com.mengzhihua.utils.common.validate.OgrnUtil;
 import com.mengzhihua.utils.common.validate.OmVatUtil;
 import com.mengzhihua.utils.common.validate.SnilsUtil;
+import com.mengzhihua.utils.common.validate.SnNineaUtil;
 import com.mengzhihua.utils.common.validate.CnicUtil;
 import com.mengzhihua.utils.common.validate.GhTinUtil;
 import com.mengzhihua.utils.common.validate.IdnoUtil;
@@ -413,6 +417,10 @@ public final class RegexUtil {
         TYPES.put("omvat", OmVatUtil::isValid);
         TYPES.put("cyvat", CyVatUtil::isValid);
         TYPES.put("mtvat", MtVatUtil::isValid);
+        TYPES.put("adnrt", AdNrtUtil::isValid);
+        TYPES.put("lipeid", LiPeidUtil::isValid);
+        TYPES.put("dznif", DzNifUtil::isValid);
+        TYPES.put("snninea", SnNineaUtil::isValid);
     }
 
     private RegexUtil() {
