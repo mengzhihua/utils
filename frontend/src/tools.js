@@ -2738,6 +2738,48 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-maxim',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'bsn',
+      group: 'validate',
+      title: '荷兰 BSN',
+      summary: 'BsnUtil elfproef',
+      method: 'GET',
+      path: '/api/utils/bsn',
+      fields: [{ name: 'value', label: 'BSN', value: '111222333' }]
+    },
+    {
+      id: 'rodne',
+      group: 'validate',
+      title: '捷克出生号',
+      summary: 'RodneCisloUtil',
+      method: 'GET',
+      path: '/api/utils/rodne',
+      fields: [{ name: 'value', label: 'rodné číslo', value: '680101/0007' }]
+    },
+    {
+      id: 'base92',
+      group: 'crypto',
+      title: 'Base92',
+      summary: 'Base92Util',
+      method: 'GET',
+      path: '/api/utils/base92',
+      fields: [
+        { name: 'action', label: '动作', type: 'select', value: 'encode', options: [
+          { value: 'encode', label: '编码' },
+          { value: 'decode', label: '解码' }
+        ]},
+        { name: 'text', label: '文本', value: 'Hello' }
+      ]
+    },
+    {
+      id: 'structured-fields',
+      group: 'web',
+      title: 'Structured Fields',
+      summary: 'StructuredFieldUtil RFC 8941',
+      method: 'GET',
+      path: '/api/utils/structured-fields',
+      fields: [{ name: 'header', label: 'Dictionary', value: 'abc=123, def=?0, title="hi"' }]
     }
   ]
 

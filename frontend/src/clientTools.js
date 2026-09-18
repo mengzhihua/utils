@@ -1155,6 +1155,20 @@ export const clientTools = [
       title: '墨西哥 RFC',
       summary: 'GODE561231GR8',
       fields: [{ name: 'value', label: 'RFC', value: 'GODE561231GR8' }]
+    },
+    {
+      id: 'bsn-local',
+      group: 'net',
+      title: '荷兰 BSN',
+      summary: '111222333',
+      fields: [{ name: 'value', label: 'BSN', value: '111222333' }]
+    },
+    {
+      id: 'rodne-local',
+      group: 'net',
+      title: '捷克出生号',
+      summary: '680101/0007',
+      fields: [{ name: 'value', label: 'rodné číslo', value: '680101/0007' }]
     }
   ]
 

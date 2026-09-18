@@ -980,6 +980,14 @@ export async function runClientTool(id, values) {
       const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
       return { normalized: compact, valid: isMxRfc(compact) }
     }
+    case 'bsn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isBsn(digits) }
+    }
+    case 'rodne-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isRodne(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2592,6 +2600,23 @@ function isPeDni(compact) {
   if (key === 11) key = 0
   const last = compact[8]
   return last === numeric[key] || last === letters[key]
+}
+
+function isBsn(digits) {
+  const padded = digits.length === 8 ? `0${digits}` : digits
+  if (!/^[1-9]\d{8}$/.test(padded) && !/^0[1-9]\d{7}$/.test(padded)) return false
+  const w = [9, 8, 7, 6, 5, 4, 3, 2, -1]
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += Number(padded[i]) * w[i]
+  return sum !== 0 && sum % 11 === 0
+}
+
+function isRodne(digits) {
+  if (!/^\d{9,10}$/.test(digits)) return false
+  if (digits.length === 9) return true
+  const n = Number(digits)
+  if (n % 11 === 0) return true
+  return Number(digits.slice(0, 9)) % 11 === 10 && digits[9] === '0'
 }
 
 function isMxRfc(compact) {

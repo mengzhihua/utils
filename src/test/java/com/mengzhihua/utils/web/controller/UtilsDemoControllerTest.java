@@ -599,4 +599,20 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc16Maxim").value("44c2"));
     }
+
+    @Test
+    void bsnRodneBase92() throws Exception {
+        mockMvc.perform(get("/api/utils/bsn").param("value", "111222333"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/rodne").param("value", "680101/0007"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.birthDate").value("1968-01-01"));
+
+        mockMvc.perform(get("/api/utils/base92").param("action", "encode").param("text", "Hello"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.encoded").value("Q2Aeq)"));
+    }
 }

@@ -90,7 +90,9 @@ import com.mengzhihua.utils.common.validate.LatvianPkUtil;
 import com.mengzhihua.utils.common.validate.LithuanianAkUtil;
 import com.mengzhihua.utils.common.validate.MxRfcUtil;
 import com.mengzhihua.utils.common.validate.NitUtil;
+import com.mengzhihua.utils.common.validate.BsnUtil;
 import com.mengzhihua.utils.common.validate.PeDniUtil;
+import com.mengzhihua.utils.common.validate.RodneCisloUtil;
 import com.mengzhihua.utils.common.validate.TajUtil;
 import com.mengzhihua.utils.common.validate.TcKimlikUtil;
 import com.mengzhihua.utils.common.validate.ThaiIdUtil;
@@ -297,6 +299,8 @@ public final class RegexUtil {
         TYPES.put("emso", EmsoUtil::isValid);
         TYPES.put("pedni", PeDniUtil::isValid);
         TYPES.put("mxrfc", MxRfcUtil::isValid);
+        TYPES.put("bsn", BsnUtil::isValid);
+        TYPES.put("rodne", RodneCisloUtil::isValid);
     }
 
     private RegexUtil() {
