@@ -749,4 +749,23 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc16Cms").value("aee7"));
     }
+
+    @Test
+    void rifRncUnp() throws Exception {
+        mockMvc.perform(get("/api/utils/rif").param("value", "V-11470283-4"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/rnc").param("value", "1-01-85004-3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/unp").param("value", "200988541"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/crc16-cdma2000").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Cdma2000").value("4c06"));
+    }
 }

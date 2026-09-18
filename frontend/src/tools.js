@@ -3212,6 +3212,69 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-cms',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'rif',
+      group: 'validate',
+      title: '委内瑞拉税号',
+      summary: 'RifUtil',
+      method: 'GET',
+      path: '/api/utils/rif',
+      fields: [{ name: 'value', label: 'RIF', value: 'V-11470283-4' }]
+    },
+    {
+      id: 'rnc',
+      group: 'validate',
+      title: '多米尼加税号',
+      summary: 'RncUtil',
+      method: 'GET',
+      path: '/api/utils/rnc',
+      fields: [{ name: 'value', label: 'RNC', value: '1-01-85004-3' }]
+    },
+    {
+      id: 'unp',
+      group: 'validate',
+      title: '白俄罗斯税号',
+      summary: 'UnpUtil',
+      method: 'GET',
+      path: '/api/utils/unp',
+      fields: [{ name: 'value', label: 'УНП', value: '200988541' }]
+    },
+    {
+      id: 'itin',
+      group: 'validate',
+      title: '美国个人税号',
+      summary: 'ItinUtil',
+      method: 'GET',
+      path: '/api/utils/itin',
+      fields: [{ name: 'value', label: 'ITIN', value: '912-90-3456' }]
+    },
+    {
+      id: 'reporting-endpoints',
+      group: 'web',
+      title: 'HTTP Reporting-Endpoints',
+      summary: 'ReportingEndpointsUtil',
+      method: 'GET',
+      path: '/api/utils/reporting-endpoints',
+      fields: [{ name: 'header', label: 'Reporting-Endpoints', type: 'textarea', value: 'csp="https://example.com/csp", default="https://example.com/reports"' }]
+    },
+    {
+      id: 'accept-ch',
+      group: 'web',
+      title: 'HTTP Accept-CH',
+      summary: 'AcceptChUtil',
+      method: 'GET',
+      path: '/api/utils/accept-ch',
+      fields: [{ name: 'header', label: 'Accept-CH', value: 'Sec-CH-UA-Mobile, DPR' }]
+    },
+    {
+      id: 'crc16-cdma2000',
+      group: 'crypto',
+      title: 'CRC-16/CDMA2000',
+      summary: 'HashUtil.crc16Cdma2000',
+      method: 'GET',
+      path: '/api/utils/crc16-cdma2000',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

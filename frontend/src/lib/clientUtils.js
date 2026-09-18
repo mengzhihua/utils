@@ -1101,6 +1101,23 @@ export async function runClientTool(id, values) {
       const compact = String(values.value || '').replace(/[\s().-]/g, '').toUpperCase().replace(/^AL/, '')
       return { normalized: compact, valid: isNipt(compact) }
     }
+    case 'rif-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isRif(compact) }
+    }
+    case 'rnc-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isRnc(digits) }
+    }
+    case 'unp-local': {
+      const compact = normalizeUnp(values.value)
+      return { normalized: compact, valid: isUnp(compact) }
+    }
+    case 'itin-local': {
+      const raw = String(values.value || '').trim()
+      const digits = raw.replace(/\D/g, '')
+      return { normalized: digits, formatted: digits.length === 9 ? `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}` : raw, valid: isItin(raw) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -3017,6 +3034,55 @@ function isSnils(digits) {
 
 function isNipt(compact) {
   return /^[A-M]\d{8}[A-Z]$/.test(compact)
+}
+
+function isRif(compact) {
+  if (!/^[VEJPG]\d{9}$/.test(compact)) return false
+  const types = { V: 4, E: 8, J: 12, P: 16, G: 20 }
+  const w = [3, 2, 7, 6, 5, 4, 3, 2]
+  let sum = types[compact[0]]
+  for (let i = 0; i < 8; i++) sum += Number(compact[i + 1]) * w[i]
+  return compact[9] === '00987654321'[sum % 11]
+}
+
+function isRnc(digits) {
+  const whitelist = new Set(['101581601', '101582245', '101595422', '101595785', '10233317', '131188691', '401007374'])
+  if (whitelist.has(digits)) return true
+  if (!/^\d{9}$/.test(digits)) return false
+  const w = [7, 9, 8, 6, 5, 4, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 8; i++) sum += Number(digits[i]) * w[i]
+  return Number(digits[8]) === (10 - (sum % 11)) % 9 + 1
+}
+
+function normalizeUnp(value) {
+  let compact = String(value || '').replace(/\s+/g, '').toUpperCase()
+  if (compact.startsWith('UNP') || compact.startsWith('УНП')) compact = compact.slice(3)
+  const cyr = { А: 'A', В: 'B', Е: 'E', К: 'K', М: 'M', Н: 'H', О: 'O', Р: 'P', С: 'C', Т: 'T' }
+  return [...compact].map((ch) => cyr[ch] || ch).join('')
+}
+
+function isUnp(compact) {
+  if (compact.length !== 9 || !/^\d{7}$/.test(compact.slice(2))) return false
+  if (!'1234567ABCEHKM'.includes(compact[0])) return false
+  if (!/\d/.test(compact[1]) && !'ABCEHKMOPT'.includes(compact[1])) return false
+  const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const letters = 'ABCEHKMOPT'
+  const w = [29, 23, 19, 17, 13, 7, 5, 3]
+  let body = compact.slice(0, 8)
+  if (!/\d/.test(body[1])) body = body[0] + String(letters.indexOf(body[1])) + body.slice(2)
+  let sum = 0
+  for (let i = 0; i < 8; i++) sum += alphabet.indexOf(body[i]) * w[i]
+  const rem = sum % 11
+  return rem <= 9 && compact[8] === String(rem)
+}
+
+function isItin(raw) {
+  if (raw.includes('-') && !/^\d{3}-\d{2}-\d{4}$/.test(raw.trim())) return false
+  const digits = String(raw || '').replace(/\D/g, '')
+  if (!/^9\d{8}$/.test(digits)) return false
+  const group = Number(digits.slice(3, 5))
+  return group >= 70 && group <= 99 && group !== 89 && group !== 93
 }
 
 function isRegistrikood(digits) {

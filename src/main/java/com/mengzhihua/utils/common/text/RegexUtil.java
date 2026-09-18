@@ -123,6 +123,10 @@ import com.mengzhihua.utils.common.validate.EinUtil;
 import com.mengzhihua.utils.common.validate.NiptUtil;
 import com.mengzhihua.utils.common.validate.OgrnUtil;
 import com.mengzhihua.utils.common.validate.SnilsUtil;
+import com.mengzhihua.utils.common.validate.ItinUtil;
+import com.mengzhihua.utils.common.validate.RifUtil;
+import com.mengzhihua.utils.common.validate.RncUtil;
+import com.mengzhihua.utils.common.validate.UnpUtil;
 import com.mengzhihua.utils.common.validate.VnMstUtil;
 import com.mengzhihua.utils.common.validate.RodneCisloUtil;
 import com.mengzhihua.utils.common.validate.TajUtil;
@@ -365,6 +369,10 @@ public final class RegexUtil {
         TYPES.put("ogrn", OgrnUtil::isValid);
         TYPES.put("snils", SnilsUtil::isValid);
         TYPES.put("nipt", NiptUtil::isValid);
+        TYPES.put("rif", RifUtil::isValid);
+        TYPES.put("rnc", RncUtil::isValid);
+        TYPES.put("unp", UnpUtil::isValid);
+        TYPES.put("itin", ItinUtil::isValid);
     }
 
     private RegexUtil() {

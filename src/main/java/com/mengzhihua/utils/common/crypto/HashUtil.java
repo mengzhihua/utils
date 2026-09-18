@@ -645,6 +645,36 @@ public final class HashUtil {
         return String.format(Locale.ROOT, "%04x", crc16Cms(text));
     }
 
+    /**
+     * CRC-16/CDMA2000 (poly {@code 0xC867}, init {@code 0xFFFF}).
+     * {@code 123456789} → {@code 4c06}.
+     */
+    public static int crc16Cdma2000(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Cdma2000(data);
+    }
+
+    public static String crc16Cdma2000Hex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Cdma2000(text));
+    }
+
+    public static int crc16Cdma2000(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0xffff;
+        for (byte b : bytes) {
+            crc ^= (b & 0xff) << 8;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 0x8000) != 0) {
+                    crc = (crc << 1) ^ 0xc867;
+                } else {
+                    crc <<= 1;
+                }
+                crc &= 0xffff;
+            }
+        }
+        return crc;
+    }
+
     public static int crc16Cms(byte[] data) {
         byte[] bytes = data == null ? new byte[0] : data;
         int crc = 0xffff;
