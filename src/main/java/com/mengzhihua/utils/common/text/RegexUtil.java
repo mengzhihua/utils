@@ -91,7 +91,12 @@ import com.mengzhihua.utils.common.validate.LithuanianAkUtil;
 import com.mengzhihua.utils.common.validate.MxRfcUtil;
 import com.mengzhihua.utils.common.validate.NitUtil;
 import com.mengzhihua.utils.common.validate.BsnUtil;
+import com.mengzhihua.utils.common.validate.CifUtil;
+import com.mengzhihua.utils.common.validate.CvrUtil;
+import com.mengzhihua.utils.common.validate.OrgnrUtil;
 import com.mengzhihua.utils.common.validate.PeDniUtil;
+import com.mengzhihua.utils.common.validate.SeOrgNrUtil;
+import com.mengzhihua.utils.common.validate.YTunnusUtil;
 import com.mengzhihua.utils.common.validate.RodneCisloUtil;
 import com.mengzhihua.utils.common.validate.TajUtil;
 import com.mengzhihua.utils.common.validate.TcKimlikUtil;
@@ -301,6 +306,11 @@ public final class RegexUtil {
         TYPES.put("mxrfc", MxRfcUtil::isValid);
         TYPES.put("bsn", BsnUtil::isValid);
         TYPES.put("rodne", RodneCisloUtil::isValid);
+        TYPES.put("ytunnus", YTunnusUtil::isValid);
+        TYPES.put("orgnr", OrgnrUtil::isValid);
+        TYPES.put("cvr", CvrUtil::isValid);
+        TYPES.put("cif", CifUtil::isValid);
+        TYPES.put("orgnrse", SeOrgNrUtil::isValid);
     }
 
     private RegexUtil() {

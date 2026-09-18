@@ -988,6 +988,18 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, valid: isRodne(digits) }
     }
+    case 'y-tunnus-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isYTunnus(digits) }
+    }
+    case 'cvr-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isCvr(digits) }
+    }
+    case 'cif-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isCif(compact) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2609,6 +2621,50 @@ function isBsn(digits) {
   let sum = 0
   for (let i = 0; i < 9; i++) sum += Number(padded[i]) * w[i]
   return sum !== 0 && sum % 11 === 0
+}
+
+function isYTunnus(digits) {
+  if (!/^\d{8}$/.test(digits)) return false
+  const w = [7, 9, 10, 5, 8, 4, 2]
+  let sum = 0
+  for (let i = 0; i < 7; i++) sum += Number(digits[i]) * w[i]
+  const rem = sum % 11
+  if (rem === 1) return false
+  const check = rem === 0 ? 0 : 11 - rem
+  return Number(digits[7]) === check
+}
+
+function isCvr(digits) {
+  if (!/^\d{8}$/.test(digits)) return false
+  const w = [2, 7, 6, 5, 4, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 7; i++) sum += Number(digits[i]) * w[i]
+  const rem = sum % 11
+  if (rem === 1) return false
+  const check = rem === 0 ? 0 : 11 - rem
+  return Number(digits[7]) === check
+}
+
+function isCif(compact) {
+  if (!/^[ABCDEFGHJNPQRSUVW]\d{7}[0-9A-J]$/.test(compact)) return false
+  const body = compact.slice(1, 8)
+  let sum = 0
+  for (let i = 0; i < 7; i++) {
+    let n = Number(body[i])
+    if (i % 2 === 0) {
+      n *= 2
+      sum += Math.floor(n / 10) + (n % 10)
+    } else {
+      sum += n
+    }
+  }
+  const digit = String((10 - (sum % 10)) % 10)
+  const letter = 'JABCDEFGHI'[Number(digit)]
+  const type = compact[0]
+  const last = compact[8]
+  if ('KPQS'.includes(type)) return last === letter
+  if ('ABEH'.includes(type)) return last === digit
+  return last === digit || last === letter
 }
 
 function isRodne(digits) {

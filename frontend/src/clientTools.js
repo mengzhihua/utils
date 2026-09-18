@@ -1169,6 +1169,27 @@ export const clientTools = [
       title: '捷克出生号',
       summary: '680101/0007',
       fields: [{ name: 'value', label: 'rodné číslo', value: '680101/0007' }]
+    },
+    {
+      id: 'y-tunnus-local',
+      group: 'net',
+      title: '芬兰企业号',
+      summary: '1234567-1',
+      fields: [{ name: 'value', label: 'Y-tunnus', value: '1234567-1' }]
+    },
+    {
+      id: 'cvr-local',
+      group: 'net',
+      title: '丹麦 CVR',
+      summary: '35408002',
+      fields: [{ name: 'value', label: 'CVR', value: '35408002' }]
+    },
+    {
+      id: 'cif-local',
+      group: 'net',
+      title: '西班牙 CIF',
+      summary: 'A58818501',
+      fields: [{ name: 'value', label: 'CIF', value: 'A58818501' }]
     }
   ]
 

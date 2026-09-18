@@ -2780,6 +2780,60 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/structured-fields',
       fields: [{ name: 'header', label: 'Dictionary', value: 'abc=123, def=?0, title="hi"' }]
+    },
+    {
+      id: 'y-tunnus',
+      group: 'validate',
+      title: '芬兰企业号',
+      summary: 'YTunnusUtil',
+      method: 'GET',
+      path: '/api/utils/y-tunnus',
+      fields: [{ name: 'value', label: 'Y-tunnus', value: '1234567-1' }]
+    },
+    {
+      id: 'orgnr',
+      group: 'validate',
+      title: '挪威企业号',
+      summary: 'OrgnrUtil',
+      method: 'GET',
+      path: '/api/utils/orgnr',
+      fields: [{ name: 'value', label: 'orgnr', value: '123456785' }]
+    },
+    {
+      id: 'cvr',
+      group: 'validate',
+      title: '丹麦 CVR',
+      summary: 'CvrUtil',
+      method: 'GET',
+      path: '/api/utils/cvr',
+      fields: [{ name: 'value', label: 'CVR', value: '35408002' }]
+    },
+    {
+      id: 'cif',
+      group: 'validate',
+      title: '西班牙 CIF',
+      summary: 'CifUtil AEAT',
+      method: 'GET',
+      path: '/api/utils/cif',
+      fields: [{ name: 'value', label: 'CIF', value: 'A58818501' }]
+    },
+    {
+      id: 'orgnr-se',
+      group: 'validate',
+      title: '瑞典企业号',
+      summary: 'SeOrgNrUtil',
+      method: 'GET',
+      path: '/api/utils/orgnr-se',
+      fields: [{ name: 'value', label: 'organisationsnummer', value: '556036-0793' }]
+    },
+    {
+      id: 'crc32-posix',
+      group: 'crypto',
+      title: 'CRC-32/POSIX',
+      summary: 'HashUtil.crc32Posix',
+      method: 'GET',
+      path: '/api/utils/crc32-posix',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

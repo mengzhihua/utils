@@ -615,4 +615,23 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.encoded").value("Q2Aeq)"));
     }
+
+    @Test
+    void yTunnusCvrCif() throws Exception {
+        mockMvc.perform(get("/api/utils/y-tunnus").param("value", "1234567-1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cvr").param("value", "35408002"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cif").param("value", "A58818501"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/crc32-posix").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc32Posix").value("765e7680"));
+    }
 }

@@ -414,8 +414,28 @@ public final class HashUtil {
     }
 
     public static int crc32Mpeg2(byte[] data) {
+        return crc32Shift(data, 0xffffffff);
+    }
+
+    /**
+     * CRC-32/POSIX (init 0, xorout {@code 0xFFFFFFFF}). {@code 123456789} → {@code 765e7680}.
+     */
+    public static int crc32Posix(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc32Posix(data);
+    }
+
+    public static String crc32PosixHex(String text) {
+        return String.format(Locale.ROOT, "%08x", crc32Posix(text));
+    }
+
+    public static int crc32Posix(byte[] data) {
+        return crc32Shift(data, 0) ^ 0xffffffff;
+    }
+
+    private static int crc32Shift(byte[] data, int init) {
         byte[] bytes = data == null ? new byte[0] : data;
-        int crc = 0xffffffff;
+        int crc = init;
         for (byte b : bytes) {
             crc ^= (b & 0xff) << 24;
             for (int i = 0; i < 8; i++) {
