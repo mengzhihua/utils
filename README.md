@@ -369,7 +369,7 @@ com.mengzhihua.utils
 | 模块 | 类 | 对标 | 说明 |
 | --- | --- | --- | --- |
 | 税号 / 证件 | `MzNuitUtil` / `CuNiUtil` / `GnNifpUtil` / `SmCoeUtil` | AT / Carnet / DGI / COE | 莫桑比克 `400339910`、古巴 `91021027775`、几内亚 `693-770-885`、圣马力诺 `24165` |
-| HTTP / CRC | `AltSvcUtil` / `HashUtil.crc16Mcrf4xx` | RFC 7838 / MCRF4XX | `h3=":443"`、`123456789` → `6f63` |
+| HTTP / CRC | `AltSvcUtil` / `HashUtil.crc16Mcrf4xx` | RFC 7838 / MCRF4XX | `h3=":443"`、`123456789` → `6f91` |
 
 ## 前端控制台（Vue 3）
 

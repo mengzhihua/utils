@@ -1313,8 +1313,8 @@ export async function runClientTool(id, values) {
       return { normalized: digits, formatted: digits.length === 9 ? `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}` : digits, valid: /^\d{9}$/.test(digits) && luhnAny(digits) }
     }
     case 'sm-coe-local': {
-      const digits = String(values.value || '').replace(/\D/g, '').replace(/^0+/, '')
-      return { normalized: digits, valid: isSmCoe(digits) }
+      const compact = String(values.value || '').replace(/[\s.]/g, '').replace(/^0+/, '')
+      return { normalized: compact, valid: isSmCoe(compact) }
     }
     default:
       throw new Error('unknown client tool')

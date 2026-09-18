@@ -664,7 +664,7 @@ public final class HashUtil {
     }
 
     /**
-     * CRC-16/MCRF4XX (KERMIT poly, init {@code 0xFFFF}). {@code 123456789} → {@code 6f63}.
+     * CRC-16/MCRF4XX (KERMIT poly, init {@code 0xFFFF}). {@code 123456789} → {@code 6f91}.
      */
     public static int crc16Mcrf4xx(String text) {
         byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);

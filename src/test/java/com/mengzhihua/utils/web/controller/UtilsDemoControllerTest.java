@@ -1016,6 +1016,6 @@ class UtilsDemoControllerTest {
 
         mockMvc.perform(get("/api/utils/crc16-mcrf4xx").param("text", "123456789"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.crc16Mcrf4xx").value("6f63"));
+                .andExpect(jsonPath("$.data.crc16Mcrf4xx").value("6f91"));
     }
 }

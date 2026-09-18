@@ -34,7 +34,7 @@ public final class SmCoeUtil {
         if (value == null) {
             return "";
         }
-        String digits = value.replaceAll("[\\s.]", "").replaceAll("\\D", "");
-        return digits.replaceFirst("^0+", "");
+        String compact = value.replaceAll("[\\s.]", "");
+        return compact.replaceFirst("^0+", "");
     }
 }

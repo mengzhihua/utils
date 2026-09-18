@@ -58,6 +58,6 @@ class MzAlignUtilsTest {
         assertEquals(":443", AltSvcUtil.parse(header).get(0).authority());
         assertEquals("86400", AltSvcUtil.parse(header).get(0).maxAge());
         assertTrue(AltSvcUtil.isClear("clear"));
-        assertEquals("6f63", HashUtil.crc16Mcrf4xxHex("123456789"));
+        assertEquals("6f91", HashUtil.crc16Mcrf4xxHex("123456789"));
     }
 }
