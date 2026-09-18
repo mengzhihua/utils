@@ -1331,6 +1331,22 @@ export async function runClientTool(id, values) {
     case 'mu-nid-local': {
       return parseMuNid(values.value)
     }
+    case 'ec-ci-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, formatted: digits.length === 10 ? `${digits.slice(0, 9)}-${digits.slice(9)}` : digits, valid: isEcCi(digits) }
+    }
+    case 'ec-ruc-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, formatted: digits.length === 13 ? `${digits.slice(0, 10)}-${digits.slice(10)}` : digits, valid: isEcRuc(digits) }
+    }
+    case 'it-iva-local': {
+      const compact = normalizeItIva(values.value)
+      return { normalized: compact, formatted: compact.length === 11 ? `IT ${compact}` : compact, valid: isItIva(compact) }
+    }
+    case 'ie-vat-local': {
+      const compact = normalizeIeVat(values.value)
+      return { normalized: compact, formatted: compact.length === 8 || compact.length === 9 ? `IE ${compact}` : compact, valid: isIeVat(compact) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -3860,4 +3876,75 @@ function parseMuNid(value) {
     valid,
     birthDate: validDate ? `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}` : ''
   }
+}
+
+function ecProvince(two) {
+  return (two >= '01' && two <= '24') || two === '30' || two === '50'
+}
+
+function isEcCi(digits) {
+  if (!/^\d{10}$/.test(digits) || !ecProvince(digits.slice(0, 2)) || digits[2] > '6') return false
+  let sum = 0
+  for (let i = 0; i < 10; i++) {
+    let product = (i % 2 === 0 ? 2 : 1) * Number(digits[i])
+    if (product > 9) product -= 9
+    sum += product
+  }
+  return sum % 10 === 0
+}
+
+function weightedMod11(digits, weights) {
+  let sum = 0
+  for (let i = 0; i < weights.length; i++) sum += weights[i] * Number(digits[i])
+  return sum % 11
+}
+
+function isEcRuc(digits) {
+  if (!/^\d{13}$/.test(digits) || !ecProvince(digits.slice(0, 2))) return false
+  const natural = !digits.endsWith('000') && isEcCi(digits.slice(0, 10))
+  const pub = !digits.endsWith('0000') && weightedMod11(digits.slice(0, 9), [3, 2, 7, 6, 5, 4, 3, 2, 1]) === 0
+  const juridical = !digits.endsWith('000') && weightedMod11(digits.slice(0, 10), [4, 3, 2, 7, 6, 5, 4, 3, 2, 1]) === 0
+  if (digits[2] < '6') return natural
+  if (digits[2] === '6') return pub || natural
+  if (digits[2] === '9') return pub || juridical
+  return false
+}
+
+function normalizeItIva(value) {
+  let compact = String(value || '').replace(/[\s.:-]/g, '').toUpperCase()
+  if (compact.startsWith('IT')) compact = compact.slice(2)
+  return compact
+}
+
+function isItIva(compact) {
+  if (!/^\d{11}$/.test(compact) || Number(compact.slice(0, 7)) === 0) return false
+  const province = compact.slice(7, 10)
+  const ok = (province >= '001' && province <= '100') || province === '120' || province === '121' || province === '888' || province === '999'
+  return ok && luhnAny(compact)
+}
+
+function normalizeIeVat(value) {
+  let compact = String(value || '').replace(/[\s-]/g, '').toUpperCase()
+  if (compact.startsWith('IE')) compact = compact.slice(2)
+  return compact
+}
+
+function ieVatCheck(body) {
+  const alphabet = 'WABCDEFGHIJKLMNOPQRSTUV'
+  const padded = body.padStart(7, '0')
+  let sum = 0
+  for (let i = 0; i < 7; i++) sum += (8 - i) * Number(padded[i])
+  const extra = padded.length > 7 ? alphabet.indexOf(padded[7]) : 0
+  if (extra < 0) return ''
+  return alphabet[(sum + 9 * extra) % 23]
+}
+
+function isIeVat(compact) {
+  const alphabet = 'WABCDEFGHIJKLMNOPQRSTUV'
+  if (compact.length !== 8 && compact.length !== 9) return false
+  if (!/^\d/.test(compact) || !/^\d{5}$/.test(compact.slice(2, 7))) return false
+  if (![...compact.slice(7)].every((ch) => alphabet.includes(ch))) return false
+  if (/^\d{7}/.test(compact)) return compact[7] === ieVatCheck(compact.slice(0, 7) + compact.slice(8))
+  if ('ABCDEFGHIJKLMNOPQRSTUVWXYZ+*'.includes(compact[1])) return compact[7] === ieVatCheck(compact.slice(2, 7) + compact[0])
+  return false
 }

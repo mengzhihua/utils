@@ -431,6 +431,34 @@ public final class HashUtil {
     }
 
     /**
+     * CRC-8/MAXIM-DOW (poly {@code 0x31}, reflected). {@code 123456789} → {@code a1}.
+     */
+    public static int crc8Maxim(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc8Maxim(data);
+    }
+
+    public static String crc8MaximHex(String text) {
+        return String.format(Locale.ROOT, "%02x", crc8Maxim(text));
+    }
+
+    public static int crc8Maxim(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0;
+        for (byte b : bytes) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 1) != 0) {
+                    crc = (crc >>> 1) ^ 0x8c;
+                } else {
+                    crc >>>= 1;
+                }
+            }
+        }
+        return crc & 0xff;
+    }
+
+    /**
      * CRC-64/ECMA-182. {@code 123456789} → {@code 6c40df5f0b497347}.
      */
     public static long crc64(String text) {

@@ -3887,6 +3887,60 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc8-wcdma',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'ec-ci',
+      group: 'validate',
+      title: '厄瓜多尔身份证',
+      summary: 'EcCiUtil',
+      method: 'GET',
+      path: '/api/utils/ec-ci',
+      fields: [{ name: 'value', label: 'CI', value: '171430710-3' }]
+    },
+    {
+      id: 'ec-ruc',
+      group: 'validate',
+      title: '厄瓜多尔税号',
+      summary: 'EcRucUtil',
+      method: 'GET',
+      path: '/api/utils/ec-ruc',
+      fields: [{ name: 'value', label: 'RUC', value: '1792060346-001' }]
+    },
+    {
+      id: 'it-iva',
+      group: 'validate',
+      title: '意大利增值税号',
+      summary: 'ItIvaUtil',
+      method: 'GET',
+      path: '/api/utils/it-iva',
+      fields: [{ name: 'value', label: 'P.IVA', value: 'IT 00743110157' }]
+    },
+    {
+      id: 'ie-vat',
+      group: 'validate',
+      title: '爱尔兰税号',
+      summary: 'IeVatUtil',
+      method: 'GET',
+      path: '/api/utils/ie-vat',
+      fields: [{ name: 'value', label: 'VAT', value: 'IE 6433435F' }]
+    },
+    {
+      id: 'xss-protection',
+      group: 'web',
+      title: 'HTTP X-XSS-Protection',
+      summary: 'XssProtectionUtil',
+      method: 'GET',
+      path: '/api/utils/xss-protection',
+      fields: [{ name: 'header', label: 'X-XSS-Protection', value: '1; mode=block' }]
+    },
+    {
+      id: 'crc8-maxim',
+      group: 'crypto',
+      title: 'CRC-8/MAXIM-DOW',
+      summary: 'HashUtil.crc8Maxim',
+      method: 'GET',
+      path: '/api/utils/crc8-maxim',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 
