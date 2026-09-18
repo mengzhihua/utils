@@ -62,6 +62,14 @@ import com.mengzhihua.utils.common.validate.PanUtil;
 import com.mengzhihua.utils.common.validate.PpsUtil;
 import com.mengzhihua.utils.common.validate.SinUtil;
 import com.mengzhihua.utils.common.validate.VatUtil;
+import com.mengzhihua.utils.common.validate.AfmUtil;
+import com.mengzhihua.utils.common.validate.CprUtil;
+import com.mengzhihua.utils.common.validate.MyNumberUtil;
+import com.mengzhihua.utils.common.validate.NinoUtil;
+import com.mengzhihua.utils.common.validate.NrnUtil;
+import com.mengzhihua.utils.common.validate.PtNifUtil;
+import com.mengzhihua.utils.common.validate.RrnUtil;
+import com.mengzhihua.utils.common.validate.SvnrUtil;
 import com.mengzhihua.utils.common.validate.VinUtil;
 
 /**
@@ -233,6 +241,14 @@ public final class RegexUtil {
         TYPES.put("pan", PanUtil::isValid);
         TYPES.put("sin", SinUtil::isValid);
         TYPES.put("pps", PpsUtil::isValid);
+        TYPES.put("cpr", CprUtil::isValid);
+        TYPES.put("nrn", NrnUtil::isValid);
+        TYPES.put("svnr", SvnrUtil::isValid);
+        TYPES.put("ptnif", PtNifUtil::isValid);
+        TYPES.put("afm", AfmUtil::isValid);
+        TYPES.put("nino", NinoUtil::isValid);
+        TYPES.put("rrn", RrnUtil::isValid);
+        TYPES.put("mynumber", MyNumberUtil::isValid);
     }
 
     private RegexUtil() {

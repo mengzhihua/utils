@@ -1015,6 +1015,41 @@ export const clientTools = [
       title: '爱尔兰 PPS',
       summary: '1234567T',
       fields: [{ name: 'value', label: 'PPS', value: '1234567T' }]
+    },
+    {
+      id: 'cpr-local',
+      group: 'net',
+      title: '丹麦 CPR',
+      summary: '010170-0003',
+      fields: [{ name: 'value', label: 'CPR', value: '010170-0003' }]
+    },
+    {
+      id: 'pt-nif-local',
+      group: 'net',
+      title: '葡萄牙 NIF',
+      summary: '123456789',
+      fields: [{ name: 'value', label: 'NIF', value: '123456789' }]
+    },
+    {
+      id: 'nino-local',
+      group: 'net',
+      title: '英国 NINO',
+      summary: 'AB123456C',
+      fields: [{ name: 'value', label: 'NINO', value: 'AB123456C' }]
+    },
+    {
+      id: 'rrn-local',
+      group: 'net',
+      title: '韩国居民登记号',
+      summary: '900101-1234568',
+      fields: [{ name: 'value', label: 'RRN', value: '900101-1234568' }]
+    },
+    {
+      id: 'afm-local',
+      group: 'net',
+      title: '希腊 AFM',
+      summary: '090000045',
+      fields: [{ name: 'value', label: 'AFM', value: '090000045' }]
     }
   ]
 

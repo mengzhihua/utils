@@ -485,4 +485,27 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc16Xmodem").value("31c3"));
     }
+
+    @Test
+    void cprPtNifYencBase36() throws Exception {
+        mockMvc.perform(get("/api/utils/cpr").param("value", "010170-0003"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/nrn").param("value", "93.05.18-223.61"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/pt-nif").param("value", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/yenc").param("text", "Hello"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.encodedHex").value("728f969699"));
+
+        mockMvc.perform(get("/api/utils/base36").param("text", "hello").param("value", "1234567890"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.encodedLong").value("kf12oi"));
+    }
 }

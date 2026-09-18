@@ -900,6 +900,26 @@ export async function runClientTool(id, values) {
       const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
       return { normalized: compact, valid: isPps(compact) }
     }
+    case 'cpr-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isCpr(digits) }
+    }
+    case 'pt-nif-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isPtNif(digits) }
+    }
+    case 'nino-local': {
+      const compact = String(values.value || '').replace(/[\s.-]/g, '').toUpperCase()
+      return { normalized: compact, prefix: compact.slice(0, 2), valid: isNino(compact) }
+    }
+    case 'rrn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isRrn(digits) }
+    }
+    case 'afm-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isAfm(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2333,6 +2353,43 @@ function isPps(compact) {
   }
   if (/^\d{7}[A-W]$/.test(compact)) return compact[7] === sum(compact.slice(0, 7))
   return false
+}
+
+function isCpr(digits) {
+  if (!/^\d{10}$/.test(digits)) return false
+  const w = [4, 3, 2, 7, 6, 5, 4, 3, 2, 1]
+  let sum = 0
+  for (let i = 0; i < 10; i++) sum += Number(digits[i]) * w[i]
+  return sum % 11 === 0
+}
+
+function isPtNif(digits) {
+  if (!/^[1-9]\d{8}$/.test(digits)) return false
+  const w = [9, 8, 7, 6, 5, 4, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 8; i++) sum += Number(digits[i]) * w[i]
+  const rem = sum % 11
+  return Number(digits[8]) === (rem < 2 ? 0 : 11 - rem)
+}
+
+function isNino(compact) {
+  if (!/^[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z]\d{6}[A-D]$/.test(compact)) return false
+  return !['BG', 'GB', 'KN', 'NK', 'NT', 'TN', 'ZZ'].includes(compact.slice(0, 2))
+}
+
+function isRrn(digits) {
+  if (!/^\d{13}$/.test(digits)) return false
+  const w = [2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5]
+  let sum = 0
+  for (let i = 0; i < 12; i++) sum += Number(digits[i]) * w[i]
+  return digits[12] === String((11 - (sum % 11)) % 10)
+}
+
+function isAfm(digits) {
+  if (!/^\d{9}$/.test(digits)) return false
+  let sum = 0
+  for (let i = 0; i < 8; i++) sum += Number(digits[i]) * (2 ** (8 - i))
+  return Number(digits[8]) === (sum % 11) % 10
 }
 
 function isSscc(digits) {

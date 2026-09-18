@@ -2289,6 +2289,117 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-xmodem',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'cpr',
+      group: 'validate',
+      title: '丹麦 CPR',
+      summary: 'CprUtil MOD 11',
+      method: 'GET',
+      path: '/api/utils/cpr',
+      fields: [{ name: 'value', label: 'CPR', value: '010170-0003' }]
+    },
+    {
+      id: 'nrn',
+      group: 'validate',
+      title: '比利时国家登记号',
+      summary: 'NrnUtil %97',
+      method: 'GET',
+      path: '/api/utils/nrn',
+      fields: [{ name: 'value', label: 'NRN', value: '93.05.18-223.61' }]
+    },
+    {
+      id: 'svnr',
+      group: 'validate',
+      title: '奥地利社保号',
+      summary: 'SvnrUtil',
+      method: 'GET',
+      path: '/api/utils/svnr',
+      fields: [{ name: 'value', label: 'SVNR', value: '1237010180' }]
+    },
+    {
+      id: 'pt-nif',
+      group: 'validate',
+      title: '葡萄牙 NIF',
+      summary: 'PtNifUtil',
+      method: 'GET',
+      path: '/api/utils/pt-nif',
+      fields: [{ name: 'value', label: 'NIF', value: '123456789' }]
+    },
+    {
+      id: 'afm',
+      group: 'validate',
+      title: '希腊 AFM',
+      summary: 'AfmUtil',
+      method: 'GET',
+      path: '/api/utils/afm',
+      fields: [{ name: 'value', label: 'AFM', value: '090000045' }]
+    },
+    {
+      id: 'nino',
+      group: 'validate',
+      title: '英国 NINO',
+      summary: 'NinoUtil',
+      method: 'GET',
+      path: '/api/utils/nino',
+      fields: [{ name: 'value', label: 'NINO', value: 'AB123456C' }]
+    },
+    {
+      id: 'rrn',
+      group: 'validate',
+      title: '韩国居民登记号',
+      summary: 'RrnUtil',
+      method: 'GET',
+      path: '/api/utils/rrn',
+      fields: [{ name: 'value', label: 'RRN', value: '900101-1234568' }]
+    },
+    {
+      id: 'my-number',
+      group: 'validate',
+      title: '日本个人番号',
+      summary: 'MyNumberUtil',
+      method: 'GET',
+      path: '/api/utils/my-number',
+      fields: [{ name: 'value', label: '番号', value: '123456789019' }]
+    },
+    {
+      id: 'yenc',
+      group: 'crypto',
+      title: 'yEnc',
+      summary: 'YencUtil',
+      method: 'GET',
+      path: '/api/utils/yenc',
+      fields: [{ name: 'text', label: '原文', value: 'Hello' }]
+    },
+    {
+      id: 'base36',
+      group: 'crypto',
+      title: 'Base36',
+      summary: 'Base36Util',
+      method: 'GET',
+      path: '/api/utils/base36',
+      fields: [
+        { name: 'text', label: '文本', value: 'hello' },
+        { name: 'value', label: '整数', value: '1234567890' }
+      ]
+    },
+    {
+      id: 'retry-after',
+      group: 'web',
+      title: 'HTTP Retry-After',
+      summary: 'RetryAfterUtil RFC 9110',
+      method: 'GET',
+      path: '/api/utils/retry-after',
+      fields: [{ name: 'header', label: 'Retry-After', value: '120' }]
+    },
+    {
+      id: 'uuid-v1',
+      group: 'id',
+      title: 'UUID v1',
+      summary: 'IdUtil.uuidV1 RFC 4122',
+      method: 'GET',
+      path: '/api/utils/uuid-v1',
+      fields: []
     }
   ]
 
