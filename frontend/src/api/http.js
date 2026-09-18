@@ -1,9 +1,11 @@
+import { acceptLanguage } from '../composables/useI18n'
+
 export async function callTool(tool, values) {
   const started = performance.now()
   let url = tool.path
   const init = {
     method: tool.method,
-    headers: { Accept: 'application/json' }
+    headers: { Accept: 'application/json', 'Accept-Language': acceptLanguage() }
   }
 
   if (tool.method === 'GET') {

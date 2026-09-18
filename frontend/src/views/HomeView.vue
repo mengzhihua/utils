@@ -2,43 +2,43 @@
   <div class="home">
     <div class="topbar">
       <div>
-        <h1 class="gradient-text">工具控制台</h1>
-        <p>后端 Java 工具 + 浏览器本地工具。左侧选择能力，或从下面卡片进入。</p>
+        <h1 class="gradient-text">{{ t('homeTitle') }}</h1>
+        <p>{{ t('homeLead') }}</p>
       </div>
     </div>
 
     <div class="stats">
       <div class="stat reveal" style="--d: 0ms">
         <b>{{ health || '...' }}</b>
-        <span>应用健康</span>
+        <span>{{ t('healthLabel') }}</span>
       </div>
       <div class="stat reveal" style="--d: 80ms">
         <b>{{ system.java || '...' }}</b>
-        <span>Java 版本</span>
+        <span>{{ t('javaLabel') }}</span>
       </div>
       <div class="stat reveal" style="--d: 160ms">
         <b>{{ now.dateTime || '...' }}</b>
-        <span>服务器时间</span>
+        <span>{{ t('timeLabel') }}</span>
       </div>
     </div>
 
     <div class="actions" style="margin: 0 0 18px">
-      <button class="btn glow-btn" type="button" @click="quick('uuid')">生成 UUID</button>
-      <button class="btn secondary" type="button" @click="quick('snowflake')">雪花 ID</button>
-      <button class="btn secondary" type="button" @click="quick('order-no')">业务单号</button>
-      <RouterLink class="btn secondary" to="/fx">打开特效实验室</RouterLink>
+      <button class="btn glow-btn" type="button" @click="quick('uuid')">{{ t('quickUuid') }}</button>
+      <button class="btn secondary" type="button" @click="quick('snowflake')">{{ t('quickSnowflake') }}</button>
+      <button class="btn secondary" type="button" @click="quick('order-no')">{{ t('quickOrder') }}</button>
+      <RouterLink class="btn secondary" to="/fx">{{ t('openEffects') }}</RouterLink>
     </div>
 
     <div v-if="quickResult" class="result result-enter" style="margin-bottom: 22px">
       <div class="result-head">
-        <span>快捷结果</span>
-        <button class="btn secondary" type="button" @click="copy(quickResult)">复制</button>
+        <span>{{ t('quickResult') }}</span>
+        <button class="btn secondary" type="button" @click="copy(quickResult)">{{ t('copy') }}</button>
       </div>
       <pre>{{ quickResult }}</pre>
     </div>
 
     <template v-for="group in clientCatalog" :key="group.id">
-      <h3 class="section-title">前端 · {{ group.label }}</h3>
+      <h3 class="section-title">{{ t('frontendPrefix') }} {{ group.label }}</h3>
       <div class="grid">
         <RouterLink
           v-for="(tool, index) in group.tools"
@@ -48,12 +48,12 @@
           :to="`/c/${tool.id}`"
         >
           <h2>{{ tool.title }}</h2>
-          <p>{{ tool.summary }} · 本地</p>
+          <p>{{ tool.summary }} · {{ t('localSuffix') }}</p>
         </RouterLink>
       </div>
     </template>
 
-    <h3 class="section-title">后端 Java 工具</h3>
+    <h3 class="section-title">{{ t('backendTitle') }}</h3>
     <div class="grid">
       <RouterLink
         v-for="(tool, index) in tools"
@@ -70,18 +70,23 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { callTool } from '../api/http'
 import { getTool, tools } from '../tools'
 import { groupedClientTools } from '../clientTools'
 import { useToast } from '../composables/useToast'
+import { useI18n } from '../composables/useI18n'
 
 const health = ref('')
 const now = reactive({})
 const system = reactive({})
 const quickResult = ref('')
 const toast = useToast()
-const clientCatalog = groupedClientTools()
+const { t } = useI18n()
+const clientCatalog = computed(() => groupedClientTools().map((group) => ({
+  ...group,
+  label: t(`group.${group.id}`, group.label)
+})))
 
 async function load() {
   const [healthRes, nowRes, sysRes] = await Promise.all([
@@ -101,7 +106,7 @@ async function quick(id) {
 
 async function copy(text) {
   await navigator.clipboard.writeText(text)
-  toast.show('已复制')
+  toast.show(t('copied'))
 }
 
 onMounted(load)

@@ -1449,6 +1449,17 @@ export const clientTools = [
       title: '巴拉圭税号',
       summary: '80028061-0',
       fields: [{ name: 'value', label: 'RUC', value: '80028061-0' }]
+    },
+    {
+      id: 'i18n-local',
+      group: 'text',
+      title: '本地化格式',
+      summary: 'Intl.NumberFormat',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'zh-CN' },
+        { name: 'amount', label: '金额', value: '1234.5' },
+        { name: 'currency', label: '货币', value: 'CNY' }
+      ]
     }
   ]
 

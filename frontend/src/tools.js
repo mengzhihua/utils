@@ -3383,6 +3383,66 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-gsm',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'i18n-message',
+      group: 'web',
+      title: '国际化文案',
+      summary: 'I18nUtil / MessageSource',
+      method: 'GET',
+      path: '/api/utils/i18n/message',
+      fields: [
+        { name: 'key', label: 'Key', value: 'hello' },
+        { name: 'arg', label: '参数', value: 'Ada' },
+        { name: 'locale', label: 'Locale', value: 'zh-CN' }
+      ]
+    },
+    {
+      id: 'i18n-locale',
+      group: 'web',
+      title: '语言标签',
+      summary: 'LocaleUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/locale',
+      fields: [
+        { name: 'tag', label: 'Tag', value: 'zh-CN' },
+        { name: 'inLocale', label: '显示语言', value: 'en' }
+      ]
+    },
+    {
+      id: 'i18n-format',
+      group: 'web',
+      title: '本地化格式',
+      summary: 'I18nFormatUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/format',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'de-DE' },
+        { name: 'amount', label: '金额', value: '1234.5' },
+        { name: 'currency', label: '货币', value: 'EUR' },
+        { name: 'date', label: '日期', value: '2026-09-18' }
+      ]
+    },
+    {
+      id: 'i18n-sort',
+      group: 'web',
+      title: '本地化排序',
+      summary: 'CollationUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/sort',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'sv' },
+        { name: 'items', label: '词条', value: 'äpfel,Zebra,öl' }
+      ]
+    },
+    {
+      id: 'accept-language',
+      group: 'web',
+      title: 'HTTP Accept-Language',
+      summary: 'AcceptLanguageUtil',
+      method: 'GET',
+      path: '/api/utils/accept-language',
+      fields: [{ name: 'header', label: 'Accept-Language', value: 'zh-CN,zh;q=0.9,en;q=0.8' }]
     }
   ]
 
