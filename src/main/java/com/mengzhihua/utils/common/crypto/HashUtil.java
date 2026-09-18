@@ -322,6 +322,24 @@ public final class HashUtil {
         return String.format(Locale.ROOT, "%08x", crc32c(text));
     }
 
+    /**
+     * CRC-32/JAMCRC (ISO-HDLC then xor {@code 0xFFFFFFFF}). {@code 123456789} → {@code 340bc6d9}.
+     */
+    public static int crc32Jamcrc(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc32Jamcrc(data);
+    }
+
+    public static String crc32JamcrcHex(String text) {
+        return String.format(Locale.ROOT, "%08x", crc32Jamcrc(text));
+    }
+
+    public static int crc32Jamcrc(byte[] data) {
+        java.util.zip.CRC32 crc = new java.util.zip.CRC32();
+        crc.update(data == null ? new byte[0] : data);
+        return (int) crc.getValue() ^ 0xffffffff;
+    }
+
     public static int crc32c(byte[] data) {
         byte[] bytes = data == null ? new byte[0] : data;
         int crc = 0xffffffff;
@@ -600,6 +618,36 @@ public final class HashUtil {
 
     public static int crc16Usb(byte[] data) {
         return crc16Reflected(data, 0xffff) ^ 0xffff;
+    }
+
+    /**
+     * CRC-16/DNP (reflected poly {@code 0x3D65}, xorout {@code 0xFFFF}).
+     * {@code 123456789} → {@code ea82}.
+     */
+    public static int crc16Dnp(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Dnp(data);
+    }
+
+    public static String crc16DnpHex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Dnp(text));
+    }
+
+    public static int crc16Dnp(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0;
+        for (byte b : bytes) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 1) != 0) {
+                    crc = (crc >>> 1) ^ 0xa6bc;
+                } else {
+                    crc >>>= 1;
+                }
+                crc &= 0xffff;
+            }
+        }
+        return crc ^ 0xffff;
     }
 
     private static int crc16Reflected(byte[] data, int init) {

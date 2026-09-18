@@ -1281,6 +1281,62 @@ export const clientTools = [
       title: '爱沙尼亚企业号',
       summary: '12345678',
       fields: [{ name: 'value', label: 'registrikood', value: '12345678' }]
+    },
+    {
+      id: 'nzbn-local',
+      group: 'net',
+      title: '新西兰企业号',
+      summary: '9429000000000',
+      fields: [{ name: 'value', label: 'NZBN', value: '9429000000000' }]
+    },
+    {
+      id: 'uen-local',
+      group: 'net',
+      title: '新加坡 UEN',
+      summary: 'T01FC6132D',
+      fields: [{ name: 'value', label: 'UEN', value: 'T01FC6132D' }]
+    },
+    {
+      id: 'il-hp-local',
+      group: 'net',
+      title: '以色列公司号',
+      summary: '516179157',
+      fields: [{ name: 'value', label: 'ח.פ.', value: '516179157' }]
+    },
+    {
+      id: 'lt-ja-local',
+      group: 'net',
+      title: '立陶宛企业号',
+      summary: '119511515',
+      fields: [{ name: 'value', label: 'JA kodas', value: '119511515' }]
+    },
+    {
+      id: 'inn-local',
+      group: 'net',
+      title: '俄罗斯税号',
+      summary: '7707083893',
+      fields: [{ name: 'value', label: 'ИНН', value: '7707083893' }]
+    },
+    {
+      id: 'pe-ruc-local',
+      group: 'net',
+      title: '秘鲁税号',
+      summary: '20512333797',
+      fields: [{ name: 'value', label: 'RUC', value: '20512333797' }]
+    },
+    {
+      id: 'nik-local',
+      group: 'net',
+      title: '印尼身份证',
+      summary: '3171011708450001',
+      fields: [{ name: 'value', label: 'NIK', value: '3171011708450001' }]
+    },
+    {
+      id: 'vn-mst-local',
+      group: 'net',
+      title: '越南税号',
+      summary: '0100233488',
+      fields: [{ name: 'value', label: 'MST', value: '0100233488' }]
     }
   ]
 

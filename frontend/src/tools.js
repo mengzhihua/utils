@@ -3023,6 +3023,132 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-genibus',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'nzbn',
+      group: 'validate',
+      title: '新西兰企业号',
+      summary: 'NzbnUtil',
+      method: 'GET',
+      path: '/api/utils/nzbn',
+      fields: [{ name: 'value', label: 'NZBN', value: '9429000000000' }]
+    },
+    {
+      id: 'uen',
+      group: 'validate',
+      title: '新加坡 UEN',
+      summary: 'UenUtil',
+      method: 'GET',
+      path: '/api/utils/uen',
+      fields: [{ name: 'value', label: 'UEN', value: 'T01FC6132D' }]
+    },
+    {
+      id: 'il-hp',
+      group: 'validate',
+      title: '以色列公司号',
+      summary: 'IlHpUtil',
+      method: 'GET',
+      path: '/api/utils/il-hp',
+      fields: [{ name: 'value', label: 'ח.פ.', value: '516179157' }]
+    },
+    {
+      id: 'lt-ja',
+      group: 'validate',
+      title: '立陶宛企业号',
+      summary: 'LtJaUtil',
+      method: 'GET',
+      path: '/api/utils/lt-ja',
+      fields: [{ name: 'value', label: 'JA kodas', value: '119511515' }]
+    },
+    {
+      id: 'coop',
+      group: 'web',
+      title: 'HTTP COOP',
+      summary: 'CoopUtil',
+      method: 'GET',
+      path: '/api/utils/coop',
+      fields: [{ name: 'header', label: 'COOP', value: 'same-origin' }]
+    },
+    {
+      id: 'coep',
+      group: 'web',
+      title: 'HTTP COEP',
+      summary: 'CoepUtil',
+      method: 'GET',
+      path: '/api/utils/coep',
+      fields: [{ name: 'header', label: 'COEP', value: 'require-corp' }]
+    },
+    {
+      id: 'crc32-jamcrc',
+      group: 'crypto',
+      title: 'CRC-32/JAMCRC',
+      summary: 'HashUtil.crc32Jamcrc',
+      method: 'GET',
+      path: '/api/utils/crc32-jamcrc',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'inn',
+      group: 'validate',
+      title: '俄罗斯税号',
+      summary: 'InnUtil',
+      method: 'GET',
+      path: '/api/utils/inn',
+      fields: [{ name: 'value', label: 'ИНН', value: '7707083893' }]
+    },
+    {
+      id: 'pe-ruc',
+      group: 'validate',
+      title: '秘鲁税号',
+      summary: 'PeRucUtil',
+      method: 'GET',
+      path: '/api/utils/pe-ruc',
+      fields: [{ name: 'value', label: 'RUC', value: '20512333797' }]
+    },
+    {
+      id: 'nik',
+      group: 'validate',
+      title: '印尼身份证',
+      summary: 'NikUtil',
+      method: 'GET',
+      path: '/api/utils/nik',
+      fields: [{ name: 'value', label: 'NIK', value: '3171011708450001' }]
+    },
+    {
+      id: 'vn-mst',
+      group: 'validate',
+      title: '越南税号',
+      summary: 'VnMstUtil',
+      method: 'GET',
+      path: '/api/utils/vn-mst',
+      fields: [{ name: 'value', label: 'MST', value: '0100233488' }]
+    },
+    {
+      id: 'corp',
+      group: 'web',
+      title: 'HTTP CORP',
+      summary: 'CorpUtil',
+      method: 'GET',
+      path: '/api/utils/corp',
+      fields: [{ name: 'header', label: 'CORP', value: 'same-origin' }]
+    },
+    {
+      id: 'xcto',
+      group: 'web',
+      title: 'HTTP X-Content-Type-Options',
+      summary: 'XctoUtil',
+      method: 'GET',
+      path: '/api/utils/xcto',
+      fields: [{ name: 'header', label: 'XCTO', value: 'nosniff' }]
+    },
+    {
+      id: 'crc16-dnp',
+      group: 'crypto',
+      title: 'CRC-16/DNP',
+      summary: 'HashUtil.crc16Dnp',
+      method: 'GET',
+      path: '/api/utils/crc16-dnp',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

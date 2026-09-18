@@ -1052,6 +1052,38 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, valid: isRegistrikood(digits) }
     }
+    case 'nzbn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isNzbn(digits) }
+    }
+    case 'uen-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isUen(compact) }
+    }
+    case 'il-hp-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isIlHp(digits) }
+    }
+    case 'lt-ja-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isLtJa(digits) }
+    }
+    case 'inn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isInn(digits) }
+    }
+    case 'pe-ruc-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isPeRuc(digits) }
+    }
+    case 'nik-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isNik(digits) }
+    }
+    case 'vn-mst-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isVnMst(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2818,6 +2850,113 @@ function isVkn(digits) {
 function isNpwp(digits) {
   if (!/^\d{15}$/.test(digits)) return false
   return luhnAny(digits.slice(0, 9))
+}
+
+function isNzbn(digits) {
+  if (!/^94\d{11}$/.test(digits)) return false
+  let sum = 0
+  let factor = 3
+  for (let i = digits.length - 2; i >= 0; i--) {
+    sum += Number(digits[i]) * factor
+    factor = 4 - factor
+  }
+  return Number(digits[12]) === (10 - (sum % 10)) % 10
+}
+
+function isUen(compact) {
+  if (/^\d{8}[A-Z]$/.test(compact)) {
+    const w = [10, 4, 9, 3, 8, 2, 7, 1]
+    let sum = 0
+    for (let i = 0; i < 8; i++) sum += Number(compact[i]) * w[i]
+    return compact[8] === 'XMKECAWLJDB'[sum % 11]
+  }
+  if (/^\d{9}[A-Z]$/.test(compact)) {
+    if (Number(compact.slice(0, 4)) > new Date().getFullYear()) return false
+    const w = [10, 8, 6, 4, 9, 7, 5, 3, 1]
+    let sum = 0
+    for (let i = 0; i < 9; i++) sum += Number(compact[i]) * w[i]
+    return compact[9] === 'ZKCMDNERGWH'[sum % 11]
+  }
+  if (!/^[RST]\d{2}[A-Z]{2}\d{4}[A-Z]$/.test(compact)) return false
+  const types = new Set(['CC','CD','CH','CL','CM','CP','CS','CX','DP','FB','FC','FM','FN','GA','GB','GS','HS','LL','LP','MB','MC','MD','MH','MM','MQ','NB','NR','PA','PB','PF','RF','RP','SM','SS','TC','TU','VH','XL'])
+  if (!types.has(compact.slice(3, 5))) return false
+  if (compact[0] === 'T' && Number(compact.slice(1, 3)) > new Date().getFullYear() % 100) return false
+  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWX0123456789'
+  const w = [4, 3, 5, 3, 10, 2, 2, 5, 7]
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += alphabet.indexOf(compact[i]) * w[i]
+  const rem = ((sum - 5) % 11 + 11) % 11
+  return compact[9] === alphabet[rem]
+}
+
+function isIlHp(digits) {
+  return /^5\d{8}$/.test(digits) && luhnAny(digits)
+}
+
+function isLtJa(digits) {
+  if (!/^\d{7}1\d$/.test(digits)) return false
+  const w = [1, 2, 3, 4, 5, 6, 7, 8]
+  let sum = 0
+  for (let i = 0; i < 8; i++) sum += Number(digits[i]) * w[i]
+  const rem = sum % 11
+  return rem !== 10 && Number(digits[8]) === rem
+}
+
+function innWeighted(digits, weights) {
+  let sum = 0
+  for (let i = 0; i < weights.length; i++) sum += Number(digits[i]) * weights[i]
+  return sum % 11 % 10
+}
+
+function isInn(digits) {
+  if (/^\d{10}$/.test(digits)) {
+    return Number(digits[9]) === innWeighted(digits, [2, 4, 10, 3, 5, 9, 4, 6, 8])
+  }
+  if (!/^\d{12}$/.test(digits)) return false
+  const d1 = innWeighted(digits, [7, 2, 4, 10, 3, 5, 9, 4, 6, 8])
+  const d2 = innWeighted(digits.slice(0, 10) + String(d1), [3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8])
+  return digits.slice(10) === `${d1}${d2}`
+}
+
+function isPeRuc(digits) {
+  if (!/^(10|15|17|20)\d{9}$/.test(digits)) return false
+  const w = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 10; i++) sum += Number(digits[i]) * w[i]
+  return Number(digits[10]) === (11 - (sum % 11)) % 10
+}
+
+function isNik(digits) {
+  if (!/^\d{16}$/.test(digits)) return false
+  const provinces = new Set([
+    '11', '12', '13', '14', '15', '16', '17', '18', '19', '21',
+    '31', '32', '33', '34', '35', '36',
+    '51', '52', '53',
+    '61', '62', '63', '64', '65',
+    '71', '72', '73', '74', '75', '76',
+    '81', '82',
+    '91', '92', '93', '94', '95', '96'
+  ])
+  if (!provinces.has(digits.slice(0, 2))) return false
+  const day = Number(digits.slice(6, 8)) % 40
+  const month = Number(digits.slice(8, 10))
+  const year = Number(digits.slice(10, 12))
+  const validDate = (y) => {
+    const date = new Date(Date.UTC(y, month - 1, day))
+    return date.getUTCFullYear() === y && date.getUTCMonth() === month - 1 && date.getUTCDate() === day
+  }
+  return validDate(year + 1900) || validDate(year + 2000)
+}
+
+function isVnMst(digits) {
+  if (!/^\d{10}$/.test(digits) && !/^\d{13}$/.test(digits)) return false
+  if (digits.slice(2, 9) === '0000000') return false
+  if (digits.length === 13 && digits.slice(10) === '000') return false
+  const w = [31, 29, 23, 19, 17, 13, 7, 5, 3]
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += Number(digits[i]) * w[i]
+  const check = 10 - (sum % 11)
+  return check !== 10 && Number(digits[9]) === check
 }
 
 function isRegistrikood(digits) {
