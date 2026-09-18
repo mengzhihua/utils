@@ -3275,6 +3275,60 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-cdma2000',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'cnic',
+      group: 'validate',
+      title: '巴基斯坦身份证',
+      summary: 'CnicUtil',
+      method: 'GET',
+      path: '/api/utils/cnic',
+      fields: [{ name: 'value', label: 'CNIC', value: '34201-0891231-8' }]
+    },
+    {
+      id: 'idno',
+      group: 'validate',
+      title: '摩尔多瓦企业号',
+      summary: 'IdnoUtil',
+      method: 'GET',
+      path: '/api/utils/idno',
+      fields: [{ name: 'value', label: 'IDNO', value: '1008600038413' }]
+    },
+    {
+      id: 'gh-tin',
+      group: 'validate',
+      title: '加纳税号',
+      summary: 'GhTinUtil',
+      method: 'GET',
+      path: '/api/utils/gh-tin',
+      fields: [{ name: 'value', label: 'TIN', value: 'C0000803561' }]
+    },
+    {
+      id: 'ke-pin',
+      group: 'validate',
+      title: '肯尼亚税号',
+      summary: 'KePinUtil',
+      method: 'GET',
+      path: '/api/utils/ke-pin',
+      fields: [{ name: 'value', label: 'PIN', value: 'P051365947M' }]
+    },
+    {
+      id: 'document-policy',
+      group: 'web',
+      title: 'HTTP Document-Policy',
+      summary: 'DocumentPolicyUtil',
+      method: 'GET',
+      path: '/api/utils/document-policy',
+      fields: [{ name: 'header', label: 'Document-Policy', type: 'textarea', value: 'unsized-media=?0, max-image-bpp=2.0' }]
+    },
+    {
+      id: 'crc32-autosar',
+      group: 'crypto',
+      title: 'CRC-32/AUTOSAR',
+      summary: 'HashUtil.crc32Autosar',
+      method: 'GET',
+      path: '/api/utils/crc32-autosar',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

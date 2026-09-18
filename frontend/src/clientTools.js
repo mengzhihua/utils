@@ -1393,6 +1393,34 @@ export const clientTools = [
       title: '美国个人税号',
       summary: '912-90-3456',
       fields: [{ name: 'value', label: 'ITIN', value: '912-90-3456' }]
+    },
+    {
+      id: 'cnic-local',
+      group: 'net',
+      title: '巴基斯坦身份证',
+      summary: '34201-0891231-8',
+      fields: [{ name: 'value', label: 'CNIC', value: '34201-0891231-8' }]
+    },
+    {
+      id: 'idno-local',
+      group: 'net',
+      title: '摩尔多瓦企业号',
+      summary: '1008600038413',
+      fields: [{ name: 'value', label: 'IDNO', value: '1008600038413' }]
+    },
+    {
+      id: 'gh-tin-local',
+      group: 'net',
+      title: '加纳税号',
+      summary: 'C0000803561',
+      fields: [{ name: 'value', label: 'TIN', value: 'C0000803561' }]
+    },
+    {
+      id: 'ke-pin-local',
+      group: 'net',
+      title: '肯尼亚税号',
+      summary: 'P051365947M',
+      fields: [{ name: 'value', label: 'PIN', value: 'P051365947M' }]
     }
   ]
 

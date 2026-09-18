@@ -1118,6 +1118,22 @@ export async function runClientTool(id, values) {
       const digits = raw.replace(/\D/g, '')
       return { normalized: digits, formatted: digits.length === 9 ? `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}` : raw, valid: isItin(raw) }
     }
+    case 'cnic-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, formatted: digits.length === 13 ? `${digits.slice(0, 5)}-${digits.slice(5, 12)}-${digits.slice(12)}` : digits, valid: isCnic(digits) }
+    }
+    case 'idno-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isIdno(digits) }
+    }
+    case 'gh-tin-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isGhTin(compact) }
+    }
+    case 'ke-pin-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isKePin(compact) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -3083,6 +3099,33 @@ function isItin(raw) {
   if (!/^9\d{8}$/.test(digits)) return false
   const group = Number(digits.slice(3, 5))
   return group >= 70 && group <= 99 && group !== 89 && group !== 93
+}
+
+function isCnic(digits) {
+  if (!/^[1-7]\d{10}[1-9]$/.test(digits)) return false
+  return '123456789'.includes(digits[12])
+}
+
+function isIdno(digits) {
+  if (!/^\d{13}$/.test(digits)) return false
+  const w = [7, 3, 1, 7, 3, 1, 7, 3, 1, 7, 3, 1]
+  let sum = 0
+  for (let i = 0; i < 12; i++) sum += Number(digits[i]) * w[i]
+  return digits[12] === String(sum % 10)
+}
+
+function isGhTin(compact) {
+  if (!/^[PCGQV]00[A-Z0-9]{8}$/.test(compact)) return false
+  const body = compact.slice(1, 10)
+  if (!/^\d{9}$/.test(body)) return false
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += (i + 1) * Number(body[i])
+  const rem = sum % 11
+  return compact[10] === (rem === 10 ? 'X' : String(rem))
+}
+
+function isKePin(compact) {
+  return /^[AP]\d{9}[A-Z]$/.test(compact)
 }
 
 function isRegistrikood(digits) {

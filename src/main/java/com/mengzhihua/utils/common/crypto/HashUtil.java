@@ -675,6 +675,35 @@ public final class HashUtil {
         return crc;
     }
 
+    /**
+     * CRC-32/AUTOSAR (poly {@code 0xF4ACFB13}, reflected {@code 0xC8DF352F}).
+     * {@code 123456789} → {@code 1697d06a}.
+     */
+    public static int crc32Autosar(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc32Autosar(data);
+    }
+
+    public static String crc32AutosarHex(String text) {
+        return String.format(Locale.ROOT, "%08x", crc32Autosar(text));
+    }
+
+    public static int crc32Autosar(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0xffffffff;
+        for (byte b : bytes) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 1) != 0) {
+                    crc = (crc >>> 1) ^ 0xc8df352f;
+                } else {
+                    crc >>>= 1;
+                }
+            }
+        }
+        return ~crc;
+    }
+
     public static int crc16Cms(byte[] data) {
         byte[] bytes = data == null ? new byte[0] : data;
         int crc = 0xffff;

@@ -123,7 +123,11 @@ import com.mengzhihua.utils.common.validate.EinUtil;
 import com.mengzhihua.utils.common.validate.NiptUtil;
 import com.mengzhihua.utils.common.validate.OgrnUtil;
 import com.mengzhihua.utils.common.validate.SnilsUtil;
+import com.mengzhihua.utils.common.validate.CnicUtil;
+import com.mengzhihua.utils.common.validate.GhTinUtil;
+import com.mengzhihua.utils.common.validate.IdnoUtil;
 import com.mengzhihua.utils.common.validate.ItinUtil;
+import com.mengzhihua.utils.common.validate.KePinUtil;
 import com.mengzhihua.utils.common.validate.RifUtil;
 import com.mengzhihua.utils.common.validate.RncUtil;
 import com.mengzhihua.utils.common.validate.UnpUtil;
@@ -373,6 +377,10 @@ public final class RegexUtil {
         TYPES.put("rnc", RncUtil::isValid);
         TYPES.put("unp", UnpUtil::isValid);
         TYPES.put("itin", ItinUtil::isValid);
+        TYPES.put("cnic", CnicUtil::isValid);
+        TYPES.put("idno", IdnoUtil::isValid);
+        TYPES.put("ghtin", GhTinUtil::isValid);
+        TYPES.put("kepin", KePinUtil::isValid);
     }
 
     private RegexUtil() {
