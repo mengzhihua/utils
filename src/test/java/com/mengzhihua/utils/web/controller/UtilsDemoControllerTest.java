@@ -902,4 +902,60 @@ class UtilsDemoControllerTest {
                 .andExpect(jsonPath("$.data.era").value("Reiwa"))
                 .andExpect(jsonPath("$.data.ordinal").value("第21"));
     }
+
+    @Test
+    void egyptTvaSalvadorMacedonia() throws Exception {
+        mockMvc.perform(get("/api/utils/eg-tn").param("value", "100-531-385"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/lu-tva").param("value", "LU 150 274 42"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/sv-nit").param("value", "0614-050707-104-8"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/mk-edb").param("value", "4030000375897"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/content-language").param("header", "zh-CN, en"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.first").value("zh-CN"))
+                .andExpect(jsonPath("$.data.hasZh").value(true));
+
+        mockMvc.perform(get("/api/utils/crc8-darc").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc8Darc").value("15"));
+    }
+
+    @Test
+    void montenegroOmanCyprusMalta() throws Exception {
+        mockMvc.perform(get("/api/utils/me-pib").param("value", "02655284"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/om-vat").param("value", "OM1100006083"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cy-vat").param("value", "CY-10259033P"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/mt-vat").param("value", "MT 1167-9112"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/vary").param("header", "Accept-Encoding, User-Agent"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.first").value("Accept-Encoding"))
+                .andExpect(jsonPath("$.data.hasAcceptEncoding").value(true));
+
+        mockMvc.perform(get("/api/utils/crc8-icode").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc8Icode").value("7e"));
+    }
 }

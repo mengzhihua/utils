@@ -1548,6 +1548,62 @@ export const clientTools = [
         { name: 'locale', label: 'Locale', value: 'ar-EG' },
         { name: 'text', label: '数字', value: '1234' }
       ]
+    },
+    {
+      id: 'eg-tn-local',
+      group: 'net',
+      title: '埃及税号',
+      summary: '100-531-385',
+      fields: [{ name: 'value', label: 'TN', value: '100-531-385' }]
+    },
+    {
+      id: 'lu-tva-local',
+      group: 'net',
+      title: '卢森堡税号',
+      summary: '15027442',
+      fields: [{ name: 'value', label: 'TVA', value: 'LU 150 274 42' }]
+    },
+    {
+      id: 'sv-nit-local',
+      group: 'net',
+      title: '萨尔瓦多税号',
+      summary: '0614-050707-104-8',
+      fields: [{ name: 'value', label: 'NIT', value: '0614-050707-104-8' }]
+    },
+    {
+      id: 'mk-edb-local',
+      group: 'net',
+      title: '北马其顿税号',
+      summary: '4030000375897',
+      fields: [{ name: 'value', label: 'ЕДБ', value: '4030000375897' }]
+    },
+    {
+      id: 'me-pib-local',
+      group: 'net',
+      title: '黑山税号',
+      summary: '02655284',
+      fields: [{ name: 'value', label: 'PIB', value: '02655284' }]
+    },
+    {
+      id: 'om-vat-local',
+      group: 'net',
+      title: '阿曼税号',
+      summary: 'OM1100006083',
+      fields: [{ name: 'value', label: 'VATIN', value: 'OM1100006083' }]
+    },
+    {
+      id: 'cy-vat-local',
+      group: 'net',
+      title: '塞浦路斯税号',
+      summary: 'CY-10259033P',
+      fields: [{ name: 'value', label: 'VAT', value: 'CY-10259033P' }]
+    },
+    {
+      id: 'mt-vat-local',
+      group: 'net',
+      title: '马耳他税号',
+      summary: '11679112',
+      fields: [{ name: 'value', label: 'VAT', value: 'MT 1167-9112' }]
     }
   ]
 
