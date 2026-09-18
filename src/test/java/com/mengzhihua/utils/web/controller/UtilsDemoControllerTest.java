@@ -788,4 +788,23 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc32Autosar").value("1697d06a"));
     }
+
+    @Test
+    void iceVoenUyRut() throws Exception {
+        mockMvc.perform(get("/api/utils/ma-ice").param("value", "001561191000066"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/voen").param("value", "140 155 5071"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/uy-rut").param("value", "21-100342-001-7"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/crc16-gsm").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Gsm").value("ce3c"));
+    }
 }

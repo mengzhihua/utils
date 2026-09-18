@@ -1134,6 +1134,22 @@ export async function runClientTool(id, values) {
       const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
       return { normalized: compact, valid: isKePin(compact) }
     }
+    case 'ma-ice-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isMaIce(digits) }
+    }
+    case 'voen-local': {
+      const digits = normalizeVoen(values.value)
+      return { normalized: digits, valid: isVoen(digits) }
+    }
+    case 'uy-rut-local': {
+      const digits = normalizeUyRut(values.value)
+      return { normalized: digits, formatted: digits.length === 12 ? `${digits.slice(0, 2)}-${digits.slice(2, 8)}-${digits.slice(8, 11)}-${digits.slice(11)}` : digits, valid: isUyRut(digits) }
+    }
+    case 'py-ruc-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, formatted: digits.length >= 2 ? `${digits.slice(0, -1)}-${digits.slice(-1)}` : digits, valid: isPyRuc(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -3126,6 +3142,49 @@ function isGhTin(compact) {
 
 function isKePin(compact) {
   return /^[AP]\d{9}[A-Z]$/.test(compact)
+}
+
+function isMaIce(digits) {
+  return /^\d{15}$/.test(digits) && BigInt(digits) % 97n === 0n
+}
+
+function normalizeVoen(value) {
+  let digits = String(value || '').replace(/\D/g, '')
+  return digits.length === 9 ? `0${digits}` : digits
+}
+
+function isVoen(digits) {
+  if (!/^\d{9}[12]$/.test(digits)) return false
+  const w = [4, 1, 8, 6, 2, 7, 5, 3]
+  let sum = 0
+  for (let i = 0; i < 8; i++) sum += Number(digits[i]) * w[i]
+  const rem = sum % 11
+  return rem <= 9 && digits[8] === String(rem)
+}
+
+function normalizeUyRut(value) {
+  let compact = String(value || '').replace(/[\s-]/g, '').toUpperCase()
+  if (compact.startsWith('UY')) compact = compact.slice(2)
+  return compact.replace(/\D/g, '')
+}
+
+function isUyRut(digits) {
+  if (!/^\d{12}$/.test(digits)) return false
+  const prefix = Number(digits.slice(0, 2))
+  if (prefix < 1 || prefix > 22 || digits.slice(2, 8) === '000000' || digits.slice(8, 11) !== '001') return false
+  const w = [4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 11; i++) sum += Number(digits[i]) * w[i]
+  const rem = ((-sum % 11) + 11) % 11
+  return rem <= 9 && digits[11] === String(rem)
+}
+
+function isPyRuc(digits) {
+  if (!/^\d{2,9}$/.test(digits)) return false
+  const body = digits.slice(0, -1)
+  let sum = 0
+  for (let i = 0; i < body.length; i++) sum += (i + 2) * Number(body[body.length - 1 - i])
+  return digits[digits.length - 1] === String((((-sum % 11) + 11) % 11) % 10)
 }
 
 function isRegistrikood(digits) {
