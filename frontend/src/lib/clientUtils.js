@@ -1068,6 +1068,22 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, valid: isLtJa(digits) }
     }
+    case 'inn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isInn(digits) }
+    }
+    case 'pe-ruc-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isPeRuc(digits) }
+    }
+    case 'nik-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isNik(digits) }
+    }
+    case 'vn-mst-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isVnMst(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2884,6 +2900,63 @@ function isLtJa(digits) {
   for (let i = 0; i < 8; i++) sum += Number(digits[i]) * w[i]
   const rem = sum % 11
   return rem !== 10 && Number(digits[8]) === rem
+}
+
+function innWeighted(digits, weights) {
+  let sum = 0
+  for (let i = 0; i < weights.length; i++) sum += Number(digits[i]) * weights[i]
+  return sum % 11 % 10
+}
+
+function isInn(digits) {
+  if (/^\d{10}$/.test(digits)) {
+    return Number(digits[9]) === innWeighted(digits, [2, 4, 10, 3, 5, 9, 4, 6, 8])
+  }
+  if (!/^\d{12}$/.test(digits)) return false
+  const d1 = innWeighted(digits, [7, 2, 4, 10, 3, 5, 9, 4, 6, 8])
+  const d2 = innWeighted(digits.slice(0, 10) + String(d1), [3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8])
+  return digits.slice(10) === `${d1}${d2}`
+}
+
+function isPeRuc(digits) {
+  if (!/^(10|15|17|20)\d{9}$/.test(digits)) return false
+  const w = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 10; i++) sum += Number(digits[i]) * w[i]
+  return Number(digits[10]) === (11 - (sum % 11)) % 10
+}
+
+function isNik(digits) {
+  if (!/^\d{16}$/.test(digits)) return false
+  const provinces = new Set([
+    '11', '12', '13', '14', '15', '16', '17', '18', '19', '21',
+    '31', '32', '33', '34', '35', '36',
+    '51', '52', '53',
+    '61', '62', '63', '64', '65',
+    '71', '72', '73', '74', '75', '76',
+    '81', '82',
+    '91', '92', '93', '94', '95', '96'
+  ])
+  if (!provinces.has(digits.slice(0, 2))) return false
+  const day = Number(digits.slice(6, 8)) % 40
+  const month = Number(digits.slice(8, 10))
+  const year = Number(digits.slice(10, 12))
+  const validDate = (y) => {
+    const date = new Date(Date.UTC(y, month - 1, day))
+    return date.getUTCFullYear() === y && date.getUTCMonth() === month - 1 && date.getUTCDate() === day
+  }
+  return validDate(year + 1900) || validDate(year + 2000)
+}
+
+function isVnMst(digits) {
+  if (!/^\d{10}$/.test(digits) && !/^\d{13}$/.test(digits)) return false
+  if (digits.slice(2, 9) === '0000000') return false
+  if (digits.length === 13 && digits.slice(10) === '000') return false
+  const w = [31, 29, 23, 19, 17, 13, 7, 5, 3]
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += Number(digits[i]) * w[i]
+  const check = 10 - (sum % 11)
+  return check !== 10 && Number(digits[9]) === check
 }
 
 function isRegistrikood(digits) {

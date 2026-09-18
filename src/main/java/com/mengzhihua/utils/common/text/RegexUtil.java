@@ -114,8 +114,12 @@ import com.mengzhihua.utils.common.validate.RegistrikoodUtil;
 import com.mengzhihua.utils.common.validate.VknUtil;
 import com.mengzhihua.utils.common.validate.IlHpUtil;
 import com.mengzhihua.utils.common.validate.LtJaUtil;
+import com.mengzhihua.utils.common.validate.InnUtil;
+import com.mengzhihua.utils.common.validate.NikUtil;
 import com.mengzhihua.utils.common.validate.NzbnUtil;
+import com.mengzhihua.utils.common.validate.PeRucUtil;
 import com.mengzhihua.utils.common.validate.UenUtil;
+import com.mengzhihua.utils.common.validate.VnMstUtil;
 import com.mengzhihua.utils.common.validate.RodneCisloUtil;
 import com.mengzhihua.utils.common.validate.TajUtil;
 import com.mengzhihua.utils.common.validate.TcKimlikUtil;
@@ -349,6 +353,10 @@ public final class RegexUtil {
         TYPES.put("uen", UenUtil::isValid);
         TYPES.put("ilhp", IlHpUtil::isValid);
         TYPES.put("ltja", LtJaUtil::isValid);
+        TYPES.put("inn", InnUtil::isValid);
+        TYPES.put("peruc", PeRucUtil::isValid);
+        TYPES.put("nik", NikUtil::isValid);
+        TYPES.put("vnmst", VnMstUtil::isValid);
     }
 
     private RegexUtil() {

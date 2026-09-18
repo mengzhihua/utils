@@ -1309,6 +1309,34 @@ export const clientTools = [
       title: '立陶宛企业号',
       summary: '119511515',
       fields: [{ name: 'value', label: 'JA kodas', value: '119511515' }]
+    },
+    {
+      id: 'inn-local',
+      group: 'net',
+      title: '俄罗斯税号',
+      summary: '7707083893',
+      fields: [{ name: 'value', label: 'ИНН', value: '7707083893' }]
+    },
+    {
+      id: 'pe-ruc-local',
+      group: 'net',
+      title: '秘鲁税号',
+      summary: '20512333797',
+      fields: [{ name: 'value', label: 'RUC', value: '20512333797' }]
+    },
+    {
+      id: 'nik-local',
+      group: 'net',
+      title: '印尼身份证',
+      summary: '3171011708450001',
+      fields: [{ name: 'value', label: 'NIK', value: '3171011708450001' }]
+    },
+    {
+      id: 'vn-mst-local',
+      group: 'net',
+      title: '越南税号',
+      summary: '0100233488',
+      fields: [{ name: 'value', label: 'MST', value: '0100233488' }]
     }
   ]
 

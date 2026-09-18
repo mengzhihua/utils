@@ -710,4 +710,23 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc32Jamcrc").value("340bc6d9"));
     }
+
+    @Test
+    void innRucNik() throws Exception {
+        mockMvc.perform(get("/api/utils/inn").param("value", "7707083893"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/pe-ruc").param("value", "20512333797"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/nik").param("value", "3171011708450001"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/crc16-dnp").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Dnp").value("ea82"));
+    }
 }
