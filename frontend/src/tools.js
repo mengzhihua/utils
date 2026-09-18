@@ -3544,6 +3544,79 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/i18n/calendar',
       fields: [{ name: 'locale', label: 'Locale', value: 'de-DE' }]
+    },
+    {
+      id: 'i18n-relative',
+      group: 'web',
+      title: '相对时间',
+      summary: 'RelativeTimeUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/relative',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'zh-CN' },
+        { name: 'seconds', label: '秒（过去）', value: '180' }
+      ]
+    },
+    {
+      id: 'i18n-case',
+      group: 'web',
+      title: '本地化大小写',
+      summary: 'LocaleCaseUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/case',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'tr' },
+        { name: 'text', label: '文本', value: 'istanbul' }
+      ]
+    },
+    {
+      id: 'i18n-parse',
+      group: 'web',
+      title: '解析本地化数字',
+      summary: 'I18nParseUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/parse',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'de-DE' },
+        { name: 'number', label: '数字', value: '1.234,5' },
+        { name: 'date', label: '日期', value: '2026-09-18' }
+      ]
+    },
+    {
+      id: 'i18n-break',
+      group: 'web',
+      title: '本地化分词',
+      summary: 'BreakIteratorUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/break',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'en' },
+        { name: 'text', label: '文本', value: 'Hello, world' }
+      ]
+    },
+    {
+      id: 'i18n-digits',
+      group: 'web',
+      title: '本地数字',
+      summary: 'NativeDigitUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/digits',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'ar-EG' },
+        { name: 'text', label: '数字', value: '1234' }
+      ]
+    },
+    {
+      id: 'i18n-chrono',
+      group: 'web',
+      title: '和历 / 序数',
+      summary: 'ChronologyUtil / OrdinalUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/chrono',
+      fields: [
+        { name: 'date', label: '日期', value: '2026-09-18' },
+        { name: 'locale', label: 'Locale', value: 'ja' }
+      ]
     }
   ]
 

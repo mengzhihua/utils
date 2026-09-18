@@ -9,12 +9,19 @@ import java.util.Map;
 import com.mengzhihua.utils.common.api.Result;
 import com.mengzhihua.utils.common.i18n.AcceptLanguageUtil;
 import com.mengzhihua.utils.common.i18n.BidiUtil;
+import com.mengzhihua.utils.common.i18n.BreakIteratorUtil;
 import com.mengzhihua.utils.common.i18n.CalendarLocaleUtil;
+import com.mengzhihua.utils.common.i18n.ChronologyUtil;
 import com.mengzhihua.utils.common.i18n.CollationUtil;
 import com.mengzhihua.utils.common.i18n.I18nFormatUtil;
+import com.mengzhihua.utils.common.i18n.I18nParseUtil;
 import com.mengzhihua.utils.common.i18n.I18nUtil;
+import com.mengzhihua.utils.common.i18n.LocaleCaseUtil;
 import com.mengzhihua.utils.common.i18n.LocaleUtil;
+import com.mengzhihua.utils.common.i18n.NativeDigitUtil;
+import com.mengzhihua.utils.common.i18n.OrdinalUtil;
 import com.mengzhihua.utils.common.i18n.PluralUtil;
+import com.mengzhihua.utils.common.i18n.RelativeTimeUtil;
 import com.mengzhihua.utils.common.i18n.TimezoneUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -159,6 +166,80 @@ public class I18nUtilsDemoController {
         data.put("minimalDaysInFirstWeek", CalendarLocaleUtil.minimalDaysInFirstWeek(locale));
         data.put("keys", I18nUtil.keys(LocaleUtil.parse(locale)));
         data.put("languages", I18nUtil.availableLanguages());
+        return Result.ok(data);
+    }
+
+    @GetMapping("/i18n/relative")
+    @Operation(summary = "相对时间")
+    public Result<Map<String, Object>> relative(
+            @RequestParam(defaultValue = "zh-CN") String locale,
+            @RequestParam(defaultValue = "180") long seconds) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("text", RelativeTimeUtil.ofSeconds(locale, seconds));
+        data.put("future", RelativeTimeUtil.ofSeconds(locale, -seconds));
+        return Result.ok(data);
+    }
+
+    @GetMapping("/i18n/case")
+    @Operation(summary = "本地化大小写")
+    public Result<Map<String, Object>> localeCase(
+            @RequestParam(defaultValue = "tr") String locale,
+            @RequestParam(defaultValue = "istanbul") String text) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("upper", LocaleCaseUtil.upper(locale, text));
+        data.put("lower", LocaleCaseUtil.lower(locale, text));
+        data.put("title", LocaleCaseUtil.title(locale, text));
+        data.put("rootUpper", LocaleCaseUtil.upper("en", text));
+        return Result.ok(data);
+    }
+
+    @GetMapping("/i18n/parse")
+    @Operation(summary = "解析本地化数字日期")
+    public Result<Map<String, Object>> parse(
+            @RequestParam(defaultValue = "de-DE") String locale,
+            @RequestParam(defaultValue = "1.234,5") String number,
+            @RequestParam(defaultValue = "2026-09-18") String date) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("number", I18nParseUtil.number(locale, number).toPlainString());
+        data.put("formattedDate", I18nFormatUtil.date(locale, date));
+        data.put("parsedDate", I18nParseUtil.date(locale, I18nFormatUtil.date(locale, date)).toString());
+        return Result.ok(data);
+    }
+
+    @GetMapping("/i18n/break")
+    @Operation(summary = "本地化分词")
+    public Result<Map<String, Object>> wordBreak(
+            @RequestParam(defaultValue = "en") String locale,
+            @RequestParam(defaultValue = "Hello, world") String text) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("words", BreakIteratorUtil.words(locale, text));
+        data.put("wordCount", BreakIteratorUtil.wordCount(locale, text));
+        data.put("sentences", BreakIteratorUtil.sentences(locale, text));
+        return Result.ok(data);
+    }
+
+    @GetMapping("/i18n/digits")
+    @Operation(summary = "本地数字")
+    public Result<Map<String, Object>> digits(
+            @RequestParam(defaultValue = "ar-EG") String locale,
+            @RequestParam(defaultValue = "1234") String text) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("native", NativeDigitUtil.toNative(locale, text));
+        data.put("latin", NativeDigitUtil.toLatin(locale, NativeDigitUtil.toNative(locale, text)));
+        data.put("zeroDigit", String.valueOf(NativeDigitUtil.zeroDigit(locale)));
+        return Result.ok(data);
+    }
+
+    @GetMapping("/i18n/chrono")
+    @Operation(summary = "和历 / ISO")
+    public Result<Map<String, Object>> chrono(
+            @RequestParam(defaultValue = "2026-09-18") String date,
+            @RequestParam(defaultValue = "ja") String locale) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("iso", ChronologyUtil.iso(locale, date));
+        data.put("japanese", ChronologyUtil.japanese(date));
+        data.put("era", ChronologyUtil.era(date));
+        data.put("ordinal", OrdinalUtil.format(locale, 21));
         return Result.ok(data);
     }
 }

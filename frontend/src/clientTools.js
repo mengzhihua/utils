@@ -1518,6 +1518,36 @@ export const clientTools = [
         { name: 'zone', label: '时区', value: 'Europe/Berlin' },
         { name: 'locale', label: 'Locale', value: 'de' }
       ]
+    },
+    {
+      id: 'i18n-relative-local',
+      group: 'text',
+      title: '相对时间',
+      summary: '3 minutes ago',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'zh-CN' },
+        { name: 'seconds', label: '秒（过去）', value: '180' }
+      ]
+    },
+    {
+      id: 'i18n-case-local',
+      group: 'text',
+      title: '本地化大小写',
+      summary: 'tr: istanbul → İSTANBUL',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'tr' },
+        { name: 'text', label: '文本', value: 'istanbul' }
+      ]
+    },
+    {
+      id: 'i18n-digits-local',
+      group: 'text',
+      title: '本地数字',
+      summary: '1234 → ١٢٣٤',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'ar-EG' },
+        { name: 'text', label: '数字', value: '1234' }
+      ]
     }
   ]
 

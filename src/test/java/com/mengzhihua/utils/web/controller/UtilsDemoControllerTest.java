@@ -880,5 +880,26 @@ class UtilsDemoControllerTest {
         mockMvc.perform(get("/api/utils/i18n/timezone").param("zone", "Europe/Berlin").param("locale", "de"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value("Europe/Berlin"));
+
+        mockMvc.perform(get("/api/utils/i18n/relative").param("locale", "en").param("seconds", "180"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.text").value("3 minutes ago"));
+
+        mockMvc.perform(get("/api/utils/i18n/case").param("locale", "tr").param("text", "istanbul"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.upper").value("İSTANBUL"));
+
+        mockMvc.perform(get("/api/utils/i18n/parse").param("locale", "de-DE").param("number", "1.234,5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.number").value("1234.5"));
+
+        mockMvc.perform(get("/api/utils/i18n/break").param("locale", "en").param("text", "Hello, world"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.wordCount").value(2));
+
+        mockMvc.perform(get("/api/utils/i18n/chrono").param("date", "2026-09-18").param("locale", "ja"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.era").value("Reiwa"))
+                .andExpect(jsonPath("$.data.ordinal").value("第21"));
     }
 }

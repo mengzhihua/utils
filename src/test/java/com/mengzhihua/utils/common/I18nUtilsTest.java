@@ -6,12 +6,19 @@ import java.util.Locale;
 
 import com.mengzhihua.utils.common.i18n.AcceptLanguageUtil;
 import com.mengzhihua.utils.common.i18n.BidiUtil;
+import com.mengzhihua.utils.common.i18n.BreakIteratorUtil;
 import com.mengzhihua.utils.common.i18n.CalendarLocaleUtil;
+import com.mengzhihua.utils.common.i18n.ChronologyUtil;
 import com.mengzhihua.utils.common.i18n.CollationUtil;
 import com.mengzhihua.utils.common.i18n.I18nFormatUtil;
+import com.mengzhihua.utils.common.i18n.I18nParseUtil;
 import com.mengzhihua.utils.common.i18n.I18nUtil;
+import com.mengzhihua.utils.common.i18n.LocaleCaseUtil;
 import com.mengzhihua.utils.common.i18n.LocaleUtil;
+import com.mengzhihua.utils.common.i18n.NativeDigitUtil;
+import com.mengzhihua.utils.common.i18n.OrdinalUtil;
 import com.mengzhihua.utils.common.i18n.PluralUtil;
+import com.mengzhihua.utils.common.i18n.RelativeTimeUtil;
 import com.mengzhihua.utils.common.i18n.TimezoneUtil;
 import org.junit.jupiter.api.Test;
 
@@ -82,5 +89,25 @@ class I18nUtilsTest {
                 || !zoneName.isBlank());
         assertTrue(I18nUtil.keys(Locale.ENGLISH).contains("hello"));
         assertTrue(I18nUtil.availableLanguages().contains("es"));
+        assertEquals("3 minutes ago", RelativeTimeUtil.ofSeconds("en", 180));
+        assertEquals("3 分钟前", RelativeTimeUtil.ofSeconds("zh-CN", 180));
+        assertEquals("in 2 minutes", RelativeTimeUtil.ofSeconds("en", -120));
+        assertEquals("刚刚", RelativeTimeUtil.ofSeconds("zh-CN", 10));
+        assertEquals("İSTANBUL", LocaleCaseUtil.upper("tr", "istanbul"));
+        assertEquals("ISTANBUL", LocaleCaseUtil.upper("en", "istanbul"));
+        assertEquals("ı", LocaleCaseUtil.lower("tr", "I"));
+        assertEquals(new java.math.BigDecimal("1234.5"), I18nParseUtil.number("de-DE", "1.234,5"));
+        assertEquals(java.time.LocalDate.of(2026, 9, 18),
+                I18nParseUtil.date("de-DE", I18nFormatUtil.date("de-DE", "2026-09-18")));
+        assertEquals(List.of("Hello", "world"), BreakIteratorUtil.words("en", "Hello, world"));
+        assertTrue(BreakIteratorUtil.wordCount("zh-CN", "你好世界") >= 1);
+        String nativeDigits = NativeDigitUtil.toNative("ar-EG", "1234");
+        assertEquals("1234", NativeDigitUtil.toLatin("ar-EG", nativeDigits));
+        String japanese = ChronologyUtil.japanese("2026-09-18");
+        assertTrue(japanese.contains("令和") || japanese.toLowerCase(Locale.ROOT).contains("reiwa"));
+        assertEquals("Reiwa", ChronologyUtil.era("2026-09-18"));
+        assertEquals("21st", OrdinalUtil.format("en", 21));
+        assertEquals("第21", OrdinalUtil.format("zh-CN", 21));
+        assertEquals("1.", OrdinalUtil.format("de", 1));
     }
 }

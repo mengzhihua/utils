@@ -1213,6 +1213,45 @@ export async function runClientTool(id, values) {
       const displayName = parts.find((part) => part.type === 'timeZoneName')?.value || zone
       return { id: zone, displayName, compact: new Intl.NumberFormat(locale, { notation: 'compact' }).format(1234.5) }
     }
+    case 'i18n-relative-local': {
+      const locale = String(values.locale || 'zh-CN')
+      const seconds = Number(values.seconds || 0)
+      const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' })
+      const abs = Math.abs(seconds)
+      const sign = seconds >= 0 ? -1 : 1
+      let value
+      let unit
+      if (abs < 45) {
+        value = 0
+        unit = 'second'
+      } else if (abs < 3600) {
+        value = Math.max(1, Math.round(abs / 60))
+        unit = 'minute'
+      } else if (abs < 86400) {
+        value = Math.max(1, Math.round(abs / 3600))
+        unit = 'hour'
+      } else {
+        value = Math.max(1, Math.round(abs / 86400))
+        unit = 'day'
+      }
+      return { locale, seconds, text: rtf.format(sign * value, unit) }
+    }
+    case 'i18n-case-local': {
+      const locale = String(values.locale || 'tr')
+      const text = String(values.text || '')
+      return { upper: text.toLocaleUpperCase(locale), lower: text.toLocaleLowerCase(locale), rootUpper: text.toLocaleUpperCase('en') }
+    }
+    case 'i18n-digits-local': {
+      const locale = String(values.locale || 'ar-EG')
+      const text = String(values.text || '1234')
+      let native = text
+      try {
+        native = new Intl.NumberFormat(locale, { useGrouping: false }).format(Number(text))
+      } catch {
+        native = text
+      }
+      return { locale, native, latin: text }
+    }
     default:
       throw new Error('unknown client tool')
   }
