@@ -1660,6 +1660,34 @@ export const clientTools = [
       title: '圣马力诺经营者号',
       summary: '24165',
       fields: [{ name: 'value', label: 'COE', value: '024165' }]
+    },
+    {
+      id: 'fo-vn-local',
+      group: 'net',
+      title: '法罗企业号',
+      summary: '623857',
+      fields: [{ name: 'value', label: 'V-number', value: 'FO 602 590' }]
+    },
+    {
+      id: 'fr-tva-local',
+      group: 'net',
+      title: '法国税号',
+      summary: '40303265045',
+      fields: [{ name: 'value', label: 'TVA', value: 'Fr 40 303 265 045' }]
+    },
+    {
+      id: 'mc-tva-local',
+      group: 'net',
+      title: '摩纳哥税号',
+      summary: '53000004605',
+      fields: [{ name: 'value', label: 'TVA', value: '53 0000 04605' }]
+    },
+    {
+      id: 'mu-nid-local',
+      group: 'net',
+      title: '毛里求斯身份证',
+      summary: 'B150390123456A',
+      fields: [{ name: 'value', label: 'NID', value: 'B150390123456A' }]
     }
   ]
 

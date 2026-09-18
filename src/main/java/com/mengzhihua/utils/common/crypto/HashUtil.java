@@ -403,6 +403,34 @@ public final class HashUtil {
     }
 
     /**
+     * CRC-8/WCDMA (poly {@code 0x9B}, reflected). {@code 123456789} → {@code 25}.
+     */
+    public static int crc8Wcdma(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc8Wcdma(data);
+    }
+
+    public static String crc8WcdmaHex(String text) {
+        return String.format(Locale.ROOT, "%02x", crc8Wcdma(text));
+    }
+
+    public static int crc8Wcdma(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0;
+        for (byte b : bytes) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 1) != 0) {
+                    crc = (crc >>> 1) ^ 0xd9;
+                } else {
+                    crc >>>= 1;
+                }
+            }
+        }
+        return crc & 0xff;
+    }
+
+    /**
      * CRC-64/ECMA-182. {@code 123456789} → {@code 6c40df5f0b497347}.
      */
     public static long crc64(String text) {

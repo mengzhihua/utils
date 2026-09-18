@@ -3833,6 +3833,60 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-mcrf4xx',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'fo-vn',
+      group: 'validate',
+      title: '法罗企业号',
+      summary: 'FoVnUtil',
+      method: 'GET',
+      path: '/api/utils/fo-vn',
+      fields: [{ name: 'value', label: 'V-number', value: '623857' }]
+    },
+    {
+      id: 'fr-tva',
+      group: 'validate',
+      title: '法国税号',
+      summary: 'FrTvaUtil',
+      method: 'GET',
+      path: '/api/utils/fr-tva',
+      fields: [{ name: 'value', label: 'TVA', value: 'Fr 40 303 265 045' }]
+    },
+    {
+      id: 'mc-tva',
+      group: 'validate',
+      title: '摩纳哥税号',
+      summary: 'McTvaUtil',
+      method: 'GET',
+      path: '/api/utils/mc-tva',
+      fields: [{ name: 'value', label: 'TVA', value: '53 0000 04605' }]
+    },
+    {
+      id: 'mu-nid',
+      group: 'validate',
+      title: '毛里求斯身份证',
+      summary: 'MuNidUtil',
+      method: 'GET',
+      path: '/api/utils/mu-nid',
+      fields: [{ name: 'value', label: 'NID', value: 'B150390123456A' }]
+    },
+    {
+      id: 'dns-prefetch',
+      group: 'web',
+      title: 'HTTP X-DNS-Prefetch-Control',
+      summary: 'DnsPrefetchUtil',
+      method: 'GET',
+      path: '/api/utils/dns-prefetch',
+      fields: [{ name: 'header', label: 'X-DNS-Prefetch-Control', value: 'on' }]
+    },
+    {
+      id: 'crc8-wcdma',
+      group: 'crypto',
+      title: 'CRC-8/WCDMA',
+      summary: 'HashUtil.crc8Wcdma',
+      method: 'GET',
+      path: '/api/utils/crc8-wcdma',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

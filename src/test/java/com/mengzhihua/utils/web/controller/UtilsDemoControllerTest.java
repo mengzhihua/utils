@@ -1018,4 +1018,35 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc16Mcrf4xx").value("6f91"));
     }
+
+    @Test
+    void faroeFranceMonacoMauritius() throws Exception {
+        mockMvc.perform(get("/api/utils/fo-vn").param("value", "FO 602 590"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("602590"));
+
+        mockMvc.perform(get("/api/utils/fr-tva").param("value", "Fr 40 303 265 045"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.formatted").value("40 303 265 045"));
+
+        mockMvc.perform(get("/api/utils/mc-tva").param("value", "53 0000 04605"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("53000004605"));
+
+        mockMvc.perform(get("/api/utils/mu-nid").param("value", "B150390123456A"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.birthDate").value("2090-03-15"));
+
+        mockMvc.perform(get("/api/utils/dns-prefetch").param("header", "on"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.on").value(true));
+
+        mockMvc.perform(get("/api/utils/crc8-wcdma").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc8Wcdma").value("25"));
+    }
 }
