@@ -8,23 +8,46 @@ import java.util.regex.Pattern;
 
 import com.mengzhihua.utils.common.codec.HexUtil;
 import com.mengzhihua.utils.common.net.Ipv6Util;
+import com.mengzhihua.utils.common.validate.AbaRoutingUtil;
 import com.mengzhihua.utils.common.validate.BicUtil;
 import com.mengzhihua.utils.common.validate.CreditCodeUtil;
 import com.mengzhihua.utils.common.validate.CusipUtil;
 import com.mengzhihua.utils.common.validate.EanUtil;
+import com.mengzhihua.utils.common.validate.FigiUtil;
 import com.mengzhihua.utils.common.validate.HkIdUtil;
 import com.mengzhihua.utils.common.validate.IbanUtil;
 import com.mengzhihua.utils.common.validate.ImeiUtil;
 import com.mengzhihua.utils.common.validate.IsbnUtil;
+import com.mengzhihua.utils.common.validate.IsmnUtil;
+import com.mengzhihua.utils.common.validate.Iso6346Util;
+import com.mengzhihua.utils.common.validate.LeiUtil;
+import com.mengzhihua.utils.common.validate.IsniUtil;
 import com.mengzhihua.utils.common.validate.IsinUtil;
 import com.mengzhihua.utils.common.validate.IsrcUtil;
 import com.mengzhihua.utils.common.validate.IssnUtil;
 import com.mengzhihua.utils.common.validate.MacUtil;
+import com.mengzhihua.utils.common.validate.CnpjUtil;
+import com.mengzhihua.utils.common.validate.CpfUtil;
+import com.mengzhihua.utils.common.validate.NhsNumberUtil;
+import com.mengzhihua.utils.common.validate.NifUtil;
+import com.mengzhihua.utils.common.validate.NpiUtil;
+import com.mengzhihua.utils.common.validate.NricUtil;
+import com.mengzhihua.utils.common.validate.PeselUtil;
 import com.mengzhihua.utils.common.validate.OrcidUtil;
 import com.mengzhihua.utils.common.validate.OrgCodeUtil;
 import com.mengzhihua.utils.common.validate.PhoneUtil;
 import com.mengzhihua.utils.common.validate.SedolUtil;
+import com.mengzhihua.utils.common.validate.SirenUtil;
+import com.mengzhihua.utils.common.validate.SiretUtil;
 import com.mengzhihua.utils.common.validate.TwIdUtil;
+import com.mengzhihua.utils.common.validate.UpcEUtil;
+import com.mengzhihua.utils.common.validate.CodiceFiscaleUtil;
+import com.mengzhihua.utils.common.validate.DoiUtil;
+import com.mengzhihua.utils.common.validate.EoriUtil;
+import com.mengzhihua.utils.common.validate.IccidUtil;
+import com.mengzhihua.utils.common.validate.NirUtil;
+import com.mengzhihua.utils.common.validate.PmidUtil;
+import com.mengzhihua.utils.common.validate.SteuerIdUtil;
 import com.mengzhihua.utils.common.validate.VinUtil;
 
 /**
@@ -159,6 +182,29 @@ public final class RegexUtil {
         TYPES.put("hkid", HkIdUtil::isValid);
         TYPES.put("twid", TwIdUtil::isValid);
         TYPES.put("orgcode", OrgCodeUtil::isValid);
+        TYPES.put("iso6346", Iso6346Util::isValid);
+        TYPES.put("aba", AbaRoutingUtil::isValid);
+        TYPES.put("figi", FigiUtil::isValid);
+        TYPES.put("lei", LeiUtil::isValid);
+        TYPES.put("nhs", NhsNumberUtil::isValid);
+        TYPES.put("npi", NpiUtil::isValid);
+        TYPES.put("ismn", IsmnUtil::isValid);
+        TYPES.put("nric", NricUtil::isValid);
+        TYPES.put("cpf", CpfUtil::isValid);
+        TYPES.put("cnpj", CnpjUtil::isValid);
+        TYPES.put("pesel", PeselUtil::isValid);
+        TYPES.put("upce", UpcEUtil::isValid);
+        TYPES.put("siren", SirenUtil::isValid);
+        TYPES.put("siret", SiretUtil::isValid);
+        TYPES.put("nif", NifUtil::isValid);
+        TYPES.put("isni", IsniUtil::isValid);
+        TYPES.put("nir", NirUtil::isValid);
+        TYPES.put("codicefiscale", CodiceFiscaleUtil::isValid);
+        TYPES.put("steuerid", SteuerIdUtil::isValid);
+        TYPES.put("eori", EoriUtil::isValid);
+        TYPES.put("doi", DoiUtil::isValid);
+        TYPES.put("pmid", PmidUtil::isValid);
+        TYPES.put("iccid", IccidUtil::isValid);
     }
 
     private RegexUtil() {

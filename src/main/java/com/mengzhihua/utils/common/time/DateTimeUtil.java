@@ -285,6 +285,10 @@ public final class DateTimeUtil {
         return date != null && date.isLeapYear();
     }
 
+    public static long julianDayNumber(LocalDate date) {
+        return JulianDayUtil.of(date);
+    }
+
     public static String formatBetween(LocalDateTime start, LocalDateTime end) {
         if (start == null || end == null) {
             return "";

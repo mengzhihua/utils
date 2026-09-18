@@ -663,6 +663,260 @@ export const clientTools = [
         { name: 'year', label: '年份', value: '2026' },
         { name: 'name', label: '节气', value: '清明' }
       ]
+    },
+    {
+      id: 'ganzhi-local',
+      group: 'time',
+      title: '天干地支',
+      summary: '1984=甲子鼠',
+      fields: [{ name: 'year', label: '年份', value: '2026' }]
+    },
+    {
+      id: 'aba-local',
+      group: 'net',
+      title: 'ABA 路由号',
+      summary: '021000021',
+      fields: [{ name: 'number', label: '路由号', value: '021000021' }]
+    },
+    {
+      id: 'iso6346-local',
+      group: 'net',
+      title: '集装箱号',
+      summary: 'CSQU3054383',
+      fields: [{ name: 'code', label: '箱号', value: 'CSQU3054383' }]
+    },
+    {
+      id: 'jump-hash-local',
+      group: 'gen',
+      title: 'Jump Hash',
+      summary: 'Guava consistentHash',
+      fields: [
+        { name: 'key', label: 'key', value: '42' },
+        { name: 'buckets', label: '分桶', value: '100' }
+      ]
+    },
+    {
+      id: 'figi-local',
+      group: 'net',
+      title: 'FIGI',
+      summary: 'BBG000B9XRY4',
+      fields: [{ name: 'value', label: 'FIGI', value: 'BBG000B9XRY4' }]
+    },
+    {
+      id: 'lei-local',
+      group: 'net',
+      title: 'LEI',
+      summary: 'ISO 17442',
+      fields: [{ name: 'value', label: 'LEI', value: '5493001KJTIIGC8Y1R12' }]
+    },
+    {
+      id: 'nhs-local',
+      group: 'net',
+      title: 'NHS 号码',
+      summary: '943 476 5919',
+      fields: [{ name: 'value', label: 'NHS', value: '943 476 5919' }]
+    },
+    {
+      id: 'npi-local',
+      group: 'net',
+      title: 'NPI',
+      summary: '1234567893',
+      fields: [{ name: 'value', label: 'NPI', value: '1234567893' }]
+    },
+    {
+      id: 'ismn-local',
+      group: 'net',
+      title: 'ISMN',
+      summary: '979-0-2600-0043-8',
+      fields: [{ name: 'value', label: 'ISMN', value: '979-0-2600-0043-8' }]
+    },
+    {
+      id: 'nric-local',
+      group: 'net',
+      title: '新加坡 NRIC',
+      summary: 'S1234567D',
+      fields: [{ name: 'value', label: 'NRIC', value: 'S1234567D' }]
+    },
+    {
+      id: 'cologne-local',
+      group: 'text',
+      title: '科隆拼音',
+      summary: 'Müller → 657',
+      fields: [{ name: 'text', label: '姓名', value: 'Müller' }]
+    },
+    {
+      id: 'hamming-local',
+      group: 'text',
+      title: 'Hamming 距离',
+      summary: 'karolin / kathrin',
+      fields: [
+        { name: 'left', label: '左', value: 'karolin' },
+        { name: 'right', label: '右', value: 'kathrin' }
+      ]
+    },
+    {
+      id: 'uuid-v8-local',
+      group: 'gen',
+      title: 'UUID v8',
+      summary: 'RFC 9562 custom',
+      fields: []
+    },
+    {
+      id: 'nysiis-local',
+      group: 'text',
+      title: 'NYSIIS',
+      summary: 'Miller → MALAR',
+      fields: [{ name: 'text', label: '姓名', value: 'Miller' }]
+    },
+    {
+      id: 'caverphone-local',
+      group: 'text',
+      title: 'Caverphone 2',
+      summary: 'Stevenson → STFNSN1111',
+      fields: [{ name: 'text', label: '姓名', value: 'Stevenson' }]
+    },
+    {
+      id: 'cpf-local',
+      group: 'net',
+      title: '巴西 CPF',
+      summary: '111.444.777-35',
+      fields: [{ name: 'value', label: 'CPF', value: '111.444.777-35' }]
+    },
+    {
+      id: 'cnpj-local',
+      group: 'net',
+      title: '巴西 CNPJ',
+      summary: '00.000.000/0001-91',
+      fields: [{ name: 'value', label: 'CNPJ', value: '00.000.000/0001-91' }]
+    },
+    {
+      id: 'pesel-local',
+      group: 'net',
+      title: '波兰 PESEL',
+      summary: '44051401359',
+      fields: [{ name: 'value', label: 'PESEL', value: '44051401359' }]
+    },
+    {
+      id: 'upc-e-local',
+      group: 'net',
+      title: 'UPC-E',
+      summary: '04252614 → 042100005264',
+      fields: [{ name: 'value', label: 'UPC-E', value: '04252614' }]
+    },
+    {
+      id: 'julian-local',
+      group: 'time',
+      title: '儒略日',
+      summary: '2000-01-01 → 2451545',
+      fields: [{ name: 'date', label: '日期', value: '2000-01-01' }]
+    },
+    {
+      id: 'double-metaphone-local',
+      group: 'text',
+      title: 'Double Metaphone',
+      summary: 'Smith → SM0',
+      fields: [{ name: 'text', label: '姓名', value: 'Smith' }]
+    },
+    {
+      id: 'match-rating-local',
+      group: 'text',
+      title: 'Match Rating',
+      summary: 'Smith / Smyth',
+      fields: [
+        { name: 'left', label: '左', value: 'Smith' },
+        { name: 'right', label: '右', value: 'Smyth' }
+      ]
+    },
+    {
+      id: 'siren-local',
+      group: 'net',
+      title: '法国 SIREN',
+      summary: '732829320',
+      fields: [{ name: 'value', label: 'SIREN', value: '732829320' }]
+    },
+    {
+      id: 'siret-local',
+      group: 'net',
+      title: '法国 SIRET',
+      summary: '73282932000074',
+      fields: [{ name: 'value', label: 'SIRET', value: '73282932000074' }]
+    },
+    {
+      id: 'nif-local',
+      group: 'net',
+      title: '西班牙 NIF',
+      summary: '12345678Z',
+      fields: [{ name: 'value', label: 'NIF', value: '12345678Z' }]
+    },
+    {
+      id: 'isni-local',
+      group: 'net',
+      title: 'ISNI',
+      summary: '0000 0001 2146 358X',
+      fields: [{ name: 'value', label: 'ISNI', value: '0000 0001 2146 358X' }]
+    },
+    {
+      id: 'bencode-local',
+      group: 'codec',
+      title: 'Bencode',
+      summary: 'spam → 4:spam',
+      fields: [{ name: 'text', label: '字符串', value: 'spam' }]
+    },
+    {
+      id: 'refined-soundex-local',
+      group: 'text',
+      title: 'Refined Soundex',
+      summary: 'testing → T6036084',
+      fields: [{ name: 'text', label: '词', value: 'testing' }]
+    },
+    {
+      id: 'nir-local',
+      group: 'net',
+      title: '法国 NIR',
+      summary: '255081416812535',
+      fields: [{ name: 'value', label: 'NIR', value: '255081416812535' }]
+    },
+    {
+      id: 'codice-fiscale-local',
+      group: 'net',
+      title: '意大利税号',
+      summary: 'RSSMRA80A01H501U',
+      fields: [{ name: 'value', label: '税号', value: 'RSSMRA80A01H501U' }]
+    },
+    {
+      id: 'steuer-id-local',
+      group: 'net',
+      title: '德国税号',
+      summary: '86095742719',
+      fields: [{ name: 'value', label: 'IdNr', value: '86095742719' }]
+    },
+    {
+      id: 'eori-local',
+      group: 'net',
+      title: '欧盟 EORI',
+      summary: 'FR73282932000074',
+      fields: [{ name: 'value', label: 'EORI', value: 'FR73282932000074' }]
+    },
+    {
+      id: 'doi-local',
+      group: 'net',
+      title: 'DOI',
+      summary: '10.1000/182',
+      fields: [{ name: 'value', label: 'DOI', value: '10.1000/182' }]
+    },
+    {
+      id: 'pmid-local',
+      group: 'net',
+      title: 'PMID',
+      summary: '12345678',
+      fields: [{ name: 'value', label: 'PMID', value: '12345678' }]
+    },
+    {
+      id: 'iccid-local',
+      group: 'net',
+      title: 'SIM ICCID',
+      summary: '89014103211118510720',
+      fields: [{ name: 'value', label: 'ICCID', value: '89014103211118510720' }]
     }
   ]
 

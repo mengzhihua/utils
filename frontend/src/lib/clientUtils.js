@@ -696,6 +696,153 @@ export async function runClientTool(id, values) {
       const year = Number(values.year) || 2026
       return { date: solarTermDate(year, values.name || '清明'), qingming: solarTermDate(year, '清明') }
     }
+    case 'ganzhi-local': {
+      const year = Number(values.year) || 2026
+      return { ganzhi: ganZhiYear(year), animal: ganZhiAnimal(year), formatted: ganZhiYear(year) + ganZhiAnimal(year) }
+    }
+    case 'aba-local': {
+      const digits = String(values.number || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isAba(digits) }
+    }
+    case 'iso6346-local': {
+      const compact = String(values.code || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isIso6346(compact) }
+    }
+    case 'jump-hash-local':
+      return { bucket: jumpHash(Number(values.key) || 0, Number(values.buckets) || 100) }
+    case 'figi-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isFigi(compact) }
+    }
+    case 'lei-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isLei(compact) }
+    }
+    case 'nhs-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isNhs(digits) }
+    }
+    case 'npi-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isNpi(digits) }
+    }
+    case 'ismn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isIsmn(digits) }
+    }
+    case 'nric-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isNric(compact) }
+    }
+    case 'cologne-local':
+      return { code: colognePhonetic(values.text || '') }
+    case 'hamming-local': {
+      const left = String(values.left || '')
+      const right = String(values.right || '')
+      if (left.length !== right.length) {
+        throw new Error('hamming requires equal length')
+      }
+      let distance = 0
+      for (let i = 0; i < left.length; i++) {
+        if (left[i] !== right[i]) distance++
+      }
+      return { distance }
+    }
+    case 'uuid-v8-local':
+      return { uuid: uuidV8() }
+    case 'nysiis-local':
+      return { code: nysiis(values.text || '') }
+    case 'caverphone-local':
+      return { code: caverphone(values.text || '') }
+    case 'cpf-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isCpf(digits) }
+    }
+    case 'cnpj-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isCnpj(digits) }
+    }
+    case 'pesel-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isPesel(digits), birthDate: isPesel(digits) ? peselBirth(digits) : null }
+    }
+    case 'upc-e-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      const upcA = isUpcE(digits) ? expandUpcE(digits) : null
+      return { normalized: digits, valid: Boolean(upcA), upcA }
+    }
+    case 'julian-local': {
+      const iso = String(values.date || '2000-01-01')
+      return { julianDayNumber: julianDayNumber(iso), iso }
+    }
+    case 'double-metaphone-local': {
+      const primary = doubleMetaphone(values.text || '')
+      return { primary }
+    }
+    case 'match-rating-local':
+      return {
+        left: matchRating(values.left || ''),
+        right: matchRating(values.right || ''),
+        similar: matchRating(values.left || '') === matchRating(values.right || '')
+          || matchRatingSimilar(values.left || '', values.right || '')
+      }
+    case 'siren-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isSiren(digits) }
+    }
+    case 'siret-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isSiret(digits), siren: digits.slice(0, 9) }
+    }
+    case 'nif-local': {
+      const compact = String(values.value || '').replace(/[\s.-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isNif(compact) }
+    }
+    case 'isni-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isIsni(compact) }
+    }
+    case 'bencode-local': {
+      const text = String(values.text || '')
+      return { encoded: `${text.length}:${text}` }
+    }
+    case 'refined-soundex-local':
+      return { code: refinedSoundex(values.text || '') }
+    case 'nir-local': {
+      const compact = String(values.value || '').replace(/[\s.-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isNir(compact), female: isNir(compact) && '248'.includes(compact[0]) }
+    }
+    case 'codice-fiscale-local': {
+      const compact = String(values.value || '').replace(/[\s.-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isCodiceFiscale(compact) }
+    }
+    case 'steuer-id-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isSteuerId(digits) }
+    }
+    case 'eori-local': {
+      const compact = String(values.value || '').replace(/[\s.-]/g, '').toUpperCase()
+      const identifier = compact.slice(2)
+      const valid = /^[A-Z]{2}[A-Z0-9]{1,15}$/.test(compact)
+        && (compact.startsWith('FR') ? isSiret(identifier) : true)
+      return { normalized: compact, country: compact.slice(0, 2), identifier, valid }
+    }
+    case 'doi-local': {
+      let compact = String(values.value || '').trim()
+      const lower = compact.toLowerCase()
+      if (lower.startsWith('https://doi.org/')) compact = compact.slice(16)
+      else if (lower.startsWith('http://doi.org/')) compact = compact.slice(15)
+      else if (lower.startsWith('doi:')) compact = compact.slice(4)
+      return { normalized: compact.trim(), valid: /^10\.\d{4,9}\/\S+$/i.test(compact.trim()) }
+    }
+    case 'pmid-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: /^[1-9]\d{0,9}$/.test(digits) }
+    }
+    case 'iccid-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: /^89\d{17,18}$/.test(digits) && luhnAny(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -711,6 +858,21 @@ function uuidV7() {
   bytes[4] = Number((time >> 8n) & 0xffn)
   bytes[5] = Number(time & 0xffn)
   bytes[6] = (bytes[6] & 0x0f) | 0x70
+  bytes[8] = (bytes[8] & 0x3f) | 0x80
+  const hex = [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('')
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`
+}
+
+function uuidV8() {
+  const bytes = crypto.getRandomValues(new Uint8Array(16))
+  const time = BigInt(Date.now())
+  bytes[0] = Number((time >> 40n) & 0xffn)
+  bytes[1] = Number((time >> 32n) & 0xffn)
+  bytes[2] = Number((time >> 24n) & 0xffn)
+  bytes[3] = Number((time >> 16n) & 0xffn)
+  bytes[4] = Number((time >> 8n) & 0xffn)
+  bytes[5] = Number(time & 0xffn)
+  bytes[6] = (bytes[6] & 0x0f) | 0x80
   bytes[8] = (bytes[8] & 0x3f) | 0x80
   const hex = [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('')
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`
@@ -1583,6 +1745,167 @@ function isOrgCode(code) {
   return compact[8] === orgCodeCheck(compact.slice(0, 8))
 }
 
+function ganZhiYear(year) {
+  const stems = '甲乙丙丁戊己庚辛壬癸'
+  const branches = '子丑寅卯辰巳午未申酉戌亥'
+  const idx = ((year - 1984) % 60 + 60) % 60
+  return stems[idx % 10] + branches[idx % 12]
+}
+
+function ganZhiAnimal(year) {
+  const animals = '鼠牛虎兔龙蛇马羊猴鸡狗猪'
+  return animals[((year - 1984) % 12 + 12) % 12]
+}
+
+function isAba(number) {
+  if (!/^\d{9}$/.test(number)) return false
+  const d = [...number].map(Number)
+  return (3 * (d[0] + d[3] + d[6]) + 7 * (d[1] + d[4] + d[7]) + (d[2] + d[5] + d[8])) % 10 === 0
+}
+
+function iso6346Value(c) {
+  if (c >= '0' && c <= '9') return c.charCodeAt(0) - 48
+  const n = c.charCodeAt(0) - 65 + 10
+  return n + Math.floor(n / 11)
+}
+
+function isIso6346(code) {
+  if (!/^[A-Z]{3}[UJZ]\d{7}$/.test(code)) return false
+  let sum = 0
+  let weight = 1
+  for (let i = 0; i < 10; i++) {
+    sum += iso6346Value(code[i]) * weight
+    weight *= 2
+  }
+  const check = sum % 11
+  return code[10] === String(check === 10 ? 0 : check)
+}
+
+function jumpHash(key, buckets) {
+  if (buckets <= 0) throw new Error('buckets must be > 0')
+  let b = -1n
+  let j = 0n
+  let k = BigInt(key)
+  const n = BigInt(buckets)
+  while (j < n) {
+    b = j
+    k = (k * 2862933555777941757n + 1n) & 0xffffffffffffffffn
+    j = BigInt(Math.floor(Number(b + 1n) * (2147483648 / (Number(k >> 33n) + 1))))
+  }
+  return Number(b)
+}
+
+function isFigi(figi) {
+  if (!/^[0-9BCDFGHJKLMNPQRSTVWXYZ]{12}$/.test(figi)) return false
+  const body = figi.slice(0, 11)
+  let sum = 0
+  for (let i = 0; i < 11; i++) {
+    const ch = body[i]
+    const value = ch >= '0' && ch <= '9' ? Number(ch) : ch.charCodeAt(0) - 55
+    if ((10 - i) % 2 === 0) {
+      const weighted = value * 2
+      sum += Math.floor(weighted / 10) + (weighted % 10)
+    } else {
+      sum += value
+    }
+  }
+  return figi[11] === String((10 - (sum % 10)) % 10)
+}
+
+function isLei(lei) {
+  if (!/^[A-Z0-9]{18}\d{2}$/.test(lei)) return false
+  let numeric = ''
+  for (const ch of lei) {
+    numeric += /[A-Z]/.test(ch) ? String(ch.charCodeAt(0) - 55) : ch
+  }
+  return BigInt(numeric) % 97n === 1n
+}
+
+function isNhs(number) {
+  if (!/^\d{10}$/.test(number)) return false
+  let sum = 0
+  for (let i = 0; i < 9; i++) {
+    sum += Number(number[i]) * (10 - i)
+  }
+  let check = 11 - (sum % 11)
+  if (check === 11) check = 0
+  if (check === 10) return false
+  return check === Number(number[9])
+}
+
+function isNpi(number) {
+  return /^\d{10}$/.test(number) && luhn('80840' + number)
+}
+
+function isIsmn(number) {
+  if (!/^9790\d{9}$/.test(number)) return false
+  let sum = 0
+  let factor = 3
+  for (let i = number.length - 2; i >= 0; i--) {
+    sum += Number(number[i]) * factor
+    factor = 4 - factor
+  }
+  return number[12] === String((10 - (sum % 10)) % 10)
+}
+
+function isNric(nric) {
+  if (!/^[STFGM]\d{7}[A-Z]$/.test(nric)) return false
+  const weights = [2, 7, 6, 5, 4, 3, 2]
+  const prefix = nric[0]
+  let sum = prefix === 'T' || prefix === 'G' || prefix === 'M' ? 4 : 0
+  for (let i = 0; i < 7; i++) {
+    sum += Number(nric[i + 1]) * weights[i]
+  }
+  const table = prefix === 'F' || prefix === 'G' || prefix === 'M' ? 'XWUTRQPNMLK' : 'JZIHGFEDCBA'
+  return nric[8] === table[sum % 11]
+}
+
+function colognePhonetic(text) {
+  const word = String(text || '')
+    .toUpperCase()
+    .replaceAll('Ä', 'A')
+    .replaceAll('Ö', 'O')
+    .replaceAll('Ü', 'U')
+    .replaceAll('ß', '8')
+  const codes = []
+  let last = ''
+  const prev = (i) => (i === 0 ? '' : word[i - 1])
+  const next = (i) => (i + 1 < word.length ? word[i + 1] : '')
+  const codeOf = (i) => {
+    const c = word[i]
+    const n = next(i)
+    if ('AEIJOUY'.includes(c)) return '0'
+    if (c === 'B') return '1'
+    if (c === 'P') return n === 'H' ? '3' : '1'
+    if (c === 'D' || c === 'T') return 'CSZ'.includes(n) ? '8' : '2'
+    if ('FVW'.includes(c)) return '3'
+    if ('GKQ'.includes(c)) return '4'
+    if (c === 'C') {
+      if (i === 0) return 'AHKLOQRUX'.includes(n) ? '4' : '8'
+      if ('AHKOQUX'.includes(n) && prev(i) !== 'S' && prev(i) !== 'Z') return '4'
+      return '8'
+    }
+    if (c === 'X') return 'CKQ'.includes(prev(i)) ? '8' : '48'
+    if (c === 'L') return '5'
+    if (c === 'M' || c === 'N') return '6'
+    if (c === 'R') return '7'
+    if (c === 'S' || c === 'Z' || c === '8') return '8'
+    return ''
+  }
+  for (let i = 0; i < word.length; i++) {
+    const c = word[i]
+    if ((c < 'A' || c > 'Z') && c !== '8') continue
+    const code = codeOf(i)
+    for (const ch of code) {
+      if (ch && ch !== last) {
+        codes.push(ch)
+        last = ch
+      }
+    }
+  }
+  return codes.filter((ch, i) => ch !== '0' || i === 0).join('')
+}
+
 function solarTermDate(year, name) {
   const names = ['小寒', '大寒', '立春', '雨水', '惊蛰', '春分', '清明', '谷雨', '立夏', '小满', '芒种', '夏至', '小暑', '大暑', '立秋', '处暑', '白露', '秋分', '寒露', '霜降', '立冬', '小雪', '大雪', '冬至']
   const c21 = [5.4055, 20.12, 3.87, 18.73, 5.63, 20.646, 4.81, 20.1, 5.52, 21.04, 5.678, 21.37, 7.108, 22.83, 7.5, 23.13, 7.646, 23.042, 8.318, 23.438, 7.438, 22.36, 7.18, 21.94]
@@ -1594,4 +1917,331 @@ function solarTermDate(year, name) {
   const day = Math.floor(y * 0.2422 + c[idx]) - Math.floor(y / 4)
   const month = Math.floor(idx / 2) + 1
   return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+}
+
+function nysiis(text) {
+  let word = String(text || '').toUpperCase().replace(/[^A-Z]/g, '')
+  if (!word) return ''
+  if (word.startsWith('MAC')) word = 'MCC' + word.slice(3)
+  else if (word.startsWith('KN')) word = 'NN' + word.slice(2)
+  else if (word.startsWith('K')) word = 'C' + word.slice(1)
+  else if (word.startsWith('PH') || word.startsWith('PF')) word = 'FF' + word.slice(2)
+  else if (word.startsWith('SCH')) word = 'SSS' + word.slice(3)
+  if (word.endsWith('EE') || word.endsWith('IE')) word = word.slice(0, -2) + 'Y'
+  else if (/(DT|RT|RD|NT|ND)$/.test(word)) word = word.slice(0, -2) + 'D'
+  const chars = word.split('')
+  const vowel = (c) => 'AEIOU'.includes(c)
+  const transcode = (prev, current, next, next2) => {
+    if (current === 'E' && next === 'V') return ['A', 'F']
+    if (vowel(current)) return ['A']
+    if (current === 'Q') return ['G']
+    if (current === 'Z') return ['S']
+    if (current === 'M') return ['N']
+    if (current === 'K') return next === 'N' ? ['N', 'N'] : ['C']
+    if (current === 'S' && next === 'C' && next2 === 'H') return ['S', 'S', 'S']
+    if (current === 'P' && next === 'H') return ['F', 'F']
+    if (current === 'H' && (!vowel(prev) || !vowel(next))) return [prev]
+    if (current === 'W' && vowel(prev)) return [prev]
+    return [current]
+  }
+  let key = chars[0]
+  for (let i = 1; i < chars.length; i++) {
+    const coded = transcode(chars[i - 1], chars[i], chars[i + 1] || ' ', chars[i + 2] || ' ')
+    for (let j = 0; j < coded.length && i + j < chars.length; j++) chars[i + j] = coded[j]
+    if (chars[i] !== chars[i - 1]) key += chars[i]
+  }
+  if (key.length > 1 && key.endsWith('S')) key = key.slice(0, -1)
+  if (key.length > 2 && key.endsWith('AY')) key = key.slice(0, -2) + 'Y'
+  if (key.length > 1 && key.endsWith('A')) key = key.slice(0, -1)
+  return key
+}
+
+function caverphone(text) {
+  if (!text) return '1111111111'
+  let word = String(text).toLowerCase().replace(/[^a-z]/g, '')
+  if (!word) return '1111111111'
+  word = word.replace(/e$/, '')
+  word = word.replace(/^cough/, 'cou2f').replace(/^rough/, 'rou2f').replace(/^tough/, 'tou2f')
+  word = word.replace(/^enough/, 'enou2f').replace(/^trough/, 'trou2f').replace(/^gn/, '2n')
+  word = word.replace(/mb$/, 'm2')
+  word = word.replace(/cq/g, '2q').replace(/ci/g, 'si').replace(/ce/g, 'se').replace(/cy/g, 'sy')
+  word = word.replace(/tch/g, '2ch').replace(/c/g, 'k').replace(/q/g, 'k').replace(/x/g, 'k').replace(/v/g, 'f')
+  word = word.replace(/dg/g, '2g').replace(/tio/g, 'sio').replace(/tia/g, 'sia').replace(/d/g, 't')
+  word = word.replace(/ph/g, 'fh').replace(/b/g, 'p').replace(/sh/g, 's2').replace(/z/g, 's')
+  word = word.replace(/^[aeiou]/, 'A').replace(/[aeiou]/g, '3')
+  word = word.replace(/j/g, 'y').replace(/^y3/, 'Y3').replace(/^y/, 'A').replace(/y/g, '3')
+  word = word.replace(/3gh3/g, '3kh3').replace(/gh/g, '22').replace(/g/g, 'k')
+  word = word.replace(/s+/g, 'S').replace(/t+/g, 'T').replace(/p+/g, 'P').replace(/k+/g, 'K')
+  word = word.replace(/f+/g, 'F').replace(/m+/g, 'M').replace(/n+/g, 'N')
+  word = word.replace(/w3/g, 'W3').replace(/wh3/g, 'Wh3').replace(/w$/, '3').replace(/w/g, '2')
+  word = word.replace(/^h/, 'A').replace(/h/g, '2')
+  word = word.replace(/r3/g, 'R3').replace(/r$/, '3').replace(/r/g, '2')
+  word = word.replace(/l3/g, 'L3').replace(/l$/, '3').replace(/l/g, '2')
+  word = word.replace(/2/g, '').replace(/3$/, 'A').replace(/3/g, '')
+  return (word + '1111111111').slice(0, 10)
+}
+
+function sameDigits(digits) {
+  return digits.split('').every((ch) => ch === digits[0])
+}
+
+function isCpf(digits) {
+  if (!/^\d{11}$/.test(digits) || sameDigits(digits)) return false
+  const digit = (body) => {
+    const weight = body.length + 1
+    let sum = 0
+    for (let i = 0; i < body.length; i++) sum += Number(body[i]) * (weight - i)
+    const rem = sum % 11
+    return String(rem < 2 ? 0 : 11 - rem)
+  }
+  return digits[9] === digit(digits.slice(0, 9)) && digits[10] === digit(digits.slice(0, 10))
+}
+
+function isCnpj(digits) {
+  if (!/^\d{14}$/.test(digits) || sameDigits(digits)) return false
+  const w12 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+  const w13 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+  const digit = (body, weights) => {
+    let sum = 0
+    for (let i = 0; i < body.length; i++) sum += Number(body[i]) * weights[i]
+    const rem = sum % 11
+    return String(rem < 2 ? 0 : 11 - rem)
+  }
+  return digits[12] === digit(digits.slice(0, 12), w12) && digits[13] === digit(digits.slice(0, 13), w13)
+}
+
+function isPesel(digits) {
+  if (!/^\d{11}$/.test(digits)) return false
+  const weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]
+  let sum = 0
+  for (let i = 0; i < 10; i++) sum += Number(digits[i]) * weights[i]
+  return digits[10] === String((10 - (sum % 10)) % 10)
+}
+
+function peselBirth(digits) {
+  let month = Number(digits.slice(2, 4))
+  const year = Number(digits.slice(0, 2))
+  const day = digits.slice(4, 6)
+  let century = 1900
+  if (month >= 21 && month <= 32) { century = 2000; month -= 20 }
+  else if (month >= 41 && month <= 52) { century = 2100; month -= 40 }
+  else if (month >= 61 && month <= 72) { century = 2200; month -= 60 }
+  else if (month >= 81 && month <= 92) { century = 1800; month -= 80 }
+  return `${century + year}-${String(month).padStart(2, '0')}-${day}`
+}
+
+function eanCheckDigit(body) {
+  let sum = 0
+  let factor = 3
+  for (let i = body.length - 1; i >= 0; i--) {
+    sum += Number(body[i]) * factor
+    factor = 4 - factor
+  }
+  return String((10 - (sum % 10)) % 10)
+}
+
+function expandUpcE(digits) {
+  if (!/^[01]\d{7}$/.test(digits)) return null
+  const ns = digits[0]
+  const body = digits.slice(1, 7)
+  const last = body[5]
+  let manufacturer
+  let product
+  if (last <= '2') {
+    manufacturer = body.slice(0, 2) + last + '00'
+    product = '00' + body.slice(2, 5)
+  } else if (last === '3') {
+    manufacturer = body.slice(0, 3) + '00'
+    product = '000' + body.slice(3, 5)
+  } else if (last === '4') {
+    manufacturer = body.slice(0, 4) + '0'
+    product = '0000' + body[4]
+  } else {
+    manufacturer = body.slice(0, 5)
+    product = '0000' + last
+  }
+  const upcA = ns + manufacturer + product + eanCheckDigit(ns + manufacturer + product)
+  return upcA[11] === digits[7] ? upcA : null
+}
+
+function isUpcE(digits) {
+  return Boolean(expandUpcE(digits))
+}
+
+function julianDayNumber(iso) {
+  const [y, m, d] = iso.split('-').map(Number)
+  const a = Math.floor((14 - m) / 12)
+  const y2 = y + 4800 - a
+  const m2 = m + 12 * a - 3
+  return d + Math.floor((153 * m2 + 2) / 5) + 365 * y2 + Math.floor(y2 / 4) - Math.floor(y2 / 100) + Math.floor(y2 / 400) - 32045
+}
+
+function matchRating(name) {
+  let word = String(name || '').toUpperCase().replace(/[^A-Z]/g, '')
+  if (!word || word.length === 1) return ''
+  const first = word[0]
+  let rest = word.replace(/[AEIOU]/g, '')
+  if ('AEIOU'.includes(first)) rest = first + rest
+  const doubles = ['BB', 'CC', 'DD', 'FF', 'GG', 'HH', 'JJ', 'KK', 'LL', 'MM', 'NN', 'PP', 'QQ', 'RR', 'SS', 'TT', 'VV', 'WW', 'XX', 'YY', 'ZZ']
+  for (const pair of doubles) rest = rest.replaceAll(pair, pair[0])
+  return rest.length > 6 ? rest.slice(0, 3) + rest.slice(-3) : rest
+}
+
+function matchRatingSimilar(left, right) {
+  const a = matchRating(left)
+  const b = matchRating(right)
+  return Boolean(a) && a === b
+}
+
+function isSiren(digits) {
+  return /^\d{9}$/.test(digits) && luhnAny(digits)
+}
+
+function isSiret(digits) {
+  return /^\d{14}$/.test(digits) && luhnAny(digits) && isSiren(digits.slice(0, 9))
+}
+
+function luhnAny(digits) {
+  if (!/^\d+$/.test(digits)) return false
+  let sum = 0
+  let doubleDigit = false
+  for (let i = digits.length - 1; i >= 0; i--) {
+    let n = Number(digits[i])
+    if (doubleDigit) {
+      n *= 2
+      if (n > 9) n -= 9
+    }
+    sum += n
+    doubleDigit = !doubleDigit
+  }
+  return sum % 10 === 0
+}
+
+function isNif(compact) {
+  const letters = 'TRWAGMYFPDXBNJZSQVHLCKE'
+  if (/^\d{8}[A-Z]$/.test(compact)) {
+    return compact[8] === letters[Number(compact.slice(0, 8)) % 23]
+  }
+  if (/^[XYZ]\d{7}[A-Z]$/.test(compact)) {
+    const mapped = compact[0] === 'X' ? '0' : compact[0] === 'Y' ? '1' : '2'
+    return compact[8] === letters[Number(mapped + compact.slice(1, 8)) % 23]
+  }
+  return false
+}
+
+function isIsni(compact) {
+  if (!/^\d{15}[\dX]$/.test(compact)) return false
+  let p = 0
+  for (let i = 0; i < 15; i++) p = (p + Number(compact[i])) * 2
+  const check = (12 - (p % 11)) % 11
+  const expected = check === 10 ? 'X' : String(check)
+  return compact[15] === expected
+}
+
+function refinedSoundex(text) {
+  const map = '01360240043788015936020505'
+  const letters = String(text || '').toUpperCase().replace(/[^A-Z]/g, '')
+  if (!letters) return ''
+  let out = letters[0]
+  let last = '*'
+  for (const ch of letters) {
+    const current = map[ch.charCodeAt(0) - 65]
+    if (current === last) continue
+    out += current
+    last = current
+  }
+  return out
+}
+
+function isNir(compact) {
+  if (!/^[1-8]\d{4}(?:\d{2}|2[AB])\d{6}\d{2}$/.test(compact)) return false
+  const body = compact.slice(0, 13)
+  const dept = compact.slice(5, 7)
+  const numeric = dept === '2A' ? `${body.slice(0, 5)}19${body.slice(7)}` : dept === '2B' ? `${body.slice(0, 5)}18${body.slice(7)}` : body
+  const key = String(97 - (Number(numeric) % 97)).padStart(2, '0')
+  return compact.slice(13) === key
+}
+
+function isCodiceFiscale(compact) {
+  if (!/^[A-Z]{6}\d{2}[A-EHLMPRST]\d{2}[A-Z]\d{3}[A-Z]$/.test(compact)) return false
+  const oddDigit = [1, 0, 5, 7, 9, 13, 15, 17, 19, 21]
+  const oddLetter = {
+    A: 1, B: 0, C: 5, D: 7, E: 9, F: 13, G: 15, H: 17, I: 19, J: 21,
+    K: 2, L: 4, M: 18, N: 20, O: 11, P: 3, Q: 6, R: 8, S: 12, T: 14,
+    U: 16, V: 10, W: 22, X: 25, Y: 24, Z: 23
+  }
+  let sum = 0
+  for (let i = 0; i < 15; i++) {
+    const c = compact[i]
+    if (i % 2 === 0) sum += /\d/.test(c) ? oddDigit[Number(c)] : oddLetter[c]
+    else sum += /\d/.test(c) ? Number(c) : c.charCodeAt(0) - 65
+  }
+  return compact[15] === String.fromCharCode(65 + (sum % 26))
+}
+
+function isSteuerId(digits) {
+  if (!/^[1-9]\d{10}$/.test(digits)) return false
+  const counts = Array(10).fill(0)
+  for (const ch of digits.slice(0, 10)) counts[Number(ch)]++
+  const missing = counts.filter((n) => n === 0).length
+  const twice = counts.filter((n) => n === 2).length
+  if (missing !== 1 || twice !== 1 || counts.some((n) => n > 2)) return false
+  let product = 10
+  for (const ch of digits.slice(0, 10)) {
+    let sum = (Number(ch) + product) % 10
+    if (sum === 0) sum = 10
+    product = (sum * 2) % 11
+  }
+  const check = 11 - product
+  return digits[10] === String(check === 10 ? 0 : check)
+}
+
+function doubleMetaphone(text) {
+  const word = String(text || '').toUpperCase().replace(/[^A-Z]/g, '')
+  if (!word) return ''
+  let i = /^(GN|KN|PN|WR|PS)/.test(word) ? 1 : 0
+  let out = ''
+  const vowel = (c) => 'AEIOUY'.includes(c)
+  const at = (n) => word[n] || ''
+  while (out.length < 4 && i < word.length) {
+    const c = word[i]
+    if ('AEIOUY'.includes(c)) {
+      if (i === 0) out += 'A'
+      i++
+      continue
+    }
+    if (c === 'B') { out += 'P'; i += at(i + 1) === 'B' ? 2 : 1; continue }
+    if (word.startsWith('CH', i) || word.startsWith('CIA', i) || word.startsWith('SCH', i) || word.startsWith('SH', i) || word.startsWith('SIO', i) || word.startsWith('SIA', i)) {
+      out += 'X'
+      i += word.startsWith('SCH', i) || word.startsWith('SIO', i) || word.startsWith('SIA', i) || word.startsWith('CIA', i) ? 3 : 2
+      continue
+    }
+    if (c === 'C') { out += (at(i + 1) === 'I' || at(i + 1) === 'E' || at(i + 1) === 'Y') ? 'S' : 'K'; i += at(i + 1) === 'C' ? 2 : 1; continue }
+    if (word.startsWith('DGE', i) || word.startsWith('DGI', i) || word.startsWith('DGY', i)) { out += 'J'; i += 3; continue }
+    if (c === 'D') { out += 'T'; i += (at(i + 1) === 'D' || at(i + 1) === 'T') ? 2 : 1; continue }
+    if (c === 'F') { out += 'F'; i += at(i + 1) === 'F' ? 2 : 1; continue }
+    if (c === 'G' && at(i + 1) === 'H') { i += 2; continue }
+    if (c === 'G' && (at(i + 1) === 'I' || at(i + 1) === 'E' || at(i + 1) === 'Y')) { out += 'J'; i += 2; continue }
+    if (c === 'G') { out += 'K'; i += at(i + 1) === 'G' ? 2 : 1; continue }
+    if (c === 'H') { i += vowel(at(i + 1)) && (i === 0 || vowel(at(i - 1))) ? 2 : 1; if ((i === 0 || vowel(at(i - 1))) && vowel(at(i + 1))) out += 'H'; continue }
+    if (c === 'J') { out += 'J'; i += at(i + 1) === 'J' ? 2 : 1; continue }
+    if (c === 'K') { out += 'K'; i += at(i + 1) === 'K' ? 2 : 1; continue }
+    if (c === 'L') { out += 'L'; i += at(i + 1) === 'L' ? 2 : 1; continue }
+    if (c === 'M') { out += 'M'; i += at(i + 1) === 'M' ? 2 : 1; continue }
+    if (c === 'N') { out += 'N'; i += at(i + 1) === 'N' ? 2 : 1; continue }
+    if (c === 'P' && at(i + 1) === 'H') { out += 'F'; i += 2; continue }
+    if (c === 'P') { out += 'P'; i += (at(i + 1) === 'P' || at(i + 1) === 'B') ? 2 : 1; continue }
+    if (c === 'Q') { out += 'K'; i += 1; continue }
+    if (c === 'R') { out += 'R'; i += at(i + 1) === 'R' ? 2 : 1; continue }
+    if (c === 'S') { out += 'S'; i += at(i + 1) === 'S' ? 2 : 1; continue }
+    if (word.startsWith('TH', i) || word.startsWith('TTH', i)) { out += '0'; i += word.startsWith('TTH', i) ? 3 : 2; continue }
+    if (c === 'T') { out += 'T'; i += (at(i + 1) === 'T' || at(i + 1) === 'D') ? 2 : 1; continue }
+    if (c === 'V') { out += 'F'; i += 1; continue }
+    if (c === 'W' && i === 0 && (vowel(at(1)) || word.startsWith('WH'))) { out += 'A'; i += word.startsWith('WH') ? 2 : 1; continue }
+    if (c === 'W') { i += 1; continue }
+    if (c === 'X') { out += i === 0 ? 'S' : 'KS'; i += 1; continue }
+    if (c === 'Z') { out += 'S'; i += 1; continue }
+    i++
+  }
+  return out.slice(0, 4)
 }

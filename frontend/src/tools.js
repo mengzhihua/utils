@@ -1605,6 +1605,507 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc64',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'blake2b',
+      group: 'crypto',
+      title: 'BLAKE2b',
+      summary: 'Blake2bUtil RFC 7693',
+      method: 'GET',
+      path: '/api/utils/blake2b',
+      fields: [{ name: 'text', label: '原文', value: 'abc' }]
+    },
+    {
+      id: 'aes-kw',
+      group: 'crypto',
+      title: 'AES Key Wrap',
+      summary: 'AesKwUtil RFC 3394',
+      method: 'GET',
+      path: '/api/utils/aes-kw',
+      fields: []
+    },
+    {
+      id: 'ed25519',
+      group: 'crypto',
+      title: 'Ed25519',
+      summary: 'Ed25519Util RFC 8032',
+      method: 'GET',
+      path: '/api/utils/ed25519',
+      fields: [{ name: 'text', label: '原文', value: 'hello' }]
+    },
+    {
+      id: 'tsid',
+      group: 'id',
+      title: 'TSID',
+      summary: 'TsidUtil 时间有序 ID',
+      method: 'GET',
+      path: '/api/utils/tsid',
+      fields: []
+    },
+    {
+      id: 'ganzhi',
+      group: 'datetime',
+      title: '天干地支',
+      summary: 'GanZhiUtil 生肖',
+      method: 'GET',
+      path: '/api/utils/ganzhi',
+      fields: [{ name: 'year', label: '年份', value: '2026' }]
+    },
+    {
+      id: 'jump-hash',
+      group: 'structure',
+      title: 'Jump Hash',
+      summary: 'JumpHashUtil Guava',
+      method: 'GET',
+      path: '/api/utils/jump-hash',
+      fields: [
+        { name: 'key', label: 'key', value: '42' },
+        { name: 'buckets', label: '分桶', value: '100' }
+      ]
+    },
+    {
+      id: 'iso6346',
+      group: 'validate',
+      title: '集装箱号',
+      summary: 'Iso6346Util ISO 6346',
+      method: 'GET',
+      path: '/api/utils/iso6346',
+      fields: [{ name: 'code', label: '箱号', value: 'CSQU3054383' }]
+    },
+    {
+      id: 'bech32m',
+      group: 'crypto',
+      title: 'Bech32m',
+      summary: 'Bech32Util.encodeM BIP-350',
+      method: 'GET',
+      path: '/api/utils/bech32m',
+      fields: [{ name: 'text', label: '原文', value: 'hello' }]
+    },
+    {
+      id: 'aba',
+      group: 'validate',
+      title: 'ABA 路由号',
+      summary: 'AbaRoutingUtil',
+      method: 'GET',
+      path: '/api/utils/aba',
+      fields: [{ name: 'number', label: '路由号', value: '021000021' }]
+    },
+    {
+      id: 'x25519',
+      group: 'crypto',
+      title: 'X25519',
+      summary: 'X25519Util RFC 7748',
+      method: 'GET',
+      path: '/api/utils/x25519',
+      fields: []
+    },
+    {
+      id: 'ripemd160',
+      group: 'crypto',
+      title: 'RIPEMD-160',
+      summary: 'Ripemd160Util',
+      method: 'GET',
+      path: '/api/utils/ripemd160',
+      fields: [{ name: 'text', label: '原文', value: 'abc' }]
+    },
+    {
+      id: 'figi',
+      group: 'validate',
+      title: 'FIGI',
+      summary: 'FigiUtil OpenFIGI',
+      method: 'GET',
+      path: '/api/utils/figi',
+      fields: [{ name: 'value', label: 'FIGI', value: 'BBG000B9XRY4' }]
+    },
+    {
+      id: 'lei',
+      group: 'validate',
+      title: 'LEI',
+      summary: 'LeiUtil ISO 17442',
+      method: 'GET',
+      path: '/api/utils/lei',
+      fields: [{ name: 'value', label: 'LEI', value: '5493001KJTIIGC8Y1R12' }]
+    },
+    {
+      id: 'nhs',
+      group: 'validate',
+      title: 'NHS 号码',
+      summary: 'NhsNumberUtil Mod 11',
+      method: 'GET',
+      path: '/api/utils/nhs',
+      fields: [{ name: 'value', label: 'NHS', value: '943 476 5919' }]
+    },
+    {
+      id: 'shake',
+      group: 'crypto',
+      title: 'SHAKE',
+      summary: 'ShakeUtil FIPS 202',
+      method: 'GET',
+      path: '/api/utils/shake',
+      fields: [{ name: 'text', label: '原文', value: 'abc' }]
+    },
+    {
+      id: 'npi',
+      group: 'validate',
+      title: 'NPI',
+      summary: 'NpiUtil CMS Luhn',
+      method: 'GET',
+      path: '/api/utils/npi',
+      fields: [{ name: 'value', label: 'NPI', value: '1234567893' }]
+    },
+    {
+      id: 'ismn',
+      group: 'validate',
+      title: 'ISMN',
+      summary: 'IsmnUtil ISO 10957',
+      method: 'GET',
+      path: '/api/utils/ismn',
+      fields: [{ name: 'value', label: 'ISMN', value: '979-0-2600-0043-8' }]
+    },
+    {
+      id: 'nric',
+      group: 'validate',
+      title: '新加坡 NRIC',
+      summary: 'NricUtil',
+      method: 'GET',
+      path: '/api/utils/nric',
+      fields: [{ name: 'value', label: 'NRIC', value: 'S1234567D' }]
+    },
+    {
+      id: 'cologne',
+      group: 'string',
+      title: '科隆拼音',
+      summary: 'ColognePhoneticUtil',
+      method: 'GET',
+      path: '/api/utils/cologne',
+      fields: [{ name: 'text', label: '姓名', value: 'Müller' }]
+    },
+    {
+      id: 'http-range',
+      group: 'web',
+      title: 'HTTP Range',
+      summary: 'HttpRangeUtil RFC 7233',
+      method: 'GET',
+      path: '/api/utils/http-range',
+      fields: [{ name: 'header', label: 'Range', value: 'bytes=0-499' }]
+    },
+    {
+      id: 'hamming',
+      group: 'string',
+      title: 'Hamming 距离',
+      summary: 'TextUtil.hamming',
+      method: 'GET',
+      path: '/api/utils/hamming',
+      fields: [
+        { name: 'left', label: '左', value: 'karolin' },
+        { name: 'right', label: '右', value: 'kathrin' }
+      ]
+    },
+    {
+      id: 'uuid-v8',
+      group: 'id',
+      title: 'UUID v8',
+      summary: 'IdUtil.uuidV8 RFC 9562',
+      method: 'GET',
+      path: '/api/utils/uuid-v8',
+      fields: []
+    },
+    {
+      id: 'nysiis',
+      group: 'string',
+      title: 'NYSIIS',
+      summary: 'NysiisUtil Commons Codec',
+      method: 'GET',
+      path: '/api/utils/nysiis',
+      fields: [{ name: 'text', label: '姓名', value: 'Miller' }]
+    },
+    {
+      id: 'caverphone',
+      group: 'string',
+      title: 'Caverphone 2',
+      summary: 'CaverphoneUtil',
+      method: 'GET',
+      path: '/api/utils/caverphone',
+      fields: [{ name: 'text', label: '姓名', value: 'Stevenson' }]
+    },
+    {
+      id: 'sonyflake',
+      group: 'id',
+      title: 'Sonyflake',
+      summary: 'SonyflakeUtil 10ms ID',
+      method: 'GET',
+      path: '/api/utils/sonyflake',
+      fields: []
+    },
+    {
+      id: 'content-disposition',
+      group: 'web',
+      title: 'Content-Disposition',
+      summary: 'ContentDispositionUtil RFC 6266',
+      method: 'GET',
+      path: '/api/utils/content-disposition',
+      fields: [{ name: 'filename', label: '文件名', value: '报表.txt' }]
+    },
+    {
+      id: 'julian',
+      group: 'datetime',
+      title: '儒略日',
+      summary: 'JulianDayUtil',
+      method: 'GET',
+      path: '/api/utils/julian',
+      fields: [{ name: 'date', label: '日期', value: '2000-01-01' }]
+    },
+    {
+      id: 'cpf',
+      group: 'validate',
+      title: '巴西 CPF',
+      summary: 'CpfUtil',
+      method: 'GET',
+      path: '/api/utils/cpf',
+      fields: [{ name: 'value', label: 'CPF', value: '111.444.777-35' }]
+    },
+    {
+      id: 'cnpj',
+      group: 'validate',
+      title: '巴西 CNPJ',
+      summary: 'CnpjUtil',
+      method: 'GET',
+      path: '/api/utils/cnpj',
+      fields: [{ name: 'value', label: 'CNPJ', value: '00.000.000/0001-91' }]
+    },
+    {
+      id: 'pesel',
+      group: 'validate',
+      title: '波兰 PESEL',
+      summary: 'PeselUtil',
+      method: 'GET',
+      path: '/api/utils/pesel',
+      fields: [{ name: 'value', label: 'PESEL', value: '44051401359' }]
+    },
+    {
+      id: 'upc-e',
+      group: 'validate',
+      title: 'UPC-E',
+      summary: 'UpcEUtil → UPC-A',
+      method: 'GET',
+      path: '/api/utils/upc-e',
+      fields: [{ name: 'value', label: 'UPC-E', value: '04252614' }]
+    },
+    {
+      id: 'crc32-mpeg2',
+      group: 'crypto',
+      title: 'CRC-32/MPEG-2',
+      summary: 'HashUtil.crc32Mpeg2',
+      method: 'GET',
+      path: '/api/utils/crc32-mpeg2',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'hmac-sm3',
+      group: 'crypto',
+      title: 'HMAC-SM3',
+      summary: 'Sm3Util.hmac',
+      method: 'GET',
+      path: '/api/utils/hmac-sm3',
+      fields: [
+        { name: 'text', label: '原文', value: 'abc' },
+        { name: 'key', label: '密钥', value: 'key' }
+      ]
+    },
+    {
+      id: 'murmur128',
+      group: 'crypto',
+      title: 'Murmur3-128',
+      summary: 'HashUtil.murmur128',
+      method: 'GET',
+      path: '/api/utils/murmur128',
+      fields: [{ name: 'text', label: '原文', value: 'abc' }]
+    },
+    {
+      id: 'double-metaphone',
+      group: 'string',
+      title: 'Double Metaphone',
+      summary: 'DoubleMetaphoneUtil',
+      method: 'GET',
+      path: '/api/utils/double-metaphone',
+      fields: [{ name: 'text', label: '姓名', value: 'Smith' }]
+    },
+    {
+      id: 'match-rating',
+      group: 'string',
+      title: 'Match Rating',
+      summary: 'MatchRatingUtil',
+      method: 'GET',
+      path: '/api/utils/match-rating',
+      fields: [
+        { name: 'left', label: '左', value: 'Smith' },
+        { name: 'right', label: '右', value: 'Smyth' }
+      ]
+    },
+    {
+      id: 'siren',
+      group: 'validate',
+      title: '法国 SIREN',
+      summary: 'SirenUtil Luhn',
+      method: 'GET',
+      path: '/api/utils/siren',
+      fields: [{ name: 'value', label: 'SIREN', value: '732829320' }]
+    },
+    {
+      id: 'siret',
+      group: 'validate',
+      title: '法国 SIRET',
+      summary: 'SiretUtil Luhn',
+      method: 'GET',
+      path: '/api/utils/siret',
+      fields: [{ name: 'value', label: 'SIRET', value: '73282932000074' }]
+    },
+    {
+      id: 'nif',
+      group: 'validate',
+      title: '西班牙 NIF',
+      summary: 'NifUtil DNI / NIE',
+      method: 'GET',
+      path: '/api/utils/nif',
+      fields: [{ name: 'value', label: 'NIF', value: '12345678Z' }]
+    },
+    {
+      id: 'isni',
+      group: 'validate',
+      title: 'ISNI',
+      summary: 'IsniUtil ISO 27729',
+      method: 'GET',
+      path: '/api/utils/isni',
+      fields: [{ name: 'value', label: 'ISNI', value: '0000 0001 2146 358X' }]
+    },
+    {
+      id: 'base91',
+      group: 'crypto',
+      title: 'basE91',
+      summary: 'Base91Util',
+      method: 'GET',
+      path: '/api/utils/base91',
+      fields: [{ name: 'text', label: '原文', value: 'Hello World' }]
+    },
+    {
+      id: 'bencode',
+      group: 'json',
+      title: 'Bencode',
+      summary: 'BencodeUtil',
+      method: 'GET',
+      path: '/api/utils/bencode',
+      fields: [{ name: 'text', label: '字符串', value: 'spam' }]
+    },
+    {
+      id: 'http-accept',
+      group: 'web',
+      title: 'HTTP Accept',
+      summary: 'HttpAcceptUtil RFC 9110',
+      method: 'GET',
+      path: '/api/utils/http-accept',
+      fields: [{ name: 'header', label: 'Accept', value: 'text/html,application/json;q=0.9,*/*;q=0.8' }]
+    },
+    {
+      id: 'refined-soundex',
+      group: 'string',
+      title: 'Refined Soundex',
+      summary: 'RefinedSoundexUtil',
+      method: 'GET',
+      path: '/api/utils/refined-soundex',
+      fields: [
+        { name: 'text', label: '词', value: 'testing' },
+        { name: 'other', label: '对照', value: 'The' }
+      ]
+    },
+    {
+      id: 'porter',
+      group: 'string',
+      title: 'Porter 词干',
+      summary: 'PorterStemmerUtil',
+      method: 'GET',
+      path: '/api/utils/porter',
+      fields: [{ name: 'text', label: '单词', value: 'relational' }]
+    },
+    {
+      id: 'nir',
+      group: 'validate',
+      title: '法国 NIR',
+      summary: 'NirUtil INSEE',
+      method: 'GET',
+      path: '/api/utils/nir',
+      fields: [{ name: 'value', label: 'NIR', value: '255081416812535' }]
+    },
+    {
+      id: 'codice-fiscale',
+      group: 'validate',
+      title: '意大利税号',
+      summary: 'CodiceFiscaleUtil',
+      method: 'GET',
+      path: '/api/utils/codice-fiscale',
+      fields: [{ name: 'value', label: '税号', value: 'RSSMRA80A01H501U' }]
+    },
+    {
+      id: 'steuer-id',
+      group: 'validate',
+      title: '德国税号',
+      summary: 'SteuerIdUtil ISO 7064',
+      method: 'GET',
+      path: '/api/utils/steuer-id',
+      fields: [{ name: 'value', label: 'IdNr', value: '86095742719' }]
+    },
+    {
+      id: 'eori',
+      group: 'validate',
+      title: '欧盟 EORI',
+      summary: 'EoriUtil',
+      method: 'GET',
+      path: '/api/utils/eori',
+      fields: [{ name: 'value', label: 'EORI', value: 'FR73282932000074' }]
+    },
+    {
+      id: 'doi',
+      group: 'validate',
+      title: 'DOI',
+      summary: 'DoiUtil ISO 26324',
+      method: 'GET',
+      path: '/api/utils/doi',
+      fields: [{ name: 'value', label: 'DOI', value: '10.1000/182' }]
+    },
+    {
+      id: 'pmid',
+      group: 'validate',
+      title: 'PMID',
+      summary: 'PmidUtil',
+      method: 'GET',
+      path: '/api/utils/pmid',
+      fields: [{ name: 'value', label: 'PMID', value: '12345678' }]
+    },
+    {
+      id: 'iccid',
+      group: 'validate',
+      title: 'SIM ICCID',
+      summary: 'IccidUtil Luhn',
+      method: 'GET',
+      path: '/api/utils/iccid',
+      fields: [{ name: 'value', label: 'ICCID', value: '89014103211118510720' }]
+    },
+    {
+      id: 'forwarded',
+      group: 'web',
+      title: 'HTTP Forwarded',
+      summary: 'ForwardedUtil RFC 7239',
+      method: 'GET',
+      path: '/api/utils/forwarded',
+      fields: [{ name: 'header', label: 'Forwarded', value: 'for=192.0.2.60;proto=http;by=203.0.113.43' }]
+    },
+    {
+      id: 'fletcher',
+      group: 'crypto',
+      title: 'Fletcher',
+      summary: 'HashUtil.fletcher16',
+      method: 'GET',
+      path: '/api/utils/fletcher',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

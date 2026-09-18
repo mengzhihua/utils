@@ -271,4 +271,167 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.qingming").value("2026-04-05"));
     }
+
+    @Test
+    void blake2bTsidFigiNhs() throws Exception {
+        mockMvc.perform(get("/api/utils/blake2b").param("text", "abc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.blake2b")
+                        .value("ba80a53f981c4d0d6a2797b69f12f6e94c212f14685ac4b74b12bb6fdbffa2d17d87c5392aab792dc252d5de4533cc9518d38aa8dbf1925ab92386edd4009923"));
+
+        mockMvc.perform(get("/api/utils/aes-kw"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.wrapped")
+                        .value("1FA68B0A8112B447AEF34BD8FB5A7B829D3E862371D2CFE5"));
+
+        mockMvc.perform(get("/api/utils/ganzhi").param("year", "2026"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.ganzhi").value("丙午"))
+                .andExpect(jsonPath("$.data.animal").value("马"));
+
+        mockMvc.perform(get("/api/utils/iso6346").param("code", "CSQU3054383"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/bech32m").param("text", ""))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.empty").value("a1lqfn3a"));
+
+        mockMvc.perform(get("/api/utils/ripemd160").param("text", "abc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.ripemd160").value("8eb208f7e05d987a9b044a8e98c6b087f15a0bfc"));
+
+        mockMvc.perform(get("/api/utils/figi").param("value", "BBG000B9XRY4"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/nhs").param("value", "943 476 5919"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+    }
+
+    @Test
+    void shakeNpiCologneRange() throws Exception {
+        mockMvc.perform(get("/api/utils/shake").param("text", "abc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.shake128")
+                        .value("5881092dd818bf5cf8a3ddb793fbcba74097d5c526a6d35f97b83351940f2cc8"));
+
+        mockMvc.perform(get("/api/utils/npi").param("value", "1234567893"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/nric").param("value", "S1234567D"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cologne").param("text", "Müller"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.code").value("657"));
+
+        mockMvc.perform(get("/api/utils/http-range").param("header", "bytes=0-499"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.ranges[0].start").value(0))
+                .andExpect(jsonPath("$.data.ranges[0].end").value(499));
+
+        mockMvc.perform(get("/api/utils/hamming").param("left", "karolin").param("right", "kathrin"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.distance").value(3));
+    }
+
+    @Test
+    void nysiisCpfJulianCrcMpeg2() throws Exception {
+        mockMvc.perform(get("/api/utils/nysiis").param("text", "Miller"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.code").value("MALAR"));
+
+        mockMvc.perform(get("/api/utils/caverphone").param("text", "Stevenson"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.code").value("STFNSN1111"));
+
+        mockMvc.perform(get("/api/utils/cpf").param("value", "111.444.777-35"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/pesel").param("value", "44051401359"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.birthDate").value("1944-05-14"));
+
+        mockMvc.perform(get("/api/utils/julian").param("date", "2000-01-01"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.julianDayNumber").value(2451545));
+
+        mockMvc.perform(get("/api/utils/crc32-mpeg2").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc32Mpeg2").value("0376e6e7"));
+
+        mockMvc.perform(get("/api/utils/upc-e").param("value", "04252614"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.upcA").value("042100005264"));
+
+        mockMvc.perform(get("/api/utils/murmur128").param("text", "abc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.murmur128").value("6778ad3f3f3f96b4522dca264174a23b"));
+
+        mockMvc.perform(get("/api/utils/hmac-sm3").param("text", "abc").param("key", "key"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.hmacSm3")
+                        .value("28e63256e7c5a087b1f073265dc53092163f7b82729735d06f28f10af9d52393"));
+    }
+
+    @Test
+    void doubleMetaphoneSirenNifBencode() throws Exception {
+        mockMvc.perform(get("/api/utils/double-metaphone").param("text", "Smith"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.primary").value("SM0"));
+
+        mockMvc.perform(get("/api/utils/match-rating").param("left", "Smith").param("right", "Smyth"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.similar").value(true));
+
+        mockMvc.perform(get("/api/utils/siren").param("value", "732829320"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/nif").param("value", "12345678Z"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/bencode").param("text", "spam"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.encoded").value("4:spam"));
+
+        mockMvc.perform(get("/api/utils/http-accept")
+                        .param("header", "text/html,application/json;q=0.9"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.negotiated").value("text/html"));
+    }
+
+    @Test
+    void refinedSoundexNirCodiceDoi() throws Exception {
+        mockMvc.perform(get("/api/utils/refined-soundex").param("text", "testing"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.code").value("T6036084"));
+
+        mockMvc.perform(get("/api/utils/porter").param("text", "relational"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.stem").value("relat"));
+
+        mockMvc.perform(get("/api/utils/nir").param("value", "255081416812535"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/codice-fiscale").param("value", "RSSMRA80A01H501U"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/doi").param("value", "10.1000/182"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/fletcher").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.fletcher16").value("1ede"));
+    }
 }
