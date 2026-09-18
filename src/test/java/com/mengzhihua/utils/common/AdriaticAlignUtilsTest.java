@@ -66,6 +66,6 @@ class AdriaticAlignUtilsTest {
         assertEquals("Response is Stale", warning.text());
         assertTrue(warning.stale());
         assertTrue(WarningUtil.known("110 - \"Response is Stale\""));
-        assertEquals("4b37", HashUtil.crc16ModbusHex("123456789"));
+        assertEquals("44c2", HashUtil.crc16MaximHex("123456789"));
     }
 }

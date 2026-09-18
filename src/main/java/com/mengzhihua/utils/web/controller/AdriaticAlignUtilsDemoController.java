@@ -113,11 +113,11 @@ public class AdriaticAlignUtilsDemoController {
         return Result.ok(data);
     }
 
-    @GetMapping("/crc16-modbus")
-    @Operation(summary = "CRC-16/MODBUS")
-    public Result<Map<String, Object>> crc16Modbus(@RequestParam(defaultValue = "123456789") String text) {
+    @GetMapping("/crc16-maxim")
+    @Operation(summary = "CRC-16/MAXIM")
+    public Result<Map<String, Object>> crc16Maxim(@RequestParam(defaultValue = "123456789") String text) {
         Map<String, Object> data = new LinkedHashMap<>();
-        data.put("crc16Modbus", HashUtil.crc16ModbusHex(text));
+        data.put("crc16Maxim", HashUtil.crc16MaximHex(text));
         return Result.ok(data);
     }
 }

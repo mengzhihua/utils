@@ -2731,12 +2731,12 @@ export const tools = [
       fields: [{ name: 'header', label: 'Warning', value: '110 - "Response is Stale"' }]
     },
     {
-      id: 'crc16-modbus',
+      id: 'crc16-maxim',
       group: 'crypto',
-      title: 'CRC-16/MODBUS',
-      summary: 'HashUtil.crc16Modbus',
+      title: 'CRC-16/MAXIM',
+      summary: 'HashUtil.crc16Maxim',
       method: 'GET',
-      path: '/api/utils/crc16-modbus',
+      path: '/api/utils/crc16-maxim',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]

@@ -595,8 +595,8 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.valid").value(true));
 
-        mockMvc.perform(get("/api/utils/crc16-modbus").param("text", "123456789"))
+        mockMvc.perform(get("/api/utils/crc16-maxim").param("text", "123456789"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.crc16Modbus").value("4b37"));
+                .andExpect(jsonPath("$.data.crc16Maxim").value("44c2"));
     }
 }

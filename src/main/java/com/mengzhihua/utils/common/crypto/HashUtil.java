@@ -369,19 +369,7 @@ public final class HashUtil {
      * CRC-16/MODBUS (poly 0xA001, init 0xFFFF). {@code 123456789} → {@code 4b37}.
      */
     public static int crc16Modbus(byte[] data) {
-        byte[] bytes = data == null ? new byte[0] : data;
-        int crc = 0xffff;
-        for (byte b : bytes) {
-            crc ^= b & 0xff;
-            for (int i = 0; i < 8; i++) {
-                if ((crc & 1) != 0) {
-                    crc = (crc >>> 1) ^ 0xa001;
-                } else {
-                    crc >>>= 1;
-                }
-            }
-        }
-        return crc & 0xffff;
+        return crc16Reflected(data, 0xffff);
     }
 
     /**
@@ -518,19 +506,19 @@ public final class HashUtil {
     }
 
     /**
-     * CRC-16/MODBUS (ARC with init {@code 0xFFFF}). {@code 123456789} → {@code 4b37}.
+     * CRC-16/MAXIM (Dallas 1-Wire, ARC then xor {@code 0xFFFF}). {@code 123456789} → {@code 44c2}.
      */
-    public static int crc16Modbus(String text) {
+    public static int crc16Maxim(String text) {
         byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
-        return crc16Modbus(data);
+        return crc16Maxim(data);
     }
 
-    public static String crc16ModbusHex(String text) {
-        return String.format(Locale.ROOT, "%04x", crc16Modbus(text));
+    public static String crc16MaximHex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Maxim(text));
     }
 
-    public static int crc16Modbus(byte[] data) {
-        return crc16Reflected(data, 0xffff);
+    public static int crc16Maxim(byte[] data) {
+        return crc16Reflected(data, 0) ^ 0xffff;
     }
 
     private static int crc16Reflected(byte[] data, int init) {
