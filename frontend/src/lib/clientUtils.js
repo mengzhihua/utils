@@ -1084,6 +1084,23 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, valid: isVnMst(digits) }
     }
+    case 'ein-local': {
+      const raw = String(values.value || '').trim()
+      const digits = raw.replace(/\D/g, '')
+      return { normalized: digits, formatted: digits.length === 9 ? `${digits.slice(0, 2)}-${digits.slice(2)}` : raw, valid: isEin(raw) }
+    }
+    case 'ogrn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isOgrn(digits) }
+    }
+    case 'snils-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isSnils(digits) }
+    }
+    case 'nipt-local': {
+      const compact = String(values.value || '').replace(/[\s().-]/g, '').toUpperCase().replace(/^AL/, '')
+      return { normalized: compact, valid: isNipt(compact) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2957,6 +2974,49 @@ function isVnMst(digits) {
   for (let i = 0; i < 9; i++) sum += Number(digits[i]) * w[i]
   const check = 10 - (sum % 11)
   return check !== 10 && Number(digits[9]) === check
+}
+
+const EIN_PREFIXES = new Set([
+  '01', '02', '03', '04', '05', '06', '10', '11', '12', '13', '14', '15', '16',
+  '20', '21', '22', '23', '24', '25', '26', '27', '30', '31', '32', '33', '34',
+  '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47',
+  '48', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61',
+  '62', '63', '64', '65', '66', '67', '68', '71', '72', '73', '74', '75', '76',
+  '77', '80', '81', '82', '83', '84', '85', '86', '87', '88', '90', '91', '92',
+  '93', '94', '95', '98', '99'
+])
+
+function isEin(raw) {
+  if (raw.includes('-') && !/^\d{2}-\d{7}$/.test(raw.trim())) return false
+  const digits = String(raw || '').replace(/\D/g, '')
+  return /^\d{9}$/.test(digits) && EIN_PREFIXES.has(digits.slice(0, 2))
+}
+
+function isOgrn(digits) {
+  if (/^[1-9]\d{12}$/.test(digits)) {
+    return Number(digits[12]) === Number(digits.slice(0, 12)) % 11 % 10
+  }
+  if (!/^[34]\d{14}$/.test(digits)) return false
+  const rem = Number(digits.slice(0, 14)) % 13
+  return rem <= 9 && Number(digits[14]) === rem
+}
+
+function isSnils(digits) {
+  if (!/^\d{11}$/.test(digits) || digits.startsWith('000000000')) return false
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += Number(digits[i]) * (9 - i)
+  let check
+  if (sum < 100) check = String(sum).padStart(2, '0')
+  else if (sum === 100 || sum === 101) check = '00'
+  else {
+    const rem = sum % 101
+    check = rem === 100 || rem === 101 ? '00' : String(rem).padStart(2, '0')
+  }
+  return digits.slice(9) === check
+}
+
+function isNipt(compact) {
+  return /^[A-M]\d{8}[A-Z]$/.test(compact)
 }
 
 function isRegistrikood(digits) {

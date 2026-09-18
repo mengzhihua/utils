@@ -633,6 +633,35 @@ public final class HashUtil {
         return String.format(Locale.ROOT, "%04x", crc16Dnp(text));
     }
 
+    /**
+     * CRC-16/CMS (poly {@code 0x8005}, init {@code 0xFFFF}). {@code 123456789} → {@code aee7}.
+     */
+    public static int crc16Cms(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Cms(data);
+    }
+
+    public static String crc16CmsHex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Cms(text));
+    }
+
+    public static int crc16Cms(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0xffff;
+        for (byte b : bytes) {
+            crc ^= (b & 0xff) << 8;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 0x8000) != 0) {
+                    crc = (crc << 1) ^ 0x8005;
+                } else {
+                    crc <<= 1;
+                }
+                crc &= 0xffff;
+            }
+        }
+        return crc;
+    }
+
     public static int crc16Dnp(byte[] data) {
         byte[] bytes = data == null ? new byte[0] : data;
         int crc = 0;

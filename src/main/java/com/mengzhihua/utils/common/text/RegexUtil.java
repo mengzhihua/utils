@@ -119,6 +119,10 @@ import com.mengzhihua.utils.common.validate.NikUtil;
 import com.mengzhihua.utils.common.validate.NzbnUtil;
 import com.mengzhihua.utils.common.validate.PeRucUtil;
 import com.mengzhihua.utils.common.validate.UenUtil;
+import com.mengzhihua.utils.common.validate.EinUtil;
+import com.mengzhihua.utils.common.validate.NiptUtil;
+import com.mengzhihua.utils.common.validate.OgrnUtil;
+import com.mengzhihua.utils.common.validate.SnilsUtil;
 import com.mengzhihua.utils.common.validate.VnMstUtil;
 import com.mengzhihua.utils.common.validate.RodneCisloUtil;
 import com.mengzhihua.utils.common.validate.TajUtil;
@@ -357,6 +361,10 @@ public final class RegexUtil {
         TYPES.put("peruc", PeRucUtil::isValid);
         TYPES.put("nik", NikUtil::isValid);
         TYPES.put("vnmst", VnMstUtil::isValid);
+        TYPES.put("ein", EinUtil::isValid);
+        TYPES.put("ogrn", OgrnUtil::isValid);
+        TYPES.put("snils", SnilsUtil::isValid);
+        TYPES.put("nipt", NiptUtil::isValid);
     }
 
     private RegexUtil() {
