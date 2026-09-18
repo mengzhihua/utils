@@ -56,9 +56,9 @@ public final class CprUtil {
         if (digits.length() != 10) {
             throw new IllegalArgumentException("CPR must be 10 digits");
         }
-        int yy = Integer.parseInt(digits.substring(0, 2));
+        int day = Integer.parseInt(digits.substring(0, 2));
         int month = Integer.parseInt(digits.substring(2, 4));
-        int day = Integer.parseInt(digits.substring(4, 6));
+        int yy = Integer.parseInt(digits.substring(4, 6));
         int serialHead = digits.charAt(6) - '0';
         int century = serialHead <= 3 ? 1900 : (yy <= 36 ? 2000 : 1900);
         return LocalDate.of(century + yy, month, day);
@@ -77,12 +77,12 @@ public final class CprUtil {
     }
 
     private static boolean validDate(String digits) {
+        int day = Integer.parseInt(digits.substring(0, 2));
         int month = Integer.parseInt(digits.substring(2, 4));
-        int day = Integer.parseInt(digits.substring(4, 6));
         if (month < 1 || month > 12 || day < 1 || day > 31) {
             return false;
         }
-        int yy = Integer.parseInt(digits.substring(0, 2));
+        int yy = Integer.parseInt(digits.substring(4, 6));
         try {
             LocalDate.of(1900 + yy, month, day);
             return true;
