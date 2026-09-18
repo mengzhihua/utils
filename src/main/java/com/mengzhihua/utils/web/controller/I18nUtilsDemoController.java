@@ -8,10 +8,14 @@ import java.util.Map;
 
 import com.mengzhihua.utils.common.api.Result;
 import com.mengzhihua.utils.common.i18n.AcceptLanguageUtil;
+import com.mengzhihua.utils.common.i18n.BidiUtil;
+import com.mengzhihua.utils.common.i18n.CalendarLocaleUtil;
 import com.mengzhihua.utils.common.i18n.CollationUtil;
 import com.mengzhihua.utils.common.i18n.I18nFormatUtil;
 import com.mengzhihua.utils.common.i18n.I18nUtil;
 import com.mengzhihua.utils.common.i18n.LocaleUtil;
+import com.mengzhihua.utils.common.i18n.PluralUtil;
+import com.mengzhihua.utils.common.i18n.TimezoneUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.context.MessageSource;
@@ -80,6 +84,8 @@ public class I18nUtilsDemoController {
         data.put("percent", I18nFormatUtil.percent(locale, "0.125"));
         data.put("date", I18nFormatUtil.date(locale, date));
         data.put("dateTimeZone", I18nFormatUtil.dateTimeZone(locale, date + "T08:15:00", zone));
+        data.put("fullDate", I18nFormatUtil.fullDate(locale, date));
+        data.put("compact", I18nFormatUtil.compact(locale, amount));
         data.put("list", I18nFormatUtil.list(locale, items));
         return Result.ok(data);
     }
@@ -103,6 +109,56 @@ public class I18nUtilsDemoController {
         data.put("negotiated", AcceptLanguageUtil.negotiate(header, List.of(Locale.SIMPLIFIED_CHINESE, Locale.ENGLISH))
                 .toLanguageTag());
         data.put("tags", AcceptLanguageUtil.parse(header).stream().map(AcceptLanguageUtil.Weighted::tag).toList());
+        return Result.ok(data);
+    }
+
+    @GetMapping("/i18n/timezone")
+    @Operation(summary = "时区显示名")
+    public Result<Map<String, Object>> timezone(
+            @RequestParam(defaultValue = "Europe/Berlin") String zone,
+            @RequestParam(defaultValue = "de") String locale) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("id", TimezoneUtil.id(zone));
+        data.put("displayName", TimezoneUtil.displayName(zone, locale));
+        data.put("shortName", TimezoneUtil.shortName(zone, locale));
+        data.put("offset", TimezoneUtil.offset(zone));
+        return Result.ok(data);
+    }
+
+    @GetMapping("/i18n/plural")
+    @Operation(summary = "复数选择")
+    public Result<Map<String, Object>> plural(
+            @RequestParam(defaultValue = "en") String locale,
+            @RequestParam(defaultValue = "3") int count) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("count", count);
+        data.put("category", PluralUtil.category(count));
+        data.put("items", PluralUtil.items(locale, count));
+        return Result.ok(data);
+    }
+
+    @GetMapping("/i18n/bidi")
+    @Operation(summary = "双向文本")
+    public Result<Map<String, Object>> bidi(
+            @RequestParam(defaultValue = "مرحبا") String text,
+            @RequestParam(defaultValue = "ar") String locale) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("direction", BidiUtil.direction(text));
+        data.put("rtl", BidiUtil.rtl(text));
+        data.put("ltr", BidiUtil.ltr(text));
+        data.put("mixed", BidiUtil.mixed(text));
+        data.put("localeRtl", BidiUtil.localeRtl(locale));
+        return Result.ok(data);
+    }
+
+    @GetMapping("/i18n/calendar")
+    @Operation(summary = "本地化日历")
+    public Result<Map<String, Object>> calendar(@RequestParam(defaultValue = "de-DE") String locale) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("firstDay", CalendarLocaleUtil.firstDay(locale));
+        data.put("minimalDaysInFirstWeek", CalendarLocaleUtil.minimalDaysInFirstWeek(locale));
+        data.put("keys", I18nUtil.keys(LocaleUtil.parse(locale)));
+        data.put("languages", I18nUtil.availableLanguages());
         return Result.ok(data);
     }
 }

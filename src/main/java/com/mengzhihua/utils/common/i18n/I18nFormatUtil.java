@@ -81,6 +81,19 @@ public final class I18nFormatUtil {
         return Currency.getInstance(code).getSymbol(tag);
     }
 
+    public static String compact(String locale, String value) {
+        Locale tag = LocaleUtil.parse(locale);
+        NumberFormat format = NumberFormat.getCompactNumberInstance(tag, NumberFormat.Style.SHORT);
+        format.setMaximumFractionDigits(1);
+        return format.format(decimal(value));
+    }
+
+    public static String fullDate(String locale, String isoDate) {
+        Locale tag = LocaleUtil.parse(locale);
+        LocalDate date = StringUtil.isBlank(isoDate) ? LocalDate.of(2026, 9, 18) : LocalDate.parse(isoDate.trim());
+        return DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(tag).format(date);
+    }
+
     public static String list(String locale, String items) {
         Locale tag = LocaleUtil.parse(locale);
         List<String> values = new ArrayList<>();

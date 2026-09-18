@@ -1488,6 +1488,36 @@ export const clientTools = [
       title: '突尼斯税号',
       summary: '1234567/M/A/E/001',
       fields: [{ name: 'value', label: 'MF', value: '1234567/M/A/E/001' }]
+    },
+    {
+      id: 'i18n-plural-local',
+      group: 'text',
+      title: '复数选择',
+      summary: 'Intl.PluralRules',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'en' },
+        { name: 'count', label: '数量', value: '3' }
+      ]
+    },
+    {
+      id: 'i18n-bidi-local',
+      group: 'text',
+      title: '双向文本',
+      summary: 'RTL / LTR',
+      fields: [
+        { name: 'text', label: '文本', value: 'مرحبا' },
+        { name: 'locale', label: 'Locale', value: 'ar' }
+      ]
+    },
+    {
+      id: 'i18n-timezone-local',
+      group: 'text',
+      title: '时区显示名',
+      summary: 'Intl.DateTimeFormat',
+      fields: [
+        { name: 'zone', label: '时区', value: 'Europe/Berlin' },
+        { name: 'locale', label: 'Locale', value: 'de' }
+      ]
     }
   ]
 

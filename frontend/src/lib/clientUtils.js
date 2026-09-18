@@ -1189,6 +1189,30 @@ export async function runClientTool(id, values) {
       const compact = normalizeTnMf(values.value)
       return { normalized: compact, formatted: formatTnMf(compact), valid: isTnMf(compact) }
     }
+    case 'i18n-plural-local': {
+      const locale = String(values.locale || 'en')
+      const count = Number(values.count || 0)
+      const category = new Intl.PluralRules(locale).select(count)
+      const items = locale.startsWith('zh')
+        ? (count === 0 ? '没有条目' : `${count} 条`)
+        : count === 0 ? 'no items' : count === 1 ? 'one item' : `${count} items`
+      return { locale, count, category, items }
+    }
+    case 'i18n-bidi-local': {
+      const text = String(values.text || '')
+      const locale = String(values.locale || 'en')
+      const rtl = /[\u0590-\u08FF]/.test(text)
+      const localeRtl = ['ar', 'he', 'fa', 'ur'].includes(locale.split('-')[0])
+      return { direction: rtl ? 'rtl' : 'ltr', rtl, ltr: !rtl, localeRtl }
+    }
+    case 'i18n-timezone-local': {
+      const locale = String(values.locale || 'en')
+      const zone = String(values.zone || 'UTC')
+      const fmt = new Intl.DateTimeFormat(locale, { timeZone: zone, timeZoneName: 'long' })
+      const parts = fmt.formatToParts(new Date('2026-09-18T08:15:00Z'))
+      const displayName = parts.find((part) => part.type === 'timeZoneName')?.value || zone
+      return { id: zone, displayName, compact: new Intl.NumberFormat(locale, { notation: 'compact' }).format(1234.5) }
+    }
     default:
       throw new Error('unknown client tool')
   }

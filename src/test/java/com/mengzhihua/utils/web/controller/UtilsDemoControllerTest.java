@@ -863,5 +863,22 @@ class UtilsDemoControllerTest {
         mockMvc.perform(get("/api/utils/crc8-sae").param("text", "123456789"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc8Sae").value("4b"));
+
+        mockMvc.perform(get("/api/utils/i18n/plural").param("locale", "en").param("count", "3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.items").value("3 items"));
+
+        mockMvc.perform(get("/api/utils/i18n/bidi").param("text", "مرحبا").param("locale", "ar"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.direction").value("rtl"))
+                .andExpect(jsonPath("$.data.localeRtl").value(true));
+
+        mockMvc.perform(get("/api/utils/i18n/calendar").param("locale", "de-DE"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.firstDay").value("MONDAY"));
+
+        mockMvc.perform(get("/api/utils/i18n/timezone").param("zone", "Europe/Berlin").param("locale", "de"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value("Europe/Berlin"));
     }
 }

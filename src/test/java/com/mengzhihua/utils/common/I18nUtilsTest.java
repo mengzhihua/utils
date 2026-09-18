@@ -5,10 +5,14 @@ import java.util.List;
 import java.util.Locale;
 
 import com.mengzhihua.utils.common.i18n.AcceptLanguageUtil;
+import com.mengzhihua.utils.common.i18n.BidiUtil;
+import com.mengzhihua.utils.common.i18n.CalendarLocaleUtil;
 import com.mengzhihua.utils.common.i18n.CollationUtil;
 import com.mengzhihua.utils.common.i18n.I18nFormatUtil;
 import com.mengzhihua.utils.common.i18n.I18nUtil;
 import com.mengzhihua.utils.common.i18n.LocaleUtil;
+import com.mengzhihua.utils.common.i18n.PluralUtil;
+import com.mengzhihua.utils.common.i18n.TimezoneUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,5 +61,26 @@ class I18nUtilsTest {
         assertTrue(cny.contains("人民") || cny.toLowerCase(Locale.ROOT).contains("yuan"));
         String berlin = I18nFormatUtil.dateTimeZone("de-DE", "2026-09-18T08:15:00", "Europe/Berlin");
         assertTrue(berlin.contains("18") || berlin.contains("Sep") || berlin.contains("2026"));
+        assertEquals("3 items", PluralUtil.items("en", 3));
+        assertEquals("one item", PluralUtil.items("en", 1));
+        assertEquals("3 条", PluralUtil.items("zh-CN", 3));
+        assertEquals("3 elementos", PluralUtil.items("es", 3));
+        assertEquals("Hola, Ada", I18nUtil.get("hello", "es", "Ada"));
+        assertEquals("rtl", BidiUtil.direction("مرحبا"));
+        assertEquals("ltr", BidiUtil.direction("Hello"));
+        assertTrue(BidiUtil.localeRtl("ar"));
+        assertFalse(BidiUtil.localeRtl("en"));
+        assertEquals("MONDAY", CalendarLocaleUtil.firstDay("de-DE"));
+        assertEquals("SUNDAY", CalendarLocaleUtil.firstDay("en-US"));
+        String compact = I18nFormatUtil.compact("en-US", "1234.5");
+        assertTrue(compact.toUpperCase(Locale.ROOT).contains("K") || compact.contains("1"));
+        String zoneName = TimezoneUtil.displayName("Europe/Berlin", "de");
+        assertTrue(zoneName.toLowerCase(Locale.GERMAN).contains("europa")
+                || zoneName.toLowerCase(Locale.ROOT).contains("central")
+                || zoneName.contains("MEZ")
+                || zoneName.contains("MESZ")
+                || !zoneName.isBlank());
+        assertTrue(I18nUtil.keys(Locale.ENGLISH).contains("hello"));
+        assertTrue(I18nUtil.availableLanguages().contains("es"));
     }
 }

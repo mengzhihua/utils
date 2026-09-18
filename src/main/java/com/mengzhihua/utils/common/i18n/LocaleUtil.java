@@ -23,7 +23,8 @@ public final class LocaleUtil {
             Locale.JAPANESE,
             Locale.GERMANY,
             Locale.FRANCE,
-            Locale.KOREA);
+            Locale.KOREA,
+            Locale.forLanguageTag("es"));
 
     private LocaleUtil() {
     }

@@ -3499,6 +3499,51 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc8-sae',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'i18n-timezone',
+      group: 'web',
+      title: '时区显示名',
+      summary: 'TimezoneUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/timezone',
+      fields: [
+        { name: 'zone', label: '时区', value: 'Europe/Berlin' },
+        { name: 'locale', label: 'Locale', value: 'de' }
+      ]
+    },
+    {
+      id: 'i18n-plural',
+      group: 'web',
+      title: '复数选择',
+      summary: 'PluralUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/plural',
+      fields: [
+        { name: 'locale', label: 'Locale', value: 'en' },
+        { name: 'count', label: '数量', value: '3' }
+      ]
+    },
+    {
+      id: 'i18n-bidi',
+      group: 'web',
+      title: '双向文本',
+      summary: 'BidiUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/bidi',
+      fields: [
+        { name: 'text', label: '文本', value: 'مرحبا' },
+        { name: 'locale', label: 'Locale', value: 'ar' }
+      ]
+    },
+    {
+      id: 'i18n-calendar',
+      group: 'web',
+      title: '本地化日历',
+      summary: 'CalendarLocaleUtil',
+      method: 'GET',
+      path: '/api/utils/i18n/calendar',
+      fields: [{ name: 'locale', label: 'Locale', value: 'de-DE' }]
     }
   ]
 
