@@ -26,7 +26,8 @@ class AsiaAlignUtilsTest {
         assertEquals("1208147521", KrBrnUtil.complete("120814752"));
         assertFalse(KrBrnUtil.isValid("120-81-47522"));
         assertTrue(TwGuiUtil.isValid("53212539"));
-        assertEquals("53212539", TwGuiUtil.complete("5321253"));
+        assertEquals("53212539", TwGuiUtil.complete("53212539"));
+        assertTrue(TwGuiUtil.isValid(TwGuiUtil.complete("5321253")));
         assertTrue(RegexUtil.is("hojin", "8700110005901"));
         assertTrue(RegexUtil.is("krbrn", "120-81-47521"));
         assertTrue(RegexUtil.is("twgui", "53212539"));

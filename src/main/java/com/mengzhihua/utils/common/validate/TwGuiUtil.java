@@ -42,6 +42,9 @@ public final class TwGuiUtil {
 
     public static String complete(String body7) {
         String digits = normalize(body7);
+        if (isValid(digits)) {
+            return digits;
+        }
         if (digits.length() == 8) {
             digits = digits.substring(0, 7);
         }

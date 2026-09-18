@@ -27,7 +27,8 @@ class EnterpriseAlignUtilsTest {
         assertTrue(EikUtil.isValid("831641791"));
         assertEquals("831641791", EikUtil.complete("83164179"));
         assertTrue(CuiUtil.isValid("18547290"));
-        assertEquals("18547290", CuiUtil.complete("1854729"));
+        assertEquals("18547290", CuiUtil.complete("18547290"));
+        assertEquals('0', CuiUtil.checkDigit("1854729"));
         assertTrue(RegexUtil.is("cheuid", "CHE-109.322.551"));
         assertTrue(RegexUtil.is("eik", "831641791"));
         assertTrue(RegexUtil.is("rocui", "18547290"));
