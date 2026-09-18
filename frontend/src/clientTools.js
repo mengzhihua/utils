@@ -1688,6 +1688,34 @@ export const clientTools = [
       title: '毛里求斯身份证',
       summary: 'B150390123456A',
       fields: [{ name: 'value', label: 'NID', value: 'B150390123456A' }]
+    },
+    {
+      id: 'ec-ci-local',
+      group: 'net',
+      title: '厄瓜多尔身份证',
+      summary: '1714307103',
+      fields: [{ name: 'value', label: 'CI', value: '171430710-3' }]
+    },
+    {
+      id: 'ec-ruc-local',
+      group: 'net',
+      title: '厄瓜多尔税号',
+      summary: '1792060346001',
+      fields: [{ name: 'value', label: 'RUC', value: '1792060346-001' }]
+    },
+    {
+      id: 'it-iva-local',
+      group: 'net',
+      title: '意大利增值税号',
+      summary: '00743110157',
+      fields: [{ name: 'value', label: 'P.IVA', value: 'IT 00743110157' }]
+    },
+    {
+      id: 'ie-vat-local',
+      group: 'net',
+      title: '爱尔兰税号',
+      summary: '6433435F',
+      fields: [{ name: 'value', label: 'VAT', value: 'IE 6433435OA' }]
     }
   ]
 

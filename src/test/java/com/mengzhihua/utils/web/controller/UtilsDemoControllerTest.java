@@ -1049,4 +1049,34 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc8Wcdma").value("25"));
     }
+
+    @Test
+    void ecuadorItalyIreland() throws Exception {
+        mockMvc.perform(get("/api/utils/ec-ci").param("value", "171430710-3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("1714307103"));
+
+        mockMvc.perform(get("/api/utils/ec-ruc").param("value", "1792060346-001"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/it-iva").param("value", "IT 00743110157"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("00743110157"));
+
+        mockMvc.perform(get("/api/utils/ie-vat").param("value", "IE 6433435OA"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/xss-protection").param("header", "1; mode=block"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.enabled").value(true))
+                .andExpect(jsonPath("$.data.modeBlock").value(true));
+
+        mockMvc.perform(get("/api/utils/crc8-maxim").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc8Maxim").value("a1"));
+    }
 }
