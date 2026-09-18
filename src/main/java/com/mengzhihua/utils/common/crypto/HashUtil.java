@@ -645,6 +645,65 @@ public final class HashUtil {
         return String.format(Locale.ROOT, "%04x", crc16Cms(text));
     }
 
+    /**
+     * CRC-16/CDMA2000 (poly {@code 0xC867}, init {@code 0xFFFF}).
+     * {@code 123456789} → {@code 4c06}.
+     */
+    public static int crc16Cdma2000(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Cdma2000(data);
+    }
+
+    public static String crc16Cdma2000Hex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Cdma2000(text));
+    }
+
+    public static int crc16Cdma2000(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0xffff;
+        for (byte b : bytes) {
+            crc ^= (b & 0xff) << 8;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 0x8000) != 0) {
+                    crc = (crc << 1) ^ 0xc867;
+                } else {
+                    crc <<= 1;
+                }
+                crc &= 0xffff;
+            }
+        }
+        return crc;
+    }
+
+    /**
+     * CRC-32/AUTOSAR (poly {@code 0xF4ACFB13}, reflected {@code 0xC8DF352F}).
+     * {@code 123456789} → {@code 1697d06a}.
+     */
+    public static int crc32Autosar(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc32Autosar(data);
+    }
+
+    public static String crc32AutosarHex(String text) {
+        return String.format(Locale.ROOT, "%08x", crc32Autosar(text));
+    }
+
+    public static int crc32Autosar(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0xffffffff;
+        for (byte b : bytes) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 1) != 0) {
+                    crc = (crc >>> 1) ^ 0xc8df352f;
+                } else {
+                    crc >>>= 1;
+                }
+            }
+        }
+        return ~crc;
+    }
+
     public static int crc16Cms(byte[] data) {
         byte[] bytes = data == null ? new byte[0] : data;
         int crc = 0xffff;

@@ -3212,6 +3212,123 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-cms',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'rif',
+      group: 'validate',
+      title: '委内瑞拉税号',
+      summary: 'RifUtil',
+      method: 'GET',
+      path: '/api/utils/rif',
+      fields: [{ name: 'value', label: 'RIF', value: 'V-11470283-4' }]
+    },
+    {
+      id: 'rnc',
+      group: 'validate',
+      title: '多米尼加税号',
+      summary: 'RncUtil',
+      method: 'GET',
+      path: '/api/utils/rnc',
+      fields: [{ name: 'value', label: 'RNC', value: '1-01-85004-3' }]
+    },
+    {
+      id: 'unp',
+      group: 'validate',
+      title: '白俄罗斯税号',
+      summary: 'UnpUtil',
+      method: 'GET',
+      path: '/api/utils/unp',
+      fields: [{ name: 'value', label: 'УНП', value: '200988541' }]
+    },
+    {
+      id: 'itin',
+      group: 'validate',
+      title: '美国个人税号',
+      summary: 'ItinUtil',
+      method: 'GET',
+      path: '/api/utils/itin',
+      fields: [{ name: 'value', label: 'ITIN', value: '912-90-3456' }]
+    },
+    {
+      id: 'reporting-endpoints',
+      group: 'web',
+      title: 'HTTP Reporting-Endpoints',
+      summary: 'ReportingEndpointsUtil',
+      method: 'GET',
+      path: '/api/utils/reporting-endpoints',
+      fields: [{ name: 'header', label: 'Reporting-Endpoints', type: 'textarea', value: 'csp="https://example.com/csp", default="https://example.com/reports"' }]
+    },
+    {
+      id: 'accept-ch',
+      group: 'web',
+      title: 'HTTP Accept-CH',
+      summary: 'AcceptChUtil',
+      method: 'GET',
+      path: '/api/utils/accept-ch',
+      fields: [{ name: 'header', label: 'Accept-CH', value: 'Sec-CH-UA-Mobile, DPR' }]
+    },
+    {
+      id: 'crc16-cdma2000',
+      group: 'crypto',
+      title: 'CRC-16/CDMA2000',
+      summary: 'HashUtil.crc16Cdma2000',
+      method: 'GET',
+      path: '/api/utils/crc16-cdma2000',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'cnic',
+      group: 'validate',
+      title: '巴基斯坦身份证',
+      summary: 'CnicUtil',
+      method: 'GET',
+      path: '/api/utils/cnic',
+      fields: [{ name: 'value', label: 'CNIC', value: '34201-0891231-8' }]
+    },
+    {
+      id: 'idno',
+      group: 'validate',
+      title: '摩尔多瓦企业号',
+      summary: 'IdnoUtil',
+      method: 'GET',
+      path: '/api/utils/idno',
+      fields: [{ name: 'value', label: 'IDNO', value: '1008600038413' }]
+    },
+    {
+      id: 'gh-tin',
+      group: 'validate',
+      title: '加纳税号',
+      summary: 'GhTinUtil',
+      method: 'GET',
+      path: '/api/utils/gh-tin',
+      fields: [{ name: 'value', label: 'TIN', value: 'C0000803561' }]
+    },
+    {
+      id: 'ke-pin',
+      group: 'validate',
+      title: '肯尼亚税号',
+      summary: 'KePinUtil',
+      method: 'GET',
+      path: '/api/utils/ke-pin',
+      fields: [{ name: 'value', label: 'PIN', value: 'P051365947M' }]
+    },
+    {
+      id: 'document-policy',
+      group: 'web',
+      title: 'HTTP Document-Policy',
+      summary: 'DocumentPolicyUtil',
+      method: 'GET',
+      path: '/api/utils/document-policy',
+      fields: [{ name: 'header', label: 'Document-Policy', type: 'textarea', value: 'unsized-media=?0, max-image-bpp=2.0' }]
+    },
+    {
+      id: 'crc32-autosar',
+      group: 'crypto',
+      title: 'CRC-32/AUTOSAR',
+      summary: 'HashUtil.crc32Autosar',
+      method: 'GET',
+      path: '/api/utils/crc32-autosar',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

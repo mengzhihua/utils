@@ -749,4 +749,43 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc16Cms").value("aee7"));
     }
+
+    @Test
+    void rifRncUnp() throws Exception {
+        mockMvc.perform(get("/api/utils/rif").param("value", "V-11470283-4"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/rnc").param("value", "1-01-85004-3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/unp").param("value", "200988541"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/crc16-cdma2000").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Cdma2000").value("4c06"));
+    }
+
+    @Test
+    void cnicIdnoGhTin() throws Exception {
+        mockMvc.perform(get("/api/utils/cnic").param("value", "34201-0891231-8"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.province").value("Punjab"));
+
+        mockMvc.perform(get("/api/utils/idno").param("value", "1008600038413"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/gh-tin").param("value", "C0000803561"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/crc32-autosar").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc32Autosar").value("1697d06a"));
+    }
 }
