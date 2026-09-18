@@ -2834,6 +2834,132 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc32-posix',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'che-uid',
+      group: 'validate',
+      title: '瑞士企业号',
+      summary: 'CheUidUtil',
+      method: 'GET',
+      path: '/api/utils/che-uid',
+      fields: [{ name: 'value', label: 'CHE-UID', value: 'CHE-109.322.551' }]
+    },
+    {
+      id: 'eik',
+      group: 'validate',
+      title: '保加利亚 EIK',
+      summary: 'EikUtil',
+      method: 'GET',
+      path: '/api/utils/eik',
+      fields: [{ name: 'value', label: 'EIK', value: '831641791' }]
+    },
+    {
+      id: 'ro-cui',
+      group: 'validate',
+      title: '罗马尼亚 CUI',
+      summary: 'CuiUtil',
+      method: 'GET',
+      path: '/api/utils/ro-cui',
+      fields: [{ name: 'value', label: 'CUI', value: '18547290' }]
+    },
+    {
+      id: 'adoszam',
+      group: 'validate',
+      title: '匈牙利税号',
+      summary: 'AdoszamUtil',
+      method: 'GET',
+      path: '/api/utils/adoszam',
+      fields: [{ name: 'value', label: 'adószám', value: '18154111-2-41' }]
+    },
+    {
+      id: 'kbo',
+      group: 'validate',
+      title: '比利时企业号',
+      summary: 'KboUtil',
+      method: 'GET',
+      path: '/api/utils/kbo',
+      fields: [{ name: 'value', label: 'KBO', value: '0123.456.749' }]
+    },
+    {
+      id: 'clear-site-data',
+      group: 'web',
+      title: 'Clear-Site-Data',
+      summary: 'ClearSiteDataUtil',
+      method: 'GET',
+      path: '/api/utils/clear-site-data',
+      fields: [{ name: 'header', label: 'Header', value: '"cache", "cookies"' }]
+    },
+    {
+      id: 'crc16-usb',
+      group: 'crypto',
+      title: 'CRC-16/USB',
+      summary: 'HashUtil.crc16Usb',
+      method: 'GET',
+      path: '/api/utils/crc16-usb',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'hojin',
+      group: 'validate',
+      title: '日本法人番号',
+      summary: 'HojinUtil',
+      method: 'GET',
+      path: '/api/utils/hojin',
+      fields: [{ name: 'value', label: '法人番号', value: '8700110005901' }]
+    },
+    {
+      id: 'kr-brn',
+      group: 'validate',
+      title: '韩国事业者号',
+      summary: 'KrBrnUtil',
+      method: 'GET',
+      path: '/api/utils/kr-brn',
+      fields: [{ name: 'value', label: 'BRN', value: '120-81-47521' }]
+    },
+    {
+      id: 'tw-gui',
+      group: 'validate',
+      title: '台湾统一编号',
+      summary: 'TwGuiUtil',
+      method: 'GET',
+      path: '/api/utils/tw-gui',
+      fields: [{ name: 'value', label: 'GUI', value: '53212539' }]
+    },
+    {
+      id: 'edrpou',
+      group: 'validate',
+      title: '乌克兰 EDRPOU',
+      summary: 'EdrpouUtil',
+      method: 'GET',
+      path: '/api/utils/edrpou',
+      fields: [{ name: 'value', label: 'EDRPOU', value: '14360570' }]
+    },
+    {
+      id: 'rs-pib',
+      group: 'validate',
+      title: '塞尔维亚 PIB',
+      summary: 'PibUtil',
+      method: 'GET',
+      path: '/api/utils/rs-pib',
+      fields: [{ name: 'value', label: 'PIB', value: '101134702' }]
+    },
+    {
+      id: 'nel',
+      group: 'web',
+      title: 'HTTP NEL',
+      summary: 'NelUtil',
+      method: 'GET',
+      path: '/api/utils/nel',
+      fields: [{ name: 'header', label: 'NEL', type: 'textarea', value: '{"report_to":"nel","max_age":31536000,"include_subdomains":true}' }]
+    },
+    {
+      id: 'crc8-smbus',
+      group: 'crypto',
+      title: 'CRC-8/SMBUS',
+      summary: 'HashUtil.crc8Smbus',
+      method: 'GET',
+      path: '/api/utils/crc8-smbus',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

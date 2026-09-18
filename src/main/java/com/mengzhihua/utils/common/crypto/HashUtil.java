@@ -259,6 +259,35 @@ public final class HashUtil {
     }
 
     /**
+     * CRC-8/SMBUS (poly {@code 0x07}). {@code 123456789} → {@code f4}.
+     */
+    public static int crc8Smbus(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc8Smbus(data);
+    }
+
+    public static String crc8SmbusHex(String text) {
+        return String.format(Locale.ROOT, "%02x", crc8Smbus(text));
+    }
+
+    public static int crc8Smbus(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0;
+        for (byte b : bytes) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 0x80) != 0) {
+                    crc = (crc << 1) ^ 0x07;
+                } else {
+                    crc <<= 1;
+                }
+                crc &= 0xff;
+            }
+        }
+        return crc;
+    }
+
+    /**
      * CRC-64/ECMA-182. {@code 123456789} → {@code 6c40df5f0b497347}.
      */
     public static long crc64(String text) {
@@ -539,6 +568,22 @@ public final class HashUtil {
 
     public static int crc16Maxim(byte[] data) {
         return crc16Reflected(data, 0) ^ 0xffff;
+    }
+
+    /**
+     * CRC-16/USB (MODBUS then xor {@code 0xFFFF}). {@code 123456789} → {@code b4c8}.
+     */
+    public static int crc16Usb(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Usb(data);
+    }
+
+    public static String crc16UsbHex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Usb(text));
+    }
+
+    public static int crc16Usb(byte[] data) {
+        return crc16Reflected(data, 0xffff) ^ 0xffff;
     }
 
     private static int crc16Reflected(byte[] data, int init) {

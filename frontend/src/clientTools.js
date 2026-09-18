@@ -1190,6 +1190,62 @@ export const clientTools = [
       title: '西班牙 CIF',
       summary: 'A58818501',
       fields: [{ name: 'value', label: 'CIF', value: 'A58818501' }]
+    },
+    {
+      id: 'che-uid-local',
+      group: 'net',
+      title: '瑞士企业号',
+      summary: 'CHE-109.322.551',
+      fields: [{ name: 'value', label: 'CHE-UID', value: 'CHE-109.322.551' }]
+    },
+    {
+      id: 'cui-local',
+      group: 'net',
+      title: '罗马尼亚 CUI',
+      summary: '18547290',
+      fields: [{ name: 'value', label: 'CUI', value: '18547290' }]
+    },
+    {
+      id: 'kbo-local',
+      group: 'net',
+      title: '比利时企业号',
+      summary: '0123456749',
+      fields: [{ name: 'value', label: 'KBO', value: '0123.456.749' }]
+    },
+    {
+      id: 'hojin-local',
+      group: 'net',
+      title: '日本法人番号',
+      summary: '8700110005901',
+      fields: [{ name: 'value', label: '法人番号', value: '8700110005901' }]
+    },
+    {
+      id: 'kr-brn-local',
+      group: 'net',
+      title: '韩国事业者号',
+      summary: '120-81-47521',
+      fields: [{ name: 'value', label: 'BRN', value: '120-81-47521' }]
+    },
+    {
+      id: 'tw-gui-local',
+      group: 'net',
+      title: '台湾统一编号',
+      summary: '53212539',
+      fields: [{ name: 'value', label: 'GUI', value: '53212539' }]
+    },
+    {
+      id: 'edrpou-local',
+      group: 'net',
+      title: '乌克兰 EDRPOU',
+      summary: '14360570',
+      fields: [{ name: 'value', label: 'EDRPOU', value: '14360570' }]
+    },
+    {
+      id: 'pib-local',
+      group: 'net',
+      title: '塞尔维亚 PIB',
+      summary: '101134702',
+      fields: [{ name: 'value', label: 'PIB', value: '101134702' }]
     }
   ]
 

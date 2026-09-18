@@ -1000,6 +1000,38 @@ export async function runClientTool(id, values) {
       const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
       return { normalized: compact, valid: isCif(compact) }
     }
+    case 'che-uid-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isCheUid(digits) }
+    }
+    case 'cui-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isCui(digits) }
+    }
+    case 'kbo-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isKbo(digits) }
+    }
+    case 'hojin-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isHojin(digits) }
+    }
+    case 'kr-brn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isKrBrn(digits) }
+    }
+    case 'tw-gui-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isTwGui(digits) }
+    }
+    case 'edrpou-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isEdrpou(digits) }
+    }
+    case 'pib-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isPib(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2643,6 +2675,93 @@ function isCvr(digits) {
   if (rem === 1) return false
   const check = rem === 0 ? 0 : 11 - rem
   return Number(digits[7]) === check
+}
+
+function isCheUid(digits) {
+  if (!/^\d{9}$/.test(digits)) return false
+  const w = [5, 4, 3, 2, 7, 6, 5, 4]
+  let sum = 0
+  for (let i = 0; i < 8; i++) sum += Number(digits[i]) * w[i]
+  const rem = sum % 11
+  if (rem === 1) return false
+  const check = rem === 0 ? 0 : 11 - rem
+  return Number(digits[8]) === check
+}
+
+function isCui(digits) {
+  if (!/^[1-9]\d{1,9}$/.test(digits)) return false
+  const body = digits.slice(0, -1)
+  const padded = body.padStart(9, '0')
+  const w = [7, 5, 3, 2, 1, 7, 5, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += Number(padded[i]) * w[i]
+  return Number(digits[digits.length - 1]) === ((sum * 10) % 11 % 10)
+}
+
+function isKbo(digits) {
+  if (!/^[01]\d{9}$/.test(digits)) return false
+  const rem = Number(digits.slice(0, 8)) % 97
+  const check = String(97 - rem).padStart(2, '0')
+  return digits.slice(8) === check
+}
+
+function isHojin(digits) {
+  if (!/^[1-9]\d{12}$/.test(digits)) return false
+  let sum = 0
+  for (let i = 0; i < 12; i++) {
+    const n = 12 - i
+    sum += Number(digits[i + 1]) * (n % 2 === 0 ? 2 : 1)
+  }
+  return Number(digits[0]) === 9 - (sum % 9)
+}
+
+function isKrBrn(digits) {
+  if (!/^\d{10}$/.test(digits)) return false
+  const w = [1, 3, 7, 1, 3, 7, 1, 3, 5]
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += Number(digits[i]) * w[i]
+  sum += Math.floor((Number(digits[8]) * 5) / 10)
+  return Number(digits[9]) === (10 - (sum % 10)) % 10
+}
+
+function isTwGui(digits) {
+  if (!/^\d{8}$/.test(digits)) return false
+  const w = [1, 2, 1, 2, 1, 2, 4, 1]
+  let sum = 0
+  for (let i = 0; i < 8; i++) {
+    const n = Number(digits[i]) * w[i]
+    sum += Math.floor(n / 10) + (n % 10)
+  }
+  if (sum % 5 === 0) return true
+  return digits[6] === '7' && (sum + 1) % 5 === 0
+}
+
+function isEdrpou(digits) {
+  if (!/^\d{8}$/.test(digits)) return false
+  const first = Number(digits[0])
+  let w = first >= 3 && first <= 5 ? [7, 1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5, 6, 7]
+  let sum = 0
+  for (let i = 0; i < 7; i++) sum += Number(digits[i]) * w[i]
+  let rem = sum % 11
+  if (rem >= 10) {
+    w = w.map((n) => n + 2)
+    sum = 0
+    for (let i = 0; i < 7; i++) sum += Number(digits[i]) * w[i]
+    rem = (sum % 11) % 10
+  }
+  return Number(digits[7]) === rem
+}
+
+function isPib(digits) {
+  if (!/^[1-9]\d{8}$/.test(digits)) return false
+  let product = 10
+  for (let i = 0; i < 8; i++) {
+    let s = (Number(digits[i]) + product) % 10
+    if (s === 0) s = 10
+    product = (s * 2) % 11
+  }
+  const check = 11 - product
+  return Number(digits[8]) === (check === 10 ? 0 : check)
 }
 
 function isCif(compact) {
