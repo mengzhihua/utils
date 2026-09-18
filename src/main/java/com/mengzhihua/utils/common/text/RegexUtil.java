@@ -75,6 +75,14 @@ import com.mengzhihua.utils.common.validate.IrdUtil;
 import com.mengzhihua.utils.common.validate.MyKadUtil;
 import com.mengzhihua.utils.common.validate.RutUtil;
 import com.mengzhihua.utils.common.validate.SaIdUtil;
+import com.mengzhihua.utils.common.validate.CnpUtil;
+import com.mengzhihua.utils.common.validate.EgnUtil;
+import com.mengzhihua.utils.common.validate.IcoUtil;
+import com.mengzhihua.utils.common.validate.IsraeliIdUtil;
+import com.mengzhihua.utils.common.validate.OibUtil;
+import com.mengzhihua.utils.common.validate.RegonUtil;
+import com.mengzhihua.utils.common.validate.TcKimlikUtil;
+import com.mengzhihua.utils.common.validate.ThaiIdUtil;
 import com.mengzhihua.utils.common.validate.VinUtil;
 
 /**
@@ -259,6 +267,14 @@ public final class RegexUtil {
         TYPES.put("said", SaIdUtil::isValid);
         TYPES.put("ird", IrdUtil::isValid);
         TYPES.put("mykad", MyKadUtil::isValid);
+        TYPES.put("tckn", TcKimlikUtil::isValid);
+        TYPES.put("israeliid", IsraeliIdUtil::isValid);
+        TYPES.put("cnp", CnpUtil::isValid);
+        TYPES.put("oib", OibUtil::isValid);
+        TYPES.put("egn", EgnUtil::isValid);
+        TYPES.put("thaiid", ThaiIdUtil::isValid);
+        TYPES.put("regon", RegonUtil::isValid);
+        TYPES.put("ico", IcoUtil::isValid);
     }
 
     private RegexUtil() {

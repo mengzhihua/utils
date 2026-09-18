@@ -2468,6 +2468,114 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/www-authenticate',
       fields: [{ name: 'header', label: 'WWW-Authenticate', value: 'Bearer realm="api", error="invalid_token"' }]
+    },
+    {
+      id: 'tckn',
+      group: 'validate',
+      title: '土耳其身份证',
+      summary: 'TcKimlikUtil',
+      method: 'GET',
+      path: '/api/utils/tckn',
+      fields: [{ name: 'value', label: 'TCKN', value: '10000000146' }]
+    },
+    {
+      id: 'israeli-id',
+      group: 'validate',
+      title: '以色列身份证',
+      summary: 'IsraeliIdUtil Luhn',
+      method: 'GET',
+      path: '/api/utils/israeli-id',
+      fields: [{ name: 'value', label: 'ID', value: '123456782' }]
+    },
+    {
+      id: 'cnp',
+      group: 'validate',
+      title: '罗马尼亚 CNP',
+      summary: 'CnpUtil',
+      method: 'GET',
+      path: '/api/utils/cnp',
+      fields: [{ name: 'value', label: 'CNP', value: '1800101010015' }]
+    },
+    {
+      id: 'oib',
+      group: 'validate',
+      title: '克罗地亚 OIB',
+      summary: 'OibUtil ISO 7064',
+      method: 'GET',
+      path: '/api/utils/oib',
+      fields: [{ name: 'value', label: 'OIB', value: '12345678903' }]
+    },
+    {
+      id: 'egn',
+      group: 'validate',
+      title: '保加利亚 EGN',
+      summary: 'EgnUtil',
+      method: 'GET',
+      path: '/api/utils/egn',
+      fields: [{ name: 'value', label: 'EGN', value: '8001010008' }]
+    },
+    {
+      id: 'thai-id',
+      group: 'validate',
+      title: '泰国身份证',
+      summary: 'ThaiIdUtil',
+      method: 'GET',
+      path: '/api/utils/thai-id',
+      fields: [{ name: 'value', label: 'ID', value: '1234567890121' }]
+    },
+    {
+      id: 'regon',
+      group: 'validate',
+      title: '波兰 REGON',
+      summary: 'RegonUtil',
+      method: 'GET',
+      path: '/api/utils/regon',
+      fields: [{ name: 'value', label: 'REGON', value: '123456785' }]
+    },
+    {
+      id: 'ico',
+      group: 'validate',
+      title: '捷克 IČO',
+      summary: 'IcoUtil',
+      method: 'GET',
+      path: '/api/utils/ico',
+      fields: [{ name: 'value', label: 'IČO', value: '25596641' }]
+    },
+    {
+      id: 'hsts',
+      group: 'web',
+      title: 'HTTP HSTS',
+      summary: 'HstsUtil RFC 6797',
+      method: 'GET',
+      path: '/api/utils/hsts',
+      fields: [{ name: 'header', label: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' }]
+    },
+    {
+      id: 'csp',
+      group: 'web',
+      title: 'Content-Security-Policy',
+      summary: 'CspUtil',
+      method: 'GET',
+      path: '/api/utils/csp',
+      fields: [{ name: 'header', label: 'CSP', value: "default-src 'self'; script-src 'self' https://cdn.example" }]
+    },
+    {
+      id: 'accept-encoding',
+      group: 'web',
+      title: 'Accept-Encoding',
+      summary: 'AcceptEncodingUtil RFC 9110',
+      method: 'GET',
+      path: '/api/utils/accept-encoding',
+      fields: [{ name: 'header', label: 'Accept-Encoding', value: 'gzip;q=1.0, br;q=0.8, deflate;q=0.5' }]
+    },
+    {
+      id: 'crc16-kermit',
+      group: 'crypto',
+      title: 'CRC-16/KERMIT',
+      summary: 'HashUtil.crc16Kermit',
+      method: 'GET',
+      path: '/api/utils/crc16-kermit',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

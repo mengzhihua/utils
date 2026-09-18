@@ -1071,6 +1071,34 @@ export const clientTools = [
       title: '南非身份证',
       summary: '8001015009087',
       fields: [{ name: 'value', label: 'ID', value: '8001015009087' }]
+    },
+    {
+      id: 'tckn-local',
+      group: 'net',
+      title: '土耳其身份证',
+      summary: '10000000146',
+      fields: [{ name: 'value', label: 'TCKN', value: '10000000146' }]
+    },
+    {
+      id: 'cnp-local',
+      group: 'net',
+      title: '罗马尼亚 CNP',
+      summary: '1800101010015',
+      fields: [{ name: 'value', label: 'CNP', value: '1800101010015' }]
+    },
+    {
+      id: 'thai-id-local',
+      group: 'net',
+      title: '泰国身份证',
+      summary: '1234567890121',
+      fields: [{ name: 'value', label: 'ID', value: '1234567890121' }]
+    },
+    {
+      id: 'oib-local',
+      group: 'net',
+      title: '克罗地亚 OIB',
+      summary: '12345678903',
+      fields: [{ name: 'value', label: 'OIB', value: '12345678903' }]
     }
   ]
 

@@ -533,4 +533,28 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.allowsOrigin").value(true));
     }
+
+    @Test
+    void tcknCnpThaiHsts() throws Exception {
+        mockMvc.perform(get("/api/utils/tckn").param("value", "10000000146"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cnp").param("value", "1800101010015"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/thai-id").param("value", "1234567890121"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/hsts")
+                        .param("header", "max-age=31536000; includeSubDomains; preload"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.maxAge").value(31536000));
+
+        mockMvc.perform(get("/api/utils/crc16-kermit").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Kermit").value("2189"));
+    }
 }

@@ -461,6 +461,46 @@ public final class HashUtil {
         return crc16Shift(data, 0);
     }
 
+    /**
+     * CRC-16/KERMIT (reflected poly {@code 0x1021}, init 0). {@code 123456789} → {@code 2189}.
+     */
+    public static int crc16Kermit(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Kermit(data);
+    }
+
+    public static String crc16KermitHex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Kermit(text));
+    }
+
+    public static int crc16Kermit(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0;
+        for (byte b : bytes) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 1) != 0) {
+                    crc = (crc >>> 1) ^ 0x8408;
+                } else {
+                    crc >>>= 1;
+                }
+                crc &= 0xffff;
+            }
+        }
+        return crc;
+    }
+
+    /**
+     * CRC-32/BZIP2 (MPEG-2 then xor {@code 0xFFFFFFFF}). {@code 123456789} → {@code fc891918}.
+     */
+    public static int crc32Bzip2(String text) {
+        return crc32Mpeg2(text) ^ 0xffffffff;
+    }
+
+    public static String crc32Bzip2Hex(String text) {
+        return String.format(Locale.ROOT, "%08x", crc32Bzip2(text));
+    }
+
     private static int crc16Shift(byte[] data, int init) {
         byte[] bytes = data == null ? new byte[0] : data;
         int crc = init;

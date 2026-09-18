@@ -932,6 +932,22 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, valid: /^\d{13}$/.test(digits) && luhnAny(digits) }
     }
+    case 'tckn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isTckn(digits) }
+    }
+    case 'cnp-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isCnp(digits) }
+    }
+    case 'thai-id-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isThaiId(digits) }
+    }
+    case 'oib-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isOib(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2427,6 +2443,48 @@ function isCuit(digits) {
   if (rem === 11) rem = 0
   if (rem === 10) rem = 9
   return Number(digits[10]) === rem
+}
+
+function isTckn(digits) {
+  if (!/^[1-9]\d{10}$/.test(digits)) return false
+  let odd = 0
+  let even = 0
+  for (let i = 0; i < 9; i++) {
+    if (i % 2 === 0) odd += Number(digits[i])
+    else even += Number(digits[i])
+  }
+  const d10 = (odd * 7 - even) % 10
+  let total = d10
+  for (let i = 0; i < 9; i++) total += Number(digits[i])
+  return Number(digits[9]) === d10 && Number(digits[10]) === total % 10
+}
+
+function isCnp(digits) {
+  if (!/^[1-8]\d{12}$/.test(digits)) return false
+  const w = [2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9]
+  let sum = 0
+  for (let i = 0; i < 12; i++) sum += Number(digits[i]) * w[i]
+  const rem = sum % 11
+  return Number(digits[12]) === (rem === 10 ? 1 : rem)
+}
+
+function isThaiId(digits) {
+  if (!/^[1-8]\d{12}$/.test(digits)) return false
+  let sum = 0
+  for (let i = 0; i < 12; i++) sum += Number(digits[i]) * (13 - i)
+  return Number(digits[12]) === (11 - (sum % 11)) % 10
+}
+
+function isOib(digits) {
+  if (!/^\d{11}$/.test(digits)) return false
+  let product = 10
+  for (let i = 0; i < 10; i++) {
+    let sum = (Number(digits[i]) + product) % 10
+    if (sum === 0) sum = 10
+    product = (sum * 2) % 11
+  }
+  const check = 11 - product
+  return Number(digits[10]) === (check === 10 ? 0 : check)
 }
 
 function isSscc(digits) {
