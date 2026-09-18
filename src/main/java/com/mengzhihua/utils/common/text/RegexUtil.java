@@ -81,6 +81,12 @@ import com.mengzhihua.utils.common.validate.IcoUtil;
 import com.mengzhihua.utils.common.validate.IsraeliIdUtil;
 import com.mengzhihua.utils.common.validate.OibUtil;
 import com.mengzhihua.utils.common.validate.RegonUtil;
+import com.mengzhihua.utils.common.validate.IpnUtil;
+import com.mengzhihua.utils.common.validate.IsikukoodUtil;
+import com.mengzhihua.utils.common.validate.JmbgUtil;
+import com.mengzhihua.utils.common.validate.KennitalaUtil;
+import com.mengzhihua.utils.common.validate.NitUtil;
+import com.mengzhihua.utils.common.validate.TajUtil;
 import com.mengzhihua.utils.common.validate.TcKimlikUtil;
 import com.mengzhihua.utils.common.validate.ThaiIdUtil;
 import com.mengzhihua.utils.common.validate.VinUtil;
@@ -275,6 +281,12 @@ public final class RegexUtil {
         TYPES.put("thaiid", ThaiIdUtil::isValid);
         TYPES.put("regon", RegonUtil::isValid);
         TYPES.put("ico", IcoUtil::isValid);
+        TYPES.put("jmbg", JmbgUtil::isValid);
+        TYPES.put("isikukood", IsikukoodUtil::isValid);
+        TYPES.put("kennitala", KennitalaUtil::isValid);
+        TYPES.put("taj", TajUtil::isValid);
+        TYPES.put("ipn", IpnUtil::isValid);
+        TYPES.put("nit", NitUtil::isValid);
     }
 
     private RegexUtil() {

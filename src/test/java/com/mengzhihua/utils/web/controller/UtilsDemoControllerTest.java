@@ -557,4 +557,25 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc16Kermit").value("2189"));
     }
+
+    @Test
+    void jmbgKennitalaNit() throws Exception {
+        mockMvc.perform(get("/api/utils/jmbg").param("value", "0101980500005"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.birthDate").value("1980-01-01"));
+
+        mockMvc.perform(get("/api/utils/kennitala").param("value", "120174-3399"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.birthDate").value("1974-01-12"));
+
+        mockMvc.perform(get("/api/utils/nit").param("value", "800197268-4"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/crc16-arc").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Arc").value("bb3d"));
+    }
 }

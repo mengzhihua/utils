@@ -501,6 +501,35 @@ public final class HashUtil {
         return String.format(Locale.ROOT, "%08x", crc32Bzip2(text));
     }
 
+    /**
+     * CRC-16/ARC (IBM, reflected poly {@code 0x8005}). {@code 123456789} → {@code bb3d}.
+     */
+    public static int crc16Arc(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Arc(data);
+    }
+
+    public static String crc16ArcHex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Arc(text));
+    }
+
+    public static int crc16Arc(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0;
+        for (byte b : bytes) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 1) != 0) {
+                    crc = (crc >>> 1) ^ 0xa001;
+                } else {
+                    crc >>>= 1;
+                }
+                crc &= 0xffff;
+            }
+        }
+        return crc;
+    }
+
     private static int crc16Shift(byte[] data, int init) {
         byte[] bytes = data == null ? new byte[0] : data;
         int crc = init;

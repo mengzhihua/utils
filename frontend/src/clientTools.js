@@ -1099,6 +1099,34 @@ export const clientTools = [
       title: '克罗地亚 OIB',
       summary: '12345678903',
       fields: [{ name: 'value', label: 'OIB', value: '12345678903' }]
+    },
+    {
+      id: 'jmbg-local',
+      group: 'net',
+      title: '南斯拉夫 JMBG',
+      summary: '0101980500005',
+      fields: [{ name: 'value', label: 'JMBG', value: '0101980500005' }]
+    },
+    {
+      id: 'kennitala-local',
+      group: 'net',
+      title: '冰岛 kennitala',
+      summary: '120174-3399',
+      fields: [{ name: 'value', label: 'kennitala', value: '120174-3399' }]
+    },
+    {
+      id: 'taj-local',
+      group: 'net',
+      title: '匈牙利 TAJ',
+      summary: '123456788',
+      fields: [{ name: 'value', label: 'TAJ', value: '123456788' }]
+    },
+    {
+      id: 'nit-local',
+      group: 'net',
+      title: '哥伦比亚 NIT',
+      summary: '800197268-4',
+      fields: [{ name: 'value', label: 'NIT', value: '800197268-4' }]
     }
   ]
 

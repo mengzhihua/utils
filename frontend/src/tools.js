@@ -2576,6 +2576,96 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-kermit',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'jmbg',
+      group: 'validate',
+      title: '南斯拉夫 JMBG',
+      summary: 'JmbgUtil',
+      method: 'GET',
+      path: '/api/utils/jmbg',
+      fields: [{ name: 'value', label: 'JMBG', value: '0101980500005' }]
+    },
+    {
+      id: 'isikukood',
+      group: 'validate',
+      title: '爱沙尼亚个人号',
+      summary: 'IsikukoodUtil',
+      method: 'GET',
+      path: '/api/utils/isikukood',
+      fields: [{ name: 'value', label: 'isikukood', value: '37601010003' }]
+    },
+    {
+      id: 'kennitala',
+      group: 'validate',
+      title: '冰岛 kennitala',
+      summary: 'KennitalaUtil',
+      method: 'GET',
+      path: '/api/utils/kennitala',
+      fields: [{ name: 'value', label: 'kennitala', value: '120174-3399' }]
+    },
+    {
+      id: 'taj',
+      group: 'validate',
+      title: '匈牙利 TAJ',
+      summary: 'TajUtil',
+      method: 'GET',
+      path: '/api/utils/taj',
+      fields: [{ name: 'value', label: 'TAJ', value: '123456788' }]
+    },
+    {
+      id: 'ipn',
+      group: 'validate',
+      title: '乌克兰 IPN',
+      summary: 'IpnUtil',
+      method: 'GET',
+      path: '/api/utils/ipn',
+      fields: [{ name: 'value', label: 'IPN', value: '2922000110' }]
+    },
+    {
+      id: 'nit',
+      group: 'validate',
+      title: '哥伦比亚 NIT',
+      summary: 'NitUtil',
+      method: 'GET',
+      path: '/api/utils/nit',
+      fields: [{ name: 'value', label: 'NIT', value: '800197268-4' }]
+    },
+    {
+      id: 'referrer-policy',
+      group: 'web',
+      title: 'Referrer-Policy',
+      summary: 'ReferrerPolicyUtil',
+      method: 'GET',
+      path: '/api/utils/referrer-policy',
+      fields: [{ name: 'header', label: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' }]
+    },
+    {
+      id: 'x-frame-options',
+      group: 'web',
+      title: 'X-Frame-Options',
+      summary: 'XFrameOptionsUtil',
+      method: 'GET',
+      path: '/api/utils/x-frame-options',
+      fields: [{ name: 'header', label: 'X-Frame-Options', value: 'SAMEORIGIN' }]
+    },
+    {
+      id: 'permissions-policy',
+      group: 'web',
+      title: 'Permissions-Policy',
+      summary: 'PermissionsPolicyUtil',
+      method: 'GET',
+      path: '/api/utils/permissions-policy',
+      fields: [{ name: 'header', label: 'Permissions-Policy', value: 'geolocation=(), camera=(self)' }]
+    },
+    {
+      id: 'crc16-arc',
+      group: 'crypto',
+      title: 'CRC-16/ARC',
+      summary: 'HashUtil.crc16Arc',
+      method: 'GET',
+      path: '/api/utils/crc16-arc',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 
