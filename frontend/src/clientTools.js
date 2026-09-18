@@ -966,6 +966,55 @@ export const clientTools = [
       title: 'GS1 SSCC',
       summary: '106141411234567897',
       fields: [{ name: 'value', label: 'SSCC', value: '106141411234567897' }]
+    },
+    {
+      id: 'vat-local',
+      group: 'net',
+      title: '欧盟 VAT',
+      summary: 'DE136695976',
+      fields: [{ name: 'value', label: 'VAT', value: 'DE136695976' }]
+    },
+    {
+      id: 'ahv-local',
+      group: 'net',
+      title: '瑞士 AHV',
+      summary: '756.1234.5678.97',
+      fields: [{ name: 'value', label: 'AHV', value: '756.1234.5678.97' }]
+    },
+    {
+      id: 'nip-local',
+      group: 'net',
+      title: '波兰 NIP',
+      summary: '1234563218',
+      fields: [{ name: 'value', label: 'NIP', value: '1234563218' }]
+    },
+    {
+      id: 'aadhaar-local',
+      group: 'net',
+      title: '印度 Aadhaar',
+      summary: '234123412346',
+      fields: [{ name: 'value', label: 'Aadhaar', value: '234123412346' }]
+    },
+    {
+      id: 'pan-local',
+      group: 'net',
+      title: '印度 PAN',
+      summary: 'ABCPE1234F',
+      fields: [{ name: 'value', label: 'PAN', value: 'ABCPE1234F' }]
+    },
+    {
+      id: 'sin-local',
+      group: 'net',
+      title: '加拿大 SIN',
+      summary: '046454286',
+      fields: [{ name: 'value', label: 'SIN', value: '046454286' }]
+    },
+    {
+      id: 'pps-local',
+      group: 'net',
+      title: '爱尔兰 PPS',
+      summary: '1234567T',
+      fields: [{ name: 'value', label: 'PPS', value: '1234567T' }]
     }
   ]
 

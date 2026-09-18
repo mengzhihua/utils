@@ -2199,6 +2199,96 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/uuencode',
       fields: [{ name: 'text', label: '原文', value: 'Cat' }]
+    },
+    {
+      id: 'vat',
+      group: 'validate',
+      title: '欧盟 VAT',
+      summary: 'VatUtil DE/FR/NL',
+      method: 'GET',
+      path: '/api/utils/vat',
+      fields: [{ name: 'value', label: 'VAT', value: 'DE136695976' }]
+    },
+    {
+      id: 'ahv',
+      group: 'validate',
+      title: '瑞士 AHV',
+      summary: 'AhvUtil EAN-13',
+      method: 'GET',
+      path: '/api/utils/ahv',
+      fields: [{ name: 'value', label: 'AHV', value: '756.1234.5678.97' }]
+    },
+    {
+      id: 'nip',
+      group: 'validate',
+      title: '波兰 NIP',
+      summary: 'NipUtil',
+      method: 'GET',
+      path: '/api/utils/nip',
+      fields: [{ name: 'value', label: 'NIP', value: '1234563218' }]
+    },
+    {
+      id: 'aadhaar',
+      group: 'validate',
+      title: '印度 Aadhaar',
+      summary: 'AadhaarUtil Verhoeff',
+      method: 'GET',
+      path: '/api/utils/aadhaar',
+      fields: [{ name: 'value', label: 'Aadhaar', value: '234123412346' }]
+    },
+    {
+      id: 'pan',
+      group: 'validate',
+      title: '印度 PAN',
+      summary: 'PanUtil',
+      method: 'GET',
+      path: '/api/utils/pan',
+      fields: [{ name: 'value', label: 'PAN', value: 'ABCPE1234F' }]
+    },
+    {
+      id: 'sin',
+      group: 'validate',
+      title: '加拿大 SIN',
+      summary: 'SinUtil Luhn',
+      method: 'GET',
+      path: '/api/utils/sin',
+      fields: [{ name: 'value', label: 'SIN', value: '046454286' }]
+    },
+    {
+      id: 'pps',
+      group: 'validate',
+      title: '爱尔兰 PPS',
+      summary: 'PpsUtil',
+      method: 'GET',
+      path: '/api/utils/pps',
+      fields: [{ name: 'value', label: 'PPS', value: '1234567T' }]
+    },
+    {
+      id: 'cache-control',
+      group: 'web',
+      title: 'HTTP Cache-Control',
+      summary: 'CacheControlUtil RFC 9111',
+      method: 'GET',
+      path: '/api/utils/cache-control',
+      fields: [{ name: 'header', label: 'Cache-Control', value: 'max-age=3600, public, must-revalidate' }]
+    },
+    {
+      id: 'z85',
+      group: 'crypto',
+      title: 'Z85',
+      summary: 'Z85Util RFC 32',
+      method: 'GET',
+      path: '/api/utils/z85',
+      fields: [{ name: 'text', label: 'Z85 / 原文', value: 'HelloWorld' }]
+    },
+    {
+      id: 'crc16-xmodem',
+      group: 'crypto',
+      title: 'CRC-16/XMODEM',
+      summary: 'HashUtil.crc16Xmodem',
+      method: 'GET',
+      path: '/api/utils/crc16-xmodem',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

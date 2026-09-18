@@ -462,4 +462,27 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.previous").value("https://example.com/x"));
     }
+
+    @Test
+    void vatAhvAadhaarZ85() throws Exception {
+        mockMvc.perform(get("/api/utils/vat").param("value", "DE136695976"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/ahv").param("value", "756.1234.5678.97"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/aadhaar").param("value", "234123412346"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/z85").param("text", "HelloWorld"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.decodedHex").value("864fd26fb559f75b"));
+
+        mockMvc.perform(get("/api/utils/crc16-xmodem").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Xmodem").value("31c3"));
+    }
 }

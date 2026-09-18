@@ -872,6 +872,34 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, valid: isSscc(digits) }
     }
+    case 'vat-local': {
+      const compact = String(values.value || '').replace(/[\s.-]/g, '').toUpperCase()
+      return { normalized: compact, country: compact.slice(0, 2), valid: isVat(compact) }
+    }
+    case 'ahv-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isAhv(digits) }
+    }
+    case 'nip-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isNip(digits) }
+    }
+    case 'aadhaar-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: /^[2-9]\d{11}$/.test(digits) && verhoeff(digits) }
+    }
+    case 'pan-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: /^[A-Z]{3}[PCHFATBLJG][A-Z]\d{4}[A-Z]$/.test(compact) }
+    }
+    case 'sin-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: /^\d{9}$/.test(digits) && digits !== '000000000' && luhnAny(digits) }
+    }
+    case 'pps-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isPps(compact) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2214,6 +2242,97 @@ function isTfn(digits) {
   let sum = 0
   for (let i = 0; i < 9; i++) sum += Number(digits[i]) * w[i]
   return sum % 11 === 0
+}
+
+function isVat(compact) {
+  if (compact.startsWith('DE') && /^\d{9}$/.test(compact.slice(2))) {
+    let product = 10
+    const body = compact.slice(2)
+    for (let i = 0; i < 8; i++) {
+      let sum = (Number(body[i]) + product) % 10
+      if (sum === 0) sum = 10
+      product = (sum * 2) % 11
+    }
+    const check = 11 - product
+    return (check === 10 ? 0 : check) === Number(body[8])
+  }
+  if (compact.startsWith('FR') && /^\d{11}$/.test(compact.slice(2))) {
+    const siren = compact.slice(4)
+    const key = (12 + 3 * (Number(siren) % 97)) % 97
+    return isSiren(siren) && Number(compact.slice(2, 4)) === key
+  }
+  if (compact.startsWith('NL') && /^\d{9}B\d{2}$/.test(compact.slice(2))) {
+    const body = compact.slice(2)
+    let sum = 0
+    for (let i = 0; i < 8; i++) sum += Number(body[i]) * (9 - i)
+    return sum % 11 === Number(body[8])
+  }
+  return false
+}
+
+function isAhv(digits) {
+  return /^756\d{10}$/.test(digits) && isEan13(digits)
+}
+
+function isEan13(digits) {
+  if (!/^\d{13}$/.test(digits)) return false
+  let sum = 0
+  let factor = 3
+  for (let i = 11; i >= 0; i--) {
+    sum += Number(digits[i]) * factor
+    factor = 4 - factor
+  }
+  return digits[12] === String((10 - (sum % 10)) % 10)
+}
+
+function isNip(digits) {
+  if (!/^\d{10}$/.test(digits)) return false
+  const w = [6, 5, 7, 2, 3, 4, 5, 6, 7]
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += Number(digits[i]) * w[i]
+  const rem = sum % 11
+  return rem !== 10 && rem === Number(digits[9])
+}
+
+function verhoeff(digits) {
+  const d = [
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    [1, 2, 3, 4, 0, 6, 7, 8, 9, 5],
+    [2, 3, 4, 0, 1, 7, 8, 9, 5, 6],
+    [3, 4, 0, 1, 2, 8, 9, 5, 6, 7],
+    [4, 0, 1, 2, 3, 9, 5, 6, 7, 8],
+    [5, 9, 8, 7, 6, 0, 4, 3, 2, 1],
+    [6, 5, 9, 8, 7, 1, 0, 4, 3, 2],
+    [7, 6, 5, 9, 8, 2, 1, 0, 4, 3],
+    [8, 7, 6, 5, 9, 3, 2, 1, 0, 4],
+    [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+  ]
+  const p = [
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    [1, 5, 7, 6, 2, 8, 3, 0, 9, 4],
+    [5, 8, 0, 3, 7, 9, 6, 1, 4, 2],
+    [8, 9, 1, 6, 0, 4, 3, 5, 2, 7],
+    [9, 4, 5, 3, 1, 2, 6, 8, 7, 0],
+    [4, 2, 8, 6, 5, 7, 9, 3, 0, 1],
+    [2, 7, 9, 3, 8, 0, 6, 4, 1, 5],
+    [7, 0, 4, 6, 9, 1, 3, 2, 5, 8]
+  ]
+  let check = 0
+  for (let i = 0; i < digits.length; i++) {
+    check = d[check][p[i % 8][Number(digits[digits.length - 1 - i])]]
+  }
+  return check === 0
+}
+
+function isPps(compact) {
+  const letters = 'WABCDEFGHIJKLMNOPQRSTUV'
+  const sum = (body, extra = 0) => {
+    let total = extra * 9
+    for (let i = 0; i < 7; i++) total += Number(body[i]) * (8 - i)
+    return letters[total % 23]
+  }
+  if (/^\d{7}[A-W]$/.test(compact)) return compact[7] === sum(compact.slice(0, 7))
+  return false
 }
 
 function isSscc(digits) {

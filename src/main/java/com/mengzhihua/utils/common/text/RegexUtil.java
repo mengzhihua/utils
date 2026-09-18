@@ -55,6 +55,13 @@ import com.mengzhihua.utils.common.validate.IswcUtil;
 import com.mengzhihua.utils.common.validate.PersonnummerUtil;
 import com.mengzhihua.utils.common.validate.SsccUtil;
 import com.mengzhihua.utils.common.validate.TfnUtil;
+import com.mengzhihua.utils.common.validate.AadhaarUtil;
+import com.mengzhihua.utils.common.validate.AhvUtil;
+import com.mengzhihua.utils.common.validate.NipUtil;
+import com.mengzhihua.utils.common.validate.PanUtil;
+import com.mengzhihua.utils.common.validate.PpsUtil;
+import com.mengzhihua.utils.common.validate.SinUtil;
+import com.mengzhihua.utils.common.validate.VatUtil;
 import com.mengzhihua.utils.common.validate.VinUtil;
 
 /**
@@ -219,6 +226,13 @@ public final class RegexUtil {
         TYPES.put("sscc", SsccUtil::isValid);
         TYPES.put("abn", AbnUtil::isValid);
         TYPES.put("tfn", TfnUtil::isValid);
+        TYPES.put("vat", VatUtil::isValid);
+        TYPES.put("ahv", AhvUtil::isValid);
+        TYPES.put("nip", NipUtil::isValid);
+        TYPES.put("aadhaar", AadhaarUtil::isValid);
+        TYPES.put("pan", PanUtil::isValid);
+        TYPES.put("sin", SinUtil::isValid);
+        TYPES.put("pps", PpsUtil::isValid);
     }
 
     private RegexUtil() {
