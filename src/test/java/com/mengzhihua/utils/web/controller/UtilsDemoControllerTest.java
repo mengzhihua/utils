@@ -1079,4 +1079,34 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc8Maxim").value("a1"));
     }
+
+    @Test
+    void ukCanadaCzechCreditor() throws Exception {
+        mockMvc.perform(get("/api/utils/gb-vat").param("value", "GB 980 7806 84"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("980780684"));
+
+        mockMvc.perform(get("/api/utils/ca-bn").param("value", "12302 6635 RC 0001"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cz-dic").param("value", "CZ 25123891"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/iso11649").param("value", "RF18 5390 0754 7034"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.formatted").value("RF18 5390 0754 7034"));
+
+        mockMvc.perform(get("/api/utils/expect-ct").param("header", "max-age=86400, enforce"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.enforce").value(true))
+                .andExpect(jsonPath("$.data.maxAge").value(86400));
+
+        mockMvc.perform(get("/api/utils/crc16-x25").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16X25").value("906e"));
+    }
 }

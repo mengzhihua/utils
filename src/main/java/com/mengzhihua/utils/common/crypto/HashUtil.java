@@ -736,6 +736,22 @@ public final class HashUtil {
     }
 
     /**
+     * CRC-16/X-25 (MCRF4XX then xor {@code 0xFFFF}). {@code 123456789} → {@code 906e}.
+     */
+    public static int crc16X25(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16X25(data);
+    }
+
+    public static String crc16X25Hex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16X25(text));
+    }
+
+    public static int crc16X25(byte[] data) {
+        return crc16Mcrf4xx(data) ^ 0xffff;
+    }
+
+    /**
      * CRC-32/BZIP2 (MPEG-2 then xor {@code 0xFFFFFFFF}). {@code 123456789} → {@code fc891918}.
      */
     public static int crc32Bzip2(String text) {

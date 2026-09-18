@@ -3941,6 +3941,60 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc8-maxim',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'gb-vat',
+      group: 'validate',
+      title: '英国税号',
+      summary: 'GbVatUtil',
+      method: 'GET',
+      path: '/api/utils/gb-vat',
+      fields: [{ name: 'value', label: 'VAT', value: 'GB 980 7806 84' }]
+    },
+    {
+      id: 'ca-bn',
+      group: 'validate',
+      title: '加拿大企业号',
+      summary: 'CaBnUtil',
+      method: 'GET',
+      path: '/api/utils/ca-bn',
+      fields: [{ name: 'value', label: 'BN', value: '12302 6635 RC 0001' }]
+    },
+    {
+      id: 'cz-dic',
+      group: 'validate',
+      title: '捷克税号',
+      summary: 'CzDicUtil',
+      method: 'GET',
+      path: '/api/utils/cz-dic',
+      fields: [{ name: 'value', label: 'DIČ', value: 'CZ 25123891' }]
+    },
+    {
+      id: 'iso11649',
+      group: 'validate',
+      title: 'ISO 11649 债权参考号',
+      summary: 'Iso11649Util',
+      method: 'GET',
+      path: '/api/utils/iso11649',
+      fields: [{ name: 'value', label: 'RF', value: 'RF18 5390 0754 7034' }]
+    },
+    {
+      id: 'expect-ct',
+      group: 'web',
+      title: 'HTTP Expect-CT',
+      summary: 'ExpectCtUtil',
+      method: 'GET',
+      path: '/api/utils/expect-ct',
+      fields: [{ name: 'header', label: 'Expect-CT', value: 'max-age=86400, enforce' }]
+    },
+    {
+      id: 'crc16-x25',
+      group: 'crypto',
+      title: 'CRC-16/X-25',
+      summary: 'HashUtil.crc16X25',
+      method: 'GET',
+      path: '/api/utils/crc16-x25',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

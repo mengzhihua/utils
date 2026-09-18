@@ -1716,6 +1716,34 @@ export const clientTools = [
       title: '爱尔兰税号',
       summary: '6433435F',
       fields: [{ name: 'value', label: 'VAT', value: 'IE 6433435OA' }]
+    },
+    {
+      id: 'gb-vat-local',
+      group: 'net',
+      title: '英国税号',
+      summary: '980780684',
+      fields: [{ name: 'value', label: 'VAT', value: 'GB 980 7806 84' }]
+    },
+    {
+      id: 'ca-bn-local',
+      group: 'net',
+      title: '加拿大企业号',
+      summary: '123026635',
+      fields: [{ name: 'value', label: 'BN', value: '12302 6635 RC 0001' }]
+    },
+    {
+      id: 'cz-dic-local',
+      group: 'net',
+      title: '捷克税号',
+      summary: '25123891',
+      fields: [{ name: 'value', label: 'DIČ', value: 'CZ 25123891' }]
+    },
+    {
+      id: 'iso11649-local',
+      group: 'net',
+      title: 'ISO 11649 债权参考号',
+      summary: 'RF18539007547034',
+      fields: [{ name: 'value', label: 'RF', value: 'RF18 5390 0754 7034' }]
     }
   ]
 

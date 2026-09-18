@@ -168,6 +168,10 @@ import com.mengzhihua.utils.common.validate.MuNidUtil;
 import com.mengzhihua.utils.common.validate.EcCiUtil;
 import com.mengzhihua.utils.common.validate.EcRucUtil;
 import com.mengzhihua.utils.common.validate.IeVatUtil;
+import com.mengzhihua.utils.common.validate.CaBnUtil;
+import com.mengzhihua.utils.common.validate.CzDicUtil;
+import com.mengzhihua.utils.common.validate.GbVatUtil;
+import com.mengzhihua.utils.common.validate.Iso11649Util;
 import com.mengzhihua.utils.common.validate.ItIvaUtil;
 
 /**
@@ -445,6 +449,10 @@ public final class RegexUtil {
         TYPES.put("ecruc", EcRucUtil::isValid);
         TYPES.put("itiva", ItIvaUtil::isValid);
         TYPES.put("ievat", IeVatUtil::isValid);
+        TYPES.put("gbvat", GbVatUtil::isValid);
+        TYPES.put("cabn", CaBnUtil::isValid);
+        TYPES.put("czdic", CzDicUtil::isValid);
+        TYPES.put("iso11649", Iso11649Util::isValid);
     }
 
     private RegexUtil() {
