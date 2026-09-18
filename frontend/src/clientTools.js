@@ -1246,6 +1246,41 @@ export const clientTools = [
       title: '塞尔维亚 PIB',
       summary: '101134702',
       fields: [{ name: 'value', label: 'PIB', value: '101134702' }]
+    },
+    {
+      id: 'gstin-local',
+      group: 'net',
+      title: '印度 GSTIN',
+      summary: '27AAPFU0939F1ZV',
+      fields: [{ name: 'value', label: 'GSTIN', value: '27AAPFU0939F1ZV' }]
+    },
+    {
+      id: 'acn-local',
+      group: 'net',
+      title: '澳大利亚公司号',
+      summary: '000000019',
+      fields: [{ name: 'value', label: 'ACN', value: '000 000 019' }]
+    },
+    {
+      id: 'vkn-local',
+      group: 'net',
+      title: '土耳其税号',
+      summary: '4540536920',
+      fields: [{ name: 'value', label: 'VKN', value: '4540536920' }]
+    },
+    {
+      id: 'npwp-local',
+      group: 'net',
+      title: '印尼税号',
+      summary: '013121660091000',
+      fields: [{ name: 'value', label: 'NPWP', value: '01.312.166.0-091.000' }]
+    },
+    {
+      id: 'registrikood-local',
+      group: 'net',
+      title: '爱沙尼亚企业号',
+      summary: '12345678',
+      fields: [{ name: 'value', label: 'registrikood', value: '12345678' }]
     }
   ]
 

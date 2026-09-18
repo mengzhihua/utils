@@ -107,6 +107,11 @@ import com.mengzhihua.utils.common.validate.KboUtil;
 import com.mengzhihua.utils.common.validate.KrBrnUtil;
 import com.mengzhihua.utils.common.validate.PibUtil;
 import com.mengzhihua.utils.common.validate.TwGuiUtil;
+import com.mengzhihua.utils.common.validate.AcnUtil;
+import com.mengzhihua.utils.common.validate.GstinUtil;
+import com.mengzhihua.utils.common.validate.NpwpUtil;
+import com.mengzhihua.utils.common.validate.RegistrikoodUtil;
+import com.mengzhihua.utils.common.validate.VknUtil;
 import com.mengzhihua.utils.common.validate.RodneCisloUtil;
 import com.mengzhihua.utils.common.validate.TajUtil;
 import com.mengzhihua.utils.common.validate.TcKimlikUtil;
@@ -331,6 +336,11 @@ public final class RegexUtil {
         TYPES.put("twgui", TwGuiUtil::isValid);
         TYPES.put("edrpou", EdrpouUtil::isValid);
         TYPES.put("rspib", PibUtil::isValid);
+        TYPES.put("gstin", GstinUtil::isValid);
+        TYPES.put("acn", AcnUtil::isValid);
+        TYPES.put("vkn", VknUtil::isValid);
+        TYPES.put("npwp", NpwpUtil::isValid);
+        TYPES.put("registrikood", RegistrikoodUtil::isValid);
     }
 
     private RegexUtil() {

@@ -2960,6 +2960,69 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc8-smbus',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'gstin',
+      group: 'validate',
+      title: '印度 GSTIN',
+      summary: 'GstinUtil',
+      method: 'GET',
+      path: '/api/utils/gstin',
+      fields: [{ name: 'value', label: 'GSTIN', value: '27AAPFU0939F1ZV' }]
+    },
+    {
+      id: 'acn',
+      group: 'validate',
+      title: '澳大利亚公司号',
+      summary: 'AcnUtil',
+      method: 'GET',
+      path: '/api/utils/acn',
+      fields: [{ name: 'value', label: 'ACN', value: '000 000 019' }]
+    },
+    {
+      id: 'vkn',
+      group: 'validate',
+      title: '土耳其税号',
+      summary: 'VknUtil',
+      method: 'GET',
+      path: '/api/utils/vkn',
+      fields: [{ name: 'value', label: 'VKN', value: '4540536920' }]
+    },
+    {
+      id: 'npwp',
+      group: 'validate',
+      title: '印尼税号',
+      summary: 'NpwpUtil',
+      method: 'GET',
+      path: '/api/utils/npwp',
+      fields: [{ name: 'value', label: 'NPWP', value: '01.312.166.0-091.000' }]
+    },
+    {
+      id: 'registrikood',
+      group: 'validate',
+      title: '爱沙尼亚企业号',
+      summary: 'RegistrikoodUtil',
+      method: 'GET',
+      path: '/api/utils/registrikood',
+      fields: [{ name: 'value', label: 'registrikood', value: '12345678' }]
+    },
+    {
+      id: 'report-to',
+      group: 'web',
+      title: 'HTTP Report-To',
+      summary: 'ReportToUtil',
+      method: 'GET',
+      path: '/api/utils/report-to',
+      fields: [{ name: 'header', label: 'Report-To', type: 'textarea', value: '[{"group":"nel","max_age":31536000,"endpoints":[{"url":"https://example.com/reports"}]}]' }]
+    },
+    {
+      id: 'crc16-genibus',
+      group: 'crypto',
+      title: 'CRC-16/GENIBUS',
+      summary: 'HashUtil.crc16Genibus',
+      method: 'GET',
+      path: '/api/utils/crc16-genibus',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

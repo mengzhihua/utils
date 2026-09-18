@@ -1032,6 +1032,26 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, valid: isPib(digits) }
     }
+    case 'gstin-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isGstin(compact) }
+    }
+    case 'acn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isAcn(digits) }
+    }
+    case 'vkn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isVkn(digits) }
+    }
+    case 'npwp-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isNpwp(digits) }
+    }
+    case 'registrikood-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isRegistrikood(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2748,6 +2768,70 @@ function isEdrpou(digits) {
     sum = 0
     for (let i = 0; i < 7; i++) sum += Number(digits[i]) * w[i]
     rem = (sum % 11) % 10
+  }
+  return Number(digits[7]) === rem
+}
+
+function isGstin(compact) {
+  if (!/^\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(compact)) return false
+  const state = Number(compact.slice(0, 2))
+  if (state < 1 || (state > 38 && state !== 97)) return false
+  if (!/^[A-Z]{3}[PCHFATBLJG][A-Z]\d{4}[A-Z]$/.test(compact.slice(2, 12))) return false
+  const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  let sum = 0
+  let doubleDigit = false
+  for (let i = compact.length - 1; i >= 0; i--) {
+    let index = alphabet.indexOf(compact[i])
+    if (index < 0) return false
+    if (doubleDigit) {
+      const doubled = index * 2
+      index = Math.floor(doubled / 36) + (doubled % 36)
+    }
+    sum += index
+    doubleDigit = !doubleDigit
+  }
+  return sum % 36 === 0
+}
+
+function isAcn(digits) {
+  if (!/^\d{9}$/.test(digits)) return false
+  const w = [8, 7, 6, 5, 4, 3, 2, 1]
+  let sum = 0
+  for (let i = 0; i < 8; i++) sum += Number(digits[i]) * w[i]
+  return Number(digits[8]) === (10 - (sum % 10)) % 10
+}
+
+function isVkn(digits) {
+  if (!/^\d{10}$/.test(digits)) return false
+  let sum = 0
+  for (let i = 1; i <= 9; i++) {
+    const n = Number(digits[9 - i])
+    const c1 = (n + i) % 10
+    if (c1 === 0) continue
+    let c2 = (c1 * 2 ** i) % 9
+    if (c2 === 0) c2 = 9
+    sum += c2
+  }
+  return Number(digits[9]) === (10 - (sum % 10)) % 10
+}
+
+function isNpwp(digits) {
+  if (!/^\d{15}$/.test(digits)) return false
+  return luhnAny(digits.slice(0, 9))
+}
+
+function isRegistrikood(digits) {
+  if (!/^[1789]\d{7}$/.test(digits)) return false
+  const primary = [1, 2, 3, 4, 5, 6, 7]
+  const secondary = [3, 4, 5, 6, 7, 8, 9]
+  let sum = 0
+  for (let i = 0; i < 7; i++) sum += Number(digits[i]) * primary[i]
+  let rem = sum % 11
+  if (rem === 10) {
+    sum = 0
+    for (let i = 0; i < 7; i++) sum += Number(digits[i]) * secondary[i]
+    rem = sum % 11
+    if (rem === 10) rem = 0
   }
   return Number(digits[7]) === rem
 }

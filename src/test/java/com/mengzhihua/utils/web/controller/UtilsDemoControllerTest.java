@@ -672,4 +672,23 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc8Smbus").value("f4"));
     }
+
+    @Test
+    void gstinAcnVkn() throws Exception {
+        mockMvc.perform(get("/api/utils/gstin").param("value", "27AAPFU0939F1ZV"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/acn").param("value", "000 000 019"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/vkn").param("value", "4540536920"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/crc16-genibus").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Genibus").value("d64e"));
+    }
 }

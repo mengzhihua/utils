@@ -413,6 +413,10 @@ public final class HashUtil {
         return String.format(Locale.ROOT, "%04x", crc16Ccitt(text));
     }
 
+    public static int crc16Ccitt(byte[] data) {
+        return crc16Shift(data, 0xffff);
+    }
+
     public static String blake2b(String text) {
         return Blake2bUtil.hash(text);
     }
@@ -478,8 +482,20 @@ public final class HashUtil {
         return crc;
     }
 
-    public static int crc16Ccitt(byte[] data) {
-        return crc16Shift(data, 0xffff);
+    /**
+     * CRC-16/GENIBUS (CCITT-FALSE then xor {@code 0xFFFF}). {@code 123456789} → {@code d64e}.
+     */
+    public static int crc16Genibus(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Genibus(data);
+    }
+
+    public static String crc16GenibusHex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Genibus(text));
+    }
+
+    public static int crc16Genibus(byte[] data) {
+        return crc16Ccitt(data) ^ 0xffff;
     }
 
     /**
