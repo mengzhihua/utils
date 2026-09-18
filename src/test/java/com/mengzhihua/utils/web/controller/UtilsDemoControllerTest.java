@@ -807,4 +807,27 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc16Gsm").value("ce3c"));
     }
+
+    @Test
+    void i18nMessageAndFormat() throws Exception {
+        mockMvc.perform(get("/api/utils/i18n/message").param("key", "hello").param("arg", "Ada").param("locale", "zh-CN"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("成功"))
+                .andExpect(jsonPath("$.data.bundle").value("你好，Ada"));
+
+        mockMvc.perform(get("/api/utils/i18n/message").param("locale", "en").header("Accept-Language", "en"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("success"))
+                .andExpect(jsonPath("$.data.bundle").value("Hello, Ada"));
+
+        mockMvc.perform(get("/api/utils/i18n/locale").param("tag", "zh_CN").param("inLocale", "en"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.tag").value("zh-CN"))
+                .andExpect(jsonPath("$.data.supported").value(true));
+
+        mockMvc.perform(get("/api/utils/accept-language").param("header", "zh-CN,zh;q=0.9,en;q=0.8"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.first").value("zh-CN"))
+                .andExpect(jsonPath("$.data.negotiated").value("zh-CN"));
+    }
 }

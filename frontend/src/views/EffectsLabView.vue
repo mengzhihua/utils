@@ -2,8 +2,8 @@
   <div class="fx-lab">
     <div class="topbar">
       <div>
-        <h1 class="gradient-text">特效实验室</h1>
-        <p>纯 CSS / Canvas 前端效果，方便演示和自测交互反馈。</p>
+        <h1 class="gradient-text">{{ t('fxTitle') }}</h1>
+        <p>{{ t('fxLead') }}</p>
       </div>
     </div>
 
@@ -42,6 +42,9 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useI18n } from '../composables/useI18n'
+
+const { t } = useI18n()
 
 const typed = ref('')
 const displayCount = ref(0)

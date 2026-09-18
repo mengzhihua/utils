@@ -3,7 +3,7 @@
     <div class="topbar">
       <div>
         <h1>{{ tool.title }}</h1>
-        <p>{{ tool.summary }} · 浏览器本地计算</p>
+        <p>{{ tool.summary }} · {{ t('localCompute') }}</p>
       </div>
     </div>
     <section class="panel">
@@ -26,8 +26,8 @@
         </div>
         <div class="field full">
           <div class="actions">
-            <button class="btn" type="submit" :disabled="loading">{{ loading ? '计算中...' : '运行' }}</button>
-            <button class="btn secondary" type="button" @click="reset">重置样例</button>
+            <button class="btn" type="submit" :disabled="loading">{{ loading ? t('calculating') : t('run') }}</button>
+            <button class="btn secondary" type="button" @click="reset">{{ t('reset') }}</button>
           </div>
         </div>
       </form>
@@ -37,14 +37,14 @@
       <div v-if="htmlPreview" class="html-preview" v-html="htmlPreview"></div>
       <div v-if="pretty" class="result result-enter">
         <div class="result-head">
-          <span class="badge ok">local</span>
-          <button class="btn secondary" type="button" @click="copy">复制 JSON</button>
+          <span class="badge ok">{{ t('localBadge') }}</span>
+          <button class="btn secondary" type="button" @click="copy">{{ t('copyJson') }}</button>
         </div>
         <pre>{{ pretty }}</pre>
       </div>
     </section>
   </div>
-  <div v-else class="panel">未找到该工具</div>
+  <div v-else class="panel">{{ t('unknownTool') }}</div>
 </template>
 
 <script setup>
@@ -52,12 +52,14 @@ import { computed, reactive, ref, watch } from 'vue'
 import { getClientTool } from '../clientTools'
 import { runClientTool } from '../lib/clientUtils'
 import { useToast } from '../composables/useToast'
+import { useI18n } from '../composables/useI18n'
 
 const props = defineProps({
   id: { type: String, required: true }
 })
 
 const toast = useToast()
+const { t } = useI18n()
 const tool = computed(() => getClientTool(props.id))
 const values = reactive({})
 const loading = ref(false)
@@ -109,7 +111,7 @@ function reset() {
 async function copy() {
   if (pretty.value) {
     await navigator.clipboard.writeText(pretty.value)
-    toast.show('已复制')
+    toast.show(t('copied'))
   }
 }
 

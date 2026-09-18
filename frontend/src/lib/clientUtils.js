@@ -1150,6 +1150,18 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, formatted: digits.length >= 2 ? `${digits.slice(0, -1)}-${digits.slice(-1)}` : digits, valid: isPyRuc(digits) }
     }
+    case 'i18n-local': {
+      const locale = String(values.locale || 'zh-CN')
+      const amount = Number(values.amount || 0)
+      const currency = String(values.currency || 'CNY')
+      return {
+        locale,
+        number: new Intl.NumberFormat(locale).format(amount),
+        currency: new Intl.NumberFormat(locale, { style: 'currency', currency }).format(amount),
+        percent: new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(0.125),
+        date: new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date('2026-09-18T00:00:00'))
+      }
+    }
     default:
       throw new Error('unknown client tool')
   }
