@@ -1284,6 +1284,38 @@ export async function runClientTool(id, values) {
       const digits = normalizeMtVat(values.value)
       return { normalized: digits, formatted: digits.length === 8 ? `${digits.slice(0, 4)}-${digits.slice(4)}` : digits, valid: isMtVat(digits) }
     }
+    case 'ad-nrt-local': {
+      const compact = normalizeAdNrt(values.value)
+      return { normalized: compact, formatted: compact.length === 8 ? `${compact[0]}-${compact.slice(1, 7)}-${compact[7]}` : compact, valid: isAdNrt(compact) }
+    }
+    case 'li-peid-local': {
+      const digits = normalizeLiPeid(values.value)
+      return { normalized: digits, valid: /^\d{4,12}$/.test(digits) }
+    }
+    case 'dz-nif-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: /^\d{15}$|^\d{20}$/.test(digits) }
+    }
+    case 'sn-ninea-local': {
+      const compact = normalizeSnNinea(values.value)
+      return { normalized: compact, formatted: compact.length > 9 ? `${compact.slice(0, -3)} ${compact.slice(-3)}` : compact, valid: isSnNinea(compact) }
+    }
+    case 'mz-nuit-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, formatted: digits.length === 9 ? `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}` : digits, valid: isMzNuit(digits) }
+    }
+    case 'cu-ni-local': {
+      const parsed = parseCuNi(values.value)
+      return parsed
+    }
+    case 'gn-nifp-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, formatted: digits.length === 9 ? `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}` : digits, valid: /^\d{9}$/.test(digits) && luhnAny(digits) }
+    }
+    case 'sm-coe-local': {
+      const compact = String(values.value || '').replace(/[\s.]/g, '').replace(/^0+/, '')
+      return { normalized: compact, valid: isSmCoe(compact) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -3490,6 +3522,73 @@ function isMtVat(digits) {
   let sum = 0
   for (let i = 0; i < 8; i++) sum += Number(digits[i]) * w[i]
   return sum % 37 === 0
+}
+
+function normalizeAdNrt(value) {
+  return String(value || '').replace(/[\s.-]/g, '').toUpperCase()
+}
+
+function isAdNrt(compact) {
+  if (!/^[A-Z]\d{6}[A-Z]$/.test(compact)) return false
+  if (!'ACDEFGLOPU'.includes(compact[0])) return false
+  const mid = compact.slice(1, 7)
+  if (compact[0] === 'F' && mid > '699999') return false
+  if ((compact[0] === 'A' || compact[0] === 'L') && !(mid > '699999' && mid < '800000')) return false
+  return true
+}
+
+function normalizeLiPeid(value) {
+  return String(value || '').replace(/\D/g, '').replace(/^0+/, '')
+}
+
+function normalizeSnNinea(value) {
+  return String(value || '').replace(/[\s/,\-]/g, '').toUpperCase()
+}
+
+function isSnNinea(compact) {
+  let body = compact
+  let cofi = ''
+  if (compact.length > 9) {
+    cofi = compact.slice(-3)
+    body = compact.slice(0, -3)
+  }
+  if (!/^\d{7}$|^\d{9}$/.test(body)) return false
+  if (cofi && !/^[012][ABCDEFGHJKLMNPQRSTUVWZ]\d$/.test(cofi)) return false
+  const padded = body.padStart(9, '0')
+  const w = [1, 2, 1, 2, 1, 2, 1, 2, 1]
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += Number(padded[i]) * w[i]
+  return sum % 10 === 0
+}
+
+function isMzNuit(digits) {
+  if (!/^\d{9}$/.test(digits)) return false
+  const w = [8, 9, 4, 5, 6, 7, 8, 9]
+  let sum = 0
+  for (let i = 0; i < 8; i++) sum += Number(digits[i]) * w[i]
+  return digits[8] === '01234567891'[sum % 11]
+}
+
+function parseCuNi(value) {
+  const digits = String(value || '').replace(/\D/g, '')
+  if (!/^\d{11}$/.test(digits)) return { normalized: digits, valid: false }
+  let year = Number(digits.slice(0, 2))
+  const month = Number(digits.slice(2, 4))
+  const day = Number(digits.slice(4, 6))
+  const century = digits[6]
+  if (century === '9') year += 1800
+  else if (century <= '5') year += 1900
+  else year += 2000
+  const date = new Date(Date.UTC(year, month - 1, day))
+  const valid = date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day
+  return { normalized: digits, valid, birthDate: valid ? `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}` : '', female: Number(digits[9]) % 2 !== 0 }
+}
+
+function isSmCoe(digits) {
+  if (!digits || digits.length > 5 || !/^\d+$/.test(digits)) return false
+  if (digits.length >= 3) return true
+  const low = new Set([2, 4, 6, 7, 8, 9, 10, 11, 13, 16, 18, 19, 20, 21, 25, 26, 30, 32, 33, 35, 36, 37, 38, 39, 40, 42, 45, 47, 49, 51, 52, 55, 56, 57, 58, 59, 61, 62, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 79, 80, 81, 84, 85, 87, 88, 91, 92, 94, 95, 96, 97, 99])
+  return low.has(Number(digits))
 }
 
 function isRegistrikood(digits) {

@@ -3725,6 +3725,114 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc8-icode',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'ad-nrt',
+      group: 'validate',
+      title: '安道尔税号',
+      summary: 'AdNrtUtil',
+      method: 'GET',
+      path: '/api/utils/ad-nrt',
+      fields: [{ name: 'value', label: 'NRT', value: 'U-132950-X' }]
+    },
+    {
+      id: 'li-peid',
+      group: 'validate',
+      title: '列支敦士登识别号',
+      summary: 'LiPeidUtil',
+      method: 'GET',
+      path: '/api/utils/li-peid',
+      fields: [{ name: 'value', label: 'PEID', value: '00001234567' }]
+    },
+    {
+      id: 'dz-nif',
+      group: 'validate',
+      title: '阿尔及利亚税号',
+      summary: 'DzNifUtil',
+      method: 'GET',
+      path: '/api/utils/dz-nif',
+      fields: [{ name: 'value', label: 'NIF', value: '416001000000007' }]
+    },
+    {
+      id: 'sn-ninea',
+      group: 'validate',
+      title: '塞内加尔企业号',
+      summary: 'SnNineaUtil',
+      method: 'GET',
+      path: '/api/utils/sn-ninea',
+      fields: [{ name: 'value', label: 'NINEA', value: '30672212G2' }]
+    },
+    {
+      id: 'origin',
+      group: 'web',
+      title: 'HTTP Origin',
+      summary: 'OriginUtil',
+      method: 'GET',
+      path: '/api/utils/origin',
+      fields: [{ name: 'header', label: 'Origin', value: 'https://example.com:8443' }]
+    },
+    {
+      id: 'crc8-rohc',
+      group: 'crypto',
+      title: 'CRC-8/ROHC',
+      summary: 'HashUtil.crc8Rohc',
+      method: 'GET',
+      path: '/api/utils/crc8-rohc',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'mz-nuit',
+      group: 'validate',
+      title: '莫桑比克税号',
+      summary: 'MzNuitUtil',
+      method: 'GET',
+      path: '/api/utils/mz-nuit',
+      fields: [{ name: 'value', label: 'NUIT', value: '400339910' }]
+    },
+    {
+      id: 'cu-ni',
+      group: 'validate',
+      title: '古巴身份证',
+      summary: 'CuNiUtil',
+      method: 'GET',
+      path: '/api/utils/cu-ni',
+      fields: [{ name: 'value', label: 'NI', value: '91021027775' }]
+    },
+    {
+      id: 'gn-nifp',
+      group: 'validate',
+      title: '几内亚税号',
+      summary: 'GnNifpUtil',
+      method: 'GET',
+      path: '/api/utils/gn-nifp',
+      fields: [{ name: 'value', label: 'NIFp', value: '693-770-885' }]
+    },
+    {
+      id: 'sm-coe',
+      group: 'validate',
+      title: '圣马力诺经营者号',
+      summary: 'SmCoeUtil',
+      method: 'GET',
+      path: '/api/utils/sm-coe',
+      fields: [{ name: 'value', label: 'COE', value: '024165' }]
+    },
+    {
+      id: 'alt-svc',
+      group: 'web',
+      title: 'HTTP Alt-Svc',
+      summary: 'AltSvcUtil',
+      method: 'GET',
+      path: '/api/utils/alt-svc',
+      fields: [{ name: 'header', label: 'Alt-Svc', value: 'h3=":443"; ma=86400, h2=":443"; ma=2592000' }]
+    },
+    {
+      id: 'crc16-mcrf4xx',
+      group: 'crypto',
+      title: 'CRC-16/MCRF4XX',
+      summary: 'HashUtil.crc16Mcrf4xx',
+      method: 'GET',
+      path: '/api/utils/crc16-mcrf4xx',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

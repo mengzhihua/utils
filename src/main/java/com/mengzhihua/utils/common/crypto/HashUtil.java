@@ -375,6 +375,34 @@ public final class HashUtil {
     }
 
     /**
+     * CRC-8/ROHC (poly {@code 0x07}, reflected, init {@code 0xFF}). {@code 123456789} → {@code d0}.
+     */
+    public static int crc8Rohc(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc8Rohc(data);
+    }
+
+    public static String crc8RohcHex(String text) {
+        return String.format(Locale.ROOT, "%02x", crc8Rohc(text));
+    }
+
+    public static int crc8Rohc(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0xff;
+        for (byte b : bytes) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 1) != 0) {
+                    crc = (crc >>> 1) ^ 0xe0;
+                } else {
+                    crc >>>= 1;
+                }
+            }
+        }
+        return crc & 0xff;
+    }
+
+    /**
      * CRC-64/ECMA-182. {@code 123456789} → {@code 6c40df5f0b497347}.
      */
     public static long crc64(String text) {
@@ -632,20 +660,23 @@ public final class HashUtil {
     }
 
     public static int crc16Kermit(byte[] data) {
-        byte[] bytes = data == null ? new byte[0] : data;
-        int crc = 0;
-        for (byte b : bytes) {
-            crc ^= b & 0xff;
-            for (int i = 0; i < 8; i++) {
-                if ((crc & 1) != 0) {
-                    crc = (crc >>> 1) ^ 0x8408;
-                } else {
-                    crc >>>= 1;
-                }
-                crc &= 0xffff;
-            }
-        }
-        return crc;
+        return crc16ReflectedPoly(data, 0, 0x8408);
+    }
+
+    /**
+     * CRC-16/MCRF4XX (KERMIT poly, init {@code 0xFFFF}). {@code 123456789} → {@code 6f91}.
+     */
+    public static int crc16Mcrf4xx(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Mcrf4xx(data);
+    }
+
+    public static String crc16Mcrf4xxHex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Mcrf4xx(text));
+    }
+
+    public static int crc16Mcrf4xx(byte[] data) {
+        return crc16ReflectedPoly(data, 0xffff, 0x8408);
     }
 
     /**
@@ -843,13 +874,17 @@ public final class HashUtil {
     }
 
     private static int crc16Reflected(byte[] data, int init) {
+        return crc16ReflectedPoly(data, init, 0xa001);
+    }
+
+    private static int crc16ReflectedPoly(byte[] data, int init, int poly) {
         byte[] bytes = data == null ? new byte[0] : data;
         int crc = init;
         for (byte b : bytes) {
             crc ^= b & 0xff;
             for (int i = 0; i < 8; i++) {
                 if ((crc & 1) != 0) {
-                    crc = (crc >>> 1) ^ 0xa001;
+                    crc = (crc >>> 1) ^ poly;
                 } else {
                     crc >>>= 1;
                 }
