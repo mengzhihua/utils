@@ -1049,4 +1049,64 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc8Wcdma").value("25"));
     }
+
+    @Test
+    void ecuadorItalyIreland() throws Exception {
+        mockMvc.perform(get("/api/utils/ec-ci").param("value", "171430710-3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("1714307103"));
+
+        mockMvc.perform(get("/api/utils/ec-ruc").param("value", "1792060346-001"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/it-iva").param("value", "IT 00743110157"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("00743110157"));
+
+        mockMvc.perform(get("/api/utils/ie-vat").param("value", "IE 6433435OA"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/xss-protection").param("header", "1; mode=block"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.enabled").value(true))
+                .andExpect(jsonPath("$.data.modeBlock").value(true));
+
+        mockMvc.perform(get("/api/utils/crc8-maxim").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc8Maxim").value("a1"));
+    }
+
+    @Test
+    void ukCanadaCzechCreditor() throws Exception {
+        mockMvc.perform(get("/api/utils/gb-vat").param("value", "GB 980 7806 84"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("980780684"));
+
+        mockMvc.perform(get("/api/utils/ca-bn").param("value", "12302 6635 RC 0001"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/cz-dic").param("value", "CZ 25123891"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/iso11649").param("value", "RF18 5390 0754 7034"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.formatted").value("RF18 5390 0754 7034"));
+
+        mockMvc.perform(get("/api/utils/expect-ct").param("header", "max-age=86400, enforce"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.enforce").value(true))
+                .andExpect(jsonPath("$.data.maxAge").value(86400));
+
+        mockMvc.perform(get("/api/utils/crc16-x25").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16X25").value("906e"));
+    }
 }
