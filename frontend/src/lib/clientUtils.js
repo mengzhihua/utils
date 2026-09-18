@@ -948,6 +948,22 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, valid: isOib(digits) }
     }
+    case 'jmbg-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isJmbg(digits) }
+    }
+    case 'kennitala-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isKennitala(digits) }
+    }
+    case 'taj-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isTaj(digits) }
+    }
+    case 'nit-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isNit(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2485,6 +2501,48 @@ function isOib(digits) {
   }
   const check = 11 - product
   return Number(digits[10]) === (check === 10 ? 0 : check)
+}
+
+function isJmbg(digits) {
+  if (!/^\d{13}$/.test(digits)) return false
+  const w = [7, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 12; i++) sum += Number(digits[i]) * w[i]
+  let rem = 11 - (sum % 11)
+  if (rem >= 10) rem = 0
+  return Number(digits[12]) === rem
+}
+
+function isKennitala(digits) {
+  if (!/^\d{10}$/.test(digits) || (digits[9] !== '9' && digits[9] !== '0')) return false
+  const w = [3, 2, 7, 6, 5, 4, 3, 2]
+  let sum = 0
+  for (let i = 0; i < 8; i++) sum += Number(digits[i]) * w[i]
+  let rem = 11 - (sum % 11)
+  if (rem === 10) return false
+  if (rem === 11) rem = 0
+  return Number(digits[8]) === rem
+}
+
+function isTaj(digits) {
+  if (!/^\d{9}$/.test(digits)) return false
+  const w = [3, 7, 3, 7, 3, 7, 3, 7]
+  let sum = 0
+  for (let i = 0; i < 8; i++) sum += Number(digits[i]) * w[i]
+  return Number(digits[8]) === sum % 10
+}
+
+function isNit(digits) {
+  if (!/^\d{8,16}$/.test(digits)) return false
+  const factors = [3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67, 71]
+  const body = digits.slice(0, -1)
+  let sum = 0
+  for (let i = 0; i < body.length; i++) {
+    sum += Number(body[body.length - 1 - i]) * factors[i]
+  }
+  const rem = sum % 11
+  const check = rem <= 1 ? rem : 11 - rem
+  return Number(digits[digits.length - 1]) === check
 }
 
 function isSscc(digits) {
