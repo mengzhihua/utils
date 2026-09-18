@@ -48,6 +48,20 @@ import com.mengzhihua.utils.common.validate.IccidUtil;
 import com.mengzhihua.utils.common.validate.NirUtil;
 import com.mengzhihua.utils.common.validate.PmidUtil;
 import com.mengzhihua.utils.common.validate.SteuerIdUtil;
+import com.mengzhihua.utils.common.validate.AbnUtil;
+import com.mengzhihua.utils.common.validate.FodselsnummerUtil;
+import com.mengzhihua.utils.common.validate.HetuUtil;
+import com.mengzhihua.utils.common.validate.IswcUtil;
+import com.mengzhihua.utils.common.validate.PersonnummerUtil;
+import com.mengzhihua.utils.common.validate.SsccUtil;
+import com.mengzhihua.utils.common.validate.TfnUtil;
+import com.mengzhihua.utils.common.validate.AadhaarUtil;
+import com.mengzhihua.utils.common.validate.AhvUtil;
+import com.mengzhihua.utils.common.validate.NipUtil;
+import com.mengzhihua.utils.common.validate.PanUtil;
+import com.mengzhihua.utils.common.validate.PpsUtil;
+import com.mengzhihua.utils.common.validate.SinUtil;
+import com.mengzhihua.utils.common.validate.VatUtil;
 import com.mengzhihua.utils.common.validate.VinUtil;
 
 /**
@@ -205,6 +219,20 @@ public final class RegexUtil {
         TYPES.put("doi", DoiUtil::isValid);
         TYPES.put("pmid", PmidUtil::isValid);
         TYPES.put("iccid", IccidUtil::isValid);
+        TYPES.put("personnummer", PersonnummerUtil::isValid);
+        TYPES.put("hetu", HetuUtil::isValid);
+        TYPES.put("fodselsnummer", FodselsnummerUtil::isValid);
+        TYPES.put("iswc", IswcUtil::isValid);
+        TYPES.put("sscc", SsccUtil::isValid);
+        TYPES.put("abn", AbnUtil::isValid);
+        TYPES.put("tfn", TfnUtil::isValid);
+        TYPES.put("vat", VatUtil::isValid);
+        TYPES.put("ahv", AhvUtil::isValid);
+        TYPES.put("nip", NipUtil::isValid);
+        TYPES.put("aadhaar", AadhaarUtil::isValid);
+        TYPES.put("pan", PanUtil::isValid);
+        TYPES.put("sin", SinUtil::isValid);
+        TYPES.put("pps", PpsUtil::isValid);
     }
 
     private RegexUtil() {

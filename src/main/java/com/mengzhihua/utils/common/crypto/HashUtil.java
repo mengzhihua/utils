@@ -442,8 +442,28 @@ public final class HashUtil {
     }
 
     public static int crc16Ccitt(byte[] data) {
+        return crc16Shift(data, 0xffff);
+    }
+
+    /**
+     * CRC-16/XMODEM (poly 0x1021, init 0). {@code 123456789} → {@code 31c3}.
+     */
+    public static int crc16Xmodem(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Xmodem(data);
+    }
+
+    public static String crc16XmodemHex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Xmodem(text));
+    }
+
+    public static int crc16Xmodem(byte[] data) {
+        return crc16Shift(data, 0);
+    }
+
+    private static int crc16Shift(byte[] data, int init) {
         byte[] bytes = data == null ? new byte[0] : data;
-        int crc = 0xffff;
+        int crc = init;
         for (byte b : bytes) {
             crc ^= (b & 0xff) << 8;
             for (int i = 0; i < 8; i++) {

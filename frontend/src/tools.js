@@ -2106,6 +2106,189 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/fletcher',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'personnummer',
+      group: 'validate',
+      title: '瑞典个人号',
+      summary: 'PersonnummerUtil Luhn',
+      method: 'GET',
+      path: '/api/utils/personnummer',
+      fields: [{ name: 'value', label: '个人号', value: '19811218-9876' }]
+    },
+    {
+      id: 'hetu',
+      group: 'validate',
+      title: '芬兰个人号',
+      summary: 'HetuUtil',
+      method: 'GET',
+      path: '/api/utils/hetu',
+      fields: [{ name: 'value', label: 'HETU', value: '131052-308T' }]
+    },
+    {
+      id: 'fodselsnummer',
+      group: 'validate',
+      title: '挪威个人号',
+      summary: 'FodselsnummerUtil MOD 11',
+      method: 'GET',
+      path: '/api/utils/fodselsnummer',
+      fields: [{ name: 'value', label: 'FNR', value: '11077941012' }]
+    },
+    {
+      id: 'iswc',
+      group: 'validate',
+      title: 'ISWC',
+      summary: 'IswcUtil ISO 15707',
+      method: 'GET',
+      path: '/api/utils/iswc',
+      fields: [{ name: 'value', label: 'ISWC', value: 'T-034.524.680-8' }]
+    },
+    {
+      id: 'sscc',
+      group: 'validate',
+      title: 'GS1 SSCC',
+      summary: 'SsccUtil',
+      method: 'GET',
+      path: '/api/utils/sscc',
+      fields: [{ name: 'value', label: 'SSCC', value: '106141411234567897' }]
+    },
+    {
+      id: 'abn',
+      group: 'validate',
+      title: '澳大利亚 ABN',
+      summary: 'AbnUtil',
+      method: 'GET',
+      path: '/api/utils/abn',
+      fields: [{ name: 'value', label: 'ABN', value: '51 824 753 556' }]
+    },
+    {
+      id: 'tfn',
+      group: 'validate',
+      title: '澳大利亚 TFN',
+      summary: 'TfnUtil',
+      method: 'GET',
+      path: '/api/utils/tfn',
+      fields: [{ name: 'value', label: 'TFN', value: '123456782' }]
+    },
+    {
+      id: 'link',
+      group: 'web',
+      title: 'HTTP Link',
+      summary: 'LinkHeaderUtil RFC 8288',
+      method: 'GET',
+      path: '/api/utils/link',
+      fields: [{ name: 'header', label: 'Link', value: '<https://example.com/TheBook/chapter2>; rel="previous"; title="previous chapter"' }]
+    },
+    {
+      id: 'etag',
+      group: 'web',
+      title: 'HTTP ETag',
+      summary: 'EtagUtil RFC 9110',
+      method: 'GET',
+      path: '/api/utils/etag',
+      fields: [
+        { name: 'value', label: 'ETag', value: 'W/"abc"' },
+        { name: 'ifNoneMatch', label: 'If-None-Match', value: '"abc", W/"xyz"' }
+      ]
+    },
+    {
+      id: 'uuencode',
+      group: 'crypto',
+      title: 'uuencode',
+      summary: 'UuencodeUtil',
+      method: 'GET',
+      path: '/api/utils/uuencode',
+      fields: [{ name: 'text', label: '原文', value: 'Cat' }]
+    },
+    {
+      id: 'vat',
+      group: 'validate',
+      title: '欧盟 VAT',
+      summary: 'VatUtil DE/FR/NL',
+      method: 'GET',
+      path: '/api/utils/vat',
+      fields: [{ name: 'value', label: 'VAT', value: 'DE136695976' }]
+    },
+    {
+      id: 'ahv',
+      group: 'validate',
+      title: '瑞士 AHV',
+      summary: 'AhvUtil EAN-13',
+      method: 'GET',
+      path: '/api/utils/ahv',
+      fields: [{ name: 'value', label: 'AHV', value: '756.1234.5678.97' }]
+    },
+    {
+      id: 'nip',
+      group: 'validate',
+      title: '波兰 NIP',
+      summary: 'NipUtil',
+      method: 'GET',
+      path: '/api/utils/nip',
+      fields: [{ name: 'value', label: 'NIP', value: '1234563218' }]
+    },
+    {
+      id: 'aadhaar',
+      group: 'validate',
+      title: '印度 Aadhaar',
+      summary: 'AadhaarUtil Verhoeff',
+      method: 'GET',
+      path: '/api/utils/aadhaar',
+      fields: [{ name: 'value', label: 'Aadhaar', value: '234123412346' }]
+    },
+    {
+      id: 'pan',
+      group: 'validate',
+      title: '印度 PAN',
+      summary: 'PanUtil',
+      method: 'GET',
+      path: '/api/utils/pan',
+      fields: [{ name: 'value', label: 'PAN', value: 'ABCPE1234F' }]
+    },
+    {
+      id: 'sin',
+      group: 'validate',
+      title: '加拿大 SIN',
+      summary: 'SinUtil Luhn',
+      method: 'GET',
+      path: '/api/utils/sin',
+      fields: [{ name: 'value', label: 'SIN', value: '046454286' }]
+    },
+    {
+      id: 'pps',
+      group: 'validate',
+      title: '爱尔兰 PPS',
+      summary: 'PpsUtil',
+      method: 'GET',
+      path: '/api/utils/pps',
+      fields: [{ name: 'value', label: 'PPS', value: '1234567T' }]
+    },
+    {
+      id: 'cache-control',
+      group: 'web',
+      title: 'HTTP Cache-Control',
+      summary: 'CacheControlUtil RFC 9111',
+      method: 'GET',
+      path: '/api/utils/cache-control',
+      fields: [{ name: 'header', label: 'Cache-Control', value: 'max-age=3600, public, must-revalidate' }]
+    },
+    {
+      id: 'z85',
+      group: 'crypto',
+      title: 'Z85',
+      summary: 'Z85Util RFC 32',
+      method: 'GET',
+      path: '/api/utils/z85',
+      fields: [{ name: 'text', label: 'Z85 / 原文', value: 'HelloWorld' }]
+    },
+    {
+      id: 'crc16-xmodem',
+      group: 'crypto',
+      title: 'CRC-16/XMODEM',
+      summary: 'HashUtil.crc16Xmodem',
+      method: 'GET',
+      path: '/api/utils/crc16-xmodem',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

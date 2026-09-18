@@ -917,6 +917,104 @@ export const clientTools = [
       title: 'SIM ICCID',
       summary: '89014103211118510720',
       fields: [{ name: 'value', label: 'ICCID', value: '89014103211118510720' }]
+    },
+    {
+      id: 'personnummer-local',
+      group: 'net',
+      title: '瑞典个人号',
+      summary: '19811218-9876',
+      fields: [{ name: 'value', label: '个人号', value: '19811218-9876' }]
+    },
+    {
+      id: 'hetu-local',
+      group: 'net',
+      title: '芬兰个人号',
+      summary: '131052-308T',
+      fields: [{ name: 'value', label: 'HETU', value: '131052-308T' }]
+    },
+    {
+      id: 'fodselsnummer-local',
+      group: 'net',
+      title: '挪威个人号',
+      summary: '11077941012',
+      fields: [{ name: 'value', label: 'FNR', value: '11077941012' }]
+    },
+    {
+      id: 'iswc-local',
+      group: 'net',
+      title: 'ISWC',
+      summary: 'T-034.524.680-8',
+      fields: [{ name: 'value', label: 'ISWC', value: 'T-034.524.680-8' }]
+    },
+    {
+      id: 'abn-local',
+      group: 'net',
+      title: '澳大利亚 ABN',
+      summary: '51 824 753 556',
+      fields: [{ name: 'value', label: 'ABN', value: '51 824 753 556' }]
+    },
+    {
+      id: 'tfn-local',
+      group: 'net',
+      title: '澳大利亚 TFN',
+      summary: '123456782',
+      fields: [{ name: 'value', label: 'TFN', value: '123456782' }]
+    },
+    {
+      id: 'sscc-local',
+      group: 'net',
+      title: 'GS1 SSCC',
+      summary: '106141411234567897',
+      fields: [{ name: 'value', label: 'SSCC', value: '106141411234567897' }]
+    },
+    {
+      id: 'vat-local',
+      group: 'net',
+      title: '欧盟 VAT',
+      summary: 'DE136695976',
+      fields: [{ name: 'value', label: 'VAT', value: 'DE136695976' }]
+    },
+    {
+      id: 'ahv-local',
+      group: 'net',
+      title: '瑞士 AHV',
+      summary: '756.1234.5678.97',
+      fields: [{ name: 'value', label: 'AHV', value: '756.1234.5678.97' }]
+    },
+    {
+      id: 'nip-local',
+      group: 'net',
+      title: '波兰 NIP',
+      summary: '1234563218',
+      fields: [{ name: 'value', label: 'NIP', value: '1234563218' }]
+    },
+    {
+      id: 'aadhaar-local',
+      group: 'net',
+      title: '印度 Aadhaar',
+      summary: '234123412346',
+      fields: [{ name: 'value', label: 'Aadhaar', value: '234123412346' }]
+    },
+    {
+      id: 'pan-local',
+      group: 'net',
+      title: '印度 PAN',
+      summary: 'ABCPE1234F',
+      fields: [{ name: 'value', label: 'PAN', value: 'ABCPE1234F' }]
+    },
+    {
+      id: 'sin-local',
+      group: 'net',
+      title: '加拿大 SIN',
+      summary: '046454286',
+      fields: [{ name: 'value', label: 'SIN', value: '046454286' }]
+    },
+    {
+      id: 'pps-local',
+      group: 'net',
+      title: '爱尔兰 PPS',
+      summary: '1234567T',
+      fields: [{ name: 'value', label: 'PPS', value: '1234567T' }]
     }
   ]
 
