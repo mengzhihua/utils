@@ -288,6 +288,36 @@ public final class HashUtil {
     }
 
     /**
+     * CRC-8/SAE-J1850 (poly {@code 0x1D}, init {@code 0xFF}, xorout {@code 0xFF}).
+     * {@code 123456789} → {@code 4b}.
+     */
+    public static int crc8SaeJ1850(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc8SaeJ1850(data);
+    }
+
+    public static String crc8SaeJ1850Hex(String text) {
+        return String.format(Locale.ROOT, "%02x", crc8SaeJ1850(text));
+    }
+
+    public static int crc8SaeJ1850(byte[] data) {
+        byte[] bytes = data == null ? new byte[0] : data;
+        int crc = 0xff;
+        for (byte b : bytes) {
+            crc ^= b & 0xff;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 0x80) != 0) {
+                    crc = (crc << 1) ^ 0x1d;
+                } else {
+                    crc <<= 1;
+                }
+                crc &= 0xff;
+            }
+        }
+        return crc ^ 0xff;
+    }
+
+    /**
      * CRC-64/ECMA-182. {@code 123456789} → {@code 6c40df5f0b497347}.
      */
     public static long crc64(String text) {
