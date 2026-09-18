@@ -1316,6 +1316,21 @@ export async function runClientTool(id, values) {
       const compact = String(values.value || '').replace(/[\s.]/g, '').replace(/^0+/, '')
       return { normalized: compact, valid: isSmCoe(compact) }
     }
+    case 'fo-vn-local': {
+      const digits = normalizeFoVn(values.value)
+      return { normalized: digits, valid: /^\d{6}$/.test(digits) }
+    }
+    case 'fr-tva-local': {
+      const compact = normalizeFrTva(values.value)
+      return { normalized: compact, formatted: formatFrTva(compact), valid: isFrTva(compact) }
+    }
+    case 'mc-tva-local': {
+      const compact = normalizeFrTva(values.value)
+      return { normalized: compact, formatted: compact.length === 11 ? `FR ${formatFrTva(compact)}` : compact, valid: isMcTva(compact) }
+    }
+    case 'mu-nid-local': {
+      return parseMuNid(values.value)
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -3784,4 +3799,65 @@ function doubleMetaphone(text) {
     i++
   }
   return out.slice(0, 4)
+}
+
+function normalizeFoVn(value) {
+  let compact = String(value || '').replace(/[\s.-]/g, '').toUpperCase()
+  if (compact.startsWith('FO')) compact = compact.slice(2)
+  return compact.replace(/\D/g, '')
+}
+
+function normalizeFrTva(value) {
+  let compact = String(value || '').replace(/[\s.-]/g, '').toUpperCase()
+  if (compact.startsWith('FR')) compact = compact.slice(2)
+  return compact
+}
+
+function formatFrTva(compact) {
+  if (compact.length !== 11) return compact
+  return `${compact.slice(0, 2)} ${compact.slice(2, 5)} ${compact.slice(5, 8)} ${compact.slice(8)}`
+}
+
+function isFrTva(compact) {
+  const alphabet = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ'
+  if (compact.length !== 11) return false
+  if (alphabet.indexOf(compact[0]) < 0 || alphabet.indexOf(compact[1]) < 0) return false
+  const siren = compact.slice(2)
+  if (!/^\d{9}$/.test(siren)) return false
+  if (!siren.startsWith('000') && !isSiren(siren)) return false
+  if (/^\d{11}$/.test(compact)) {
+    return (12 + 3 * (Number(siren) % 97)) % 97 === Number(compact.slice(0, 2))
+  }
+  const check = /\d/.test(compact[0])
+    ? alphabet.indexOf(compact[0]) * 24 + alphabet.indexOf(compact[1]) - 10
+    : alphabet.indexOf(compact[0]) * 34 + alphabet.indexOf(compact[1]) - 100
+  return (Number(siren) + 1 + Math.floor(check / 11)) % 11 === (check % 11)
+}
+
+function isMcTva(compact) {
+  return compact.length === 11 && compact.slice(2, 5) === '000' && isFrTva(compact)
+}
+
+function parseMuNid(value) {
+  const compact = String(value || '').replace(/[\s-]/g, '').toUpperCase()
+  if (!/^[A-Z]\d{12}[0-9A-Z]$/.test(compact)) return { normalized: compact, valid: false }
+  const day = Number(compact.slice(1, 3))
+  const month = Number(compact.slice(3, 5))
+  const year = 2000 + Number(compact.slice(5, 7))
+  const date = new Date(Date.UTC(year, month - 1, day))
+  const validDate = date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day
+  const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  let sum = 0
+  for (let i = 0; i < 13; i++) {
+    const index = alphabet.indexOf(compact[i])
+    if (index < 0) return { normalized: compact, valid: false }
+    sum += (14 - i) * index
+  }
+  const check = alphabet[((17 - (sum % 17)) % 17)]
+  const valid = validDate && check === compact[13]
+  return {
+    normalized: compact,
+    valid,
+    birthDate: validDate ? `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}` : ''
+  }
 }

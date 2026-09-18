@@ -161,6 +161,10 @@ import com.mengzhihua.utils.common.validate.TajUtil;
 import com.mengzhihua.utils.common.validate.TcKimlikUtil;
 import com.mengzhihua.utils.common.validate.ThaiIdUtil;
 import com.mengzhihua.utils.common.validate.VinUtil;
+import com.mengzhihua.utils.common.validate.FoVnUtil;
+import com.mengzhihua.utils.common.validate.FrTvaUtil;
+import com.mengzhihua.utils.common.validate.McTvaUtil;
+import com.mengzhihua.utils.common.validate.MuNidUtil;
 
 /**
  * Common format validators (Hutool {@code Validator} / Commons Validator style).
@@ -429,6 +433,10 @@ public final class RegexUtil {
         TYPES.put("cuni", CuNiUtil::isValid);
         TYPES.put("gnnifp", GnNifpUtil::isValid);
         TYPES.put("smcoe", SmCoeUtil::isValid);
+        TYPES.put("fovn", FoVnUtil::isValid);
+        TYPES.put("frtva", FrTvaUtil::isValid);
+        TYPES.put("mctva", McTvaUtil::isValid);
+        TYPES.put("munid", MuNidUtil::isValid);
     }
 
     private RegexUtil() {
