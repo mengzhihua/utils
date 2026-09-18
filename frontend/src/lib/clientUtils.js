@@ -1052,6 +1052,22 @@ export async function runClientTool(id, values) {
       const digits = String(values.value || '').replace(/\D/g, '')
       return { normalized: digits, valid: isRegistrikood(digits) }
     }
+    case 'nzbn-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isNzbn(digits) }
+    }
+    case 'uen-local': {
+      const compact = String(values.value || '').replace(/[\s-]/g, '').toUpperCase()
+      return { normalized: compact, valid: isUen(compact) }
+    }
+    case 'il-hp-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isIlHp(digits) }
+    }
+    case 'lt-ja-local': {
+      const digits = String(values.value || '').replace(/\D/g, '')
+      return { normalized: digits, valid: isLtJa(digits) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -2818,6 +2834,56 @@ function isVkn(digits) {
 function isNpwp(digits) {
   if (!/^\d{15}$/.test(digits)) return false
   return luhnAny(digits.slice(0, 9))
+}
+
+function isNzbn(digits) {
+  if (!/^94\d{11}$/.test(digits)) return false
+  let sum = 0
+  let factor = 3
+  for (let i = digits.length - 2; i >= 0; i--) {
+    sum += Number(digits[i]) * factor
+    factor = 4 - factor
+  }
+  return Number(digits[12]) === (10 - (sum % 10)) % 10
+}
+
+function isUen(compact) {
+  if (/^\d{8}[A-Z]$/.test(compact)) {
+    const w = [10, 4, 9, 3, 8, 2, 7, 1]
+    let sum = 0
+    for (let i = 0; i < 8; i++) sum += Number(compact[i]) * w[i]
+    return compact[8] === 'XMKECAWLJDB'[sum % 11]
+  }
+  if (/^\d{9}[A-Z]$/.test(compact)) {
+    if (Number(compact.slice(0, 4)) > new Date().getFullYear()) return false
+    const w = [10, 8, 6, 4, 9, 7, 5, 3, 1]
+    let sum = 0
+    for (let i = 0; i < 9; i++) sum += Number(compact[i]) * w[i]
+    return compact[9] === 'ZKCMDNERGWH'[sum % 11]
+  }
+  if (!/^[RST]\d{2}[A-Z]{2}\d{4}[A-Z]$/.test(compact)) return false
+  const types = new Set(['CC','CD','CH','CL','CM','CP','CS','CX','DP','FB','FC','FM','FN','GA','GB','GS','HS','LL','LP','MB','MC','MD','MH','MM','MQ','NB','NR','PA','PB','PF','RF','RP','SM','SS','TC','TU','VH','XL'])
+  if (!types.has(compact.slice(3, 5))) return false
+  if (compact[0] === 'T' && Number(compact.slice(1, 3)) > new Date().getFullYear() % 100) return false
+  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWX0123456789'
+  const w = [4, 3, 5, 3, 10, 2, 2, 5, 7]
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += alphabet.indexOf(compact[i]) * w[i]
+  const rem = ((sum - 5) % 11 + 11) % 11
+  return compact[9] === alphabet[rem]
+}
+
+function isIlHp(digits) {
+  return /^5\d{8}$/.test(digits) && luhnAny(digits)
+}
+
+function isLtJa(digits) {
+  if (!/^\d{7}1\d$/.test(digits)) return false
+  const w = [1, 2, 3, 4, 5, 6, 7, 8]
+  let sum = 0
+  for (let i = 0; i < 8; i++) sum += Number(digits[i]) * w[i]
+  const rem = sum % 11
+  return rem !== 10 && Number(digits[8]) === rem
 }
 
 function isRegistrikood(digits) {

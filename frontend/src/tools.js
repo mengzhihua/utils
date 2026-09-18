@@ -3023,6 +3023,69 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-genibus',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'nzbn',
+      group: 'validate',
+      title: '新西兰企业号',
+      summary: 'NzbnUtil',
+      method: 'GET',
+      path: '/api/utils/nzbn',
+      fields: [{ name: 'value', label: 'NZBN', value: '9429000000000' }]
+    },
+    {
+      id: 'uen',
+      group: 'validate',
+      title: '新加坡 UEN',
+      summary: 'UenUtil',
+      method: 'GET',
+      path: '/api/utils/uen',
+      fields: [{ name: 'value', label: 'UEN', value: 'T01FC6132D' }]
+    },
+    {
+      id: 'il-hp',
+      group: 'validate',
+      title: '以色列公司号',
+      summary: 'IlHpUtil',
+      method: 'GET',
+      path: '/api/utils/il-hp',
+      fields: [{ name: 'value', label: 'ח.פ.', value: '516179157' }]
+    },
+    {
+      id: 'lt-ja',
+      group: 'validate',
+      title: '立陶宛企业号',
+      summary: 'LtJaUtil',
+      method: 'GET',
+      path: '/api/utils/lt-ja',
+      fields: [{ name: 'value', label: 'JA kodas', value: '119511515' }]
+    },
+    {
+      id: 'coop',
+      group: 'web',
+      title: 'HTTP COOP',
+      summary: 'CoopUtil',
+      method: 'GET',
+      path: '/api/utils/coop',
+      fields: [{ name: 'header', label: 'COOP', value: 'same-origin' }]
+    },
+    {
+      id: 'coep',
+      group: 'web',
+      title: 'HTTP COEP',
+      summary: 'CoepUtil',
+      method: 'GET',
+      path: '/api/utils/coep',
+      fields: [{ name: 'header', label: 'COEP', value: 'require-corp' }]
+    },
+    {
+      id: 'crc32-jamcrc',
+      group: 'crypto',
+      title: 'CRC-32/JAMCRC',
+      summary: 'HashUtil.crc32Jamcrc',
+      method: 'GET',
+      path: '/api/utils/crc32-jamcrc',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

@@ -322,6 +322,24 @@ public final class HashUtil {
         return String.format(Locale.ROOT, "%08x", crc32c(text));
     }
 
+    /**
+     * CRC-32/JAMCRC (ISO-HDLC then xor {@code 0xFFFFFFFF}). {@code 123456789} → {@code 340bc6d9}.
+     */
+    public static int crc32Jamcrc(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc32Jamcrc(data);
+    }
+
+    public static String crc32JamcrcHex(String text) {
+        return String.format(Locale.ROOT, "%08x", crc32Jamcrc(text));
+    }
+
+    public static int crc32Jamcrc(byte[] data) {
+        java.util.zip.CRC32 crc = new java.util.zip.CRC32();
+        crc.update(data == null ? new byte[0] : data);
+        return (int) crc.getValue() ^ 0xffffffff;
+    }
+
     public static int crc32c(byte[] data) {
         byte[] bytes = data == null ? new byte[0] : data;
         int crc = 0xffffffff;

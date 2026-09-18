@@ -1281,6 +1281,34 @@ export const clientTools = [
       title: '爱沙尼亚企业号',
       summary: '12345678',
       fields: [{ name: 'value', label: 'registrikood', value: '12345678' }]
+    },
+    {
+      id: 'nzbn-local',
+      group: 'net',
+      title: '新西兰企业号',
+      summary: '9429000000000',
+      fields: [{ name: 'value', label: 'NZBN', value: '9429000000000' }]
+    },
+    {
+      id: 'uen-local',
+      group: 'net',
+      title: '新加坡 UEN',
+      summary: 'T01FC6132D',
+      fields: [{ name: 'value', label: 'UEN', value: 'T01FC6132D' }]
+    },
+    {
+      id: 'il-hp-local',
+      group: 'net',
+      title: '以色列公司号',
+      summary: '516179157',
+      fields: [{ name: 'value', label: 'ח.פ.', value: '516179157' }]
+    },
+    {
+      id: 'lt-ja-local',
+      group: 'net',
+      title: '立陶宛企业号',
+      summary: '119511515',
+      fields: [{ name: 'value', label: 'JA kodas', value: '119511515' }]
     }
   ]
 
