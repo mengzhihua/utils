@@ -514,8 +514,28 @@ public final class HashUtil {
     }
 
     public static int crc16Arc(byte[] data) {
+        return crc16Reflected(data, 0);
+    }
+
+    /**
+     * CRC-16/MODBUS (ARC with init {@code 0xFFFF}). {@code 123456789} → {@code 4b37}.
+     */
+    public static int crc16Modbus(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16Modbus(data);
+    }
+
+    public static String crc16ModbusHex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16Modbus(text));
+    }
+
+    public static int crc16Modbus(byte[] data) {
+        return crc16Reflected(data, 0xffff);
+    }
+
+    private static int crc16Reflected(byte[] data, int init) {
         byte[] bytes = data == null ? new byte[0] : data;
-        int crc = 0;
+        int crc = init;
         for (byte b : bytes) {
             crc ^= b & 0xff;
             for (int i = 0; i < 8; i++) {

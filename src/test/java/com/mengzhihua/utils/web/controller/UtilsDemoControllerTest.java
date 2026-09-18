@@ -578,4 +578,25 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc16Arc").value("bb3d"));
     }
+
+    @Test
+    void lvPkEmsoMxRfc() throws Exception {
+        mockMvc.perform(get("/api/utils/lv-pk").param("value", "111111-11111"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.birthDate").value("1911-11-11"));
+
+        mockMvc.perform(get("/api/utils/emso").param("value", "0101006500006"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.birthDate").value("2006-01-01"));
+
+        mockMvc.perform(get("/api/utils/mx-rfc").param("value", "GODE561231GR8"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/crc16-modbus").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16Modbus").value("4b37"));
+    }
 }

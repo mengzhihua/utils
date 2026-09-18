@@ -2666,6 +2666,78 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-arc',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'lv-pk',
+      group: 'validate',
+      title: '拉脱维亚个人号',
+      summary: 'LatvianPkUtil',
+      method: 'GET',
+      path: '/api/utils/lv-pk',
+      fields: [{ name: 'value', label: 'personas kods', value: '111111-11111' }]
+    },
+    {
+      id: 'lt-ak',
+      group: 'validate',
+      title: '立陶宛个人号',
+      summary: 'LithuanianAkUtil',
+      method: 'GET',
+      path: '/api/utils/lt-ak',
+      fields: [{ name: 'value', label: 'asmens kodas', value: '33309240064' }]
+    },
+    {
+      id: 'emso',
+      group: 'validate',
+      title: '斯洛文尼亚 EMŠO',
+      summary: 'EmsoUtil',
+      method: 'GET',
+      path: '/api/utils/emso',
+      fields: [{ name: 'value', label: 'EMŠO', value: '0101006500006' }]
+    },
+    {
+      id: 'pe-dni',
+      group: 'validate',
+      title: '秘鲁 DNI',
+      summary: 'PeDniUtil',
+      method: 'GET',
+      path: '/api/utils/pe-dni',
+      fields: [{ name: 'value', label: 'DNI', value: '713903006' }]
+    },
+    {
+      id: 'mx-rfc',
+      group: 'validate',
+      title: '墨西哥 RFC',
+      summary: 'MxRfcUtil SAT',
+      method: 'GET',
+      path: '/api/utils/mx-rfc',
+      fields: [{ name: 'value', label: 'RFC', value: 'GODE561231GR8' }]
+    },
+    {
+      id: 'http-age',
+      group: 'web',
+      title: 'HTTP Age',
+      summary: 'HttpAgeUtil RFC 9111',
+      method: 'GET',
+      path: '/api/utils/http-age',
+      fields: [{ name: 'header', label: 'Age', value: '3600' }]
+    },
+    {
+      id: 'warning',
+      group: 'web',
+      title: 'HTTP Warning',
+      summary: 'WarningUtil RFC 7234',
+      method: 'GET',
+      path: '/api/utils/warning',
+      fields: [{ name: 'header', label: 'Warning', value: '110 - "Response is Stale"' }]
+    },
+    {
+      id: 'crc16-modbus',
+      group: 'crypto',
+      title: 'CRC-16/MODBUS',
+      summary: 'HashUtil.crc16Modbus',
+      method: 'GET',
+      path: '/api/utils/crc16-modbus',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

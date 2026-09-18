@@ -1127,6 +1127,34 @@ export const clientTools = [
       title: '哥伦比亚 NIT',
       summary: '800197268-4',
       fields: [{ name: 'value', label: 'NIT', value: '800197268-4' }]
+    },
+    {
+      id: 'lv-pk-local',
+      group: 'net',
+      title: '拉脱维亚个人号',
+      summary: '111111-11111',
+      fields: [{ name: 'value', label: 'personas kods', value: '111111-11111' }]
+    },
+    {
+      id: 'emso-local',
+      group: 'net',
+      title: '斯洛文尼亚 EMŠO',
+      summary: '0101006500006',
+      fields: [{ name: 'value', label: 'EMŠO', value: '0101006500006' }]
+    },
+    {
+      id: 'pe-dni-local',
+      group: 'net',
+      title: '秘鲁 DNI',
+      summary: '713903006',
+      fields: [{ name: 'value', label: 'DNI', value: '713903006' }]
+    },
+    {
+      id: 'mx-rfc-local',
+      group: 'net',
+      title: '墨西哥 RFC',
+      summary: 'GODE561231GR8',
+      fields: [{ name: 'value', label: 'RFC', value: 'GODE561231GR8' }]
     }
   ]
 
