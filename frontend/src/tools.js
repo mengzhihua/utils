@@ -3995,6 +3995,60 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-x25',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'at-uid',
+      group: 'validate',
+      title: '奥地利税号',
+      summary: 'AtUidUtil',
+      method: 'GET',
+      path: '/api/utils/at-uid',
+      fields: [{ name: 'value', label: 'UID', value: 'AT U13585627' }]
+    },
+    {
+      id: 'sk-dph',
+      group: 'validate',
+      title: '斯洛伐克税号',
+      summary: 'SkDphUtil',
+      method: 'GET',
+      path: '/api/utils/sk-dph',
+      fields: [{ name: 'value', label: 'IČ DPH', value: 'SK 202 274 96 19' }]
+    },
+    {
+      id: 'si-ddv',
+      group: 'validate',
+      title: '斯洛文尼亚税号',
+      summary: 'SiDdvUtil',
+      method: 'GET',
+      path: '/api/utils/si-ddv',
+      fields: [{ name: 'value', label: 'DDV', value: 'SI 5022 3054' }]
+    },
+    {
+      id: 'nl-btw',
+      group: 'validate',
+      title: '荷兰税号',
+      summary: 'NlBtwUtil',
+      method: 'GET',
+      path: '/api/utils/nl-btw',
+      fields: [{ name: 'value', label: 'BTW', value: 'NL004495445B01' }]
+    },
+    {
+      id: 'priority',
+      group: 'web',
+      title: 'HTTP Priority',
+      summary: 'PriorityUtil',
+      method: 'GET',
+      path: '/api/utils/priority',
+      fields: [{ name: 'header', label: 'Priority', value: 'u=1, i' }]
+    },
+    {
+      id: 'crc16-dect-r',
+      group: 'crypto',
+      title: 'CRC-16/DECT-R',
+      summary: 'HashUtil.crc16DectR',
+      method: 'GET',
+      path: '/api/utils/crc16-dect-r',
+      fields: [{ name: 'text', label: '原文', value: '123456789' }]
     }
   ]
 

@@ -752,6 +752,22 @@ public final class HashUtil {
     }
 
     /**
+     * CRC-16/DECT-R (poly {@code 0x0589}, xorout {@code 0x0001}). {@code 123456789} → {@code 007e}.
+     */
+    public static int crc16DectR(String text) {
+        byte[] data = text == null ? new byte[0] : text.getBytes(StandardCharsets.UTF_8);
+        return crc16DectR(data);
+    }
+
+    public static String crc16DectRHex(String text) {
+        return String.format(Locale.ROOT, "%04x", crc16DectR(text));
+    }
+
+    public static int crc16DectR(byte[] data) {
+        return crc16ShiftPoly(data, 0, 0x0589) ^ 0x0001;
+    }
+
+    /**
      * CRC-32/BZIP2 (MPEG-2 then xor {@code 0xFFFFFFFF}). {@code 123456789} → {@code fc891918}.
      */
     public static int crc32Bzip2(String text) {
@@ -967,13 +983,17 @@ public final class HashUtil {
     }
 
     private static int crc16Shift(byte[] data, int init) {
+        return crc16ShiftPoly(data, init, 0x1021);
+    }
+
+    private static int crc16ShiftPoly(byte[] data, int init, int poly) {
         byte[] bytes = data == null ? new byte[0] : data;
         int crc = init;
         for (byte b : bytes) {
             crc ^= (b & 0xff) << 8;
             for (int i = 0; i < 8; i++) {
                 if ((crc & 0x8000) != 0) {
-                    crc = (crc << 1) ^ 0x1021;
+                    crc = (crc << 1) ^ poly;
                 } else {
                     crc <<= 1;
                 }

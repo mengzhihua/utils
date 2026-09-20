@@ -1363,6 +1363,22 @@ export async function runClientTool(id, values) {
       const compact = String(values.value || '').replace(/[\s.,/:\-]/g, '').toUpperCase()
       return { normalized: compact, formatted: compact.match(/.{1,4}/g)?.join(' ') || compact, valid: isIso11649(compact) }
     }
+    case 'at-uid-local': {
+      const compact = normalizeAtUid(values.value)
+      return { normalized: compact, formatted: compact.length === 9 ? `AT ${compact}` : compact, valid: isAtUid(compact) }
+    }
+    case 'sk-dph-local': {
+      const compact = normalizeSkDph(values.value)
+      return { normalized: compact, formatted: compact.length === 10 ? `SK ${compact.slice(0, 3)} ${compact.slice(3, 6)} ${compact.slice(6, 8)} ${compact.slice(8)}` : compact, valid: isSkDph(compact) }
+    }
+    case 'si-ddv-local': {
+      const compact = normalizeSiDdv(values.value)
+      return { normalized: compact, formatted: compact.length === 8 ? `SI ${compact.slice(0, 4)} ${compact.slice(4)}` : compact, valid: isSiDdv(compact) }
+    }
+    case 'nl-btw-local': {
+      const compact = normalizeNlBtw(values.value)
+      return { normalized: compact, formatted: compact.length === 12 ? `NL${compact}` : compact, valid: isNlBtw(compact) }
+    }
     case 'json-flatten-local': {
       const parsed = JSON.parse(values.text || '{}')
       if (values.mode === 'unflatten') {
@@ -4254,6 +4270,73 @@ function isIso11649(compact) {
   const rearranged = compact.slice(4) + compact.slice(0, 4)
   let numeric = ''
   for (const ch of rearranged) numeric += /[A-Z]/.test(ch) ? String(ch.charCodeAt(0) - 55) : ch
+  return BigInt(numeric) % 97n === 1n
+}
+
+function normalizeAtUid(value) {
+  let compact = String(value || '').replace(/[\s./-]/g, '').toUpperCase()
+  if (compact.startsWith('AT')) compact = compact.slice(2)
+  return compact
+}
+
+function isAtUid(compact) {
+  if (!/^U\d{8}$/.test(compact)) return false
+  const digits = compact.slice(1, 8)
+  const s = (ch) => Math.floor(Number(ch) / 5) + ((Number(ch) * 2) % 10)
+  const r = s(digits[1]) + s(digits[3]) + s(digits[5])
+  const sum = r + Number(digits[0]) + Number(digits[2]) + Number(digits[4]) + Number(digits[6]) + 4
+  return compact[8] === String((10 - (sum % 10)) % 10)
+}
+
+function normalizeSkDph(value) {
+  let compact = String(value || '').replace(/[\s-]/g, '').toUpperCase()
+  if (compact.startsWith('SK')) compact = compact.slice(2)
+  return compact
+}
+
+function isSkDph(compact) {
+  return /^[1-9]\d{9}$/.test(compact) && '234789'.includes(compact[2]) && BigInt(compact) % 11n === 0n
+}
+
+function normalizeSiDdv(value) {
+  let compact = String(value || '').replace(/[\s-]/g, '').toUpperCase()
+  if (compact.startsWith('SI')) compact = compact.slice(2)
+  return compact
+}
+
+function isSiDdv(compact) {
+  if (!/^[1-9]\d{7}$/.test(compact)) return false
+  let sum = 0
+  for (let i = 0; i < 7; i++) sum += (8 - i) * Number(compact[i])
+  const check = 11 - (sum % 11)
+  if (check === 11) return false
+  return compact[7] === String(check === 10 ? 0 : check)
+}
+
+function normalizeNlBtw(value) {
+  let compact = String(value || '').replace(/[\s.-]/g, '').toUpperCase()
+  if (compact.startsWith('NL')) compact = compact.slice(2)
+  const marker = compact.lastIndexOf('B')
+  if (marker > 0 && compact.length - marker === 3 && /^\d+$/.test(compact.slice(0, marker))) {
+    compact = compact.slice(0, marker).padStart(9, '0') + compact.slice(marker)
+  }
+  return compact
+}
+
+function isNlBtwElfproef(digits) {
+  if (!/^\d{9}$/.test(digits)) return false
+  const w = [9, 8, 7, 6, 5, 4, 3, 2, -1]
+  let sum = 0
+  for (let i = 0; i < 9; i++) sum += Number(digits[i]) * w[i]
+  return sum !== 0 && sum % 11 === 0
+}
+
+function isNlBtw(compact) {
+  if (!/^\d{9}B\d{2}$/.test(compact)) return false
+  if (Number(compact.slice(0, 9)) <= 0 || Number(compact.slice(10)) <= 0) return false
+  if (isNlBtwElfproef(compact.slice(0, 9))) return true
+  let numeric = ''
+  for (const ch of `NL${compact}`) numeric += /[A-Z]/.test(ch) ? String(ch.charCodeAt(0) - 55) : ch
   return BigInt(numeric) % 97n === 1n
 }
 
