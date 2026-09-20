@@ -14,6 +14,8 @@
     <ClickSpeedPanel v-else-if="id === 'click'" />
     <GamepadTestPanel v-else-if="id === 'gamepad'" />
     <AudioTestPanel v-else-if="id === 'audio'" />
+    <CameraTestPanel v-else-if="id === 'camera'" />
+    <MicTestPanel v-else-if="id === 'mic'" />
   </div>
   <div v-else class="panel">{{ t('unknownTool') }}</div>
 </template>
@@ -29,6 +31,8 @@ import PointerTestPanel from './hw/PointerTestPanel.vue'
 import ClickSpeedPanel from './hw/ClickSpeedPanel.vue'
 import GamepadTestPanel from './hw/GamepadTestPanel.vue'
 import AudioTestPanel from './hw/AudioTestPanel.vue'
+import CameraTestPanel from './hw/CameraTestPanel.vue'
+import MicTestPanel from './hw/MicTestPanel.vue'
 
 const props = defineProps({
   id: { type: String, required: true }

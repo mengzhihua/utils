@@ -1489,6 +1489,8 @@ export async function runClientTool(id, values) {
       return collectBrowserInfo()
     case 'screen-info-local':
       return collectScreenInfo()
+    case 'media-devices-local':
+      return collectMediaDevices()
     case 'zero-width-local': {
       const text = String(values.text || '')
       const matches = [...text.matchAll(ZERO_WIDTH)].map((m) => ({
@@ -4701,6 +4703,25 @@ function collectScreenInfo() {
       touch: navigator.maxTouchPoints || 0,
       gamepads: navigator.getGamepads ? [...navigator.getGamepads()].filter(Boolean).length : 0
     }
+  }
+}
+
+async function collectMediaDevices() {
+  const supported = Boolean(navigator.mediaDevices?.enumerateDevices)
+  const devices = supported ? await navigator.mediaDevices.enumerateDevices() : []
+  const mapped = devices.map((item) => ({
+    kind: item.kind,
+    label: item.label || '',
+    deviceId: item.deviceId ? `${item.deviceId.slice(0, 10)}…` : '',
+    groupId: item.groupId ? `${item.groupId.slice(0, 8)}…` : ''
+  }))
+  return {
+    secure: window.isSecureContext,
+    mediaDevices: supported,
+    videoInputs: mapped.filter((item) => item.kind === 'videoinput').length,
+    audioInputs: mapped.filter((item) => item.kind === 'audioinput').length,
+    audioOutputs: mapped.filter((item) => item.kind === 'audiooutput').length,
+    devices: mapped
   }
 }
 
