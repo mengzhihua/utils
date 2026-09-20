@@ -3,6 +3,7 @@ export const clientGroups = [
   { id: 'text', label: '文本' },
   { id: 'hash', label: '哈希' },
   { id: 'gen', label: '生成' },
+  { id: 'fe', label: '前端实用' },
   { id: 'time', label: '时间 / 颜色' },
   { id: 'net', label: '网络' }
 ]
@@ -1744,6 +1745,227 @@ export const clientTools = [
       title: 'ISO 11649 债权参考号',
       summary: 'RF18539007547034',
       fields: [{ name: 'value', label: 'RF', value: 'RF18 5390 0754 7034' }]
+    },
+    {
+      id: 'json-flatten-local',
+      group: 'fe',
+      title: 'JSON 扁平化',
+      summary: '嵌套对象 flatten / unflatten',
+      fields: [
+        { name: 'mode', label: '模式', type: 'select', value: 'flatten', options: [
+          { value: 'flatten', label: '扁平化' },
+          { value: 'unflatten', label: '还原嵌套' }
+        ] },
+        { name: 'text', label: 'JSON', type: 'textarea', value: '{"user":{"name":"Ada","skills":["java","vue"]}}' }
+      ]
+    },
+    {
+      id: 'json-ts-local',
+      group: 'fe',
+      title: 'JSON → TypeScript',
+      summary: '从样例推断 interface',
+      fields: [{ name: 'text', label: 'JSON', type: 'textarea', value: '{"name":"Ada","age":18,"skills":["java"],"ok":true}' }]
+    },
+    {
+      id: 'json-pointer-local',
+      group: 'fe',
+      title: 'JSON Pointer',
+      summary: 'RFC 6901 取值',
+      fields: [
+        { name: 'pointer', label: '指针', value: '/user/skills/0' },
+        { name: 'text', label: 'JSON', type: 'textarea', value: '{"user":{"skills":["java","vue"]}}' }
+      ]
+    },
+    {
+      id: 'env-parse-local',
+      group: 'fe',
+      title: '.env 解析',
+      summary: 'KEY=value / export',
+      fields: [
+        { name: 'mode', label: '模式', type: 'select', value: 'parse', options: [
+          { value: 'parse', label: '解析' },
+          { value: 'stringify', label: '对象 → .env' }
+        ] },
+        { name: 'text', label: '内容', type: 'textarea', value: 'APP_NAME=utils\nexport PORT=8080\n# comment\nTOKEN="ab=cd"' }
+      ]
+    },
+    {
+      id: 'nanoid-local',
+      group: 'fe',
+      title: 'NanoID',
+      summary: 'URL 安全随机 ID',
+      fields: [
+        { name: 'length', label: '长度', value: '21' },
+        { name: 'count', label: '数量', value: '5' }
+      ]
+    },
+    {
+      id: 'totp-local',
+      group: 'fe',
+      title: '本地 TOTP',
+      summary: 'Web Crypto HMAC-SHA1，不上传密钥',
+      fields: [
+        { name: 'secret', label: 'Base32 密钥', value: 'JBSWY3DPEHPK3PXP' },
+        { name: 'digits', label: '位数', value: '6' },
+        { name: 'step', label: '步长秒', value: '30' }
+      ]
+    },
+    {
+      id: 'aes-gcm-local',
+      group: 'fe',
+      title: 'AES-GCM',
+      summary: 'PBKDF2 + Web Crypto，本地加解密',
+      fields: [
+        { name: 'mode', label: '模式', type: 'select', value: 'encrypt', options: [
+          { value: 'encrypt', label: '加密' },
+          { value: 'decrypt', label: '解密' }
+        ] },
+        { name: 'password', label: '口令', value: 'change-me' },
+        { name: 'text', label: '明文 / 密文', type: 'textarea', value: 'hello 工具集' }
+      ]
+    },
+    {
+      id: 'sha-more-local',
+      group: 'fe',
+      title: 'SHA-1 / 384 / 512',
+      summary: 'Web Crypto 摘要',
+      fields: [{ name: 'text', label: '原文', type: 'textarea', value: 'hello' }]
+    },
+    {
+      id: 'utm-local',
+      group: 'fe',
+      title: 'UTM 链接',
+      summary: '拼 campaign 参数',
+      fields: [
+        { name: 'url', label: '基础 URL', value: 'https://example.com/app' },
+        { name: 'source', label: 'utm_source', value: 'newsletter' },
+        { name: 'medium', label: 'utm_medium', value: 'email' },
+        { name: 'campaign', label: 'utm_campaign', value: 'spring-launch' },
+        { name: 'term', label: 'utm_term', value: '' },
+        { name: 'content', label: 'utm_content', value: 'hero' }
+      ]
+    },
+    {
+      id: 'mime-local',
+      group: 'fe',
+      title: 'MIME / 扩展名',
+      summary: '文件名或类型互查',
+      fields: [{ name: 'text', label: '文件名或 MIME', value: 'photo.webp' }]
+    },
+    {
+      id: 'browser-info-local',
+      group: 'fe',
+      title: '浏览器信息',
+      summary: 'UA / 视口 / 时区 / 语言',
+      fields: []
+    },
+    {
+      id: 'zero-width-local',
+      group: 'fe',
+      title: '零宽字符',
+      summary: '检测 / 清除不可见字符',
+      fields: [
+        { name: 'mode', label: '模式', type: 'select', value: 'scan', options: [
+          { value: 'scan', label: '检测' },
+          { value: 'strip', label: '清除' }
+        ] },
+        { name: 'text', label: '文本', type: 'textarea', value: 'hello\u200bworld\ufeff' }
+      ]
+    },
+    {
+      id: 'eol-local',
+      group: 'fe',
+      title: '换行符',
+      summary: 'CRLF / LF / CR 互转',
+      fields: [
+        { name: 'mode', label: '目标', type: 'select', value: 'lf', options: [
+          { value: 'lf', label: '→ LF' },
+          { value: 'crlf', label: '→ CRLF' },
+          { value: 'cr', label: '→ CR' }
+        ] },
+        { name: 'text', label: '文本', type: 'textarea', value: 'line1\r\nline2\nline3' }
+      ]
+    },
+    {
+      id: 'unicode-norm-local',
+      group: 'fe',
+      title: 'Unicode 正规化',
+      summary: 'NFC / NFD / NFKC / NFKD',
+      fields: [
+        { name: 'form', label: '形式', type: 'select', value: 'NFC', options: [
+          { value: 'NFC', label: 'NFC' },
+          { value: 'NFD', label: 'NFD' },
+          { value: 'NFKC', label: 'NFKC' },
+          { value: 'NFKD', label: 'NFKD' }
+        ] },
+        { name: 'text', label: '文本', type: 'textarea', value: 'café' }
+      ]
+    },
+    {
+      id: 'markdown-toc-local',
+      group: 'fe',
+      title: 'Markdown 目录',
+      summary: '从标题生成 TOC',
+      fields: [{ name: 'text', label: 'Markdown', type: 'textarea', value: '# 概述\n## 安装\n### npm\n## 用法' }]
+    },
+    {
+      id: 'lorem-local',
+      group: 'fe',
+      title: '占位文本',
+      summary: '英文 / 中文假文',
+      fields: [
+        { name: 'lang', label: '语言', type: 'select', value: 'en', options: [
+          { value: 'en', label: 'English' },
+          { value: 'zh', label: '中文' }
+        ] },
+        { name: 'paragraphs', label: '段落', value: '2' }
+      ]
+    },
+    {
+      id: 'css-unit-local',
+      group: 'fe',
+      title: 'CSS 单位',
+      summary: 'px ↔ rem，可设 root',
+      fields: [
+        { name: 'value', label: '数值', value: '16' },
+        { name: 'from', label: '从', type: 'select', value: 'px', options: [
+          { value: 'px', label: 'px' },
+          { value: 'rem', label: 'rem' }
+        ] },
+        { name: 'root', label: 'root px', value: '16' }
+      ]
+    },
+    {
+      id: 'color-palette-local',
+      group: 'fe',
+      title: '色板',
+      summary: '从 HEX 生成深浅阶',
+      fields: [{ name: 'hex', label: 'HEX', value: '#0f766e' }]
+    },
+    {
+      id: 'vcard-local',
+      group: 'fe',
+      title: 'vCard',
+      summary: '生成 vCard 3.0',
+      fields: [
+        { name: 'name', label: '姓名', value: 'Ada Lovelace' },
+        { name: 'org', label: '组织', value: 'Analytical Engine' },
+        { name: 'tel', label: '电话', value: '+44 20 7946 0958' },
+        { name: 'email', label: '邮箱', value: 'ada@example.com' },
+        { name: 'url', label: '网址', value: 'https://example.com' }
+      ]
+    },
+    {
+      id: 'ics-local',
+      group: 'fe',
+      title: 'ICS 日程',
+      summary: '生成 VEVENT',
+      fields: [
+        { name: 'title', label: '标题', value: 'Sprint Review' },
+        { name: 'start', label: '开始', value: '2026-09-20T10:00' },
+        { name: 'end', label: '结束', value: '2026-09-20T11:00' },
+        { name: 'location', label: '地点', value: 'Zoom' }
+      ]
     }
   ]
 

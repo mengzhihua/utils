@@ -1363,6 +1363,125 @@ export async function runClientTool(id, values) {
       const compact = String(values.value || '').replace(/[\s.,/:\-]/g, '').toUpperCase()
       return { normalized: compact, formatted: compact.match(/.{1,4}/g)?.join(' ') || compact, valid: isIso11649(compact) }
     }
+    case 'json-flatten-local': {
+      const parsed = JSON.parse(values.text || '{}')
+      if (values.mode === 'unflatten') {
+        return unflattenObject(parsed)
+      }
+      return flattenObject(parsed)
+    }
+    case 'json-ts-local': {
+      const parsed = JSON.parse(values.text || '{}')
+      return { typescript: inferTs(parsed, 'Root') }
+    }
+    case 'json-pointer-local': {
+      const parsed = JSON.parse(values.text || '{}')
+      const pointer = String(values.pointer || '')
+      return { pointer, value: jsonPointerGet(parsed, pointer), found: jsonPointerHas(parsed, pointer) }
+    }
+    case 'env-parse-local': {
+      const text = String(values.text || '')
+      if (values.mode === 'stringify') {
+        const obj = JSON.parse(text || '{}')
+        return { env: stringifyEnv(obj) }
+      }
+      return parseEnv(text)
+    }
+    case 'nanoid-local': {
+      const length = Math.min(64, Math.max(4, Number(values.length) || 21))
+      const count = Math.min(20, Math.max(1, Number(values.count) || 1))
+      return { ids: Array.from({ length: count }, () => nanoid(length)), length }
+    }
+    case 'totp-local': {
+      const digits = Math.min(8, Math.max(6, Number(values.digits) || 6))
+      const step = Math.min(120, Math.max(15, Number(values.step) || 30))
+      const now = Date.now()
+      const code = await totpCode(values.secret || '', now, step, digits)
+      return { code, remaining: step - (Math.floor(now / 1000) % step), digits, step }
+    }
+    case 'aes-gcm-local': {
+      const password = String(values.password || '')
+      const text = String(values.text || '')
+      if (!password) throw new Error('请填写口令')
+      if (values.mode === 'decrypt') {
+        return { plaintext: await aesGcmDecrypt(password, text) }
+      }
+      return { ciphertext: await aesGcmEncrypt(password, text) }
+    }
+    case 'sha-more-local': {
+      const data = new TextEncoder().encode(values.text || '')
+      const [sha1, sha384, sha512] = await Promise.all([
+        crypto.subtle.digest('SHA-1', data),
+        crypto.subtle.digest('SHA-384', data),
+        crypto.subtle.digest('SHA-512', data)
+      ])
+      return {
+        sha1: hexFromBytes(new Uint8Array(sha1)),
+        sha384: hexFromBytes(new Uint8Array(sha384)),
+        sha512: hexFromBytes(new Uint8Array(sha512))
+      }
+    }
+    case 'utm-local': {
+      return buildUtm(values)
+    }
+    case 'mime-local': {
+      return lookupMime(values.text || '')
+    }
+    case 'browser-info-local':
+      return collectBrowserInfo()
+    case 'zero-width-local': {
+      const text = String(values.text || '')
+      const matches = [...text.matchAll(ZERO_WIDTH)].map((m) => ({
+        char: `U+${m[0].codePointAt(0).toString(16).toUpperCase().padStart(4, '0')}`,
+        index: m.index
+      }))
+      return values.mode === 'strip'
+        ? { result: text.replace(ZERO_WIDTH, ''), removed: matches.length }
+        : { count: matches.length, matches }
+    }
+    case 'eol-local': {
+      const text = String(values.text || '')
+      const stats = eolStats(text)
+      const unified = text.replace(/\r\n|\r|\n/g, values.mode === 'crlf' ? '\r\n' : values.mode === 'cr' ? '\r' : '\n')
+      return { ...stats, result: unified, target: values.mode }
+    }
+    case 'unicode-norm-local': {
+      const text = String(values.text || '')
+      const form = values.form || 'NFC'
+      const normalized = text.normalize(form)
+      return {
+        form,
+        result: normalized,
+        changed: normalized !== text,
+        nfcEqualsNfd: text.normalize('NFC') === text.normalize('NFD')
+      }
+    }
+    case 'markdown-toc-local': {
+      const toc = markdownToc(values.text || '')
+      return { toc, markdown: toc.map((item) => `${'  '.repeat(item.level - 1)}- [${item.title}](#${item.slug})`).join('\n') }
+    }
+    case 'lorem-local': {
+      const n = Math.min(8, Math.max(1, Number(values.paragraphs) || 2))
+      return { text: loremText(values.lang || 'en', n) }
+    }
+    case 'css-unit-local': {
+      const raw = Number(values.value)
+      const root = Number(values.root) || 16
+      if (!Number.isFinite(raw)) throw new Error('请输入数值')
+      if (values.from === 'rem') {
+        return { rem: raw, px: +(raw * root).toFixed(4), root }
+      }
+      return { px: raw, rem: +(raw / root).toFixed(4), root }
+    }
+    case 'color-palette-local': {
+      return buildPalette(values.hex || '#0f766e')
+    }
+    case 'vcard-local': {
+      return { vcard: buildVcard(values) }
+    }
+    case 'ics-local': {
+      return { ics: buildIcs(values) }
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -4046,4 +4165,362 @@ function isIso11649(compact) {
   let numeric = ''
   for (const ch of rearranged) numeric += /[A-Z]/.test(ch) ? String(ch.charCodeAt(0) - 55) : ch
   return BigInt(numeric) % 97n === 1n
+}
+
+const ZERO_WIDTH = /[\u200B-\u200F\u202A-\u202E\u2060-\u206F\uFEFF\u00AD]/g
+
+const MIME_BY_EXT = {
+  html: 'text/html', htm: 'text/html', css: 'text/css', js: 'text/javascript', mjs: 'text/javascript',
+  json: 'application/json', xml: 'application/xml', txt: 'text/plain', md: 'text/markdown', csv: 'text/csv',
+  svg: 'image/svg+xml', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif',
+  webp: 'image/webp', ico: 'image/x-icon', avif: 'image/avif',
+  woff: 'font/woff', woff2: 'font/woff2', ttf: 'font/ttf',
+  pdf: 'application/pdf', zip: 'application/zip', wasm: 'application/wasm',
+  mp3: 'audio/mpeg', mp4: 'video/mp4', webm: 'video/webm',
+  webmanifest: 'application/manifest+json', map: 'application/json'
+}
+
+function flattenObject(value, prefix = '', out = {}) {
+  if (value === null || typeof value !== 'object') {
+    out[prefix || '$'] = value
+    return out
+  }
+  if (Array.isArray(value)) {
+    if (value.length === 0) {
+      if (prefix) out[prefix] = []
+      return out
+    }
+    value.forEach((item, index) => flattenObject(item, prefix ? `${prefix}[${index}]` : `[${index}]`, out))
+    return out
+  }
+  const keys = Object.keys(value)
+  if (keys.length === 0) {
+    if (prefix) out[prefix] = {}
+    return out
+  }
+  for (const key of keys) {
+    flattenObject(value[key], prefix ? `${prefix}.${key}` : key, out)
+  }
+  return out
+}
+
+function unflattenObject(map) {
+  if (map === null || typeof map !== 'object' || Array.isArray(map)) {
+    throw new Error('还原嵌套需要扁平对象')
+  }
+  const keys = Object.keys(map)
+  const root = keys.length > 0 && keys.every((key) => key.startsWith('[')) ? [] : {}
+  for (const [path, value] of Object.entries(map)) {
+    setFlatPath(root, path, value)
+  }
+  return root
+}
+
+function setFlatPath(root, path, value) {
+  const tokens = []
+  String(path).replace(/\[(\d+)\]|[^.[\]]+/g, (match, index) => {
+    tokens.push(index !== undefined ? Number(index) : match)
+    return match
+  })
+  if (tokens.length === 0) return
+  let cursor = root
+  for (let i = 0; i < tokens.length - 1; i++) {
+    const token = tokens[i]
+    const next = tokens[i + 1]
+    if (cursor[token] == null) {
+      cursor[token] = typeof next === 'number' ? [] : {}
+    }
+    cursor = cursor[token]
+  }
+  cursor[tokens[tokens.length - 1]] = value
+}
+
+function jsonPointerGet(doc, pointer) {
+  if (pointer === '') return doc
+  if (!pointer.startsWith('/')) throw new Error('JSON Pointer 必须以 / 开头')
+  const parts = pointer.split('/').slice(1).map((part) => part.replace(/~1/g, '/').replace(/~0/g, '~'))
+  let current = doc
+  for (const part of parts) {
+    if (current == null || !(part in Object(current))) return undefined
+    current = current[part]
+  }
+  return current
+}
+
+function jsonPointerHas(doc, pointer) {
+  if (pointer === '') return true
+  if (!pointer.startsWith('/')) return false
+  const parts = pointer.split('/').slice(1).map((part) => part.replace(/~1/g, '/').replace(/~0/g, '~'))
+  let current = doc
+  for (const part of parts) {
+    if (current == null || !(part in Object(current))) return false
+    current = current[part]
+  }
+  return true
+}
+
+function inferTs(value, name) {
+  const lines = [`interface ${name} {`]
+  writeTsFields(value, '  ', lines, new Map())
+  lines.push('}')
+  return lines.join('\n')
+}
+
+function writeTsFields(value, indent, lines, seen) {
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) {
+    lines.push(`${indent}value: ${tsType(value, seen)}`)
+    return
+  }
+  for (const [key, child] of Object.entries(value)) {
+    const safe = /^[A-Za-z_$][\w$]*$/.test(key) ? key : JSON.stringify(key)
+    lines.push(`${indent}${safe}: ${tsType(child, seen)}`)
+  }
+}
+
+function tsType(value, seen) {
+  if (value === null) return 'null'
+  if (Array.isArray(value)) {
+    if (value.length === 0) return 'unknown[]'
+    const types = [...new Set(value.map((item) => tsType(item, seen)))]
+    return types.length === 1 ? `${types[0]}[]` : `Array<${types.join(' | ')}>`
+  }
+  if (typeof value === 'object') {
+    const inner = []
+    writeTsFields(value, '', inner, seen)
+    return `{ ${inner.map((line) => line.trim()).join('; ')} }`
+  }
+  return typeof value
+}
+
+function parseEnv(text) {
+  const out = {}
+  for (const raw of String(text).split(/\r?\n/)) {
+    const line = raw.trim()
+    if (!line || line.startsWith('#')) continue
+    const body = line.startsWith('export ') ? line.slice(7).trim() : line
+    const eq = body.indexOf('=')
+    if (eq < 0) continue
+    const key = body.slice(0, eq).trim()
+    let value = body.slice(eq + 1).trim()
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1)
+    }
+    if (key) out[key] = value
+  }
+  return out
+}
+
+function stringifyEnv(obj) {
+  return Object.entries(obj).map(([key, value]) => {
+    const text = String(value ?? '')
+    return /[\s#=]/.test(text) ? `${key}="${text.replaceAll('"', '\\"')}"` : `${key}=${text}`
+  }).join('\n')
+}
+
+function nanoid(length) {
+  const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz-'
+  const bytes = crypto.getRandomValues(new Uint8Array(length))
+  return Array.from(bytes, (byte) => alphabet[byte % alphabet.length]).join('')
+}
+
+function base32Decode(secret) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
+  const compact = String(secret || '').toUpperCase().replace(/=+$/g, '').replace(/\s+/g, '')
+  let bits = ''
+  for (const ch of compact) {
+    const index = alphabet.indexOf(ch)
+    if (index < 0) throw new Error('密钥必须是 Base32')
+    bits += index.toString(2).padStart(5, '0')
+  }
+  const bytes = []
+  for (let i = 0; i + 8 <= bits.length; i += 8) {
+    bytes.push(Number.parseInt(bits.slice(i, i + 8), 2))
+  }
+  if (bytes.length === 0) throw new Error('密钥太短')
+  return new Uint8Array(bytes)
+}
+
+async function totpCode(secret, now, step, digits) {
+  const key = base32Decode(secret)
+  const counter = Math.floor(now / 1000 / step)
+  const buffer = new ArrayBuffer(8)
+  new DataView(buffer).setUint32(4, counter)
+  const cryptoKey = await crypto.subtle.importKey('raw', key, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign'])
+  const hmac = new Uint8Array(await crypto.subtle.sign('HMAC', cryptoKey, buffer))
+  const offset = hmac[hmac.length - 1] & 0x0f
+  const bin = ((hmac[offset] & 0x7f) << 24) | (hmac[offset + 1] << 16) | (hmac[offset + 2] << 8) | hmac[offset + 3]
+  return String(bin % (10 ** digits)).padStart(digits, '0')
+}
+
+function bytesToB64(bytes) {
+  return btoa(String.fromCharCode(...bytes))
+}
+
+function b64ToBytes(text) {
+  return Uint8Array.from(atob(text), (ch) => ch.charCodeAt(0))
+}
+
+async function deriveAesKey(password, salt) {
+  const material = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey'])
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
+    material,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  )
+}
+
+async function aesGcmEncrypt(password, plaintext) {
+  const salt = crypto.getRandomValues(new Uint8Array(16))
+  const iv = crypto.getRandomValues(new Uint8Array(12))
+  const key = await deriveAesKey(password, salt)
+  const cipher = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(plaintext)))
+  return `${bytesToB64(salt)}.${bytesToB64(iv)}.${bytesToB64(cipher)}`
+}
+
+async function aesGcmDecrypt(password, packed) {
+  const parts = String(packed).trim().split('.')
+  if (parts.length !== 3) throw new Error('密文格式应为 salt.iv.cipher')
+  const [salt, iv, cipher] = parts.map(b64ToBytes)
+  const key = await deriveAesKey(password, salt)
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipher)
+  return new TextDecoder().decode(plain)
+}
+
+function buildUtm(values) {
+  const url = new URL(values.url || 'https://example.com')
+  const fields = [
+    ['utm_source', values.source],
+    ['utm_medium', values.medium],
+    ['utm_campaign', values.campaign],
+    ['utm_term', values.term],
+    ['utm_content', values.content]
+  ]
+  for (const [key, value] of fields) {
+    if (String(value || '').trim()) url.searchParams.set(key, String(value).trim())
+    else url.searchParams.delete(key)
+  }
+  return { href: url.toString(), params: Object.fromEntries(url.searchParams.entries()) }
+}
+
+function lookupMime(input) {
+  const text = String(input || '').trim()
+  if (text.includes('/')) {
+    const ext = Object.entries(MIME_BY_EXT).find(([, mime]) => mime === text.toLowerCase())?.[0] || ''
+    return { mime: text.toLowerCase(), extension: ext ? `.${ext}` : '' }
+  }
+  const ext = text.replace(/^\./, '').split('.').pop().toLowerCase()
+  return { extension: `.${ext}`, mime: MIME_BY_EXT[ext] || '' }
+}
+
+function collectBrowserInfo() {
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection
+  return {
+    userAgent: navigator.userAgent,
+    language: navigator.language,
+    languages: navigator.languages,
+    cookies: navigator.cookieEnabled,
+    online: navigator.onLine,
+    cores: navigator.hardwareConcurrency || 0,
+    deviceMemory: navigator.deviceMemory || 0,
+    touch: navigator.maxTouchPoints || 0,
+    viewport: { width: window.innerWidth, height: window.innerHeight, dpr: window.devicePixelRatio },
+    screen: { width: window.screen.width, height: window.screen.height },
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    locale: Intl.DateTimeFormat().resolvedOptions().locale,
+    connection: connection ? { type: connection.effectiveType, downlink: connection.downlink } : {}
+  }
+}
+
+function eolStats(text) {
+  return {
+    crlf: (text.match(/\r\n/g) || []).length,
+    cr: (text.match(/\r(?!\n)/g) || []).length,
+    lf: (text.match(/(?<!\r)\n/g) || []).length
+  }
+}
+
+function markdownToc(text) {
+  const items = []
+  const used = new Map()
+  for (const line of String(text).split(/\r?\n/)) {
+    const match = line.match(/^(#{1,6})\s+(.+?)\s*$/)
+    if (!match) continue
+    const title = match[2].replace(/[#*`[\]]/g, '').trim()
+    let slug = title.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '')
+    const times = (used.get(slug) || 0) + 1
+    used.set(slug, times)
+    if (times > 1) slug += `-${times}`
+    items.push({ level: match[1].length, title, slug })
+  }
+  return items
+}
+
+function loremText(lang, paragraphs) {
+  const en = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.'
+  const zh = '春江潮水连海平，海上明月共潮生。滟滟随波千万里，何处春江无月明。江流宛转绕芳甸，月照花林皆似霰。'
+  const seed = lang === 'zh' ? zh : en
+  return Array.from({ length: paragraphs }, (_, index) => (index % 2 === 0 ? seed : `${seed} ${seed}`)).join('\n\n')
+}
+
+function mixHex(hex, target, amount) {
+  const n = Number.parseInt(hex.slice(1), 16)
+  const t = Number.parseInt(target.slice(1), 16)
+  const channel = (shift) => Math.round((((n >> shift) & 255) * (1 - amount)) + (((t >> shift) & 255) * amount))
+  return `#${[16, 8, 0].map((shift) => channel(shift).toString(16).padStart(2, '0')).join('')}`
+}
+
+function buildPalette(input) {
+  let hex = String(input || '#0f766e').trim()
+  if (!hex.startsWith('#')) hex = `#${hex}`
+  if (!/^#([0-9a-fA-F]{6})$/.test(hex)) throw new Error('请输入 6 位 HEX')
+  hex = hex.toLowerCase()
+  const steps = [0.15, 0.3, 0.45, 0.6]
+  const tints = steps.map((amount) => mixHex(hex, '#ffffff', amount))
+  const shades = steps.map((amount) => mixHex(hex, '#000000', amount))
+  const colors = [...[...tints].reverse(), hex, ...shades]
+  const html = `<div style="display:flex;gap:6px;flex-wrap:wrap">${colors.map((color) => `<div style="width:56px;height:56px;border-radius:8px;background:${color}" title="${color}"></div>`).join('')}</div>`
+  return { hex, tints, shades, colors, html, preview: hex }
+}
+
+function vcardEscape(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/,/g, '\\,').replace(/;/g, '\\;')
+}
+
+function buildVcard(values) {
+  return [
+    'BEGIN:VCARD',
+    'VERSION:3.0',
+    `FN:${vcardEscape(values.name)}`,
+    values.org ? `ORG:${vcardEscape(values.org)}` : '',
+    values.tel ? `TEL:${vcardEscape(values.tel)}` : '',
+    values.email ? `EMAIL:${vcardEscape(values.email)}` : '',
+    values.url ? `URL:${vcardEscape(values.url)}` : '',
+    'END:VCARD'
+  ].filter(Boolean).join('\n')
+}
+
+function icsStamp(value) {
+  const date = value ? new Date(value) : new Date()
+  if (Number.isNaN(date.getTime())) throw new Error('日期无效')
+  return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')
+}
+
+function buildIcs(values) {
+  const uid = `${nanoid(12)}@utils`
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Java Utils//EN',
+    'BEGIN:VEVENT',
+    `UID:${uid}`,
+    `DTSTAMP:${icsStamp()}`,
+    `DTSTART:${icsStamp(values.start)}`,
+    `DTEND:${icsStamp(values.end)}`,
+    `SUMMARY:${vcardEscape(values.title)}`,
+    values.location ? `LOCATION:${vcardEscape(values.location)}` : '',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].filter(Boolean).join('\n')
 }
