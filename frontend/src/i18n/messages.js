@@ -16,7 +16,17 @@ export const messages = {
     localeJa: '日本語',
     localeDe: 'Deutsch',
     homeTitle: '工具控制台',
-    homeLead: '后端 Java 工具 + 浏览器本地工具。左侧选择能力，或从下面卡片进入。',
+    homeLead: '日常办公、浏览器本地工具、后端 Java 工具。也可打成 Windows / Linux / macOS 安装包，或服务器跑 JAR。',
+    officeNav: '日常办公',
+    officeHint: '个税 / 房贷 / 发票 / 待办',
+    officePrefix: '办公 ·',
+    officeTitle: '日常办公工作台',
+    officeLead: '直接在浏览器里算工资、房贷、发票，写纪要和待办，数据留在本机。',
+    officeSearch: '搜索个税、房贷、发票、待办…',
+    openOffice: '打开办公工作台',
+    quickPit: '个税',
+    quickMortgage: '房贷',
+    quickInvoice: '发票',
     healthLabel: '应用健康',
     javaLabel: 'Java 版本',
     timeLabel: '服务器时间',
@@ -55,7 +65,9 @@ export const messages = {
       hash: '哈希',
       gen: '生成',
       time: '时间 / 颜色',
-      net: '网络'
+      net: '网络',
+      fe: '前端实用',
+      office: '日常办公'
     }
   },
   en: {
@@ -75,7 +87,17 @@ export const messages = {
     localeJa: '日本語',
     localeDe: 'Deutsch',
     homeTitle: 'Toolkit console',
-    homeLead: 'Java utilities plus in-browser tools. Pick one on the left or open a card below.',
+    homeLead: 'Office tools, in-browser utilities, and Java APIs. Ship as Windows / Linux / macOS apps or a server JAR.',
+    officeNav: 'Office',
+    officeHint: 'Tax / mortgage / invoice / todos',
+    officePrefix: 'Office ·',
+    officeTitle: 'Office workbench',
+    officeLead: 'Payroll, mortgage, invoices, notes and todos — computed locally in the browser.',
+    officeSearch: 'Search tax, mortgage, invoice, todos…',
+    openOffice: 'Open office workbench',
+    quickPit: 'Income tax',
+    quickMortgage: 'Mortgage',
+    quickInvoice: 'Invoice',
     healthLabel: 'App health',
     javaLabel: 'Java version',
     timeLabel: 'Server time',
@@ -114,7 +136,9 @@ export const messages = {
       hash: 'Hash',
       gen: 'Generate',
       time: 'Time / color',
-      net: 'Network'
+      net: 'Network',
+      fe: 'Frontend',
+      office: 'Office'
     }
   },
   ja: {
@@ -134,7 +158,17 @@ export const messages = {
     localeJa: '日本語',
     localeDe: 'Deutsch',
     homeTitle: 'ツールコンソール',
-    homeLead: 'Java ユーティリティとブラウザ内ツール。左から選ぶか、下のカードを開きます。',
+    homeLead: '日常オフィス、ブラウザ内ツール、Java API。Windows / Linux / macOS アプリまたはサーバ JAR で配布できます。',
+    officeNav: 'オフィス',
+    officeHint: '税 / ローン / 請求 / ToDo',
+    officePrefix: 'オフィス ·',
+    officeTitle: 'オフィス作業台',
+    officeLead: '給与・ローン・請求・メモ・ToDo をブラウザ内で計算します。',
+    officeSearch: '税、ローン、請求、ToDo を検索…',
+    openOffice: 'オフィスを開く',
+    quickPit: '所得税',
+    quickMortgage: 'ローン',
+    quickInvoice: '請求',
     healthLabel: 'アプリ状態',
     javaLabel: 'Java バージョン',
     timeLabel: 'サーバー時刻',
@@ -173,7 +207,9 @@ export const messages = {
       hash: 'ハッシュ',
       gen: '生成',
       time: '時刻 / 色',
-      net: 'ネットワーク'
+      net: 'ネットワーク',
+      fe: 'フロント',
+      office: 'オフィス'
     }
   },
   de: {
@@ -193,7 +229,17 @@ export const messages = {
     localeJa: '日本語',
     localeDe: 'Deutsch',
     homeTitle: 'Werkzeugkonsole',
-    homeLead: 'Java-Hilfen plus lokale Browser-Tools. Links wählen oder eine Karte öffnen.',
+    homeLead: 'Büro-Tools, lokale Browser-Hilfen und Java-APIs. Als Windows-/Linux-/macOS-App oder Server-JAR.',
+    officeNav: 'Büro',
+    officeHint: 'Steuer / Kredit / Rechnung / Todos',
+    officePrefix: 'Büro ·',
+    officeTitle: 'Büro-Werkbank',
+    officeLead: 'Gehalt, Kredit, Rechnungen, Notizen und Todos — lokal im Browser.',
+    officeSearch: 'Steuer, Kredit, Rechnung, Todos suchen…',
+    openOffice: 'Büro öffnen',
+    quickPit: 'ESt',
+    quickMortgage: 'Kredit',
+    quickInvoice: 'Rechnung',
     healthLabel: 'App-Status',
     javaLabel: 'Java-Version',
     timeLabel: 'Serverzeit',
@@ -232,7 +278,9 @@ export const messages = {
       hash: 'Hash',
       gen: 'Erzeugen',
       time: 'Zeit / Farbe',
-      net: 'Netzwerk'
+      net: 'Netzwerk',
+      fe: 'Frontend',
+      office: 'Büro'
     }
   }
 }

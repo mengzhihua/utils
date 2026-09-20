@@ -4049,6 +4049,47 @@ export const tools = [
       method: 'GET',
       path: '/api/utils/crc16-dect-r',
       fields: [{ name: 'text', label: '原文', value: '123456789' }]
+    },
+    {
+      id: 'pit',
+      group: 'number',
+      title: '个税估算',
+      summary: 'PitUtil',
+      method: 'GET',
+      path: '/api/utils/pit',
+      fields: [
+        { name: 'income', label: '月收入', value: '30000' },
+        { name: 'insurance', label: '社保公积金', value: '0' },
+        { name: 'special', label: '专项附加', value: '0' },
+        { name: 'month', label: '第几月', value: '1' }
+      ]
+    },
+    {
+      id: 'mortgage',
+      group: 'number',
+      title: '房贷试算',
+      summary: 'MortgageUtil',
+      method: 'GET',
+      path: '/api/utils/mortgage',
+      fields: [
+        { name: 'principal', label: '贷款本金', value: '1000000' },
+        { name: 'rate', label: '年利率 %', value: '4.2' },
+        { name: 'years', label: '年限', value: '30' },
+        { name: 'mode', label: '方式', value: 'installment' }
+      ]
+    },
+    {
+      id: 'invoice-vat',
+      group: 'number',
+      title: '发票价税分离',
+      summary: 'InvoiceVatUtil',
+      method: 'GET',
+      path: '/api/utils/invoice-vat',
+      fields: [
+        { name: 'amount', label: '金额', value: '113' },
+        { name: 'rate', label: '税率', value: '13' },
+        { name: 'taxIncluded', label: '含税', value: 'true' }
+      ]
     }
   ]
 

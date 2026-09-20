@@ -15,8 +15,10 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  jar:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,23 +50,92 @@ jobs:
 
       - name: Package release JAR
         run: |
-          chmod +x mvnw scripts/package.sh
+          chmod +x mvnw scripts/package.sh scripts/start.sh
           ./scripts/package.sh "${{ steps.version.outputs.version }}"
 
-      - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
+      - uses: actions/upload-artifact@v4
         with:
-          tag_name: v${{ steps.version.outputs.version }}
-          name: v${{ steps.version.outputs.version }}
-          generate_release_notes: true
-          files: |
+          name: utils-jar
+          path: |
             dist/utils-${{ steps.version.outputs.version }}.jar
             dist/utils-${{ steps.version.outputs.version }}.jar.sha256
-          body: |
-            可执行发行包，需要 **JDK 21+**。
+            dist/start.sh
+            dist/start.bat
+            dist/README.txt
 
+  native:
+    needs: jar
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            type: app-image
+            asset: linux
+          - os: windows-latest
+            type: app-image
+            asset: windows
+          - os: macos-latest
+            type: dmg
+            asset: macos
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/download-artifact@v4
+        with:
+          name: utils-jar
+          path: dist
+      - name: Prepare jar name
+        shell: bash
+        run: |
+          mkdir -p dist
+          if [[ ! -f dist/utils.jar ]]; then
+            cp dist/utils-*.jar dist/utils.jar
+          fi
+      - name: Native package
+        shell: bash
+        run: |
+          chmod +x scripts/package-native.sh scripts/gen-icon.py
+          ./scripts/package-native.sh "${{ needs.jar.outputs.version }}" "${{ matrix.type }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: utils-native-${{ matrix.asset }}
+          path: dist/native/**
+
+  publish:
+    if: github.ref_type == 'tag' || github.event_name == 'workflow_dispatch'
+    needs: [jar, native]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.jar.outputs.version }}
+          name: v${{ needs.jar.outputs.version }}
+          generate_release_notes: true
+          files: artifacts/**/*
+          body: |
+            ## 运行方式
+
+            **服务器 JAR（JDK 21+）**
             ```bash
-            java -jar utils-${{ steps.version.outputs.version }}.jar
+            java -jar utils-${{ needs.jar.outputs.version }}.jar
+            ```
+            浏览器打开 http://localhost:8080/
+
+            **桌面模式（同 JAR，自动打开办公工作台）**
+            ```bash
+            ./start.sh          # Linux / macOS
+            start.bat           # Windows
             ```
 
-            浏览器打开 http://localhost:8080/
+            **系统安装包**
+            - Windows：解压 `utils-native-windows` 后运行 `Utils.exe`
+            - Linux：解压 `utils-native-linux` 后运行 `Utils/bin/Utils`
+            - macOS：打开 `dmg` 后启动 Utils

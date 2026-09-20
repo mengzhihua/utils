@@ -12,12 +12,16 @@
       </div>
       <nav>
         <RouterLink class="nav-link" to="/" exact-active-class="active" @click="open = false">{{ t('overview') }}</RouterLink>
+        <RouterLink class="nav-link" to="/office" active-class="active" @click="open = false">
+          {{ t('officeNav') }}
+          <small>{{ t('officeHint') }}</small>
+        </RouterLink>
         <RouterLink class="nav-link" to="/fx" active-class="active" @click="open = false">
           {{ t('effects') }}
           <small>{{ t('effectsHint') }}</small>
         </RouterLink>
         <div class="nav-group" v-for="group in clientCatalog" :key="group.id">
-          <h3>{{ t('frontendPrefix') }} {{ group.label }}</h3>
+          <h3>{{ group.id === 'office' ? t('officePrefix') : t('frontendPrefix') }} {{ group.label }}</h3>
           <RouterLink
             v-for="tool in group.tools"
             :key="tool.id"

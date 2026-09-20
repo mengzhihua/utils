@@ -1,0 +1,11 @@
+server:
+  address: 127.0.0.1
+  port: ${UTILS_PORT:18765}
+
+spring:
+  application:
+    name: utils-desktop
+
+utils:
+  desktop:
+    open-browser: true

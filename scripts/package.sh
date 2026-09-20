@@ -41,6 +41,9 @@ mkdir -p "$OUT_DIR"
 JAR_NAME="utils-${VERSION}.jar"
 cp "$ROOT/target/utils.jar" "$OUT_DIR/$JAR_NAME"
 cp "$ROOT/target/utils.jar" "$OUT_DIR/utils.jar"
+cp "$ROOT/scripts/start.sh" "$OUT_DIR/start.sh"
+cp "$ROOT/scripts/start.bat" "$OUT_DIR/start.bat"
+chmod +x "$OUT_DIR/start.sh"
 (
   cd "$OUT_DIR"
   if command -v sha256sum >/dev/null 2>&1; then
@@ -50,11 +53,30 @@ cp "$ROOT/target/utils.jar" "$OUT_DIR/utils.jar"
   fi
 )
 
+cat > "$OUT_DIR/README.txt" <<EOF
+Java Utils ${VERSION}
+
+服务器 / 本机 JAR：
+  java -jar ${JAR_NAME}
+  浏览器打开 http://localhost:8080/
+
+桌面模式（自动打开办公工作台）：
+  ./start.sh
+  start.bat
+
+Windows / Linux / macOS 原生安装包：
+  ./scripts/package-native.sh
+EOF
+
 echo
 echo "成品已生成："
 echo "  $OUT_DIR/$JAR_NAME"
 echo "  $OUT_DIR/${JAR_NAME}.sha256"
+echo "  $OUT_DIR/start.sh"
+echo "  $OUT_DIR/start.bat"
 echo
 echo "运行："
 echo "  java -jar $OUT_DIR/$JAR_NAME"
 echo "  浏览器打开 http://localhost:8080/"
+echo "桌面模式："
+echo "  $OUT_DIR/start.sh"
