@@ -70,10 +70,12 @@ Java Utils ${VERSION}
   ./start.sh
   start.bat
 
-Windows / Linux / macOS 原生安装包（按芯片命名）：
+Windows / Linux / macOS 原生包（下载即可用，按芯片命名）：
   ./scripts/package-native.sh
-  # Apple Silicon: utils-${VERSION}-macos-arm64.dmg
-  # Intel Mac:     utils-${VERSION}-macos-x64.dmg
+  # Windows:         utils-${VERSION}-windows-x64.exe
+  # Apple Silicon:   utils-${VERSION}-macos-arm64.app.zip
+  # Intel Mac:       utils-${VERSION}-macos-x64.app.zip
+  # Linux:           utils-${VERSION}-linux-x64.deb  与  .tar.gz
 EOF
 
 echo

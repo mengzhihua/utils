@@ -40,8 +40,8 @@ esac
 TYPE="${2:-}"
 if [[ -z "$TYPE" ]]; then
   case "$OS" in
-    linux*) TYPE="app-image" ;;
-    darwin*) TYPE="dmg" ;;
+    linux*) TYPE="deb" ;;
+    darwin*) TYPE="app-image" ;;
     mingw*|msys*|cygwin*) TYPE="exe" ;;
     *) TYPE="app-image" ;;
   esac
@@ -80,33 +80,64 @@ if unzip -p "$STAGE/utils.jar" META-INF/MANIFEST.MF | grep -q 'org.springframewo
   MAIN_CLASS="org.springframework.boot.loader.JarLauncher"
 fi
 
-ARGS=(
-  --name Utils
-  --app-version "${VERSION%%-*}"
-  --dest "$ROOT/dist/native"
-  --input "$STAGE"
-  --main-jar utils.jar
-  --main-class "$MAIN_CLASS"
-  --java-options "-Dutils.desktop=true"
-  --arguments "--desktop"
-  --description "Java / 前端 / 日常办公工具台"
-  --vendor "mengzhihua"
-  --type "$TYPE"
-)
-
-if [[ "$PLATFORM" == "macos" ]]; then
-  ARGS+=(--mac-package-identifier com.mengzhihua.utils --mac-package-name Utils)
-  if make_icns "$ICON_PNG" "$ICON_ICNS" && [[ -f "$ICON_ICNS" ]]; then
-    ARGS+=(--icon "$ICON_ICNS")
+common_args() {
+  local type="$1"
+  ARGS=(
+    --name Utils
+    --app-version "${VERSION%%-*}"
+    --dest "$ROOT/dist/native"
+    --input "$STAGE"
+    --main-jar utils.jar
+    --main-class "$MAIN_CLASS"
+    --java-options "-Dutils.desktop=true"
+    --arguments "--desktop"
+    --description "Java / 前端 / 日常办公工具台"
+    --vendor "mengzhihua"
+    --type "$type"
+  )
+  if [[ "$PLATFORM" == "macos" ]]; then
+    ARGS+=(--mac-package-identifier com.mengzhihua.utils --mac-package-name Utils)
+    if make_icns "$ICON_PNG" "$ICON_ICNS" && [[ -f "$ICON_ICNS" ]]; then
+      ARGS+=(--icon "$ICON_ICNS")
+    elif [[ -f "$ICON_PNG" ]]; then
+      ARGS+=(--icon "$ICON_PNG")
+    fi
   elif [[ -f "$ICON_PNG" ]]; then
     ARGS+=(--icon "$ICON_PNG")
   fi
-elif [[ -f "$ICON_PNG" ]]; then
-  ARGS+=(--icon "$ICON_PNG")
-fi
+  if [[ "$PLATFORM" == "windows" && "$type" == "exe" ]]; then
+    ARGS+=(
+      --win-shortcut
+      --win-menu
+      --win-menu-group Utils
+      --win-dir-chooser
+      --win-per-user-install
+      --win-upgrade-uuid e6c3d8a1-4f2b-4c9e-9a71-8b2d5e1f0c44
+    )
+  fi
+  if [[ "$PLATFORM" == "linux" && "$type" == "deb" ]]; then
+    ARGS+=(
+      --linux-shortcut
+      --linux-menu-group Utility
+    )
+  fi
+}
 
-echo "==> jpackage $TYPE ($PLATFORM-$ARCH)"
-jpackage "${ARGS[@]}"
+run_jpackage() {
+  local type="$1"
+  common_args "$type"
+  echo "==> jpackage $type ($PLATFORM-$ARCH)"
+  jpackage "${ARGS[@]}"
+}
+
+if [[ "$PLATFORM" == "linux" && "$TYPE" == "deb" ]]; then
+  run_jpackage "app-image"
+  run_jpackage "deb"
+elif [[ "$PLATFORM" == "linux" && "$TYPE" == "app-image" ]]; then
+  run_jpackage "app-image"
+else
+  run_jpackage "$TYPE"
+fi
 
 python3 "$ROOT/scripts/stage-native.py" "$ROOT/dist/native" "$VERSION" "$PLATFORM" "$ARCH"
 
@@ -114,13 +145,13 @@ echo
 echo "原生包已生成：$ROOT/dist/native"
 ls -la "$ROOT/dist/native"
 echo
-echo "产物按芯片命名，例如："
-echo "  utils-${VERSION}-macos-arm64.dmg   # Apple Silicon"
-echo "  utils-${VERSION}-macos-x64.dmg     # Intel Mac"
-echo "  utils-${VERSION}-windows-x64.zip"
-echo "  utils-${VERSION}-linux-x64.zip"
+echo "下载后即可用的文件："
+echo "  utils-${VERSION}-windows-x64.exe         # Windows 安装包，双击安装"
+echo "  utils-${VERSION}-macos-arm64.app.zip     # Apple Silicon，解压得 Utils.app"
+echo "  utils-${VERSION}-macos-x64.app.zip       # Intel Mac，解压得 Utils.app"
+echo "  utils-${VERSION}-linux-x64.deb           # Ubuntu/Debian，双击或 dpkg -i"
+echo "  utils-${VERSION}-linux-x64.tar.gz        # Linux 便携包，解压后 ./Utils"
 echo
-echo "Windows：在 Windows + JDK 21 上执行  scripts\\package-native.bat"
-echo "macOS Apple Silicon：./scripts/package-native.sh ${VERSION} dmg"
-echo "macOS Intel：同一脚本在 x86_64 机器上会生成 macos-x64"
-echo "Linux：本脚本可生成 app-image 或 deb（./scripts/package-native.sh ${VERSION} deb）"
+echo "Windows 本机打包需要 WiX 3.14：choco install wixtoolset --version 3.14.1"
+echo "macOS：./scripts/package-native.sh ${VERSION}"
+echo "Linux：./scripts/package-native.sh ${VERSION}    # deb + 便携 tar.gz"

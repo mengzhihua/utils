@@ -532,24 +532,25 @@ start.bat               # Windows
 
 GitHub Release 按**芯片**各打一份，打开 [Releases](https://github.com/mengzhihua/utils/releases) 下载对应文件：
 
-| 平台 | 芯片 | 发行文件 |
-| --- | --- | --- |
-| macOS | Apple Silicon（M1/M2/M3/M4，arm64） | `utils-x.y.z-macos-arm64.dmg` |
-| macOS | Intel（x64） | `utils-x.y.z-macos-x64.dmg` |
-| Windows | x64 | `utils-x.y.z-windows-x64.zip` |
-| Linux | x64 | `utils-x.y.z-linux-x64.zip` |
+| 平台 | 芯片 | 发行文件 | 怎么用 |
+| --- | --- | --- | --- |
+| Windows | x64 | `utils-x.y.z-windows-x64.exe` | 双击安装（当前用户，一般不用管理员），开始菜单打开 **Utils** |
+| macOS | Apple Silicon（M1/M2/M3/M4，arm64） | `utils-x.y.z-macos-arm64.app.zip` | 解压得到 `Utils.app`，双击打开 |
+| macOS | Intel（x64） | `utils-x.y.z-macos-x64.app.zip` | 解压得到 `Utils.app`，双击打开 |
+| Linux | x64 | `utils-x.y.z-linux-x64.deb` | 双击或 `sudo dpkg -i`，应用菜单打开 Utils |
+| Linux | x64 | `utils-x.y.z-linux-x64.tar.gz` | 解压后在目录里执行 `./Utils` |
 
-Apple Silicon 请用 **macos-arm64** 的 dmg，不要下 Intel 包（反过来也一样）。第一次打开若被拦截，在访达里右键「打开」。
+Apple Silicon 请用 **macos-arm64**，Intel 请用 **macos-x64**，不要混用。macOS 第一次打开若被拦截，在访达里右键「打开」。Windows 安装包由 WiX 打成 exe；Linux 同时给 deb 安装包和可直接跑的便携包。
 
 本机用 **JDK 21+**（含 `jpackage`）重打：
 
 ```bash
-./scripts/package-native.sh          # 当前系统 / 当前芯片：Linux zip 或 macOS dmg
-scripts\package-native.bat           # Windows：生成 zip
-./scripts/package-native.sh 1.1.0 deb
+./scripts/package-native.sh            # 当前系统 / 当前芯片
+scripts\package-native.bat             # Windows：生成 exe（需 WiX 3.14）
+./scripts/package-native.sh 1.1.0 deb  # Linux：deb + tar.gz
 ```
 
-产物在 `dist/native/`，文件名带 `macos-arm64` / `macos-x64` / `windows-x64` / `linux-x64`。Windows 解压后运行 `Utils/Utils.exe`；Linux 运行 `Utils/bin/Utils`；macOS 打开 dmg。
+产物在 `dist/native/`。CI 不能跨平台交叉编译：exe 在 Windows 打，`.app` 在对应芯片的 macOS 打，deb / tar.gz 在 Linux 打。
 
 ### 4. 开发启动 / 源码
 
