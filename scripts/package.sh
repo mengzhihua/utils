@@ -32,6 +32,12 @@ else
 fi
 (cd frontend && npm run build)
 
+echo "==> 对齐 pom 版本 $VERSION"
+chmod +x "$ROOT/scripts/set-version.sh"
+"$ROOT/scripts/set-version.sh" "$VERSION"
+restore_pom() { git checkout -- "$ROOT/pom.xml" >/dev/null 2>&1 || true; }
+trap restore_pom EXIT
+
 echo "==> 打包可执行 JAR"
 ./mvnw -B -DskipTests package
 
