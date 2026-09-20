@@ -421,7 +421,39 @@ npm run dev      # 开发（代理到 8080）
 npm run build    # 构建进 Spring Boot 静态资源
 ```
 
-## 快速开始
+## 发布版（推荐）
+
+需要本机已安装 **JDK 21+**。从 [GitHub Releases](https://github.com/mengzhihua/utils/releases) 下载 `utils-x.y.z.jar` 后直接运行：
+
+```bash
+java -jar utils-1.0.0.jar
+```
+
+浏览器打开 <http://localhost:8080/> 即可使用控制台（后端演示 + 浏览器本地工具）。可用端口：
+
+```bash
+java -jar utils-1.0.0.jar --server.port=9090
+```
+
+发布 `v*` 标签后，GitHub Actions 会自动构建并上传 JAR 与 SHA-256。
+
+本地打可执行包（产物在 `dist/`）：
+
+```bash
+chmod +x mvnw scripts/package.sh
+./scripts/package.sh            # 使用 pom 版本，例如 1.0.0-SNAPSHOT
+./scripts/package.sh 1.0.0      # 指定发行版本号
+java -jar dist/utils-1.0.0.jar
+```
+
+可选 Docker（先执行 `./scripts/package.sh`）：
+
+```bash
+docker build -t mengzhihua/utils:1.0.0 .
+docker run --rm -p 8080:8080 mengzhihua/utils:1.0.0
+```
+
+## 快速开始（源码）
 
 ```bash
 chmod +x mvnw
@@ -433,6 +465,7 @@ chmod +x mvnw
 - 首页：<http://localhost:8080/>
 - Swagger UI：<http://localhost:8080/swagger-ui.html>
 - 健康检查：<http://localhost:8080/actuator/health>
+- 构建信息：<http://localhost:8080/actuator/info>
 
 ```bash
 curl "http://localhost:8080/api/utils/string/mask-phone?phone=13812345678"
