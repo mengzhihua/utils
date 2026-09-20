@@ -36,3 +36,6 @@ build/
 
 ### Frontend ###
 frontend/node_modules/
+
+### Release artifacts ###
+dist/
