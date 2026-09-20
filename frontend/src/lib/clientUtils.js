@@ -1,3 +1,5 @@
+import { collectChromeConfig, collectChromeResources } from './chromeSystem.js'
+
 function toBase64(text) {
   return btoa(unescape(encodeURIComponent(text)))
 }
@@ -1491,6 +1493,10 @@ export async function runClientTool(id, values) {
       return collectScreenInfo()
     case 'media-devices-local':
       return collectMediaDevices()
+    case 'system-info-local':
+      return collectChromeConfig()
+    case 'resources-info-local':
+      return collectChromeResources()
     case 'zero-width-local': {
       const text = String(values.text || '')
       const matches = [...text.matchAll(ZERO_WIDTH)].map((m) => ({

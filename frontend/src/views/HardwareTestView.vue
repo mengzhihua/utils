@@ -7,7 +7,9 @@
       </div>
       <RouterLink class="btn secondary" to="/hw">{{ t('hwBack') }}</RouterLink>
     </div>
-    <ScreenTestPanel v-if="id === 'screen'" />
+    <SystemTestPanel v-if="id === 'system'" />
+    <ResourcesTestPanel v-else-if="id === 'resources'" />
+    <ScreenTestPanel v-else-if="id === 'screen'" />
     <KeyboardTestPanel v-else-if="id === 'keyboard'" />
     <MouseTestPanel v-else-if="id === 'mouse'" />
     <PointerTestPanel v-else-if="id === 'pointer'" />
@@ -24,6 +26,8 @@
 import { computed } from 'vue'
 import { getHardwareTool } from '../hardwareTools'
 import { useI18n } from '../composables/useI18n'
+import SystemTestPanel from './hw/SystemTestPanel.vue'
+import ResourcesTestPanel from './hw/ResourcesTestPanel.vue'
 import ScreenTestPanel from './hw/ScreenTestPanel.vue'
 import KeyboardTestPanel from './hw/KeyboardTestPanel.vue'
 import MouseTestPanel from './hw/MouseTestPanel.vue'

@@ -2162,6 +2162,20 @@ export const clientTools = [
       fields: []
     },
     {
+      id: 'system-info-local',
+      group: 'fe',
+      title: '电脑配置快照',
+      summary: 'Chrome UA-CH / 核数 / GPU',
+      fields: []
+    },
+    {
+      id: 'resources-info-local',
+      group: 'fe',
+      title: '资源占用快照',
+      summary: 'JS 堆 / 存储 / 电池 / 网络',
+      fields: []
+    },
+    {
       id: 'zero-width-local',
       group: 'fe',
       title: '零宽字符',
