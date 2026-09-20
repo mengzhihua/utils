@@ -53,7 +53,10 @@ const rows = computed(() => {
   const data = cfg.value
   if (!data) return []
   const hints = data.clientHints || {}
-  const brands = (hints.brands || []).map((item) => `${item.brand} ${item.version}`).join(', ')
+  const brands = (hints.brands || [])
+    .filter((item) => item.brand && !/not.a.brand/i.test(item.brand))
+    .map((item) => `${item.brand} ${item.version}`)
+    .join(', ')
   const net = data.network || {}
   return [
     { label: t('hwCores'), value: String(data.cpu?.cores || '—') },

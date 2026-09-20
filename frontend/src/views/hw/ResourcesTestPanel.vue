@@ -49,8 +49,9 @@ const heapUsed = computed(() => formatBytes(data.value?.heap?.used))
 const heapLimit = computed(() => formatBytes(data.value?.heap?.limit))
 const heapPct = computed(() => {
   const heap = data.value?.heap
-  if (!heap?.limit) return 0
-  return Math.min(100, Math.round((heap.used / heap.limit) * 100))
+  const denom = heap?.total || heap?.limit
+  if (!denom || !heap?.used) return 0
+  return Math.min(100, Math.max(2, Math.round((heap.used / denom) * 100)))
 })
 const storageUsed = computed(() => formatBytes(data.value?.storage?.usage))
 const storagePct = computed(() => {
