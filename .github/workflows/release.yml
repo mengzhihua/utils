@@ -162,13 +162,20 @@ jobs:
         include:
           - os: ubuntu-latest
             type: app-image
-            asset: linux
+            asset: linux-x64
+            arch: x64
           - os: windows-latest
             type: app-image
-            asset: windows
+            asset: windows-x64
+            arch: x64
           - os: macos-latest
             type: dmg
-            asset: macos
+            asset: macos-arm64
+            arch: aarch64
+          - os: macos-15-intel
+            type: dmg
+            asset: macos-x64
+            arch: x64
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -176,6 +183,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+          architecture: ${{ matrix.arch }}
       - uses: actions/download-artifact@v4
         with:
           name: utils-jar
@@ -190,12 +198,15 @@ jobs:
       - name: Native package
         shell: bash
         run: |
-          chmod +x scripts/package-native.sh scripts/gen-icon.py
+          chmod +x scripts/package-native.sh scripts/stage-native.py scripts/gen-icon.py
           ./scripts/package-native.sh "${{ needs.version.outputs.version }}" "${{ matrix.type }}"
+          ls -la dist/native
+          test -n "$(ls dist/native/utils-${{ needs.version.outputs.version }}-${{ matrix.asset }}.*)"
       - uses: actions/upload-artifact@v4
         with:
           name: utils-native-${{ matrix.asset }}
-          path: dist/native/**
+          path: dist/native/utils-*
+          if-no-files-found: error
 
   publish:
     needs: [version, jar, native]
@@ -214,23 +225,30 @@ jobs:
           tag_name: v${{ needs.version.outputs.version }}
           name: v${{ needs.version.outputs.version }}
           generate_release_notes: true
-          files: artifacts/**/*
+          files: |
+            artifacts/utils-jar/utils-*.jar
+            artifacts/utils-jar/utils-*.jar.sha256
+            artifacts/utils-jar/start.sh
+            artifacts/utils-jar/start.bat
+            artifacts/utils-jar/README.txt
+            artifacts/utils-native-*/*
           body: |
-            测试通过后自动发行。需要 **JDK 21+**（原生包装了运行时）。
+            测试通过后自动发行。原生包装了对应芯片的运行时。
 
-            **服务器 JAR**
+            **服务器 JAR**（任意系统，需本机 JDK 21+）
             ```bash
             java -jar utils-${{ needs.version.outputs.version }}.jar
             ```
             浏览器打开 http://localhost:8080/
 
-            **桌面模式**
+            **桌面模式**（同一 JAR）
             ```bash
             ./start.sh
             start.bat
             ```
 
-            **系统安装包**
-            - Windows：`Utils.exe`
-            - Linux：`Utils/bin/Utils`
-            - macOS：打开 dmg
+            **系统安装包**（自带运行时，按芯片选）
+            - Windows x64：`utils-${{ needs.version.outputs.version }}-windows-x64.zip`，解压后运行 `Utils/Utils.exe`
+            - Linux x64：`utils-${{ needs.version.outputs.version }}-linux-x64.zip`，解压后运行 `Utils/bin/Utils`
+            - macOS Apple Silicon（M1/M2/M3/M4，arm64）：`utils-${{ needs.version.outputs.version }}-macos-arm64.dmg`
+            - macOS Intel（x64）：`utils-${{ needs.version.outputs.version }}-macos-x64.dmg`

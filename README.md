@@ -508,15 +508,26 @@ start.bat               # Windows
 
 ### 3. Windows / Linux / macOS 原生包（自带运行时）
 
-在对应系统上用 **JDK 21+**（含 `jpackage`）：
+GitHub Release 按**芯片**各打一份，打开 [Releases](https://github.com/mengzhihua/utils/releases) 下载对应文件：
+
+| 平台 | 芯片 | 发行文件 |
+| --- | --- | --- |
+| macOS | Apple Silicon（M1/M2/M3/M4，arm64） | `utils-x.y.z-macos-arm64.dmg` |
+| macOS | Intel（x64） | `utils-x.y.z-macos-x64.dmg` |
+| Windows | x64 | `utils-x.y.z-windows-x64.zip` |
+| Linux | x64 | `utils-x.y.z-linux-x64.zip` |
+
+Apple Silicon 请用 **macos-arm64** 的 dmg，不要下 Intel 包（反过来也一样）。第一次打开若被拦截，在访达里右键「打开」。
+
+本机用 **JDK 21+**（含 `jpackage`）重打：
 
 ```bash
-./scripts/package-native.sh          # 当前系统：Linux app-image / macOS dmg
-scripts\package-native.bat           # Windows：生成 Utils.exe
+./scripts/package-native.sh          # 当前系统 / 当前芯片：Linux zip 或 macOS dmg
+scripts\package-native.bat           # Windows：生成 zip
 ./scripts/package-native.sh 1.1.0 deb
 ```
 
-Windows 解压后运行 `Utils.exe`；Linux 运行 `Utils/bin/Utils`；macOS 打开 dmg。
+产物在 `dist/native/`，文件名带 `macos-arm64` / `macos-x64` / `windows-x64` / `linux-x64`。Windows 解压后运行 `Utils/Utils.exe`；Linux 运行 `Utils/bin/Utils`；macOS 打开 dmg。
 
 ### 4. 开发启动 / 源码
 

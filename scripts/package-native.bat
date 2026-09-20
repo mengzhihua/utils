@@ -17,5 +17,6 @@ if exist dist\jpackage-input rmdir /s /q dist\jpackage-input
 mkdir dist\jpackage-input dist\native
 copy /y dist\utils.jar dist\jpackage-input\utils.jar >nul
 jpackage --name Utils --app-version 1.0.0 --dest dist\native --input dist\jpackage-input --main-jar utils.jar --main-class org.springframework.boot.loader.launch.JarLauncher --java-options "-Dutils.desktop=true" --arguments "--desktop" --type app-image --icon packaging\icon.png
-echo 已生成 dist\native\Utils\Utils.exe
+python scripts\stage-native.py dist\native 1.0.0 windows x64
+echo 已生成 dist\native\utils-1.0.0-windows-x64.zip
 echo 若要安装包：再执行 jpackage --type exe
