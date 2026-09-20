@@ -437,16 +437,48 @@ npm run build    # 构建进 Spring Boot 静态资源
 | 个税 / 房贷 / 发票 | `PitUtil` / `MortgageUtil` / `InvoiceVatUtil` | 也可走 `/api/utils/pit` `/mortgage` `/invoice-vat` |
 | 办公工作台 | `/#/office` | 搜索 + 分类卡片，适合每天开着当桌面工具 |
 
+## 发布版（推荐）
+
+需要本机已安装 **JDK 21+**。从 [GitHub Releases](https://github.com/mengzhihua/utils/releases) 下载 `utils-x.y.z.jar` 后直接运行：
+
+```bash
+java -jar utils-1.0.0.jar
+```
+
+浏览器打开 <http://localhost:8080/> 即可使用控制台（后端演示 + 浏览器本地工具 + 日常办公）。可用端口：
+
+```bash
+java -jar utils-1.0.0.jar --server.port=9090
+```
+
+发布 `v*` 标签后，GitHub Actions 会构建并上传 JAR、SHA-256，以及 Windows / Linux / macOS 原生包。
+
+本地打可执行包（产物在 `dist/`）：
+
+```bash
+chmod +x mvnw scripts/package.sh
+./scripts/package.sh            # 使用 pom 版本
+./scripts/package.sh 1.0.0      # 指定发行版本号
+java -jar dist/utils-1.0.0.jar
+```
+
+可选 Docker（先执行 `./scripts/package.sh`）：
+
+```bash
+docker build -t mengzhihua/utils:1.0.0 .
+docker run --rm -p 8080:8080 mengzhihua/utils:1.0.0
+```
+
 ## 四种运行方式
 
 ### 1. 服务器部署 Spring Boot JAR
 
 ```bash
 ./scripts/package.sh
-java -jar dist/utils-1.0.0-SNAPSHOT.jar
+java -jar dist/utils-1.0.0.jar
 ```
 
-浏览器打开 <http://localhost:8080/>。Docker：`docker build -t utils . && docker run -p 8080:8080 utils`。
+浏览器打开 <http://localhost:8080/>。
 
 ### 2. 本机桌面模式（Win / Linux / macOS 同一 JAR）
 
@@ -467,9 +499,10 @@ scripts\package-native.bat           # Windows：生成 Utils.exe
 ./scripts/package-native.sh 1.0.0 deb
 ```
 
-GitHub Actions（`.github/workflows/release.yml`）会在 Ubuntu / Windows / macOS 各打一份，随 Release 上传。Windows 解压后运行 `Utils.exe`；Linux 运行 `Utils/bin/Utils`；macOS 打开 dmg。
+Windows 解压后运行 `Utils.exe`；Linux 运行 `Utils/bin/Utils`；macOS 打开 dmg。
 
-### 4. 开发启动
+### 4. 开发启动 / 源码
+
 
 ```bash
 chmod +x mvnw
@@ -482,6 +515,7 @@ chmod +x mvnw
 - 首页：<http://localhost:8080/>
 - Swagger UI：<http://localhost:8080/swagger-ui.html>
 - 健康检查：<http://localhost:8080/actuator/health>
+- 构建信息：<http://localhost:8080/actuator/info>
 
 ```bash
 curl "http://localhost:8080/api/utils/string/mask-phone?phone=13812345678"

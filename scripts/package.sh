@@ -71,6 +71,7 @@ EOF
 echo
 echo "成品已生成："
 echo "  $OUT_DIR/$JAR_NAME"
+echo "  $OUT_DIR/${JAR_NAME}.sha256"
 echo "  $OUT_DIR/start.sh"
 echo "  $OUT_DIR/start.bat"
 echo
