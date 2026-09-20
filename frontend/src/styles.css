@@ -788,6 +788,29 @@ button, input, select, textarea { font: inherit; }
   width: 100%;
   margin-top: 12px;
 }
+.hw-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.hw-table th, .hw-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+.hw-table th {
+  width: 28%;
+  color: var(--muted);
+  font-weight: 600;
+}
+.hw-bar-block { margin: 0 0 12px; }
+.hw-bar-label {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
 
 @media (max-width: 860px) {
   .shell { grid-template-columns: 1fr; }

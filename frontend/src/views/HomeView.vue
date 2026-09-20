@@ -39,6 +39,8 @@
       <RouterLink class="btn secondary" to="/hw/mouse">{{ t('quickMouse') }}</RouterLink>
       <RouterLink class="btn secondary" to="/hw/camera">{{ t('quickCamera') }}</RouterLink>
       <RouterLink class="btn secondary" to="/hw/mic">{{ t('quickMic') }}</RouterLink>
+      <RouterLink class="btn secondary" to="/hw/system">{{ t('quickSystem') }}</RouterLink>
+      <RouterLink class="btn secondary" to="/hw/resources">{{ t('quickResources') }}</RouterLink>
       <RouterLink class="btn secondary" to="/fx">{{ t('openEffects') }}</RouterLink>
     </div>
 

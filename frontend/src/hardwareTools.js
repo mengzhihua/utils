@@ -1,5 +1,15 @@
 export const hardwareTools = [
   {
+    id: 'system',
+    title: '电脑配置',
+    summary: 'CPU 核数、内存约数、UA-CH、GPU'
+  },
+  {
+    id: 'resources',
+    title: '资源占用',
+    summary: 'JS 堆、CPU 压力、存储、电池、网络'
+  },
+  {
     id: 'screen',
     title: '屏幕检测',
     summary: '分辨率、色域、色条、坏点、帧率'
