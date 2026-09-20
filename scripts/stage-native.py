@@ -3,12 +3,21 @@
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import stat
 import subprocess
 import sys
 import tarfile
 from pathlib import Path
+
+
+def remove_tree(path: Path) -> None:
+    def onexc(_func, name, _exc):
+        os.chmod(name, stat.S_IWRITE)
+        os.unlink(name)
+
+    shutil.rmtree(path, onexc=onexc)
 
 
 def parse_args() -> argparse.Namespace:
@@ -130,7 +139,7 @@ def main() -> int:
             dmg = make_macos_dmg(app, root / f"{stem}.dmg")
             if dmg:
                 created.append(dmg)
-            shutil.rmtree(app)
+            remove_tree(app)
         installer = first_match(root, "Utils*.dmg", "Utils*.pkg")
         if installer and installer.is_file():
             created.append(rename_file(installer, root / f"{stem}{installer.suffix.lower()}"))
@@ -151,7 +160,7 @@ def main() -> int:
             created.append(stage_linux_portable(root, app_dir, root / f"{stem}.tar.gz"))
         else:
             created.append(zip_directory(app_dir, root / f"{stem}.zip"))
-        shutil.rmtree(app_dir)
+        remove_tree(app_dir)
 
     if not created:
         print(f"no jpackage output in {root}", file=sys.stderr)
