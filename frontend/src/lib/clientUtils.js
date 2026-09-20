@@ -1482,6 +1482,96 @@ export async function runClientTool(id, values) {
     case 'ics-local': {
       return { ics: buildIcs(values) }
     }
+    case 'json-diff-local': {
+      const left = JSON.parse(values.left || '{}')
+      const right = JSON.parse(values.right || '{}')
+      const diff = jsonDiff(left, right)
+      return { ...diff, equal: diff.added.length === 0 && diff.removed.length === 0 && diff.changed.length === 0 }
+    }
+    case 'json-merge-local': {
+      const left = JSON.parse(values.left || '{}')
+      const right = JSON.parse(values.right || '{}')
+      return jsonMerge(left, right, values.arrays === 'concat')
+    }
+    case 'json-sort-local': {
+      const parsed = JSON.parse(values.text || '{}')
+      return sortJsonKeys(parsed, values.order === 'desc')
+    }
+    case 'data-url-local': {
+      const text = String(values.text || '')
+      if (values.mode === 'decode') {
+        return decodeDataUrl(text)
+      }
+      const mime = String(values.mime || 'text/plain').trim() || 'text/plain'
+      const encoded = toBase64(text)
+      return { dataUrl: `data:${mime};base64,${encoded}`, mime, bytes: encoded.length }
+    }
+    case 'html-strip-local': {
+      const text = String(values.text || '')
+      const stripped = stripHtml(text)
+      return { text: stripped, chars: [...stripped].length, tagsRemoved: (text.match(/<\/?[a-zA-Z][^>]*>/g) || []).length }
+    }
+    case 'template-local': {
+      const ctx = JSON.parse(values.context || '{}')
+      return { result: renderTemplate(values.text || '', ctx) }
+    }
+    case 'password-score-local': {
+      return scorePassword(values.password || '')
+    }
+    case 'uuid-parse-local': {
+      return parseUuid(values.value || '')
+    }
+    case 'url-normalize-local': {
+      return normalizeUrl(values.url || '', values)
+    }
+    case 'number-format-local': {
+      const value = Number(values.value)
+      if (!Number.isFinite(value)) throw new Error('请输入数字')
+      const locale = String(values.locale || 'zh-CN').trim() || 'zh-CN'
+      const style = values.style || 'decimal'
+      const options = { style }
+      if (style === 'currency') options.currency = String(values.currency || 'CNY').trim() || 'CNY'
+      if (style === 'percent') options.maximumFractionDigits = 2
+      return { formatted: new Intl.NumberFormat(locale, options).format(value), locale, style }
+    }
+    case 'mailto-local': {
+      return buildMailto(values)
+    }
+    case 'csv-md-local': {
+      return csvToMarkdown(values.text || '')
+    }
+    case 'og-parse-local': {
+      return parseOpenGraph(values.text || '')
+    }
+    case 'filename-sanitize-local': {
+      return sanitizeFilename(values.name || '')
+    }
+    case 'hash-color-local': {
+      return hashColor(values.text || '')
+    }
+    case 'query-build-local': {
+      const obj = JSON.parse(values.text || '{}')
+      const params = new URLSearchParams()
+      for (const [key, value] of Object.entries(obj)) {
+        if (Array.isArray(value)) {
+          for (const item of value) params.append(key, String(item))
+        } else if (value != null && typeof value === 'object') {
+          params.set(key, JSON.stringify(value))
+        } else if (value != null) {
+          params.set(key, String(value))
+        }
+      }
+      return { query: params.toString(), pairs: Object.fromEntries(params.entries()) }
+    }
+    case 'cookie-build-local': {
+      return buildCookie(values)
+    }
+    case 'reading-time-local': {
+      return readingTime(values.text || '')
+    }
+    case 'initials-local': {
+      return avatarInitials(values.name || '')
+    }
     default:
       throw new Error('unknown client tool')
   }
@@ -4523,4 +4613,338 @@ function buildIcs(values) {
     'END:VEVENT',
     'END:VCALENDAR'
   ].filter(Boolean).join('\n')
+}
+
+function isPlainObject(value) {
+  return value != null && typeof value === 'object' && !Array.isArray(value)
+}
+
+function jsonDiff(left, right, prefix = '') {
+  const added = []
+  const removed = []
+  const changed = []
+  if (Object.is(left, right)) {
+    return { added, removed, changed }
+  }
+  if (isPlainObject(left) && isPlainObject(right)) {
+    const keys = new Set([...Object.keys(left), ...Object.keys(right)])
+    for (const key of keys) {
+      const path = prefix ? `${prefix}.${key}` : key
+      if (!(key in left)) added.push({ path, value: right[key] })
+      else if (!(key in right)) removed.push({ path, value: left[key] })
+      else {
+        const inner = jsonDiff(left[key], right[key], path)
+        added.push(...inner.added)
+        removed.push(...inner.removed)
+        changed.push(...inner.changed)
+      }
+    }
+    return { added, removed, changed }
+  }
+  if (Array.isArray(left) && Array.isArray(right)) {
+    const max = Math.max(left.length, right.length)
+    for (let i = 0; i < max; i++) {
+      const path = prefix ? `${prefix}[${i}]` : `[${i}]`
+      if (i >= left.length) added.push({ path, value: right[i] })
+      else if (i >= right.length) removed.push({ path, value: left[i] })
+      else {
+        const inner = jsonDiff(left[i], right[i], path)
+        added.push(...inner.added)
+        removed.push(...inner.removed)
+        changed.push(...inner.changed)
+      }
+    }
+    return { added, removed, changed }
+  }
+  changed.push({ path: prefix || '$', from: left, to: right })
+  return { added, removed, changed }
+}
+
+function jsonMerge(left, right, concatArrays) {
+  if (Array.isArray(left) && Array.isArray(right)) {
+    return concatArrays ? [...left, ...right] : [...right]
+  }
+  if (isPlainObject(left) && isPlainObject(right)) {
+    const out = { ...left }
+    for (const [key, value] of Object.entries(right)) {
+      out[key] = key in left ? jsonMerge(left[key], value, concatArrays) : value
+    }
+    return out
+  }
+  return right
+}
+
+function sortJsonKeys(value, desc) {
+  if (Array.isArray(value)) {
+    return value.map((item) => sortJsonKeys(item, desc))
+  }
+  if (!isPlainObject(value)) {
+    return value
+  }
+  const keys = Object.keys(value).sort((a, b) => desc ? b.localeCompare(a) : a.localeCompare(b))
+  const out = {}
+  for (const key of keys) {
+    out[key] = sortJsonKeys(value[key], desc)
+  }
+  return out
+}
+
+function decodeDataUrl(text) {
+  const match = String(text).trim().match(/^data:([^;,]+)?((?:;[^,]*)*),([\s\S]*)$/i)
+  if (!match) throw new Error('不是有效的 Data URL')
+  const mime = match[1] || 'text/plain'
+  const meta = match[2] || ''
+  const payload = match[3] || ''
+  const isBase64 = /;base64/i.test(meta)
+  const textOut = isBase64 ? fromBase64(payload) : decodeURIComponent(payload)
+  return { mime, base64: isBase64, text: textOut, bytes: payload.length }
+}
+
+function stripHtml(html) {
+  return String(html)
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&amp;/gi, '&')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
+}
+
+function lookupPath(obj, path) {
+  return String(path).split('.').reduce((acc, key) => (acc == null ? undefined : acc[key]), obj)
+}
+
+function renderTemplate(text, ctx) {
+  return String(text).replace(/\{\{\s*([\w.]+)\s*\}\}/g, (_, path) => {
+    const value = lookupPath(ctx, path)
+    return value == null ? '' : String(value)
+  })
+}
+
+const COMMON_PASSWORDS = new Set(['password', '123456', '12345678', 'qwerty', 'abc123', '111111', 'letmein', 'admin', 'welcome', 'iloveyou'])
+
+function scorePassword(password) {
+  const text = String(password)
+  const length = text.length
+  const classes = {
+    lower: /[a-z]/.test(text),
+    upper: /[A-Z]/.test(text),
+    digit: /\d/.test(text),
+    symbol: /[^A-Za-z0-9]/.test(text)
+  }
+  const classCount = Object.values(classes).filter(Boolean).length
+  let score = 0
+  if (length >= 8) score += 1
+  if (length >= 12) score += 1
+  if (classCount >= 3) score += 1
+  if (classCount === 4 && length >= 10) score += 1
+  if (COMMON_PASSWORDS.has(text.toLowerCase()) || /(.)\1{3,}/.test(text) || /^(?:0123|1234|abcd|qwer)/i.test(text)) {
+    score = Math.max(0, score - 2)
+  }
+  const labels = ['很弱', '弱', '一般', '较强', '强']
+  return { score, label: labels[score], length, classes, common: COMMON_PASSWORDS.has(text.toLowerCase()) }
+}
+
+function parseUuid(value) {
+  const compact = String(value || '').trim().toLowerCase().replace(/^{|\}$/g, '')
+  const match = compact.match(/^([0-9a-f]{8})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{12})$/)
+  if (!match) throw new Error('不是标准 UUID')
+  const hex = match.slice(1).join('')
+  const version = Number.parseInt(match[3][0], 16)
+  const variantNibble = Number.parseInt(match[4][0], 16)
+  const variant = variantNibble >= 14 ? 'reserved' : variantNibble >= 12 ? 'microsoft' : variantNibble >= 8 ? 'rfc4122' : 'ncs'
+  const out = { uuid: compact, version, variant, hex }
+  if (version === 7) {
+    const ms = Number.parseInt(hex.slice(0, 12), 16)
+    out.timestamp = new Date(ms).toISOString()
+  }
+  return out
+}
+
+function normalizeUrl(input, options) {
+  const url = new URL(String(input || '').trim())
+  url.hostname = url.hostname.toLowerCase()
+  if ((url.protocol === 'https:' && url.port === '443') || (url.protocol === 'http:' && url.port === '80')) {
+    url.port = ''
+  }
+  if (options.sort !== 'keep') {
+    const keys = [...new Set([...url.searchParams.keys()])].sort()
+    const next = new URLSearchParams()
+    for (const key of keys) {
+      for (const value of url.searchParams.getAll(key)) next.append(key, value)
+    }
+    url.search = next.toString()
+  }
+  if (options.hash === 'strip') url.hash = ''
+  if (options.slash === 'strip' && url.pathname.length > 1 && url.pathname.endsWith('/')) {
+    url.pathname = url.pathname.replace(/\/+$/, '') || '/'
+  }
+  return { href: url.toString(), protocol: url.protocol, host: url.host, pathname: url.pathname, search: url.search, hash: url.hash }
+}
+
+function buildMailto(values) {
+  const to = String(values.to || '').trim()
+  if (!to) throw new Error('请填写收件人')
+  const params = new URLSearchParams()
+  if (String(values.cc || '').trim()) params.set('cc', String(values.cc).trim())
+  if (String(values.subject || '').trim()) params.set('subject', String(values.subject).trim())
+  if (String(values.body || '').trim()) params.set('body', String(values.body).trim())
+  const query = params.toString()
+  const href = `mailto:${to}${query ? `?${query}` : ''}`
+  return { href, to }
+}
+
+function parseCsvRows(text) {
+  const rows = []
+  let row = []
+  let cell = ''
+  let quoted = false
+  const src = String(text).replace(/\r\n/g, '\n').replace(/\r/g, '\n')
+  for (let i = 0; i < src.length; i++) {
+    const ch = src[i]
+    if (quoted) {
+      if (ch === '"') {
+        if (src[i + 1] === '"') {
+          cell += '"'
+          i += 1
+        } else {
+          quoted = false
+        }
+      } else {
+        cell += ch
+      }
+    } else if (ch === '"') {
+      quoted = true
+    } else if (ch === ',') {
+      row.push(cell)
+      cell = ''
+    } else if (ch === '\n') {
+      row.push(cell)
+      rows.push(row)
+      row = []
+      cell = ''
+    } else {
+      cell += ch
+    }
+  }
+  if (quoted) throw new Error('CSV 引号未闭合')
+  if (cell || row.length) {
+    row.push(cell)
+    rows.push(row)
+  }
+  return rows.filter((item) => item.some((value) => String(value).trim() !== ''))
+}
+
+function csvToMarkdown(text) {
+  const rows = parseCsvRows(text)
+  if (rows.length === 0) throw new Error('CSV 为空')
+  const width = Math.max(...rows.map((row) => row.length))
+  const padded = rows.map((row) => Array.from({ length: width }, (_, i) => String(row[i] ?? '').replace(/\|/g, '\\|')))
+  const header = padded[0]
+  const body = padded.slice(1)
+  const sep = header.map(() => '---')
+  const markdown = [
+    `| ${header.join(' | ')} |`,
+    `| ${sep.join(' | ')} |`,
+    ...body.map((row) => `| ${row.join(' | ')} |`)
+  ].join('\n')
+  return { markdown, rows: padded.length, columns: width }
+}
+
+function parseAttrs(tag) {
+  const attrs = {}
+  const re = /([^\s=]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g
+  let match
+  while ((match = re.exec(tag))) {
+    attrs[match[1].toLowerCase()] = match[2] ?? match[3] ?? match[4] ?? ''
+  }
+  return attrs
+}
+
+function parseOpenGraph(html) {
+  const text = String(html)
+  const meta = {}
+  const tags = text.match(/<meta\b[^>]*>/gi) || []
+  for (const tag of tags) {
+    const attrs = parseAttrs(tag)
+    const key = attrs.property || attrs.name || ''
+    const content = attrs.content
+    if (key && content != null) meta[key] = content
+  }
+  const title = text.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.trim()
+  return {
+    title: meta['og:title'] || title || '',
+    description: meta['og:description'] || meta.description || '',
+    image: meta['og:image'] || '',
+    url: meta['og:url'] || '',
+    type: meta['og:type'] || '',
+    site: meta['og:site_name'] || '',
+    twitter: meta['twitter:card'] || '',
+    meta
+  }
+}
+
+const WINDOWS_RESERVED = new Set(['CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4', 'LPT1', 'LPT2', 'LPT3'])
+
+function sanitizeFilename(name) {
+  const base = String(name || '').split(/[/\\]/).pop() || ''
+  let cleaned = base.replace(/[\u0000-\u001f<>:"|?*]/g, '_').replace(/[. ]+$/g, '').trim()
+  if (!cleaned) cleaned = 'untitled'
+  const stem = cleaned.includes('.') ? cleaned.slice(0, cleaned.lastIndexOf('.')) : cleaned
+  if (WINDOWS_RESERVED.has(stem.toUpperCase())) cleaned = `_${cleaned}`
+  if (cleaned.length > 120) {
+    const ext = cleaned.includes('.') ? cleaned.slice(cleaned.lastIndexOf('.')) : ''
+    cleaned = `${cleaned.slice(0, Math.max(1, 120 - ext.length))}${ext}`
+  }
+  return { original: name, sanitized: cleaned, changed: cleaned !== name }
+}
+
+function hashColor(text) {
+  const hash = Math.abs(murmur32(String(text)))
+  const hue = hash % 360
+  const hex = `#${[
+    Math.round((hash >> 8) & 255),
+    Math.round((hash >> 16) & 255),
+    Math.round(hash & 255)
+  ].map((n) => n.toString(16).padStart(2, '0')).join('')}`
+  const hsl = `hsl(${hue} 70% 42%)`
+  return { text, hex, hsl, hue, preview: hex }
+}
+
+function buildCookie(values) {
+  const name = String(values.name || '').trim()
+  if (!name) throw new Error('请填写 Cookie 名')
+  const parts = [`${encodeURIComponent(name)}=${encodeURIComponent(values.value || '')}`]
+  if (String(values.path || '').trim()) parts.push(`Path=${values.path}`)
+  if (String(values.domain || '').trim()) parts.push(`Domain=${values.domain}`)
+  if (String(values.maxAge || '').trim()) parts.push(`Max-Age=${Number(values.maxAge) || 0}`)
+  if (String(values.sameSite || '').trim()) parts.push(`SameSite=${values.sameSite}`)
+  if (values.secure === 'true') parts.push('Secure')
+  return { cookie: parts.join('; ') }
+}
+
+function readingTime(text) {
+  const raw = String(text)
+  const cjk = (raw.match(/[\u4e00-\u9fff]/g) || []).length
+  const latin = (raw.replace(/[\u4e00-\u9fff]/g, ' ').match(/[A-Za-z0-9]+/g) || []).length
+  const words = cjk + latin
+  const minutes = Math.max(1, Math.ceil(cjk / 400 + latin / 200))
+  return { words, cjk, latin, minutes, text: `${minutes} 分钟` }
+}
+
+function avatarInitials(name) {
+  const parts = String(name || '').trim().split(/\s+/).filter(Boolean)
+  let initials = ''
+  if (parts.length === 0) initials = '?'
+  else if (parts.length === 1) initials = [...parts[0]].slice(0, 2).join('').toUpperCase()
+  else initials = `${[...parts[0]][0]}${[...parts[parts.length - 1]][0]}`.toUpperCase()
+  const color = hashColor(name)
+  const html = `<div style="width:64px;height:64px;border-radius:50%;background:${color.hex};color:#fff;display:flex;align-items:center;justify-content:center;font:600 20px/1 system-ui">${escapeHtml(initials)}</div>`
+  return { initials, name, hex: color.hex, html, preview: color.hex }
 }

@@ -1966,6 +1966,208 @@ export const clientTools = [
         { name: 'end', label: '结束', value: '2026-09-20T11:00' },
         { name: 'location', label: '地点', value: 'Zoom' }
       ]
+    },
+    {
+      id: 'json-diff-local',
+      group: 'fe',
+      title: 'JSON Diff',
+      summary: '比较两个对象的增删改',
+      fields: [
+        { name: 'left', label: '左侧 JSON', type: 'textarea', value: '{"name":"Ada","year":1815}' },
+        { name: 'right', label: '右侧 JSON', type: 'textarea', value: '{"name":"Ada","year":1816,"lang":"en"}' }
+      ]
+    },
+    {
+      id: 'json-merge-local',
+      group: 'fe',
+      title: 'JSON Merge',
+      summary: '深合并，可拼接数组',
+      fields: [
+        { name: 'arrays', label: '数组', type: 'select', value: 'replace', options: [
+          { value: 'replace', label: '覆盖' },
+          { value: 'concat', label: '拼接' }
+        ] },
+        { name: 'left', label: '基础 JSON', type: 'textarea', value: '{"user":{"name":"Ada"},"tags":["java"]}' },
+        { name: 'right', label: '覆盖 JSON', type: 'textarea', value: '{"user":{"city":"London"},"tags":["vue"]}' }
+      ]
+    },
+    {
+      id: 'json-sort-local',
+      group: 'fe',
+      title: 'JSON 键排序',
+      summary: '递归按键名排序',
+      fields: [
+        { name: 'order', label: '顺序', type: 'select', value: 'asc', options: [
+          { value: 'asc', label: '升序' },
+          { value: 'desc', label: '降序' }
+        ] },
+        { name: 'text', label: 'JSON', type: 'textarea', value: '{"z":1,"a":{"c":3,"b":2}}' }
+      ]
+    },
+    {
+      id: 'data-url-local',
+      group: 'fe',
+      title: 'Data URL',
+      summary: '文本编解码 data:',
+      fields: [
+        { name: 'mode', label: '模式', type: 'select', value: 'encode', options: [
+          { value: 'encode', label: '编码' },
+          { value: 'decode', label: '解码' }
+        ] },
+        { name: 'mime', label: 'MIME', value: 'text/plain' },
+        { name: 'text', label: '文本或 Data URL', type: 'textarea', value: 'hello 世界' }
+      ]
+    },
+    {
+      id: 'html-strip-local',
+      group: 'fe',
+      title: '去 HTML 标签',
+      summary: '去掉标签保留纯文本',
+      fields: [{ name: 'text', label: 'HTML', type: 'textarea', value: '<p>Hello <b>Ada</b></p><script>alert(1)</script>' }]
+    },
+    {
+      id: 'template-local',
+      group: 'fe',
+      title: '模板插值',
+      summary: '{{key}} 替换 JSON 字段',
+      fields: [
+        { name: 'text', label: '模板', type: 'textarea', value: 'Hello {{user.name}}, city={{user.city}}' },
+        { name: 'context', label: '上下文 JSON', type: 'textarea', value: '{"user":{"name":"Ada","city":"London"}}' }
+      ]
+    },
+    {
+      id: 'password-score-local',
+      group: 'fe',
+      title: '密码强度',
+      summary: '本地评分，不上传',
+      fields: [{ name: 'password', label: '密码', value: 'Tr0ub4dor&3' }]
+    },
+    {
+      id: 'uuid-parse-local',
+      group: 'fe',
+      title: 'UUID 解析',
+      summary: '版本 / 变体 / v7 时间',
+      fields: [{ name: 'value', label: 'UUID', value: '01890f5e-8b5a-7c3d-8a1b-0c1d2e3f4a5b' }]
+    },
+    {
+      id: 'url-normalize-local',
+      group: 'fe',
+      title: 'URL 正规化',
+      summary: '小写主机、排序查询、去默认端口',
+      fields: [
+        { name: 'sort', label: '查询', type: 'select', value: 'sort', options: [
+          { value: 'sort', label: '排序参数' },
+          { value: 'keep', label: '保持顺序' }
+        ] },
+        { name: 'hash', label: 'Hash', type: 'select', value: 'keep', options: [
+          { value: 'keep', label: '保留' },
+          { value: 'strip', label: '去掉' }
+        ] },
+        { name: 'slash', label: '尾斜杠', type: 'select', value: 'keep', options: [
+          { value: 'keep', label: '保留' },
+          { value: 'strip', label: '去掉' }
+        ] },
+        { name: 'url', label: 'URL', value: 'HTTPS://Example.COM:443/docs/?b=2&a=1#top/' }
+      ]
+    },
+    {
+      id: 'number-format-local',
+      group: 'fe',
+      title: '数字格式化',
+      summary: 'Intl.NumberFormat',
+      fields: [
+        { name: 'value', label: '数字', value: '1234567.89' },
+        { name: 'locale', label: '语言', value: 'zh-CN' },
+        { name: 'style', label: '样式', type: 'select', value: 'currency', options: [
+          { value: 'decimal', label: '小数' },
+          { value: 'currency', label: '货币' },
+          { value: 'percent', label: '百分比' }
+        ] },
+        { name: 'currency', label: '币种', value: 'CNY' }
+      ]
+    },
+    {
+      id: 'mailto-local',
+      group: 'fe',
+      title: 'mailto 链接',
+      summary: '生成邮件链接',
+      fields: [
+        { name: 'to', label: '收件人', value: 'ada@example.com' },
+        { name: 'cc', label: '抄送', value: 'team@example.com' },
+        { name: 'subject', label: '主题', value: 'Sprint notes' },
+        { name: 'body', label: '正文', type: 'textarea', value: 'See the attached notes.' }
+      ]
+    },
+    {
+      id: 'csv-md-local',
+      group: 'fe',
+      title: 'CSV → Markdown',
+      summary: '表格互转预览',
+      fields: [{ name: 'text', label: 'CSV', type: 'textarea', value: 'name,year\nAda,1815\nGrace,1906' }]
+    },
+    {
+      id: 'og-parse-local',
+      group: 'fe',
+      title: 'Open Graph',
+      summary: '解析 og / twitter meta',
+      fields: [{ name: 'text', label: 'HTML', type: 'textarea', value: '<html><head><title>Page</title><meta property="og:title" content="Ada"><meta property="og:image" content="https://ex.com/a.png"><meta name="description" content="Bio"></head></html>' }]
+    },
+    {
+      id: 'filename-sanitize-local',
+      group: 'fe',
+      title: '文件名清洗',
+      summary: '去掉非法字符与保留名',
+      fields: [{ name: 'name', label: '文件名', value: '../CON.txt' }]
+    },
+    {
+      id: 'hash-color-local',
+      group: 'fe',
+      title: '哈希配色',
+      summary: '字符串映射稳定颜色',
+      fields: [{ name: 'text', label: '文本', value: 'Ada Lovelace' }]
+    },
+    {
+      id: 'query-build-local',
+      group: 'fe',
+      title: 'Query 构建',
+      summary: 'JSON 转查询串',
+      fields: [{ name: 'text', label: 'JSON', type: 'textarea', value: '{"q":"ada","tag":["java","vue"],"page":2}' }]
+    },
+    {
+      id: 'cookie-build-local',
+      group: 'fe',
+      title: 'Cookie 构建',
+      summary: '生成 Set-Cookie 片段',
+      fields: [
+        { name: 'name', label: '名称', value: 'sid' },
+        { name: 'value', label: '值', value: 'abc123' },
+        { name: 'path', label: 'Path', value: '/' },
+        { name: 'domain', label: 'Domain', value: '' },
+        { name: 'maxAge', label: 'Max-Age', value: '3600' },
+        { name: 'sameSite', label: 'SameSite', type: 'select', value: 'Lax', options: [
+          { value: 'Lax', label: 'Lax' },
+          { value: 'Strict', label: 'Strict' },
+          { value: 'None', label: 'None' }
+        ] },
+        { name: 'secure', label: 'Secure', type: 'select', value: 'true', options: [
+          { value: 'true', label: '是' },
+          { value: 'false', label: '否' }
+        ] }
+      ]
+    },
+    {
+      id: 'reading-time-local',
+      group: 'fe',
+      title: '阅读时长',
+      summary: '中英混排估时',
+      fields: [{ name: 'text', label: '文本', type: 'textarea', value: '春江潮水连海平，海上明月共潮生。The spring river tides connect the sea.' }]
+    },
+    {
+      id: 'initials-local',
+      group: 'fe',
+      title: '头像缩写',
+      summary: '姓名首字母 + 色块',
+      fields: [{ name: 'name', label: '姓名', value: 'Ada Lovelace' }]
     }
   ]
 
