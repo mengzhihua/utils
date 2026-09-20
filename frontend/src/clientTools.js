@@ -2148,6 +2148,13 @@ export const clientTools = [
       fields: []
     },
     {
+      id: 'screen-info-local',
+      group: 'fe',
+      title: '屏幕信息',
+      summary: '分辨率 / DPR / 色域 / 触控',
+      fields: []
+    },
+    {
       id: 'zero-width-local',
       group: 'fe',
       title: '零宽字符',

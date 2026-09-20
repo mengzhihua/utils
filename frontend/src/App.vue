@@ -16,6 +16,10 @@
           {{ t('officeNav') }}
           <small>{{ t('officeHint') }}</small>
         </RouterLink>
+        <RouterLink class="nav-link" to="/hw" active-class="active" @click="open = false">
+          {{ t('hwNav') }}
+          <small>{{ t('hwHint') }}</small>
+        </RouterLink>
         <RouterLink class="nav-link" to="/fx" active-class="active" @click="open = false">
           {{ t('effects') }}
           <small>{{ t('effectsHint') }}</small>
