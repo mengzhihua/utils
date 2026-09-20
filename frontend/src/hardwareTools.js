@@ -33,6 +33,16 @@ export const hardwareTools = [
     id: 'audio',
     title: '扬声器检测',
     summary: '左右声道、扫频蜂鸣'
+  },
+  {
+    id: 'camera',
+    title: '摄像头检测',
+    summary: '预览、切换设备、镜像、抓拍'
+  },
+  {
+    id: 'mic',
+    title: '麦克风检测',
+    summary: '电平、波形、试听、本地录音'
   }
 ]
 

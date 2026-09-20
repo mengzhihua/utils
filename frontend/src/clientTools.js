@@ -2155,6 +2155,13 @@ export const clientTools = [
       fields: []
     },
     {
+      id: 'media-devices-local',
+      group: 'fe',
+      title: '音视频设备',
+      summary: '摄像头 / 麦克风 / 扬声器列表',
+      fields: []
+    },
+    {
       id: 'zero-width-local',
       group: 'fe',
       title: '零宽字符',

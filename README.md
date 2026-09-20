@@ -415,7 +415,7 @@ com.mengzhihua.utils
 - 后端 Java 工具演示（脱敏、JWT、AES、身份证、信用代码、坐标系、签名、TOTP、Cron、Ant 路径、限流、星座、slug、时长、农历、表达式、ISBN、验证码、单位换算、IMEI、Hashids、罗马数字、URL 解析、IBAN、VIN、EAN、Soundex、Jaro-Winkler、SHA3、KSUID、Sqids、UUID v5/v6、Metaphone、ISIN、BIC、Bech32、HKDF、摩斯电码、CaseFormat、HOTP、Base45、JSON Patch、节假日、WCAG 对比度、CUSIP、SEDOL、ORCID、ISRC、JSON Merge Patch、HTTP Date、车牌、URI Template、正则抽取、SM3、ISBN 互转、IPv6、SemVer、CRC-16、SM4、BLAKE2s、CMAC、香港/台湾身份证、组织机构代码、节气、拼音、XML、ChaCha20、CRC-64、BLAKE2b、AES-KW、Ed25519、TSID、干支、Jump Hash、集装箱号、Bech32m、ABA、X25519、RIPEMD-160、FIGI、LEI、NHS、SHAKE、NPI、ISMN、NRIC、科隆拼音、HTTP Range、Hamming、UUID v8、NYSIIS、Caverphone、Sonyflake、Content-Disposition、儒略日、CPF、CNPJ、PESEL、UPC-E、CRC-32/MPEG-2、HMAC-SM3、Murmur3-128、Double Metaphone、Match Rating、SIREN、SIRET、NIF、ISNI、basE91、Bencode、HTTP Accept、Refined Soundex、Porter、NIR、意大利税号、德国税号、EORI、DOI、PMID、ICCID、HTTP Forwarded、Fletcher、瑞典/芬兰/挪威个人号、ISWC、SSCC、ABN、TFN、HTTP Link、ETag、uuencode、VAT、AHV、NIP、Aadhaar、PAN、SIN、PPS、Cache-Control、Z85、CRC-16/XMODEM、丹麦 CPR、比利时 NRN、奥地利 SVNR、葡萄牙 NIF、希腊 AFM、英国 NINO、韩国居民号、日本个人番号、yEnc、Base36、Retry-After、UUID v1、智利 RUT、阿根廷 CUIT、南非身份证、新西兰 IRD、马来西亚 MyKad、CORS、WWW-Authenticate、土耳其 TCKN、以色列身份证、罗马尼亚 CNP、克罗地亚 OIB、保加利亚 EGN、泰国身份证、波兰 REGON、捷克 IČO、HSTS、CSP、Accept-Encoding、CRC-16/KERMIT、南斯拉夫 JMBG、爱沙尼亚个人号、冰岛 kennitala、匈牙利 TAJ、乌克兰 IPN、哥伦比亚 NIT、Referrer-Policy、X-Frame-Options、Permissions-Policy、CRC-16/ARC、拉脱维亚个人号、立陶宛个人号、斯洛文尼亚 EMŠO、秘鲁 DNI、墨西哥 RFC、HTTP Age、HTTP Warning、CRC-16/MAXIM、荷兰 BSN、捷克出生号、Base92、Structured Fields、芬兰企业号、挪威企业号、丹麦 CVR、西班牙 CIF、瑞典企业号、CRC-32/POSIX、瑞士企业号、保加利亚 EIK、罗马尼亚 CUI、匈牙利税号、比利时 KBO、Clear-Site-Data、CRC-16/USB、日本法人番号、韩国事业者号、台湾统一编号、乌克兰 EDRPOU、塞尔维亚 PIB、HTTP NEL、CRC-8/SMBUS、印度 GSTIN、澳大利亚公司号、土耳其税号、印尼税号、爱沙尼亚企业号、HTTP Report-To、CRC-16/GENIBUS、新西兰企业号、新加坡 UEN、以色列公司号、立陶宛企业号、HTTP COOP、HTTP COEP、CRC-32/JAMCRC、俄罗斯税号、秘鲁税号、印尼身份证、越南税号、HTTP CORP、HTTP X-Content-Type-Options、CRC-16/DNP、美国雇主识别号、俄罗斯统一注册号、俄罗斯养老金号、阿尔巴尼亚税号、HTTP Timing-Allow-Origin、HTTP Origin-Agent-Cluster、CRC-16/CMS、委内瑞拉税号、多米尼加税号、白俄罗斯税号、美国个人税号、HTTP Reporting-Endpoints、HTTP Accept-CH、CRC-16/CDMA2000、巴基斯坦身份证、摩尔多瓦企业号、加纳税号、肯尼亚税号、HTTP Document-Policy、CRC-32/AUTOSAR、摩洛哥企业号、阿塞拜疆税号、乌拉圭税号、巴拉圭税号、HTTP X-Robots-Tag、CRC-16/GSM、国际化文案、语言标签、本地化格式、本地化排序、HTTP Accept-Language、危地马拉税号、哥斯达黎加身份证、哥斯达黎加税号、突尼斯税号、HTTP Server-Timing、CRC-8/SAE-J1850、时区显示名、复数选择、双向文本、本地化日历、相对时间、本地化大小写、解析本地化数字、本地化分词、本地数字、和历 / 序数、埃及税号、卢森堡税号、萨尔瓦多税号、北马其顿税号、HTTP Content-Language、CRC-8/DARC、黑山税号、阿曼税号、塞浦路斯税号、马耳他税号、HTTP Vary、CRC-8/I-CODE、安道尔税号、列支敦士登识别号、阿尔及利亚税号、塞内加尔企业号、HTTP Origin、CRC-8/ROHC、莫桑比克税号、古巴身份证、几内亚税号、圣马力诺经营者号、HTTP Alt-Svc、CRC-16/MCRF4XX、法罗企业号、法国税号、摩纳哥税号、毛里求斯身份证、HTTP X-DNS-Prefetch-Control、CRC-8/WCDMA、厄瓜多尔身份证、厄瓜多尔税号、意大利增值税号、爱尔兰税号、HTTP X-XSS-Protection、CRC-8/MAXIM-DOW、英国税号、加拿大企业号、捷克税号、ISO 11649 债权参考号、HTTP Expect-CT、CRC-16/X-25、奥地利税号、斯洛伐克税号、斯洛文尼亚税号、荷兰税号、HTTP Priority、CRC-16/DECT-R 等）
 - 浏览器本地工具：JSON/XML、Base64、JWT 解码、Markdown、命名风格、全角半角、行处理、文本对比、MD5/HMAC/CRC32/Murmur3、ULID、UUID v7、CIDR、UA/Cookie、星座、高亮、四则运算、进制、ISBN、Punycode、罗马数字、单位换算、IMEI、URL 解析、Soundex、Jaro-Winkler、IBAN、EAN、年龄、ROT13、摩斯、通配符、ISIN、Humanize、Quoted-Printable、Base45、WCAG 对比度、去音调、车牌、Emoji、CUSIP、正则抽取/转义、ISBN 互转、IPv6、卡组织、时长差、拼音首字母、港澳台证件、组织机构代码、节气、干支、ABA、集装箱号、Jump Hash、FIGI、LEI、NHS、NPI、ISMN、NRIC、科隆拼音、Hamming、UUID v8、NYSIIS、Caverphone、CPF、CNPJ、PESEL、UPC-E、儒略日、Double Metaphone、Match Rating、SIREN、SIRET、NIF、ISNI、Bencode、Refined Soundex、NIR、意大利税号、德国税号、EORI、DOI、PMID、ICCID、瑞典/芬兰/挪威个人号、ISWC、ABN、TFN、SSCC、VAT、AHV、NIP、Aadhaar、PAN、SIN、PPS、丹麦 CPR、葡萄牙 NIF、英国 NINO、韩国居民号、希腊 AFM、智利 RUT、阿根廷 CUIT、南非身份证、土耳其 TCKN、罗马尼亚 CNP、泰国身份证、克罗地亚 OIB、南斯拉夫 JMBG、冰岛 kennitala、匈牙利 TAJ、哥伦比亚 NIT、拉脱维亚个人号、斯洛文尼亚 EMŠO、秘鲁 DNI、墨西哥 RFC、荷兰 BSN、捷克出生号、芬兰企业号、丹麦 CVR、西班牙 CIF、瑞士企业号、罗马尼亚 CUI、比利时 KBO、日本法人番号、韩国事业者号、台湾统一编号、乌克兰 EDRPOU、塞尔维亚 PIB、印度 GSTIN、澳大利亚公司号、土耳其税号、印尼税号、爱沙尼亚企业号、新西兰企业号、新加坡 UEN、以色列公司号、立陶宛企业号、俄罗斯税号、秘鲁税号、印尼身份证、越南税号、美国雇主识别号、俄罗斯统一注册号、俄罗斯养老金号、阿尔巴尼亚税号、委内瑞拉税号、多米尼加税号、白俄罗斯税号、美国个人税号、巴基斯坦身份证、摩尔多瓦企业号、加纳税号、肯尼亚税号、摩洛哥企业号、阿塞拜疆税号、乌拉圭税号、巴拉圭税号、本地化格式、黑山税号、阿曼税号、塞浦路斯税号、马耳他税号、安道尔税号、列支敦士登识别号、阿尔及利亚税号、塞内加尔企业号、莫桑比克税号、古巴身份证、几内亚税号、圣马力诺经营者号、法罗企业号、法国税号、摩纳哥税号、毛里求斯身份证、厄瓜多尔身份证、厄瓜多尔税号、意大利增值税号、爱尔兰税号、英国税号、加拿大企业号、捷克税号、ISO 11649 债权参考号、奥地利税号、斯洛伐克税号、斯洛文尼亚税号、荷兰税号、JSON 扁平化、TypeScript 推断、JSON Pointer、.env 解析、NanoID、本地 TOTP、AES-GCM、SHA-1/384/512、UTM 链接、MIME、浏览器信息、零宽字符、换行符、Unicode 正规化、Markdown 目录、占位文本、CSS 单位、色板、vCard、ICS 日程、JSON Diff/Merge/键排序、Data URL、去 HTML、模板插值、密码强度、UUID 解析、URL 正规化、数字格式化、mailto、CSV→Markdown、Open Graph、文件名清洗、哈希配色、Query 构建、Cookie 构建、阅读时长、头像缩写 等
 - 特效实验室：玻璃拟态、光晕、礼花、打字机、涟漪、聚光跟随
-- 硬件检测台：屏幕分辨率/色条/坏点/帧率、键盘 `event.code` 点亮、鼠标轨迹与滚轮、触控压感、连点 CPS、手柄、扬声器左右声道
+- 硬件检测台：屏幕分辨率/色条/坏点/帧率、键盘 `event.code` 点亮、鼠标轨迹与滚轮、触控压感、连点 CPS、手柄、扬声器左右声道、摄像头预览/抓拍、麦克风电平/波形/本地录音
 - 深色模式、中英切换、页面过渡、复制 Toast
 
 未内置（需额外依赖，可按项目再加）：Excel、邮件、二维码、Redis、OSS。
@@ -437,7 +437,7 @@ npm run build    # 构建进 Spring Boot 静态资源
 | --- | --- | --- |
 | 个税 / 房贷 / 发票 | `PitUtil` / `MortgageUtil` / `InvoiceVatUtil` | 也可走 `/api/utils/pit` `/mortgage` `/invoice-vat` |
 | 办公工作台 | `/#/office` | 搜索 + 分类卡片，适合每天开着当桌面工具 |
-| 硬件检测台 | `/#/hw` | 屏幕 / 键盘 / 鼠标 / 触控 / 连点 / 手柄 / 扬声器，全在浏览器本机完成 |
+| 硬件检测台 | `/#/hw` | 屏幕 / 键盘 / 鼠标 / 触控 / 连点 / 手柄 / 扬声器 / 摄像头 / 麦克风，全在浏览器本机完成 |
 
 ### 屏幕与键鼠检测（浏览器直接用）
 
@@ -452,7 +452,10 @@ npm run build    # 构建进 Spring Boot 静态资源
 | `/#/hw/click` | 5 秒连点 CPS，最好成绩存在 `localStorage` |
 | `/#/hw/gamepad` | `navigator.getGamepads()` 按键与摇杆，可选震动 |
 | `/#/hw/audio` | Web Audio 左右声道与扫频 |
+| `/#/hw/camera` | `getUserMedia` 预览、切换设备、镜像、抓拍（不上传） |
+| `/#/hw/mic` | 麦克风电平 / 波形 / 试听 / 本机录 4 秒回放 |
 | `/#/c/screen-info-local` | 屏幕快照 JSON（分辨率 / 色域 / 触控点数） |
+| `/#/c/media-devices-local` | 摄像头 / 麦克风 / 扬声器设备列表快照 |
 
 ## 发布版（推荐）
 
