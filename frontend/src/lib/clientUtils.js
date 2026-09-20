@@ -1487,6 +1487,8 @@ export async function runClientTool(id, values) {
     }
     case 'browser-info-local':
       return collectBrowserInfo()
+    case 'screen-info-local':
+      return collectScreenInfo()
     case 'zero-width-local': {
       const text = String(values.text || '')
       const matches = [...text.matchAll(ZERO_WIDTH)].map((m) => ({
@@ -4645,6 +4647,60 @@ function collectBrowserInfo() {
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     locale: Intl.DateTimeFormat().resolvedOptions().locale,
     connection: connection ? { type: connection.effectiveType, downlink: connection.downlink } : {}
+  }
+}
+
+function mediaMatch(query) {
+  return window.matchMedia(query).matches
+}
+
+function collectScreenInfo() {
+  const screen = window.screen
+  const orientation = screen.orientation || {}
+  const gamut = mediaMatch('(color-gamut: rec2020)')
+    ? 'rec2020'
+    : mediaMatch('(color-gamut: p3)')
+      ? 'p3'
+      : mediaMatch('(color-gamut: srgb)')
+        ? 'srgb'
+        : 'unknown'
+  return {
+    screen: {
+      width: screen.width,
+      height: screen.height,
+      availWidth: screen.availWidth,
+      availHeight: screen.availHeight,
+      colorDepth: screen.colorDepth || 0,
+      pixelDepth: screen.pixelDepth || 0
+    },
+    window: {
+      innerWidth: window.innerWidth,
+      innerHeight: window.innerHeight,
+      outerWidth: window.outerWidth,
+      outerHeight: window.outerHeight,
+      dpr: window.devicePixelRatio || 1,
+      screenX: window.screenX,
+      screenY: window.screenY
+    },
+    orientation: {
+      type: orientation.type || (window.innerWidth >= window.innerHeight ? 'landscape' : 'portrait'),
+      angle: orientation.angle ?? 0
+    },
+    media: {
+      colorGamut: gamut,
+      hdr: mediaMatch('(dynamic-range: high)'),
+      reducedMotion: mediaMatch('(prefers-reduced-motion: reduce)'),
+      dark: mediaMatch('(prefers-color-scheme: dark)'),
+      hover: mediaMatch('(hover: hover)'),
+      pointerFine: mediaMatch('(pointer: fine)'),
+      pointerCoarse: mediaMatch('(pointer: coarse)')
+    },
+    hardware: {
+      cores: navigator.hardwareConcurrency || 0,
+      memory: navigator.deviceMemory || 0,
+      touch: navigator.maxTouchPoints || 0,
+      gamepads: navigator.getGamepads ? [...navigator.getGamepads()].filter(Boolean).length : 0
+    }
   }
 }
 
