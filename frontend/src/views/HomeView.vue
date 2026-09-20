@@ -6,6 +6,9 @@
         <p>{{ t('homeLead') }}</p>
       </div>
     </div>
+    <div class="office-search">
+      <input v-model="query" type="search" :placeholder="t('officeSearch')" />
+    </div>
 
     <div class="stats">
       <div class="stat reveal" style="--d: 0ms">
@@ -26,6 +29,10 @@
       <button class="btn glow-btn" type="button" @click="quick('uuid')">{{ t('quickUuid') }}</button>
       <button class="btn secondary" type="button" @click="quick('snowflake')">{{ t('quickSnowflake') }}</button>
       <button class="btn secondary" type="button" @click="quick('order-no')">{{ t('quickOrder') }}</button>
+      <RouterLink class="btn glow-btn" to="/office">{{ t('openOffice') }}</RouterLink>
+      <RouterLink class="btn secondary" to="/c/pit-local">{{ t('quickPit') }}</RouterLink>
+      <RouterLink class="btn secondary" to="/c/mortgage-local">{{ t('quickMortgage') }}</RouterLink>
+      <RouterLink class="btn secondary" to="/c/invoice-vat-local">{{ t('quickInvoice') }}</RouterLink>
       <RouterLink class="btn secondary" to="/fx">{{ t('openEffects') }}</RouterLink>
     </div>
 
@@ -38,12 +45,13 @@
     </div>
 
     <template v-for="group in clientCatalog" :key="group.id">
-      <h3 class="section-title">{{ t('frontendPrefix') }} {{ group.label }}</h3>
+      <h3 class="section-title">{{ group.id === 'office' ? t('officePrefix') : t('frontendPrefix') }} {{ group.label }}</h3>
       <div class="grid">
         <RouterLink
           v-for="(tool, index) in group.tools"
           :key="tool.id"
           class="card reveal"
+          :class="{ 'office-card': group.id === 'office' }"
           :style="{ '--d': `${index * 40}ms` }"
           :to="`/c/${tool.id}`"
         >
@@ -56,7 +64,7 @@
     <h3 class="section-title">{{ t('backendTitle') }}</h3>
     <div class="grid">
       <RouterLink
-        v-for="(tool, index) in tools"
+        v-for="(tool, index) in backendTools"
         :key="tool.id"
         class="card reveal"
         :style="{ '--d': `${index * 18}ms` }"
@@ -81,12 +89,19 @@ const health = ref('')
 const now = reactive({})
 const system = reactive({})
 const quickResult = ref('')
+const query = ref('')
 const toast = useToast()
 const { t } = useI18n()
-const clientCatalog = computed(() => groupedClientTools().map((group) => ({
-  ...group,
-  label: t(`group.${group.id}`, group.label)
-})))
+const needle = computed(() => query.value.trim().toLowerCase())
+const matchTool = (tool) => !needle.value || `${tool.title} ${tool.summary} ${tool.id}`.toLowerCase().includes(needle.value)
+const clientCatalog = computed(() => groupedClientTools()
+  .map((group) => ({
+    ...group,
+    label: t(`group.${group.id}`, group.label),
+    tools: group.tools.filter(matchTool)
+  }))
+  .filter((group) => group.tools.length > 0))
+const backendTools = computed(() => tools.filter(matchTool))
 
 async function load() {
   const [healthRes, nowRes, sysRes] = await Promise.all([

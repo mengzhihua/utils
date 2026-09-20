@@ -1,6 +1,6 @@
 # Java Utils Toolkit
 
-基于 **Spring Boot 4.1 + Java 21** 的通用工具集。既可直接运行演示服务，也可把 `com.mengzhihua.utils.common` 下按领域分包的工具类复用到业务项目。
+基于 **Spring Boot 4.1 + Java 21** 的通用工具集：Java 工具类、浏览器前端工具、日常办公工作台。支持四种用法——服务器 JAR、Windows 可执行程序、Linux 包、macOS 包。
 
 ## 工程结构
 
@@ -428,7 +428,48 @@ npm run dev      # 开发（代理到 8080）
 npm run build    # 构建进 Spring Boot 静态资源
 ```
 
-## 快速开始
+### 日常办公（浏览器直接用）
+
+打开 <http://localhost:8080/#/office>。个税、房贷、发票、社保、加班、报销、工作日、会议纪要、周报、待办、便签、番茄钟、快递单号、对公转账、Excel 列号、图片压缩/水印、抽签均在浏览器本地计算，不上传。
+
+| 模块 | 类 / 入口 | 说明 |
+| --- | --- | --- |
+| 个税 / 房贷 / 发票 | `PitUtil` / `MortgageUtil` / `InvoiceVatUtil` | 也可走 `/api/utils/pit` `/mortgage` `/invoice-vat` |
+| 办公工作台 | `/#/office` | 搜索 + 分类卡片，适合每天开着当桌面工具 |
+
+## 四种运行方式
+
+### 1. 服务器部署 Spring Boot JAR
+
+```bash
+./scripts/package.sh
+java -jar dist/utils-1.0.0-SNAPSHOT.jar
+```
+
+浏览器打开 <http://localhost:8080/>。Docker：`docker build -t utils . && docker run -p 8080:8080 utils`。
+
+### 2. 本机桌面模式（Win / Linux / macOS 同一 JAR）
+
+```bash
+./scripts/start.sh      # Linux / macOS，自动打开办公工作台
+start.bat               # Windows
+```
+
+监听 `127.0.0.1:18765`，并打开 `/#/office`。需要本机 **JDK 21+**。
+
+### 3. Windows / Linux / macOS 原生包（自带运行时）
+
+在对应系统上用 **JDK 21+**（含 `jpackage`）：
+
+```bash
+./scripts/package-native.sh          # 当前系统：Linux app-image / macOS dmg
+scripts\package-native.bat           # Windows：生成 Utils.exe
+./scripts/package-native.sh 1.0.0 deb
+```
+
+GitHub Actions（`.github/workflows/release.yml`）会在 Ubuntu / Windows / macOS 各打一份，随 Release 上传。Windows 解压后运行 `Utils.exe`；Linux 运行 `Utils/bin/Utils`；macOS 打开 dmg。
+
+### 4. 开发启动
 
 ```bash
 chmod +x mvnw
@@ -437,6 +478,7 @@ chmod +x mvnw
 
 启动后：
 
+- 办公工作台：<http://localhost:8080/#/office>
 - 首页：<http://localhost:8080/>
 - Swagger UI：<http://localhost:8080/swagger-ui.html>
 - 健康检查：<http://localhost:8080/actuator/health>

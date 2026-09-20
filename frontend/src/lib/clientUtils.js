@@ -1379,6 +1379,48 @@ export async function runClientTool(id, values) {
       const compact = normalizeNlBtw(values.value)
       return { normalized: compact, formatted: compact.length === 12 ? `NL${compact}` : compact, valid: isNlBtw(compact) }
     }
+    case 'pit-local':
+      return estimatePit(values.income, values.insurance, values.special, values.month)
+    case 'mortgage-local':
+      return estimateMortgage(values.principal, values.rate, values.years, values.mode)
+    case 'invoice-vat-local':
+      return splitInvoiceVat(values.amount, values.rate, values.taxIncluded !== 'false')
+    case 'social-fund-local':
+      return estimateSocialFund(values)
+    case 'overtime-pay-local':
+      return estimateOvertime(values)
+    case 'expense-sum-local':
+      return sumExpenses(values.text)
+    case 'salary-raise-local':
+      return salaryRaise(values.before, values.after)
+    case 'workday-local':
+      return workdayCalc(values)
+    case 'countdown-local':
+      return countdownTo(values.target)
+    case 'meeting-notes-local':
+      return meetingNotes(values)
+    case 'weekly-report-local':
+      return weeklyReport(values)
+    case 'todo-local':
+      return officeTodos(values)
+    case 'note-local':
+      return officeNote(values)
+    case 'pomodoro-local':
+      return officePomodoro(values)
+    case 'batch-replace-local':
+      return { text: String(values.text || '').split(values.find || '').join(values.replace || '') }
+    case 'express-no-local':
+      return identifyExpress(values.value)
+    case 'transfer-card-local':
+      return transferCard(values)
+    case 'excel-col-local':
+      return excelCol(values.mode, values.value)
+    case 'image-compress-local':
+      return compressImage(values.dataUrl, values.maxWidth, values.quality)
+    case 'image-watermark-local':
+      return watermarkImage(values.dataUrl, values.text, values.position)
+    case 'draw-local':
+      return drawLots(values.text, values.count)
     case 'json-flatten-local': {
       const parsed = JSON.parse(values.text || '{}')
       if (values.mode === 'unflatten') {
@@ -5030,4 +5072,337 @@ function avatarInitials(name) {
   const color = hashColor(name)
   const html = `<div style="width:64px;height:64px;border-radius:50%;background:${color.hex};color:#fff;display:flex;align-items:center;justify-content:center;font:600 20px/1 system-ui">${escapeHtml(initials)}</div>`
   return { initials, name, hex: color.hex, html, preview: color.hex }
+}
+
+function money(value) {
+  const amount = Number(String(value ?? '0').replace(/,/g, ''))
+  if (!Number.isFinite(amount) || amount < 0) throw new Error('金额无效')
+  return Math.round(amount * 100) / 100
+}
+
+function rmbUpper(amount) {
+  const n = money(amount)
+  if (n === 0) return '零元整'
+  const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
+  const units = ['', '拾', '佰', '仟']
+  const groups = ['', '万', '亿']
+  const yuan = Math.floor(n)
+  const cents = Math.round((n - yuan) * 100)
+  const parts = []
+  let rest = yuan
+  let gi = 0
+  while (rest > 0 && gi < 3) {
+    const chunk = rest % 10000
+    if (chunk) {
+      let chunkText = ''
+      const str = String(chunk).padStart(4, '0')
+      for (let i = 0; i < 4; i++) {
+        const d = Number(str[i])
+        if (d) chunkText += digits[d] + units[3 - i]
+        else if (i < 3 && Number(str[i + 1]) && !chunkText.endsWith('零')) chunkText += '零'
+      }
+      parts.unshift(chunkText + groups[gi])
+    }
+    rest = Math.floor(rest / 10000)
+    gi++
+  }
+  let text = parts.join('').replace(/零+/g, '零').replace(/零(万|亿)/g, '$1').replace(/零+$/g, '') + '元'
+  if (!cents) return text + '整'
+  text += digits[Math.floor(cents / 10)] + (cents >= 10 ? '角' : '')
+  if (cents % 10) text += (cents < 10 ? '零' : '') + digits[cents % 10] + '分'
+  return text
+}
+
+function estimatePit(income, insurance, special, month) {
+  const m = Math.min(12, Math.max(1, Number(month) || 1))
+  const taxable = Math.max(0, money(income) * m - money(insurance) * m - money(special) * m - 5000 * m)
+  const brackets = [
+    [36000, 0.03, 0], [144000, 0.10, 2520], [300000, 0.20, 16920],
+    [420000, 0.25, 31920], [660000, 0.30, 52920], [960000, 0.35, 85920],
+    [Infinity, 0.45, 181920]
+  ]
+  const row = brackets.find((item) => taxable <= item[0])
+  const tax = Math.max(0, Math.round((taxable * row[1] - row[2]) * 100) / 100)
+  const net = Math.round((money(income) - money(insurance) - tax) * 100) / 100
+  return {
+    month: m, monthlyIncome: money(income), insurance: money(insurance), special: money(special),
+    taxableCumulative: taxable, rate: row[1], quickDeduction: row[2], taxCumulative: tax, netMonthly: net
+  }
+}
+
+function estimateMortgage(principal, rate, years, mode) {
+  const p = money(principal)
+  const n = Math.min(50, Math.max(1, Number(years) || 1)) * 12
+  const r = money(rate) / 100 / 12
+  if (mode === 'principal') {
+    const monthlyPrincipal = Math.round((p / n) * 100) / 100
+    const first = Math.round((monthlyPrincipal + p * r) * 100) / 100
+    let interest = 0
+    let balance = p
+    for (let i = 0; i < n; i++) {
+      const part = i === n - 1 ? balance : monthlyPrincipal
+      interest += balance * r
+      balance = Math.round((balance - part) * 100) / 100
+    }
+    interest = Math.round(interest * 100) / 100
+    return { mode: 'principal', principal: p, months: n, monthly: first, firstMonth: first, lastMonth: monthlyPrincipal, interest, total: Math.round((p + interest) * 100) / 100 }
+  }
+  const factor = r === 0 ? 1 : (1 + r) ** n
+  const monthly = r === 0 ? Math.round((p / n) * 100) / 100 : Math.round((p * r * factor / (factor - 1)) * 100) / 100
+  const total = Math.round(monthly * n * 100) / 100
+  return { mode: 'installment', principal: p, months: n, monthly, firstMonth: monthly, lastMonth: monthly, interest: Math.round((total - p) * 100) / 100, total }
+}
+
+function splitInvoiceVat(amount, rate, taxIncluded) {
+  const vat = money(rate) > 1 ? money(rate) / 100 : money(rate)
+  const value = money(amount)
+  const exclusive = taxIncluded ? Math.round(value / (1 + vat) * 100) / 100 : value
+  const inclusive = taxIncluded ? value : Math.round(value * (1 + vat) * 100) / 100
+  const tax = Math.round((inclusive - exclusive) * 100) / 100
+  return { rate: vat, taxIncluded, exclusive, tax, inclusive, rmb: rmbUpper(inclusive) }
+}
+
+function estimateSocialFund(values) {
+  const base = money(values.base)
+  const items = {
+    pension: money(values.pension) / 100,
+    medical: money(values.medical) / 100,
+    unemployment: money(values.unemployment) / 100,
+    housing: money(values.housing) / 100
+  }
+  const personal = {
+    pension: Math.round(base * items.pension * 100) / 100,
+    medical: Math.round(base * items.medical * 100) / 100,
+    unemployment: Math.round(base * items.unemployment * 100) / 100,
+    housing: Math.round(base * items.housing * 100) / 100
+  }
+  const total = Object.values(personal).reduce((sum, item) => sum + item, 0)
+  return { base, personal, total: Math.round(total * 100) / 100 }
+}
+
+function estimateOvertime(values) {
+  const hourly = money(values.monthly) / 21.75 / 8
+  const weekday = Math.round(hourly * 1.5 * Number(values.weekdayHours || 0) * 100) / 100
+  const weekend = Math.round(hourly * 2 * Number(values.weekendHours || 0) * 100) / 100
+  const holiday = Math.round(hourly * 3 * Number(values.holidayHours || 0) * 100) / 100
+  return { hourly: Math.round(hourly * 100) / 100, weekday, weekend, holiday, total: Math.round((weekday + weekend + holiday) * 100) / 100 }
+}
+
+function sumExpenses(text) {
+  const amounts = String(text || '').split(/\s+/).map((item) => Number(item.replace(/,/g, ''))).filter((item) => Number.isFinite(item))
+  const total = Math.round(amounts.reduce((sum, item) => sum + item, 0) * 100) / 100
+  return { count: amounts.length, amounts, total, rmb: rmbUpper(total) }
+}
+
+function salaryRaise(before, after) {
+  const prev = money(before)
+  const next = money(after)
+  const delta = Math.round((next - prev) * 100) / 100
+  return { before: prev, after: next, delta, percent: prev ? Math.round((delta / prev) * 10000) / 100 : 0 }
+}
+
+function isWeekend(date) {
+  const day = date.getDay()
+  return day === 0 || day === 6
+}
+
+function parseDate(value) {
+  const date = new Date(String(value || '').replace(' ', 'T'))
+  if (Number.isNaN(date.getTime())) throw new Error('日期无效')
+  return date
+}
+
+function workdayCalc(values) {
+  const start = parseDate(values.start)
+  if (values.mode === 'add') {
+    let left = Math.max(0, Number(values.days) || 0)
+    const cursor = new Date(start)
+    while (left > 0) {
+      cursor.setDate(cursor.getDate() + 1)
+      if (!isWeekend(cursor)) left--
+    }
+    return { mode: 'add', start: values.start, days: Number(values.days) || 0, end: cursor.toISOString().slice(0, 10) }
+  }
+  const end = parseDate(values.end)
+  let workdays = 0
+  const cursor = new Date(start)
+  while (cursor <= end) {
+    if (!isWeekend(cursor)) workdays++
+    cursor.setDate(cursor.getDate() + 1)
+  }
+  return { mode: 'diff', start: values.start, end: values.end, workdays }
+}
+
+function countdownTo(target) {
+  const date = parseDate(target)
+  const ms = date.getTime() - Date.now()
+  const abs = Math.abs(ms)
+  return {
+    target,
+    overdue: ms < 0,
+    days: Math.floor(abs / 86400000),
+    hours: Math.floor(abs / 3600000) % 24,
+    minutes: Math.floor(abs / 60000) % 60
+  }
+}
+
+function meetingNotes(values) {
+  const agenda = String(values.agenda || '').split(/\n+/).filter(Boolean).map((item, i) => `${i + 1}. ${item}`).join('\n')
+  const markdown = `# ${values.title || '会议纪要'}\n\n- 时间：${values.when || ''}\n- 参会：${values.attendees || ''}\n\n## 议题\n${agenda}\n\n## 决议\n- \n\n## 待办\n- [ ] `
+  return { markdown, html: `<pre>${escapeHtml(markdown)}</pre>` }
+}
+
+function weeklyReport(values) {
+  const markdown = `# ${values.name || ''} 周报（${values.week || ''}）\n\n## 本周完成\n${values.done || ''}\n\n## 下周计划\n${values.next || ''}\n`
+  return { markdown, html: `<pre>${escapeHtml(markdown)}</pre>` }
+}
+
+function officeTodos(values) {
+  const key = 'utils.office.todos'
+  const items = JSON.parse(localStorage.getItem(key) || '[]')
+  if (values.mode === 'add') {
+    const text = String(values.text || '').trim()
+    if (!text) throw new Error('请填写待办')
+    items.push({ text, done: false, at: new Date().toISOString() })
+  } else if (values.mode === 'done') {
+    const index = Number(values.text) - 1
+    if (!items[index]) throw new Error('序号不存在')
+    items[index].done = true
+  } else if (values.mode === 'clear') {
+    const kept = items.filter((item) => !item.done)
+    localStorage.setItem(key, JSON.stringify(kept))
+    return { items: kept }
+  }
+  localStorage.setItem(key, JSON.stringify(items))
+  return { items }
+}
+
+function officeNote(values) {
+  const key = 'utils.office.note'
+  if (values.mode === 'clear') {
+    localStorage.removeItem(key)
+    return { note: '' }
+  }
+  if (values.mode === 'save') {
+    localStorage.setItem(key, String(values.text || ''))
+  }
+  return { note: localStorage.getItem(key) || '' }
+}
+
+function officePomodoro(values) {
+  const key = 'utils.office.pomodoro'
+  const minutes = Math.min(90, Math.max(5, Number(values.minutes) || 25))
+  if (values.mode === 'stop') {
+    localStorage.removeItem(key)
+    return { running: false }
+  }
+  if (values.mode === 'start') {
+    const state = { start: Date.now(), minutes }
+    localStorage.setItem(key, JSON.stringify(state))
+    return { running: true, minutes, remainingSec: minutes * 60 }
+  }
+  const state = JSON.parse(localStorage.getItem(key) || 'null')
+  if (!state) return { running: false }
+  const remainingSec = Math.max(0, Math.round(state.minutes * 60 - (Date.now() - state.start) / 1000))
+  return { running: remainingSec > 0, minutes: state.minutes, remainingSec }
+}
+
+function identifyExpress(value) {
+  const no = String(value || '').replace(/\s+/g, '').toUpperCase()
+  let carrier = '未知'
+  if (/^SF\d{10,}$/.test(no) || /^[0-9]{12}$/.test(no) && no.startsWith('SF')) carrier = '顺丰'
+  else if (/^SF/.test(no)) carrier = '顺丰'
+  else if (/^(YT|YTO)/.test(no)) carrier = '圆通'
+  else if (/^(ZT|ZTO)/.test(no)) carrier = '中通'
+  else if (/^(YD|YUNDA)/.test(no)) carrier = '韵达'
+  else if (/^(STO|ST)/.test(no)) carrier = '申通'
+  else if (/^JD/.test(no)) carrier = '京东'
+  else if (/^EMS|^[A-Z]{2}\d{9}[A-Z]{2}$/.test(no)) carrier = 'EMS'
+  else if (/^\d{10,15}$/.test(no)) carrier = '国内快递（待确认）'
+  return { trackingNo: no, carrier }
+}
+
+function transferCard(values) {
+  const account = String(values.account || '').replace(/\D/g, '')
+  const grouped = account.replace(/(\d{4})(?=\d)/g, '$1 ')
+  const text = `户名：${values.name || ''}\n账号：${grouped}\n开户行：${values.bank || ''}`
+  return { name: values.name, account: grouped, bank: values.bank, text, html: `<pre>${escapeHtml(text)}</pre>` }
+}
+
+function excelCol(mode, value) {
+  if (mode === 'toName') {
+    let n = Number(value)
+    if (!Number.isInteger(n) || n < 1) throw new Error('列号需为正整数')
+    let name = ''
+    while (n > 0) {
+      n--
+      name = String.fromCharCode(65 + (n % 26)) + name
+      n = Math.floor(n / 26)
+    }
+    return { number: Number(value), name }
+  }
+  const raw = String(value || '').trim().toUpperCase()
+  if (!/^[A-Z]{1,3}$/.test(raw)) throw new Error('列名需为 A-Z')
+  let number = 0
+  for (const ch of raw) number = number * 26 + (ch.charCodeAt(0) - 64)
+  return { name: raw, number }
+}
+
+function loadImage(dataUrl) {
+  return new Promise((resolve, reject) => {
+    const image = new Image()
+    image.onload = () => resolve(image)
+    image.onerror = () => reject(new Error('请先选择图片'))
+    image.src = dataUrl
+  })
+}
+
+async function compressImage(dataUrl, maxWidth, quality) {
+  if (!dataUrl) throw new Error('请先选择图片')
+  const image = await loadImage(dataUrl)
+  const width = Math.min(image.width, Number(maxWidth) || 1280)
+  const height = Math.round(image.height * (width / image.width))
+  const canvas = document.createElement('canvas')
+  canvas.width = width
+  canvas.height = height
+  canvas.getContext('2d').drawImage(image, 0, 0, width, height)
+  const out = canvas.toDataURL('image/jpeg', Math.min(1, Math.max(0.1, Number(quality) || 0.72)))
+  return { width, height, bytes: Math.round(out.length * 0.75), dataUrl: out }
+}
+
+async function watermarkImage(dataUrl, text, position) {
+  if (!dataUrl) throw new Error('请先选择图片')
+  const image = await loadImage(dataUrl)
+  const canvas = document.createElement('canvas')
+  canvas.width = image.width
+  canvas.height = image.height
+  const ctx = canvas.getContext('2d')
+  ctx.drawImage(image, 0, 0)
+  ctx.fillStyle = 'rgba(15, 118, 110, 0.55)'
+  ctx.font = `${Math.max(16, Math.round(image.width / 24))}px sans-serif`
+  const label = String(text || '内部资料')
+  const metrics = ctx.measureText(label)
+  let x = 24
+  let y = 40
+  if (position === 'center') {
+    x = (image.width - metrics.width) / 2
+    y = image.height / 2
+  } else if (position !== 'top-left') {
+    x = image.width - metrics.width - 24
+    y = image.height - 24
+  }
+  ctx.fillText(label, x, y)
+  return { dataUrl: canvas.toDataURL('image/png'), text: label }
+}
+
+function drawLots(text, count) {
+  const names = String(text || '').split(/\n+/).map((item) => item.trim()).filter(Boolean)
+  const n = Math.min(names.length, Math.max(1, Number(count) || 1))
+  const pool = [...names]
+  const picked = []
+  for (let i = 0; i < n; i++) {
+    const index = Math.floor(Math.random() * pool.length)
+    picked.push(pool.splice(index, 1)[0])
+  }
+  return { picked, remain: pool }
 }

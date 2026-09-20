@@ -473,6 +473,25 @@ button, input, select, textarea { font: inherit; }
   z-index: 30;
 }
 
+.office-search {
+  margin: 0 0 18px;
+}
+.office-search input {
+  width: 100%;
+  max-width: 560px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: var(--card);
+  color: var(--ink);
+}
+.office-card {
+  border-color: rgba(15, 118, 110, 0.28);
+}
+.office-card:hover {
+  border-color: var(--accent);
+}
+
 @media (max-width: 860px) {
   .shell { grid-template-columns: 1fr; }
   .sidebar {

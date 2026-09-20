@@ -1139,4 +1139,24 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc16DectR").value("007e"));
     }
+
+    @Test
+    void officePitMortgageInvoice() throws Exception {
+        mockMvc.perform(get("/api/utils/pit").param("income", "30000").param("month", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.taxCumulative").value(750.00));
+
+        mockMvc.perform(get("/api/utils/mortgage").param("principal", "1000000").param("rate", "4.2").param("years", "30"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.months").value(360));
+
+        mockMvc.perform(get("/api/utils/invoice-vat").param("amount", "113").param("rate", "13"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.exclusive").value(100.00))
+                .andExpect(jsonPath("$.data.tax").value(13.00));
+
+        mockMvc.perform(get("/api/utils/desktop-url").param("port", "18765"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.url").value("http://127.0.0.1:18765/#/office"));
+    }
 }

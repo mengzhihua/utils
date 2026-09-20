@@ -1,4 +1,5 @@
 export const clientGroups = [
+  { id: 'office', label: '日常办公' },
   { id: 'codec', label: '编解码' },
   { id: 'text', label: '文本' },
   { id: 'hash', label: '哈希' },
@@ -8,7 +9,266 @@ export const clientGroups = [
   { id: 'net', label: '网络' }
 ]
 
+export const officeCategories = [
+  { id: 'pay', label: '薪酬财务', ids: ['pit-local', 'mortgage-local', 'invoice-vat-local', 'social-fund-local', 'overtime-pay-local', 'expense-sum-local', 'salary-raise-local'] },
+  { id: 'schedule', label: '日程协作', ids: ['workday-local', 'countdown-local', 'meeting-notes-local', 'weekly-report-local', 'todo-local', 'note-local', 'pomodoro-local'] },
+  { id: 'docs', label: '文档事务', ids: ['batch-replace-local', 'express-no-local', 'transfer-card-local', 'excel-col-local', 'image-compress-local', 'image-watermark-local', 'draw-local'] }
+]
+
 export const clientTools = [
+  {
+    id: 'pit-local',
+    group: 'office',
+    title: '个税估算',
+    summary: '累计预扣预缴（起征点 5000）',
+    fields: [
+      { name: 'income', label: '月收入', value: '30000' },
+      { name: 'insurance', label: '社保公积金', value: '0' },
+      { name: 'special', label: '专项附加', value: '0' },
+      { name: 'month', label: '第几月', value: '1' }
+    ]
+  },
+  {
+    id: 'mortgage-local',
+    group: 'office',
+    title: '房贷试算',
+    summary: '等额本息 / 等额本金',
+    fields: [
+      { name: 'principal', label: '贷款本金', value: '1000000' },
+      { name: 'rate', label: '年利率 %', value: '4.2' },
+      { name: 'years', label: '年限', value: '30' },
+      { name: 'mode', label: '方式', type: 'select', value: 'installment', options: [
+        { value: 'installment', label: '等额本息' },
+        { value: 'principal', label: '等额本金' }
+      ] }
+    ]
+  },
+  {
+    id: 'invoice-vat-local',
+    group: 'office',
+    title: '发票价税分离',
+    summary: '1% / 3% / 6% / 9% / 13%',
+    fields: [
+      { name: 'amount', label: '金额', value: '113' },
+      { name: 'rate', label: '税率 %', type: 'select', value: '13', options: [
+        { value: '1', label: '1%' }, { value: '3', label: '3%' }, { value: '6', label: '6%' },
+        { value: '9', label: '9%' }, { value: '13', label: '13%' }
+      ] },
+      { name: 'taxIncluded', label: '含税', type: 'select', value: 'true', options: [
+        { value: 'true', label: '价税合计' },
+        { value: 'false', label: '不含税' }
+      ] }
+    ]
+  },
+  {
+    id: 'social-fund-local',
+    group: 'office',
+    title: '社保公积金',
+    summary: '按缴存基数和比例估算',
+    fields: [
+      { name: 'base', label: '缴存基数', value: '12000' },
+      { name: 'pension', label: '养老 %（个人）', value: '8' },
+      { name: 'medical', label: '医疗 %（个人）', value: '2' },
+      { name: 'unemployment', label: '失业 %（个人）', value: '0.5' },
+      { name: 'housing', label: '公积金 %（个人）', value: '12' }
+    ]
+  },
+  {
+    id: 'overtime-pay-local',
+    group: 'office',
+    title: '加班费',
+    summary: '工作日 1.5 / 休息日 2 / 法定 3',
+    fields: [
+      { name: 'monthly', label: '月工资', value: '12000' },
+      { name: 'weekdayHours', label: '工作日加班小时', value: '8' },
+      { name: 'weekendHours', label: '休息日加班小时', value: '8' },
+      { name: 'holidayHours', label: '法定假加班小时', value: '0' }
+    ]
+  },
+  {
+    id: 'expense-sum-local',
+    group: 'office',
+    title: '报销合计',
+    summary: '每行一个金额，合计 + 大写',
+    fields: [{ name: 'text', label: '金额列表', type: 'textarea', value: '128.50\n36\n240' }]
+  },
+  {
+    id: 'salary-raise-local',
+    group: 'office',
+    title: '涨薪对比',
+    summary: '税前涨幅与差额',
+    fields: [
+      { name: 'before', label: '调整前', value: '15000' },
+      { name: 'after', label: '调整后', value: '18000' }
+    ]
+  },
+  {
+    id: 'workday-local',
+    group: 'office',
+    title: '工作日计算',
+    summary: '跳过周末，可加天数',
+    fields: [
+      { name: 'mode', label: '模式', type: 'select', value: 'diff', options: [
+        { value: 'diff', label: '两个日期之间' },
+        { value: 'add', label: '加工作日' }
+      ] },
+      { name: 'start', label: '开始日期', value: '2026-09-21' },
+      { name: 'end', label: '结束日期', value: '2026-10-09' },
+      { name: 'days', label: '加几天', value: '5' }
+    ]
+  },
+  {
+    id: 'countdown-local',
+    group: 'office',
+    title: '倒计时',
+    summary: '距目标日期还剩多久',
+    fields: [{ name: 'target', label: '目标时间', value: '2026-10-01 00:00:00' }]
+  },
+  {
+    id: 'meeting-notes-local',
+    group: 'office',
+    title: '会议纪要',
+    summary: '一键生成 Markdown 模板',
+    fields: [
+      { name: 'title', label: '主题', value: '周例会' },
+      { name: 'when', label: '时间', value: '2026-09-21 10:00' },
+      { name: 'attendees', label: '参会人', value: 'Ada, Bob' },
+      { name: 'agenda', label: '议题', type: 'textarea', value: '进度同步\n风险与阻塞' }
+    ]
+  },
+  {
+    id: 'weekly-report-local',
+    group: 'office',
+    title: '周报模板',
+    summary: '本周完成 / 下周计划',
+    fields: [
+      { name: 'name', label: '姓名', value: 'Ada' },
+      { name: 'week', label: '周次', value: '2026-W38' },
+      { name: 'done', label: '本周完成', type: 'textarea', value: '完成控制台办公工作台' },
+      { name: 'next', label: '下周计划', type: 'textarea', value: '跟进发行包验证' }
+    ]
+  },
+  {
+    id: 'todo-local',
+    group: 'office',
+    title: '待办清单',
+    summary: '保存在本机 localStorage',
+    fields: [
+      { name: 'mode', label: '操作', type: 'select', value: 'add', options: [
+        { value: 'add', label: '添加' },
+        { value: 'list', label: '查看' },
+        { value: 'done', label: '完成' },
+        { value: 'clear', label: '清空已完成' }
+      ] },
+      { name: 'text', label: '内容 / 序号', value: '提交周报' }
+    ]
+  },
+  {
+    id: 'note-local',
+    group: 'office',
+    title: '便签',
+    summary: '本机备忘，不上传',
+    fields: [
+      { name: 'mode', label: '操作', type: 'select', value: 'save', options: [
+        { value: 'save', label: '保存' },
+        { value: 'load', label: '读取' },
+        { value: 'clear', label: '清空' }
+      ] },
+      { name: 'text', label: '内容', type: 'textarea', value: '记得 18:00 前发出差申请' }
+    ]
+  },
+  {
+    id: 'pomodoro-local',
+    group: 'office',
+    title: '番茄钟',
+    summary: '25 分钟专注，状态存在本机',
+    fields: [
+      { name: 'mode', label: '操作', type: 'select', value: 'start', options: [
+        { value: 'start', label: '开始' },
+        { value: 'status', label: '查看剩余' },
+        { value: 'stop', label: '停止' }
+      ] },
+      { name: 'minutes', label: '分钟', value: '25' }
+    ]
+  },
+  {
+    id: 'batch-replace-local',
+    group: 'office',
+    title: '批量替换',
+    summary: '按行查找替换',
+    fields: [
+      { name: 'text', label: '原文', type: 'textarea', value: '张三 2026-09-01\n李四 2026-09-01' },
+      { name: 'find', label: '查找', value: '2026-09-01' },
+      { name: 'replace', label: '替换为', value: '2026-09-21' }
+    ]
+  },
+  {
+    id: 'express-no-local',
+    group: 'office',
+    title: '快递单号',
+    summary: '识别常见承运商',
+    fields: [{ name: 'value', label: '单号', value: 'SF1234567890123' }]
+  },
+  {
+    id: 'transfer-card-local',
+    group: 'office',
+    title: '对公转账卡',
+    summary: '户名 / 账号 / 开户行排版',
+    fields: [
+      { name: 'name', label: '户名', value: '孟芝华科技有限公司' },
+      { name: 'account', label: '账号', value: '6222021234567890123' },
+      { name: 'bank', label: '开户行', value: '中国工商银行北京分行' }
+    ]
+  },
+  {
+    id: 'excel-col-local',
+    group: 'office',
+    title: 'Excel 列号',
+    summary: 'A ↔ 1，AA ↔ 27',
+    fields: [
+      { name: 'mode', label: '方向', type: 'select', value: 'toNumber', options: [
+        { value: 'toNumber', label: '列名 → 数字' },
+        { value: 'toName', label: '数字 → 列名' }
+      ] },
+      { name: 'value', label: '输入', value: 'AA' }
+    ]
+  },
+  {
+    id: 'image-compress-local',
+    group: 'office',
+    title: '图片压缩',
+    summary: 'Canvas 本地压缩，不上传',
+    fields: [
+      { name: 'file', label: '图片', type: 'file' },
+      { name: 'maxWidth', label: '最大宽度', value: '1280' },
+      { name: 'quality', label: '质量 0-1', value: '0.72' }
+    ]
+  },
+  {
+    id: 'image-watermark-local',
+    group: 'office',
+    title: '图片水印',
+    summary: '文字水印，本地绘制',
+    fields: [
+      { name: 'file', label: '图片', type: 'file' },
+      { name: 'text', label: '水印文字', value: '内部资料' },
+      { name: 'position', label: '位置', type: 'select', value: 'bottom-right', options: [
+        { value: 'bottom-right', label: '右下' },
+        { value: 'center', label: '居中' },
+        { value: 'top-left', label: '左上' }
+      ] }
+    ]
+  },
+  {
+    id: 'draw-local',
+    group: 'office',
+    title: '随机抽签',
+    summary: '名单里抽 N 个',
+    fields: [
+      { name: 'text', label: '名单（每行一个）', type: 'textarea', value: 'Ada\nBob\nCara\nDan' },
+      { name: 'count', label: '抽取人数', value: '2' }
+    ]
+  },
   {
     id: 'json-format',
     group: 'codec',
