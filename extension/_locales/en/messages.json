@@ -1,0 +1,5 @@
+{
+  "extName": { "message": "Utils machine overview" },
+  "extDesc": { "message": "Show machine config and CPU / RAM usage on the Chrome new tab page via chrome.system." },
+  "extAction": { "message": "Machine config and usage" }
+}

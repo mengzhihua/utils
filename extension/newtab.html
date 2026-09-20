@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>新标签页</title>
+    <link rel="stylesheet" href="newtab.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="top">
+        <div>
+          <h1>Utils 本机概览</h1>
+          <span id="subtitle">Chrome 新标签页 · 配置与占用</span>
+        </div>
+        <time id="clock"></time>
+      </header>
+
+      <form class="search" action="https://www.google.com/search" method="get">
+        <input id="q" name="q" type="search" placeholder="搜索 Google，或输入网址后回车" autofocus />
+      </form>
+
+      <section class="hero" id="hero">
+        <article class="card"><h2>CPU</h2><b>—</b><small>—</small></article>
+        <article class="card"><h2>内存</h2><b>—</b><small>—</small></article>
+        <article class="card"><h2>电池</h2><b>—</b><small>—</small></article>
+        <article class="card"><h2>系统</h2><b>—</b><small>—</small></article>
+      </section>
+      <section class="grid" id="grid"></section>
+      <p class="note" id="note"></p>
+    </div>
+    <script type="module" src="newtab.js"></script>
+  </body>
+</html>
