@@ -161,19 +161,19 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            type: app-image
+            type: deb
             asset: linux-x64
             arch: x64
           - os: windows-latest
-            type: app-image
+            type: exe
             asset: windows-x64
             arch: x64
           - os: macos-latest
-            type: dmg
+            type: app-image
             asset: macos-arm64
             arch: aarch64
           - os: macos-15-intel
-            type: dmg
+            type: app-image
             asset: macos-x64
             arch: x64
     runs-on: ${{ matrix.os }}
@@ -184,6 +184,23 @@ jobs:
           distribution: temurin
           java-version: '21'
           architecture: ${{ matrix.arch }}
+      - name: Install WiX 3
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          choco install wixtoolset --version 3.14.1 -y --no-progress
+          $candidates = @(
+            "${env:ProgramFiles(x86)}\WiX Toolset v3.14\bin",
+            "${env:ProgramFiles(x86)}\WiX Toolset v3.11\bin"
+          )
+          foreach ($wix in $candidates) {
+            if (Test-Path $wix) {
+              echo $wix | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+            }
+          }
+      - name: Install Linux packagers
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y fakeroot binutils
       - uses: actions/download-artifact@v4
         with:
           name: utils-jar
@@ -247,8 +264,8 @@ jobs:
             start.bat
             ```
 
-            **系统安装包**（自带运行时，按芯片选）
-            - Windows x64：`utils-${{ needs.version.outputs.version }}-windows-x64.zip`，解压后运行 `Utils/Utils.exe`
-            - Linux x64：`utils-${{ needs.version.outputs.version }}-linux-x64.zip`，解压后运行 `Utils/bin/Utils`
-            - macOS Apple Silicon（M1/M2/M3/M4，arm64）：`utils-${{ needs.version.outputs.version }}-macos-arm64.dmg`
-            - macOS Intel（x64）：`utils-${{ needs.version.outputs.version }}-macos-x64.dmg`
+            **系统安装包**（自带运行时，按芯片选，下载后即可用）
+            - Windows x64：`utils-${{ needs.version.outputs.version }}-windows-x64.exe`，双击安装，开始菜单打开 Utils
+            - Linux x64：`utils-${{ needs.version.outputs.version }}-linux-x64.deb` 双击 / `dpkg -i`；或不安装，解压 `utils-${{ needs.version.outputs.version }}-linux-x64.tar.gz` 后执行 `./Utils`
+            - macOS Apple Silicon（M1/M2/M3/M4，arm64）：`utils-${{ needs.version.outputs.version }}-macos-arm64.app.zip`，解压得 `Utils.app` 双击打开
+            - macOS Intel（x64）：`utils-${{ needs.version.outputs.version }}-macos-x64.app.zip`，解压得 `Utils.app` 双击打开
