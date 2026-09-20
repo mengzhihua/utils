@@ -1747,6 +1747,34 @@ export const clientTools = [
       fields: [{ name: 'value', label: 'RF', value: 'RF18 5390 0754 7034' }]
     },
     {
+      id: 'at-uid-local',
+      group: 'net',
+      title: '奥地利税号',
+      summary: 'U13585627',
+      fields: [{ name: 'value', label: 'UID', value: 'AT U13585627' }]
+    },
+    {
+      id: 'sk-dph-local',
+      group: 'net',
+      title: '斯洛伐克税号',
+      summary: '2022749619',
+      fields: [{ name: 'value', label: 'IČ DPH', value: 'SK 202 274 96 19' }]
+    },
+    {
+      id: 'si-ddv-local',
+      group: 'net',
+      title: '斯洛文尼亚税号',
+      summary: '50223054',
+      fields: [{ name: 'value', label: 'DDV', value: 'SI 5022 3054' }]
+    },
+    {
+      id: 'nl-btw-local',
+      group: 'net',
+      title: '荷兰税号',
+      summary: '004495445B01',
+      fields: [{ name: 'value', label: 'BTW', value: 'NL004495445B01' }]
+    },
+    {
       id: 'json-flatten-local',
       group: 'fe',
       title: 'JSON 扁平化',

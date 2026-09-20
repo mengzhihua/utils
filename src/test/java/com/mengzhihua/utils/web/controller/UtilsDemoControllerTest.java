@@ -1109,4 +1109,34 @@ class UtilsDemoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.crc16X25").value("906e"));
     }
+
+    @Test
+    void austriaSlovakiaSloveniaNetherlands() throws Exception {
+        mockMvc.perform(get("/api/utils/at-uid").param("value", "AT U13585627"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("U13585627"));
+
+        mockMvc.perform(get("/api/utils/sk-dph").param("value", "SK 202 274 96 19"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/si-ddv").param("value", "SI 5022 3054"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true));
+
+        mockMvc.perform(get("/api/utils/nl-btw").param("value", "NL004495445B01"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.valid").value(true))
+                .andExpect(jsonPath("$.data.normalized").value("004495445B01"));
+
+        mockMvc.perform(get("/api/utils/priority").param("header", "u=1, i"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.urgency").value(1))
+                .andExpect(jsonPath("$.data.incremental").value(true));
+
+        mockMvc.perform(get("/api/utils/crc16-dect-r").param("text", "123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.crc16DectR").value("007e"));
+    }
 }
