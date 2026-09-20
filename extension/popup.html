@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>本机占用</title>
+    <link rel="stylesheet" href="newtab.css" />
+    <style>
+      html, body { width: 320px; min-height: 220px; }
+      .page { padding: 14px; }
+      .hero { grid-template-columns: 1fr 1fr; }
+      .card b { font-size: 22px; }
+      .top h1 { font-size: 16px; }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="top">
+        <div>
+          <h1>本机占用</h1>
+          <span id="hint">点工具栏图标也可打开新标签页仪表盘</span>
+        </div>
+      </header>
+      <section class="hero" id="hero">
+        <article class="card"><h2>CPU</h2><b>—</b></article>
+        <article class="card"><h2>内存</h2><b>—</b></article>
+      </section>
+    </div>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 # Java Utils Toolkit
 
-基于 **Spring Boot 4.1 + Java 21** 的通用工具集：Java 工具类、浏览器前端工具、日常办公工作台、屏幕/键鼠检测。支持四种用法——服务器 JAR、Windows 可执行程序、Linux 包、macOS 包。
+基于 **Spring Boot 4.1 + Java 21** 的通用工具集：Java 工具类、浏览器前端工具、日常办公工作台、屏幕/键鼠检测。支持服务器 JAR、Windows / Linux / macOS 安装包，以及 Chrome 新标签页扩展。
 
 ## 工程结构
 
@@ -33,6 +33,8 @@ com.mengzhihua.utils
 │   └── filter             # TraceIdFilter
 └── config                 # Spring / OpenAPI 装配
 ```
+
+仓库根目录还有 `frontend/`（Vue 控制台）和 `extension/`（Chrome 新标签页扩展，用 `chrome.system` 展示整机配置与占用）。
 
 ## 能力一览
 
@@ -416,6 +418,7 @@ com.mengzhihua.utils
 - 浏览器本地工具：JSON/XML、Base64、JWT 解码、Markdown、命名风格、全角半角、行处理、文本对比、MD5/HMAC/CRC32/Murmur3、ULID、UUID v7、CIDR、UA/Cookie、星座、高亮、四则运算、进制、ISBN、Punycode、罗马数字、单位换算、IMEI、URL 解析、Soundex、Jaro-Winkler、IBAN、EAN、年龄、ROT13、摩斯、通配符、ISIN、Humanize、Quoted-Printable、Base45、WCAG 对比度、去音调、车牌、Emoji、CUSIP、正则抽取/转义、ISBN 互转、IPv6、卡组织、时长差、拼音首字母、港澳台证件、组织机构代码、节气、干支、ABA、集装箱号、Jump Hash、FIGI、LEI、NHS、NPI、ISMN、NRIC、科隆拼音、Hamming、UUID v8、NYSIIS、Caverphone、CPF、CNPJ、PESEL、UPC-E、儒略日、Double Metaphone、Match Rating、SIREN、SIRET、NIF、ISNI、Bencode、Refined Soundex、NIR、意大利税号、德国税号、EORI、DOI、PMID、ICCID、瑞典/芬兰/挪威个人号、ISWC、ABN、TFN、SSCC、VAT、AHV、NIP、Aadhaar、PAN、SIN、PPS、丹麦 CPR、葡萄牙 NIF、英国 NINO、韩国居民号、希腊 AFM、智利 RUT、阿根廷 CUIT、南非身份证、土耳其 TCKN、罗马尼亚 CNP、泰国身份证、克罗地亚 OIB、南斯拉夫 JMBG、冰岛 kennitala、匈牙利 TAJ、哥伦比亚 NIT、拉脱维亚个人号、斯洛文尼亚 EMŠO、秘鲁 DNI、墨西哥 RFC、荷兰 BSN、捷克出生号、芬兰企业号、丹麦 CVR、西班牙 CIF、瑞士企业号、罗马尼亚 CUI、比利时 KBO、日本法人番号、韩国事业者号、台湾统一编号、乌克兰 EDRPOU、塞尔维亚 PIB、印度 GSTIN、澳大利亚公司号、土耳其税号、印尼税号、爱沙尼亚企业号、新西兰企业号、新加坡 UEN、以色列公司号、立陶宛企业号、俄罗斯税号、秘鲁税号、印尼身份证、越南税号、美国雇主识别号、俄罗斯统一注册号、俄罗斯养老金号、阿尔巴尼亚税号、委内瑞拉税号、多米尼加税号、白俄罗斯税号、美国个人税号、巴基斯坦身份证、摩尔多瓦企业号、加纳税号、肯尼亚税号、摩洛哥企业号、阿塞拜疆税号、乌拉圭税号、巴拉圭税号、本地化格式、黑山税号、阿曼税号、塞浦路斯税号、马耳他税号、安道尔税号、列支敦士登识别号、阿尔及利亚税号、塞内加尔企业号、莫桑比克税号、古巴身份证、几内亚税号、圣马力诺经营者号、法罗企业号、法国税号、摩纳哥税号、毛里求斯身份证、厄瓜多尔身份证、厄瓜多尔税号、意大利增值税号、爱尔兰税号、英国税号、加拿大企业号、捷克税号、ISO 11649 债权参考号、奥地利税号、斯洛伐克税号、斯洛文尼亚税号、荷兰税号、JSON 扁平化、TypeScript 推断、JSON Pointer、.env 解析、NanoID、本地 TOTP、AES-GCM、SHA-1/384/512、UTM 链接、MIME、浏览器信息、零宽字符、换行符、Unicode 正规化、Markdown 目录、占位文本、CSS 单位、色板、vCard、ICS 日程、JSON Diff/Merge/键排序、Data URL、去 HTML、模板插值、密码强度、UUID 解析、URL 正规化、数字格式化、mailto、CSV→Markdown、Open Graph、文件名清洗、哈希配色、Query 构建、Cookie 构建、阅读时长、头像缩写 等
 - 特效实验室：玻璃拟态、光晕、礼花、打字机、涟漪、聚光跟随
 - 硬件检测台：Chrome 电脑配置（UA-CH / 核数 / GPU）与资源占用（JS 堆 / CPU 压力 / 存储 / 电池）、屏幕分辨率/色条/坏点/帧率、键盘 `event.code` 点亮、鼠标轨迹与滚轮、触控压感、连点 CPS、手柄、扬声器左右声道、摄像头预览/抓拍、麦克风电平/波形/本地录音
+- Chrome 扩展：`extension/` 覆盖新标签页，用 `chrome.system` 展示整机 CPU / 内存 / 磁盘 / 显示器
 - 深色模式、中英切换、页面过渡、复制 Toast
 
 未内置（需额外依赖，可按项目再加）：Excel、邮件、二维码、Redis、OSS。
@@ -452,7 +455,7 @@ npm run build    # 构建进 Spring Boot 静态资源
 | `/#/hw/click` | 5 秒连点 CPS，最好成绩存在 `localStorage` |
 | `/#/hw/gamepad` | `navigator.getGamepads()` 按键与摇杆，可选震动 |
 | `/#/hw/audio` | Web Audio 左右声道与扫频 |
-| `/#/hw/system` | Chrome UA-CH、`deviceMemory`、逻辑核数、WebGL/WebGPU 渲染器（网页看不到整机任务管理器） |
+| `/#/hw/system` | Chrome UA-CH、`deviceMemory`、逻辑核数、WebGL/WebGPU 渲染器（网页看不到整机任务管理器；整机占用用下面的 Chrome 扩展） |
 | `/#/hw/resources` | `performance.memory` JS 堆、`PressureObserver` CPU 压力、Storage 配额、电池、网络 |
 | `/#/hw/camera` | `getUserMedia` 预览、切换设备、镜像、抓拍（不上传） |
 | `/#/hw/mic` | 麦克风电平 / 波形 / 试听 / 本机录 4 秒回放 |
@@ -460,6 +463,18 @@ npm run build    # 构建进 Spring Boot 静态资源
 | `/#/c/media-devices-local` | 摄像头 / 麦克风 / 扬声器设备列表快照 |
 | `/#/c/system-info-local` | 电脑配置 JSON 快照 |
 | `/#/c/resources-info-local` | 资源占用 JSON 快照 |
+
+### Chrome 扩展（新标签页展示整机配置 / 占用）
+
+普通网页读不到任务管理器里的整机 CPU / 内存。仓库里的 `extension/` 是 Manifest V3 扩展，用 `chrome.system.cpu` / `memory` / `storage` / `display` 读本机，并覆盖 Chrome **新标签页（首页）**。
+
+1. 打开 `chrome://extensions`
+2. 打开右上角「开发者模式」
+3. 点「加载已解压的扩展程序」，选中本仓库的 `extension/` 目录
+4. 新建标签页：顶部是时钟和 Google 搜索（也可直接输入网址回车），下面是 CPU / 内存 / 电池 / 系统卡片，以及每核占用、磁盘、显示器、GPU
+5. 点工具栏图标可打开精简弹层（CPU + 内存）
+
+没有加载扩展时，同一套页面会降级为网页接口（核数、`deviceMemory`、视口、GPU），并提示去 `chrome://extensions` 加载。文案支持中 / 英 / 日 / 德。
 
 ## 发布版（推荐）
 

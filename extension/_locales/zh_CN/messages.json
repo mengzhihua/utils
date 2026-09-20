@@ -1,0 +1,5 @@
+{
+  "extName": { "message": "Utils 本机概览" },
+  "extDesc": { "message": "在 Chrome 新标签页展示电脑配置和 CPU / 内存占用。使用 chrome.system 读取整机信息。" },
+  "extAction": { "message": "本机配置与占用" }
+}

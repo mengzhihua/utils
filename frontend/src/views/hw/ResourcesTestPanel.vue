@@ -8,6 +8,7 @@
       <div class="hw-stat"><b>{{ batteryText }}</b><span>{{ t('hwBattery') }}</span></div>
     </div>
     <p class="hw-hint">{{ t('hwResourcesHint') }}</p>
+    <p class="hw-hint">{{ t('hwSystemExtHint') }}</p>
     <div class="hw-bar-block">
       <div class="hw-bar-label">
         <span>{{ t('hwHeap') }}</span>

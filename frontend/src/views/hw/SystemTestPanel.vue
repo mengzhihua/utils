@@ -8,6 +8,7 @@
       <div class="hw-stat"><b>{{ gpuShort }}</b><span>{{ t('hwGpu') }}</span></div>
     </div>
     <p class="hw-hint">{{ t('hwSystemHint') }}</p>
+    <p class="hw-hint">{{ t('hwSystemExtHint') }}</p>
     <div class="actions" style="margin-bottom: 14px">
       <button class="btn" type="button" @click="load">{{ t('hwRefresh') }}</button>
     </div>

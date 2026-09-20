@@ -2,7 +2,7 @@ export const hardwareTools = [
   {
     id: 'system',
     title: '电脑配置',
-    summary: 'CPU 核数、内存约数、UA-CH、GPU'
+    summary: 'CPU 核数、内存约数、UA-CH、GPU。整机占用见 Chrome 扩展'
   },
   {
     id: 'resources',

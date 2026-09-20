@@ -1,0 +1,5 @@
+{
+  "extName": { "message": "Utils マシン概要" },
+  "extDesc": { "message": "Chrome の新しいタブにマシン構成と CPU / メモリ使用量を表示します。chrome.system で本体情報を読みます。" },
+  "extAction": { "message": "構成と使用量" }
+}

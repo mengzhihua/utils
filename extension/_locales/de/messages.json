@@ -1,0 +1,5 @@
+{
+  "extName": { "message": "Utils Geräteüberblick" },
+  "extDesc": { "message": "Zeigt Gerätekonfiguration und CPU-/RAM-Auslastung auf dem Chrome-Neuer-Tab über chrome.system." },
+  "extAction": { "message": "Konfiguration und Auslastung" }
+}
