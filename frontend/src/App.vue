@@ -16,7 +16,7 @@
       <nav>
         <RouterLink v-if="showTop(t('overview'))" class="nav-link" to="/" exact-active-class="active" @click="open = false">{{ t('overview') }}</RouterLink>
 
-        <div v-if="visibleOffice.length" class="nav-group" :class="{ open: isOpen('office') }">
+        <div v-if="!menuNeedle && visibleOffice.length" class="nav-group" :class="{ open: isOpen('office') }">
           <button class="nav-parent" type="button" :class="{ current: isOpen('office') }" :aria-expanded="isOpen('office')" @click="toggle('office')">
             <span>{{ t('officeNav') }}</span>
             <small>{{ visibleOffice.length }}</small>
@@ -35,7 +35,7 @@
           </div>
         </div>
 
-        <div v-if="visibleHw.length" class="nav-group" :class="{ open: isOpen('hw') }">
+        <div v-if="!menuNeedle && visibleHw.length" class="nav-group" :class="{ open: isOpen('hw') }">
           <button class="nav-parent" type="button" :class="{ current: isOpen('hw') }" :aria-expanded="isOpen('hw')" @click="toggle('hw')">
             <span>{{ t('hwNav') }}</span>
             <small>{{ visibleHw.length }}</small>
@@ -54,45 +54,79 @@
           </div>
         </div>
 
-        <RouterLink v-if="showTop(t('effects'))" class="nav-link" to="/fx" active-class="active" @click="open = false">{{ t('effects') }}</RouterLink>
+        <RouterLink v-if="showTop(t('effects')) && !menuNeedle" class="nav-link" to="/fx" active-class="active" @click="open = false">{{ t('effects') }}</RouterLink>
 
-        <p v-if="visibleClient.length" class="nav-section">{{ t('navFrontend') }}</p>
-        <div v-for="group in visibleClient" :key="`c-${group.id}`" class="nav-group" :class="{ open: isOpen(`client:${group.id}`) }">
-          <button class="nav-parent" type="button" :class="{ current: isOpen(`client:${group.id}`) }" :aria-expanded="isOpen(`client:${group.id}`)" @click="toggle(`client:${group.id}`)">
-            <span>{{ group.label }}</span>
-            <small>{{ group.tools.length }}</small>
+        <div v-if="menuNeedle" class="nav-results">
+          <RouterLink
+            v-for="item in menuHits"
+            :key="item.to"
+            class="nav-link nav-child nav-hit"
+            :to="item.to"
+            active-class="active"
+            @click="open = false"
+          >
+            <span>{{ item.title }}</span>
+            <small>{{ item.group }}</small>
+          </RouterLink>
+          <p v-if="menuMore" class="nav-empty">{{ t('navMore').replace('{n}', String(menuMore)) }}</p>
+          <p v-if="!menuHits.length" class="nav-empty">{{ t('homeNoMatch') }}</p>
+        </div>
+
+        <template v-if="!menuNeedle">
+        <div class="nav-group" :class="{ open: sectionOpen('client') }">
+          <button class="nav-parent" type="button" :aria-expanded="sectionOpen('client')" @click="toggleSection('client')">
+            <span>{{ t('navFrontend') }}</span>
+            <small>{{ clientCount }}</small>
             <i class="nav-chevron" aria-hidden="true"></i>
           </button>
-          <div v-show="isOpen(`client:${group.id}`)" class="nav-children">
-            <RouterLink
-              v-for="tool in group.tools"
-              :key="tool.id"
-              class="nav-link nav-child"
-              :to="`/c/${tool.id}`"
-              active-class="active"
-              @click="open = false"
-            >{{ tool.title }}</RouterLink>
+          <div v-show="sectionOpen('client')" class="nav-children">
+            <div v-for="group in visibleClient" :key="`c-${group.id}`" class="nav-group" :class="{ open: isOpen(`client:${group.id}`) }">
+              <button class="nav-parent" type="button" :class="{ current: isOpen(`client:${group.id}`) }" :aria-expanded="isOpen(`client:${group.id}`)" @click="toggle(`client:${group.id}`)">
+                <span>{{ group.label }}</span>
+                <small>{{ group.tools.length }}</small>
+                <i class="nav-chevron" aria-hidden="true"></i>
+              </button>
+              <div v-show="isOpen(`client:${group.id}`)" class="nav-children">
+                <RouterLink
+                  v-for="tool in group.tools"
+                  :key="tool.id"
+                  class="nav-link nav-child"
+                  :to="`/c/${tool.id}`"
+                  active-class="active"
+                  @click="open = false"
+                >{{ tool.title }}</RouterLink>
+              </div>
+            </div>
           </div>
         </div>
 
-        <p v-if="visibleJava.length" class="nav-section">{{ t('navJava') }}</p>
-        <div v-for="group in visibleJava" :key="`j-${group.id}`" class="nav-group" :class="{ open: isOpen(`java:${group.id}`) }">
-          <button class="nav-parent" type="button" :class="{ current: isOpen(`java:${group.id}`) }" :aria-expanded="isOpen(`java:${group.id}`)" @click="toggle(`java:${group.id}`)">
-            <span>{{ group.label }}</span>
-            <small>{{ group.tools.length }}</small>
+        <div class="nav-group" :class="{ open: sectionOpen('java') }">
+          <button class="nav-parent" type="button" :aria-expanded="sectionOpen('java')" @click="toggleSection('java')">
+            <span>{{ t('navJava') }}</span>
+            <small>{{ javaCount }}</small>
             <i class="nav-chevron" aria-hidden="true"></i>
           </button>
-          <div v-show="isOpen(`java:${group.id}`)" class="nav-children">
-            <RouterLink
-              v-for="tool in group.tools"
-              :key="tool.id"
-              class="nav-link nav-child"
-              :to="`/t/${tool.id}`"
-              active-class="active"
-              @click="open = false"
-            >{{ tool.title }}</RouterLink>
+          <div v-show="sectionOpen('java')" class="nav-children">
+            <div v-for="group in visibleJava" :key="`j-${group.id}`" class="nav-group" :class="{ open: isOpen(`java:${group.id}`) }">
+              <button class="nav-parent" type="button" :class="{ current: isOpen(`java:${group.id}`) }" :aria-expanded="isOpen(`java:${group.id}`)" @click="toggle(`java:${group.id}`)">
+                <span>{{ group.label }}</span>
+                <small>{{ group.tools.length }}</small>
+                <i class="nav-chevron" aria-hidden="true"></i>
+              </button>
+              <div v-show="isOpen(`java:${group.id}`)" class="nav-children">
+                <RouterLink
+                  v-for="tool in group.tools"
+                  :key="tool.id"
+                  class="nav-link nav-child"
+                  :to="`/t/${tool.id}`"
+                  active-class="active"
+                  @click="open = false"
+                >{{ tool.title }}</RouterLink>
+              </div>
+            </div>
           </div>
         </div>
+        </template>
       </nav>
       <div class="sidebar-links">
         <div class="locale-switch">
@@ -119,7 +153,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { groupedTools, getTool } from './tools'
 import { groupedClientTools, getClientTool } from './clientTools'
@@ -131,6 +165,7 @@ import { useI18n } from './composables/useI18n'
 const open = ref(false)
 const opened = ref('')
 const menuQuery = ref('')
+const sectionsOpen = ref({ client: false, java: false })
 const route = useRoute()
 const { t, locale, setLocale } = useI18n()
 const catalog = computed(() => groupedTools().map((group) => ({
@@ -157,6 +192,31 @@ const visibleClient = computed(() => clientCatalog.value
 const visibleJava = computed(() => catalog.value
   .map((group) => ({ ...group, tools: group.tools.filter(hit) }))
   .filter((group) => group.tools.length > 0))
+const clientCount = computed(() => visibleClient.value.reduce((sum, group) => sum + group.tools.length, 0))
+const javaCount = computed(() => visibleJava.value.reduce((sum, group) => sum + group.tools.length, 0))
+const menuHitAll = computed(() => {
+  if (!menuNeedle.value) return []
+  const items = []
+  for (const tool of visibleOffice.value) items.push({ title: tool.title, group: t('officeNav'), to: `/c/${tool.id}` })
+  for (const tool of visibleHw.value) items.push({ title: tool.title, group: t('hwNav'), to: `/hw/${tool.id}` })
+  for (const group of visibleClient.value) {
+    for (const tool of group.tools) items.push({ title: tool.title, group: group.label, to: `/c/${tool.id}` })
+  }
+  for (const group of visibleJava.value) {
+    for (const tool of group.tools) items.push({ title: tool.title, group: group.label, to: `/t/${tool.id}` })
+  }
+  return items
+})
+const menuHits = computed(() => menuHitAll.value.slice(0, 12))
+const menuMore = computed(() => Math.max(0, menuHitAll.value.length - menuHits.value.length))
+
+function sectionOpen(id) {
+  return Boolean(sectionsOpen.value[id])
+}
+
+function toggleSection(id) {
+  sectionsOpen.value = { ...sectionsOpen.value, [id]: !sectionsOpen.value[id] }
+}
 
 function showTop(label) {
   if (!menuNeedle.value) return true
@@ -194,8 +254,12 @@ function toggle(key) {
   opened.value = opened.value === key ? '' : key
 }
 
-watch(() => route.fullPath, () => {
+watch(() => route.fullPath, async () => {
   const key = currentKey()
   if (key) opened.value = key
+  if (key.startsWith('client:')) sectionsOpen.value = { ...sectionsOpen.value, client: true }
+  if (key.startsWith('java:')) sectionsOpen.value = { ...sectionsOpen.value, java: true }
+  await nextTick()
+  document.querySelector('.sidebar .nav-link.active')?.scrollIntoView({ block: 'nearest' })
 }, { immediate: true })
 </script>

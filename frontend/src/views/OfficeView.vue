@@ -5,10 +5,12 @@
         <h1 class="gradient-text">{{ t('officeTitle') }}</h1>
         <p>{{ t('officeLead') }}</p>
       </div>
+      <RouterLink class="btn secondary" to="/">{{ t('backOverview') }}</RouterLink>
     </div>
     <div class="office-search">
       <input v-model="query" type="search" :placeholder="t('officeSearch')" />
     </div>
+    <p v-if="query && !sections.length" class="home-hint">{{ t('homeNoMatch') }}</p>
     <template v-for="section in sections" :key="section.id">
       <h3 class="section-title">{{ section.label }}</h3>
       <div class="grid">

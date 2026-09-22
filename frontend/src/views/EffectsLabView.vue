@@ -5,6 +5,7 @@
         <h1 class="gradient-text">{{ t('fxTitle') }}</h1>
         <p>{{ t('fxLead') }}</p>
       </div>
+      <RouterLink class="btn secondary" to="/">{{ t('backOverview') }}</RouterLink>
     </div>
 
     <div class="fx-grid">

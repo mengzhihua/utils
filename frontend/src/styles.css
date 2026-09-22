@@ -113,6 +113,21 @@ button, input, select, textarea { font: inherit; }
   color: var(--muted);
   font-size: 14px;
 }
+.launcher-card {
+  min-height: 120px;
+}
+.launcher-card h2 { font-size: 22px; }
+.launcher-card h2 small {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-left: 4px;
+}
+.nav-empty {
+  margin: 8px 10px 0;
+  color: #8b9aab;
+  font-size: 13px;
+}
 
 .nav-section {
   margin: 16px 10px 6px;
@@ -153,7 +168,9 @@ button, input, select, textarea { font: inherit; }
   transform: rotate(-45deg);
   transition: transform 0.18s ease;
 }
-.nav-group.open .nav-chevron { transform: rotate(45deg); }
+.nav-group.open > .nav-parent .nav-chevron { transform: rotate(45deg); }
+.nav-children .nav-parent { padding: 6px 8px; font-size: 13px; }
+.nav-hit small { margin-top: 2px; }
 .nav-children {
   padding: 2px 0 8px 8px;
   border-left: 1px solid rgba(255,255,255,0.08);
@@ -876,4 +893,5 @@ button, input, select, textarea { font: inherit; }
   .menu-btn { display: inline-flex; }
   .stats, .form-grid { grid-template-columns: 1fr; }
   .main { padding: 18px 16px 40px; }
+  .topbar { flex-wrap: wrap; }
 }

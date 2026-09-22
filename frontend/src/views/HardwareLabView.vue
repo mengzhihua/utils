@@ -5,10 +5,12 @@
         <h1 class="gradient-text">{{ t('hwTitle') }}</h1>
         <p>{{ t('hwLead') }}</p>
       </div>
+      <RouterLink class="btn secondary" to="/">{{ t('backOverview') }}</RouterLink>
     </div>
     <div class="office-search">
       <input v-model="query" type="search" :placeholder="t('hwSearch')" />
     </div>
+    <p v-if="query && !filtered.length" class="home-hint">{{ t('homeNoMatch') }}</p>
     <div class="grid">
       <RouterLink
         v-for="(tool, index) in filtered"
