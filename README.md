@@ -478,16 +478,16 @@ npm run build    # 构建进 Spring Boot 静态资源
 
 ## 发布版（推荐）
 
-需要本机已安装 **JDK 21+**。从 [GitHub Releases](https://github.com/mengzhihua/utils/releases) 下载 `utils-x.y.z.jar` 后直接运行：
+需要本机已安装 **JDK 21+**。从 [GitHub Releases](https://github.com/mengzhihua/utils/releases) 下载 **Latest**（收尾版 **v1.2.0**）后直接运行。不要用 v1.1.0：那一版附件是打散的运行时文件。
 
 ```bash
-java -jar utils-1.1.0.jar
+java -jar utils-1.2.0.jar
 ```
 
 浏览器打开 <http://localhost:8080/> 即可使用控制台（后端演示 + 浏览器本地工具 + 日常办公 + 屏幕/键鼠检测）。可用端口：
 
 ```bash
-java -jar utils-1.1.0.jar --server.port=9090
+java -jar utils-1.2.0.jar --server.port=9090
 ```
 
 `main` 上的提交在 **CI 测试通过后会自动发 GitHub Release**（补丁号 +1；若 `pom.xml` 版本更新，则以 pom 为准）。也可打 `v*` 标签或在 Actions 里手动选版本。提交说明里写 `[skip release]` 可跳过本次发行。
@@ -497,15 +497,15 @@ java -jar utils-1.1.0.jar --server.port=9090
 ```bash
 chmod +x mvnw scripts/package.sh
 ./scripts/package.sh            # 使用 pom 版本
-./scripts/package.sh 1.1.0      # 指定发行版本号
-java -jar dist/utils-1.1.0.jar
+./scripts/package.sh 1.2.0      # 指定发行版本号
+java -jar dist/utils-1.2.0.jar
 ```
 
 可选 Docker（先执行 `./scripts/package.sh`）：
 
 ```bash
-docker build -t mengzhihua/utils:1.1.0 .
-docker run --rm -p 8080:8080 mengzhihua/utils:1.1.0
+docker build -t mengzhihua/utils:1.2.0 .
+docker run --rm -p 8080:8080 mengzhihua/utils:1.2.0
 ```
 
 ## 四种运行方式
@@ -514,7 +514,7 @@ docker run --rm -p 8080:8080 mengzhihua/utils:1.1.0
 
 ```bash
 ./scripts/package.sh
-java -jar dist/utils-1.1.0.jar
+java -jar dist/utils-1.2.0.jar
 ```
 
 浏览器打开 <http://localhost:8080/>。
@@ -547,7 +547,7 @@ Apple Silicon 请用 **macos-arm64**，Intel 请用 **macos-x64**，不要混用
 ```bash
 ./scripts/package-native.sh            # 当前系统 / 当前芯片
 scripts\package-native.bat             # Windows：生成 exe（需 WiX 3.14）
-./scripts/package-native.sh 1.1.0 deb  # Linux：deb + tar.gz
+./scripts/package-native.sh 1.2.0 deb  # Linux：deb + tar.gz
 ```
 
 产物在 `dist/native/`。CI 不能跨平台交叉编译：exe 在 Windows 打，`.app` 在对应芯片的 macOS 打，deb / tar.gz 在 Linux 打。
