@@ -4,7 +4,7 @@ set "ROOT=%~dp0.."
 cd /d "%ROOT%"
 set "VERSION=%~1"
 if "%VERSION%"=="" (
-  for /f "usebackq delims=" %%i in (`python -c "import re;from pathlib import Path;t=re.sub(r'<parent>.*?</parent>','',Path('pom.xml').read_text(),flags=re.S);m=re.search(r'<version>([^<]+)</version>',t);print(m.group(1) if m else '1.2.0')"`) do set "VERSION=%%i"
+  for /f "usebackq delims=" %%i in (`python -c "import re;from pathlib import Path;t=re.sub(r'<parent>.*?</parent>','',Path('pom.xml').read_text(),flags=re.S);m=re.search(r'<version>([^<]+)</version>',t);print(m.group(1) if m else '1.3.0')"`) do set "VERSION=%%i"
 )
 if not exist dist\utils.jar (
   echo 请先运行 scripts\package.sh 生成 JAR

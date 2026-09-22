@@ -5,6 +5,7 @@
         <h1>{{ tool.title }}</h1>
         <p>{{ tool.summary }} · {{ t('localCompute') }}</p>
       </div>
+      <RouterLink class="btn secondary" :to="tool.group === 'office' ? '/office' : '/'">{{ tool.group === 'office' ? t('officeNav') : t('backOverview') }}</RouterLink>
     </div>
     <section class="panel">
       <form class="form-grid" @submit.prevent="run">

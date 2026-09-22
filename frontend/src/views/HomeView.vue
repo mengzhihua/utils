@@ -12,39 +12,22 @@
     <p v-if="!needle" class="home-hint">{{ t('homeDefaultHint') }}</p>
     <p v-else-if="!hasMatches" class="home-hint">{{ t('homeNoMatch') }}</p>
 
-    <div class="stats">
-      <div class="stat reveal" style="--d: 0ms">
-        <b>{{ health || '...' }}</b>
-        <span>{{ t('healthLabel') }}</span>
-      </div>
-      <div class="stat reveal" style="--d: 80ms">
-        <b>{{ system.java || '...' }}</b>
-        <span>{{ t('javaLabel') }}</span>
-      </div>
-      <div class="stat reveal" style="--d: 160ms">
-        <b>{{ now.dateTime || '...' }}</b>
-        <span>{{ t('timeLabel') }}</span>
-      </div>
+    <div v-if="!needle" class="grid">
+      <RouterLink class="card reveal launcher-card" to="/office">
+        <h2>{{ t('officeNav') }} <small>{{ officeCount }}</small></h2>
+        <p>{{ t('officeHint') }}</p>
+      </RouterLink>
+      <RouterLink class="card reveal launcher-card" to="/hw">
+        <h2>{{ t('hwNav') }} <small>{{ hwCount }}</small></h2>
+        <p>{{ t('hwHint') }}</p>
+      </RouterLink>
+      <RouterLink class="card reveal launcher-card" to="/fx">
+        <h2>{{ t('effects') }}</h2>
+        <p>{{ t('effectsHint') }}</p>
+      </RouterLink>
     </div>
 
-    <div class="actions" style="margin: 0 0 18px">
-      <button class="btn glow-btn" type="button" @click="quick('uuid')">{{ t('quickUuid') }}</button>
-      <button class="btn secondary" type="button" @click="quick('snowflake')">{{ t('quickSnowflake') }}</button>
-      <button class="btn secondary" type="button" @click="quick('order-no')">{{ t('quickOrder') }}</button>
-      <RouterLink class="btn glow-btn" to="/office">{{ t('openOffice') }}</RouterLink>
-      <RouterLink class="btn glow-btn" to="/hw">{{ t('openHw') }}</RouterLink>
-      <RouterLink class="btn secondary" to="/fx">{{ t('openEffects') }}</RouterLink>
-    </div>
-
-    <div v-if="quickResult" class="result result-enter" style="margin-bottom: 22px">
-      <div class="result-head">
-        <span>{{ t('quickResult') }}</span>
-        <button class="btn secondary" type="button" @click="copy(quickResult)">{{ t('copy') }}</button>
-      </div>
-      <pre>{{ quickResult }}</pre>
-    </div>
-
-    <template v-if="hwCatalog.length">
+    <template v-if="needle && hwCatalog.length">
       <h3 class="section-title">{{ t('hwPrefix') }} {{ t('hwNav') }}</h3>
       <div class="grid">
         <RouterLink
@@ -60,7 +43,8 @@
       </div>
     </template>
 
-    <template v-for="group in clientCatalog" :key="group.id">
+    <template v-if="needle">
+      <template v-for="group in clientCatalog" :key="group.id">
       <h3 class="section-title">{{ group.id === 'office' ? t('officePrefix') : t('frontendPrefix') }} {{ group.label }}</h3>
       <div class="grid">
         <RouterLink
@@ -75,10 +59,11 @@
           <p>{{ tool.summary }} · {{ t('localSuffix') }}</p>
         </RouterLink>
       </div>
+      </template>
     </template>
 
-    <h3 v-if="backendTools.length" class="section-title">{{ t('backendTitle') }}</h3>
-    <div v-if="backendTools.length" class="grid">
+    <h3 v-if="needle && backendTools.length" class="section-title">{{ t('backendTitle') }}</h3>
+    <div v-if="needle && backendTools.length" class="grid">
       <RouterLink
         v-for="(tool, index) in backendTools"
         :key="tool.id"
@@ -89,6 +74,35 @@
         <h2>{{ tool.title }}</h2>
         <p>{{ tool.summary }} · {{ tool.method }}</p>
       </RouterLink>
+    </div>
+
+    <div class="stats">
+      <div class="stat reveal" style="--d: 0ms">
+        <b>{{ health || '...' }}</b>
+        <span>{{ t('healthLabel') }}</span>
+      </div>
+      <div class="stat reveal" style="--d: 80ms">
+        <b>{{ system.java || '...' }}</b>
+        <span>{{ t('javaLabel') }}</span>
+      </div>
+      <div class="stat reveal" style="--d: 160ms">
+        <b>{{ now.dateTime || '...' }}</b>
+        <span>{{ t('timeLabel') }}</span>
+      </div>
+    </div>
+
+    <div class="actions" style="margin: 18px 0">
+      <button class="btn glow-btn" type="button" @click="quick('uuid')">{{ t('quickUuid') }}</button>
+      <button class="btn secondary" type="button" @click="quick('snowflake')">{{ t('quickSnowflake') }}</button>
+      <button class="btn secondary" type="button" @click="quick('order-no')">{{ t('quickOrder') }}</button>
+    </div>
+
+    <div v-if="quickResult" class="result result-enter" style="margin-bottom: 22px">
+      <div class="result-head">
+        <span>{{ t('quickResult') }}</span>
+        <button class="btn secondary" type="button" @click="copy(quickResult)">{{ t('copy') }}</button>
+      </div>
+      <pre>{{ quickResult }}</pre>
     </div>
   </div>
 </template>
@@ -121,6 +135,8 @@ const clientCatalog = computed(() => groupedClientTools()
   .filter((group) => group.tools.length > 0))
 const backendTools = computed(() => (needle.value ? tools.filter(matchTool) : []))
 const hwCatalog = computed(() => hardwareTools.filter(matchTool))
+const officeCount = computed(() => groupedClientTools().find((group) => group.id === 'office')?.tools.length || 0)
+const hwCount = hardwareTools.length
 const hasMatches = computed(() => clientCatalog.value.length > 0 || backendTools.value.length > 0 || hwCatalog.value.length > 0)
 
 async function load() {

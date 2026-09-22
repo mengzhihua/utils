@@ -5,6 +5,7 @@
         <h1>{{ tool.title }}</h1>
         <p>{{ tool.summary }} · {{ tool.method }} {{ tool.path }}</p>
       </div>
+      <RouterLink class="btn secondary" to="/">{{ t('backOverview') }}</RouterLink>
     </div>
 
     <section class="panel">
