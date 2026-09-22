@@ -7,8 +7,10 @@
       </div>
     </div>
     <div class="office-search">
-      <input v-model="query" type="search" :placeholder="t('officeSearch')" />
+      <input v-model="query" type="search" :placeholder="t('homeSearch')" />
     </div>
+    <p v-if="!needle" class="home-hint">{{ t('homeDefaultHint') }}</p>
+    <p v-else-if="!hasMatches" class="home-hint">{{ t('homeNoMatch') }}</p>
 
     <div class="stats">
       <div class="stat reveal" style="--d: 0ms">
@@ -31,16 +33,6 @@
       <button class="btn secondary" type="button" @click="quick('order-no')">{{ t('quickOrder') }}</button>
       <RouterLink class="btn glow-btn" to="/office">{{ t('openOffice') }}</RouterLink>
       <RouterLink class="btn glow-btn" to="/hw">{{ t('openHw') }}</RouterLink>
-      <RouterLink class="btn secondary" to="/c/pit-local">{{ t('quickPit') }}</RouterLink>
-      <RouterLink class="btn secondary" to="/c/mortgage-local">{{ t('quickMortgage') }}</RouterLink>
-      <RouterLink class="btn secondary" to="/c/invoice-vat-local">{{ t('quickInvoice') }}</RouterLink>
-      <RouterLink class="btn secondary" to="/hw/screen">{{ t('quickScreen') }}</RouterLink>
-      <RouterLink class="btn secondary" to="/hw/keyboard">{{ t('quickKeyboard') }}</RouterLink>
-      <RouterLink class="btn secondary" to="/hw/mouse">{{ t('quickMouse') }}</RouterLink>
-      <RouterLink class="btn secondary" to="/hw/camera">{{ t('quickCamera') }}</RouterLink>
-      <RouterLink class="btn secondary" to="/hw/mic">{{ t('quickMic') }}</RouterLink>
-      <RouterLink class="btn secondary" to="/hw/system">{{ t('quickSystem') }}</RouterLink>
-      <RouterLink class="btn secondary" to="/hw/resources">{{ t('quickResources') }}</RouterLink>
       <RouterLink class="btn secondary" to="/fx">{{ t('openEffects') }}</RouterLink>
     </div>
 
@@ -85,8 +77,8 @@
       </div>
     </template>
 
-    <h3 class="section-title">{{ t('backendTitle') }}</h3>
-    <div class="grid">
+    <h3 v-if="backendTools.length" class="section-title">{{ t('backendTitle') }}</h3>
+    <div v-if="backendTools.length" class="grid">
       <RouterLink
         v-for="(tool, index) in backendTools"
         :key="tool.id"
@@ -120,14 +112,16 @@ const { t } = useI18n()
 const needle = computed(() => query.value.trim().toLowerCase())
 const matchTool = (tool) => !needle.value || `${tool.title} ${tool.summary} ${tool.id}`.toLowerCase().includes(needle.value)
 const clientCatalog = computed(() => groupedClientTools()
+  .filter((group) => needle.value || group.id === 'office')
   .map((group) => ({
     ...group,
     label: t(`group.${group.id}`, group.label),
     tools: group.tools.filter(matchTool)
   }))
   .filter((group) => group.tools.length > 0))
-const backendTools = computed(() => tools.filter(matchTool))
+const backendTools = computed(() => (needle.value ? tools.filter(matchTool) : []))
 const hwCatalog = computed(() => hardwareTools.filter(matchTool))
+const hasMatches = computed(() => clientCatalog.value.length > 0 || backendTools.value.length > 0 || hwCatalog.value.length > 0)
 
 async function load() {
   const [healthRes, nowRes, sysRes] = await Promise.all([
