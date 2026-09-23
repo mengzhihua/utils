@@ -148,7 +148,9 @@ echo
 echo "下载后即可用的文件："
 echo "  utils-${VERSION}-windows-x64.exe         # Windows 安装包，双击安装"
 echo "  utils-${VERSION}-macos-arm64.app.zip     # Apple Silicon，解压得 Utils.app"
+echo "  utils-${VERSION}-macos-arm64.dmg         # Apple Silicon，打开后拖进应用程序"
 echo "  utils-${VERSION}-macos-x64.app.zip       # Intel Mac，解压得 Utils.app"
+echo "  utils-${VERSION}-macos-x64.dmg           # Intel Mac，打开后拖进应用程序"
 echo "  utils-${VERSION}-linux-x64.deb           # Ubuntu/Debian，双击或 dpkg -i"
 echo "  utils-${VERSION}-linux-x64.tar.gz        # Linux 便携包，解压后 ./Utils"
 echo

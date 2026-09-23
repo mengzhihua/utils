@@ -65,6 +65,7 @@ Java Utils ${VERSION}
 服务器 / 本机 JAR：
   java -jar ${JAR_NAME}
   浏览器打开 http://localhost:8080/
+  首页是三个入口：日常办公、硬件检测、特效实验室。搜索框可按名字找工具。
 
 桌面模式（自动打开办公工作台）：
   ./start.sh
@@ -73,8 +74,8 @@ Java Utils ${VERSION}
 Windows / Linux / macOS 原生包（下载即可用，按芯片命名）：
   ./scripts/package-native.sh
   # Windows:         utils-${VERSION}-windows-x64.exe
-  # Apple Silicon:   utils-${VERSION}-macos-arm64.app.zip
-  # Intel Mac:       utils-${VERSION}-macos-x64.app.zip
+  # Apple Silicon:   utils-${VERSION}-macos-arm64.app.zip  与  .dmg
+  # Intel Mac:       utils-${VERSION}-macos-x64.app.zip  与  .dmg
   # Linux:           utils-${VERSION}-linux-x64.deb  与  .tar.gz
 EOF
 
