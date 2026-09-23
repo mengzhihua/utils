@@ -1,6 +1,6 @@
 # Java Utils Toolkit
 
-基于 **Spring Boot 4.1 + Java 21** 的通用工具集：Java 工具类、浏览器前端工具、日常办公工作台、屏幕/键鼠检测。支持服务器 JAR、Windows / Linux / macOS 安装包，以及 Chrome 新标签页扩展。
+基于 **Spring Boot 4.1 + Java 21** 的通用工具集：Java 工具类、浏览器前端工具、日常办公工作台、屏幕/键鼠检测。支持服务器 JAR、Windows / Linux / macOS 安装包，以及 Chrome 新标签页扩展。分层、接口约定、控制台路由和发行流程见 [技术方案](docs/技术方案.md)。
 
 ## 快速开始
 
